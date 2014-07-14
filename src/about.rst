@@ -20,6 +20,6 @@ About CouchDB Documentation
 License
 =======
 
-.. literalinclude:: ../../../LICENSE
+.. literalinclude:: ../LICENSE
    :lines: 1-202
 
