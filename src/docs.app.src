@@ -1,0 +1,6 @@
+{application, docs, [
+    {description, "CouchDB Documentation"},
+    {vsn, git},
+    {registered, []},
+    {applications, [kernel]}
+]}.
