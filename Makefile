@@ -11,7 +11,7 @@
 ## the License.
 
 SPHINXBUILD  := sphinx-build
-BUILDDIR     := _build
+BUILDDIR     := build
 COUCHVERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo unknown)
 COUCHDOCSHA  := $(shell git rev-parse --verify --short HEAD 2>/dev/null || echo src)
 COUCHRELEASE := $(COUCHVERSION)-git-$(COUCHDOCSHA)
