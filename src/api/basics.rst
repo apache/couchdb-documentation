@@ -238,10 +238,10 @@ below.
    If the response uses an encoding, then it is specified in this
    header field.
 
-   ``Transfer-Encoding: chunked`` means that the response is sent
-   in parts, a method known as `chunked transfer encoding`_. This
-   is used when CouchDB is unable to send all the data at the same time
-   (for example, the changes feed).
+   ``Transfer-Encoding: chunked`` means that the response is sent in
+   parts, a method known as `chunked transfer encoding`_. This is used
+   when CouchDB does not know beforehand the size of the data it will
+   send (for example, the :ref:`changes feed <changes>`).
 
 .. _chunked transfer encoding:
    https://en.wikipedia.org/wiki/Chunked_transfer_encoding
