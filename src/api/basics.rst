@@ -84,9 +84,9 @@ CouchDB supports the following HTTP request methods:
 
    A special method that can be used to copy documents and objects.
 
-If you use the an unsupported HTTP request type with a URL that does not
-support the specified type, a 405 error will be returned, listing the
-supported HTTP methods. For example:
+If you use an unsupported HTTP request type with an URL that does not
+support the specified type then a ``405 - Resource Not Allowed`` will be
+returned, listing the supported HTTP methods. For example:
 
 .. code-block:: javascript
 
@@ -112,17 +112,6 @@ as possible.
 
 Request Headers
 ---------------
-
--  ``Content-type``
-
-   Specifies the content type of the information being supplied within
-   the request. The specification uses MIME type specifications. For the
-   majority of requests this will be JSON (``application/json``). For
-   some settings the MIME type will be plain text. When uploading
-   attachments it should be the corresponding MIME type for the
-   attachment or binary (``application/octet-stream``).
-
-   The use of the ``Content-type`` on a request is highly recommended.
 
 -  ``Accept``
 
@@ -166,8 +155,10 @@ Request Headers
        Content-Length: 227
        Cache-Control: must-revalidate
 
-   Note that the returned content type is ``text/plain`` even though the
-   information returned by the request is in JSON format.
+   .. Note::
+       The returned content type is ``text/plain`` even though the
+       information returned by the request is in JSON format.
+
 
    Explicitly specifying the ``Accept`` header:
 
@@ -187,6 +178,17 @@ Request Headers
        Content-Length: 227
        Cache-Control: must-revalidate
 
+-  ``Content-type``
+
+   Specifies the content type of the information being supplied within
+   the request. The specification uses MIME type specifications. For the
+   majority of requests this will be JSON (``application/json``). For
+   some settings the MIME type will be plain text. When uploading
+   attachments it should be the corresponding MIME type for the
+   attachment or binary (``application/octet-stream``).
+
+   The use of the ``Content-type`` on a request is highly recommended.
+
 Response Headers
 ----------------
 
@@ -195,13 +197,6 @@ and include a number of different header fields, many of which are
 standard HTTP response header and have no significance to CouchDB
 operation. The list of response headers important to CouchDB are listed
 below.
-
--  ``Content-type``
-
-   Specifies the MIME type of the returned data. For most request, the
-   returned MIME type is ``text/plain``. All text is encoded in Unicode
-   (UTF-8), and this is explicitly stated in the returned
-   ``Content-type``, as ``text/plain;charset=utf-8``.
 
 -  ``Cache-control``
 
@@ -215,6 +210,13 @@ below.
 -  ``Content-length``
 
    The length (in bytes) of the returned content.
+
+-  ``Content-type``
+
+   Specifies the MIME type of the returned data. For most request, the
+   returned MIME type is ``text/plain``. All text is encoded in Unicode
+   (UTF-8), and this is explicitly stated in the returned
+   ``Content-type``, as ``text/plain;charset=utf-8``.
 
 -  ``Etag``
 
@@ -230,8 +232,8 @@ below.
    Each ``_view`` URL has its own ETag which only gets updated when
    changes are made to the database that effect that index. If the
    index for that specific view does not change, that view keeps the
-   original ETag head (therefore sending back 304 Not Modified more
-   often).
+   original ETag head (therefore sending back ``304 - Not Modified``
+   more often).
 
 -  ``Transfer-Encoding``
 
@@ -255,7 +257,7 @@ The majority of requests and responses to CouchDB use the JavaScript
 Object Notation (JSON) for formatting the content and structure of the
 data and responses.
 
-JSON is used because it is the simplest and easiest to use solution for
+JSON is used because it is the simplest and easiest solution for
 working with data within a web browser, as JSON structures can be
 evaluated and used as JavaScript objects within the web browser
 environment. JSON also integrates with the server-side JavaScript used
@@ -264,14 +266,11 @@ within CouchDB.
 JSON supports the same basic types as supported by JavaScript, these
 are:
 
--  Number (either integer or floating-point).
-
--  String; this should be enclosed by double-quotes and supports Unicode
-   characters and backslash escaping. For example:
+-  Array - a list of values enclosed in square brackets. For example:
 
    .. code-block:: javascript
 
-       "A String"
+       ["one", "two", "three"]
 
 -  Boolean - a ``true`` or ``false`` value. You can use these strings
    directly. For example:
@@ -280,11 +279,7 @@ are:
 
        { "value": true}
 
--  Array - a list of values enclosed in square brackets. For example:
-
-   .. code-block:: javascript
-
-       ["one", "two", "three"]
+-  Number - an integer or floating-point number.
 
 -  Object - a set of key/value pairs (i.e. an associative array, or
    hash). The key must be a string, but the value can be any of the
@@ -298,10 +293,16 @@ are:
           "cooktime" : 60,
           "title" : "Chicken Coriander"
        }
-           
 
    In CouchDB, the JSON object is used to represent a variety of
    structures, including the main CouchDB document.
+
+-  String - this should be enclosed by double-quotes and supports Unicode
+   characters and backslash escaping. For example:
+
+   .. code-block:: javascript
+
+       "A String"
 
 Parsing JSON into a JavaScript object is supported through the
 ``JSON.parse()`` function in JavaScript, or through various libraries that
@@ -381,16 +382,19 @@ accept that numbers are stored in doubles).
 Here's a log for a couple of the more common JSON libraries that happen
 to be on the author's machine:
 
-Spidermonkey::
+Ejson (CouchDB's current parser) at CouchDB sha 168a663b::
 
-    $ js -h 2>&1 | head -n 1
-    JavaScript-C 1.8.5 2011-03-31
-    $ js
-    js> JSON.stringify(JSON.parse("1.01234567890123456789012345678901234567890"))
-    "1.0123456789012346"
-    js> var f = JSON.stringify(JSON.parse("1.01234567890123456789012345678901234567890"))
-    js> JSON.stringify(JSON.parse(f))
-    "1.0123456789012346"
+    $ ./utils/run -i
+    Erlang R14B04 (erts-5.8.5) [source] [64-bit] [smp:2:2] [rq:2]
+    [async-threads:4] [hipe] [kernel-poll:true]
+
+    Eshell V5.8.5  (abort with ^G)
+    1> ejson:encode(ejson:decode(<<"1.01234567890123456789012345678901234567890">>)).
+    <<"1.0123456789012346135">>
+    2> F = ejson:encode(ejson:decode(<<"1.01234567890123456789012345678901234567890">>)).
+    <<"1.0123456789012346135">>
+    3> ejson:encode(ejson:decode(F)).
+    <<"1.0123456789012346135">>
 
 Node::
 
@@ -430,26 +434,20 @@ Ruby::
     JSON.dump(JSON.load(f))
     => "[1.01234567890123]"
 
-
 .. note:: A small aside on Ruby, it requires a top level object or array, so I just
          wrapped the value. Should be obvious it doesn't affect the result of
          parsing the number though.
 
+Spidermonkey::
 
-Ejson (CouchDB's current parser) at CouchDB sha 168a663b::
-
-    $ ./utils/run -i
-    Erlang R14B04 (erts-5.8.5) [source] [64-bit] [smp:2:2] [rq:2]
-    [async-threads:4] [hipe] [kernel-poll:true]
-
-    Eshell V5.8.5  (abort with ^G)
-    1> ejson:encode(ejson:decode(<<"1.01234567890123456789012345678901234567890">>)).
-    <<"1.0123456789012346135">>
-    2> F = ejson:encode(ejson:decode(<<"1.01234567890123456789012345678901234567890">>)).
-    <<"1.0123456789012346135">>
-    3> ejson:encode(ejson:decode(F)).
-    <<"1.0123456789012346135">>
-
+    $ js -h 2>&1 | head -n 1
+    JavaScript-C 1.8.5 2011-03-31
+    $ js
+    js> JSON.stringify(JSON.parse("1.01234567890123456789012345678901234567890"))
+    "1.0123456789012346"
+    js> var f = JSON.stringify(JSON.parse("1.01234567890123456789012345678901234567890"))
+    js> JSON.stringify(JSON.parse(f))
+    "1.0123456789012346"
 
 As you can see they all pretty much behave the same except for Ruby
 actually does appear to be losing some precision over the other
