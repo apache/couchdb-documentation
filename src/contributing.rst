@@ -112,7 +112,7 @@ but it includes some code listings. Let's mark them up. We'll turn::
 Into::
 
     .. code-block:: erlang
-        
+
       ejson:encode(ejson:decode(<<"1.1">>)).
       <<"1.1000000000000000888">>
 

@@ -22,7 +22,7 @@ nitty-gritty and clever bits. We show you best practices and guide you around
 common pitfalls.
 
 We start out by revisiting the basic operations we ran in the previous document
-:ref:`intro/tour`, looking behind the scenes. We also show what Futon needs to 
+:ref:`intro/tour`, looking behind the scenes. We also show what Futon needs to
 do behind its user interface to give us the nice features we saw earlier.
 
 This document is both an introduction to the core CouchDB API as well as a
@@ -119,7 +119,7 @@ about how CouchDB works. CouchDB stores each database in a single file.
 Very simple.
 
 Let's create another database, this time with curl's ``-v`` (for "verbose")
-option. The verbose option tells curl to show us not only the essentials -- 
+option. The verbose option tells curl to show us not only the essentials --
 the HTTP response body -- but all the underlying request and response details::
 
   curl -vX PUT http://127.0.0.1:5984/albums-backup
@@ -174,8 +174,8 @@ The ``>`` means the line was sent to CouchDB verbatim (without the actual
   > PUT /albums-backup HTTP/1.1
 
 This initiates an HTTP request. Its *method* is :method:`PUT`, the *URI* is
-``/albums-backup``, and the HTTP version is ``HTTP/1.1``. There is also 
-``HTTP/1.0``, which is simpler in some cases, but for all practical reasons 
+``/albums-backup``, and the HTTP version is ``HTTP/1.1``. There is also
+``HTTP/1.0``, which is simpler in some cases, but for all practical reasons
 you should be using ``HTTP/1.1``.
 
 Next, we see a number of *request headers*. These are used to provide
@@ -189,8 +189,8 @@ The User-Agent header tells CouchDB which piece of client software is doing
 the HTTP request. We don't learn anything new: it's curl. This header is
 often useful in web development when there are known errors in client
 implementations that a server might want to prepare the response for.
-It also helps to determine which platform a user is on. This information 
-can be used for technical and statistical reasons. For CouchDB, the 
+It also helps to determine which platform a user is on. This information
+can be used for technical and statistical reasons. For CouchDB, the
 :header:`User-Agent` header is irrelevant.
 
 ::
@@ -229,47 +229,47 @@ server. Or, if an error occurred, what kind of error. :rfc:`2616` (the HTTP 1.1
 specification) defines clear behavior for response codes. CouchDB fully
 follows the RFC.
 
-The :statuscode:`201` status code tells the client that the resource 
+The :statuscode:`201` status code tells the client that the resource
 the request was made against was successfully created. No surprise here,
 but if you remember that we got an error message when we tried to create this
 database twice, you now know that this response could include a different
 response code. Acting upon responses based on response codes is a common
-practice. For example, all response codes of :statuscode:`400` or larger 
-tell you that some error occurred. If you want to shortcut your logic and 
-immediately deal with the error, you could just check a >= ``400`` response 
+practice. For example, all response codes of :statuscode:`400` or larger
+tell you that some error occurred. If you want to shortcut your logic and
+immediately deal with the error, you could just check a >= ``400`` response
 code.
 
 ::
 
   < Server: CouchDB (Erlang/OTP)
 
-The :header:`Server` header is good for diagnostics. It tells us which 
-CouchDB version and which underlying Erlang version we are talking to. 
-In general, you can ignore this header, but it is good to know it's there if 
+The :header:`Server` header is good for diagnostics. It tells us which
+CouchDB version and which underlying Erlang version we are talking to.
+In general, you can ignore this header, but it is good to know it's there if
 you need it.
 
 ::
 
   < Date: Sun, 05 Jul 2009 22:48:28 GMT
 
-The :header:`Date` header tells you the time of the server. Since client 
-and server time are not necessarily synchronized, this header is purely 
-informational. You shouldn't build any critical application logic on top 
+The :header:`Date` header tells you the time of the server. Since client
+and server time are not necessarily synchronized, this header is purely
+informational. You shouldn't build any critical application logic on top
 of this!
 
 ::
 
   < Content-Type: text/plain;charset=utf-8
 
-The :header:`Content-Type` header tells you which MIME type 
-the HTTP response body is and its encoding. We already know CouchDB returns 
-JSON strings. The appropriate :header:`Content-Type` header is 
-:mimetype:`application/json`. Why do we see :mimetype:`text/plain`? 
-This is where pragmatism wins over purity. Sending an 
-:mimetype:`application/json` :header:`Content-Type` header will make 
-a browser offer you the returned JSON for download instead of 
-just displaying it. Since it is extremely useful to be able to test CouchDB 
-from a browser, CouchDB sends a :mimetype:`text/plain` content type, so all 
+The :header:`Content-Type` header tells you which MIME type
+the HTTP response body is and its encoding. We already know CouchDB returns
+JSON strings. The appropriate :header:`Content-Type` header is
+:mimetype:`application/json`. Why do we see :mimetype:`text/plain`?
+This is where pragmatism wins over purity. Sending an
+:mimetype:`application/json` :header:`Content-Type` header will make
+a browser offer you the returned JSON for download instead of
+just displaying it. Since it is extremely useful to be able to test CouchDB
+from a browser, CouchDB sends a :mimetype:`text/plain` content type, so all
 browsers will display the JSON as text.
 
 .. note::
@@ -280,24 +280,24 @@ browsers will display the JSON as text.
 
   .. _JSONView: http://jsonview.com/
 
-Do you remember the :header:`Accept` request header and how it is set to 
+Do you remember the :header:`Accept` request header and how it is set to
 ``*/*`` to express interest in any MIME type? If you send ``Accept:
-application/json`` in your request, CouchDB knows that you can deal with a pure 
-JSON response with the proper :header:`Content-Type` header and will 
+application/json`` in your request, CouchDB knows that you can deal with a pure
+JSON response with the proper :header:`Content-Type` header and will
 use it instead of :mimetype:`text/plain`.
 
 ::
 
   < Content-Length: 12
 
-The :header:`Content-Length` header simply tells us how many bytes 
+The :header:`Content-Length` header simply tells us how many bytes
 the response body has.
 
 ::
 
   < Cache-Control: must-revalidate
 
-This :header:`Cache-Control` header tells you, or any proxy server between 
+This :header:`Cache-Control` header tells you, or any proxy server between
 CouchDB and you, not to cache this response.
 
 ::
@@ -372,14 +372,14 @@ CouchDB replies:
 .. code-block:: javascript
 
   {"ok":true,"id":"6e1295ed6c29495e54cc05947f18c8af","rev":"1-2902191555"}
-  
-The curl command appears complex, but let's break it down. 
-First, ``-X PUT`` tells curl to make a :method:`PUT` request. 
-It is followed by the URL that specifies your CouchDB IP address and port. 
+
+The curl command appears complex, but let's break it down.
+First, ``-X PUT`` tells curl to make a :method:`PUT` request.
+It is followed by the URL that specifies your CouchDB IP address and port.
 The resource part of the URL ``/albums/6e1295ed6c29495e54cc05947f18c8af``
-specifies the location of a document inside our albums database. 
-The wild collection of numbers and characters is a UUID. This UUID is your 
-document's ID. Finally, the ``-d`` flag tells curl to use the following 
+specifies the location of a document inside our albums database.
+The wild collection of numbers and characters is a UUID. This UUID is your
+document's ID. Finally, the ``-d`` flag tells curl to use the following
 string as the body for the :method:`PUT` request. The string is a simple JSON
 structure including ``title`` and ``artist`` attributes with their respective
 values.
@@ -397,7 +397,7 @@ values.
   .. code-block:: javascript
 
     {"uuids":["6e1295ed6c29495e54cc05947f18c8af"]}
-  
+
   Voilà, a UUID. If you need more than one, you can pass in the ``?count=10`` HTTP
   parameter to request 10 UUIDs, or really, any number you need.
 
@@ -405,7 +405,7 @@ To double-check that CouchDB isn't lying about having saved your document (it
 usually doesn't), try to retrieve it by sending a GET request::
 
   curl -X GET http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
- 
+
 We hope you see a pattern here. Everything in CouchDB has an address, a URI,
 and you use the different HTTP methods to operate on these URIs.
 
@@ -427,10 +427,10 @@ Revisions
 ---------
 
 If you want to change a document in CouchDB, you don't tell it to go and find
-a field in a specific document and insert a new value. Instead, you load 
-the full document out of CouchDB, make your changes in the JSON structure 
-(or object, when you are doing actual programming), and save the entire new 
-revision (or version) of that document back into CouchDB. Each revision is 
+a field in a specific document and insert a new value. Instead, you load
+the full document out of CouchDB, make your changes in the JSON structure
+(or object, when you are doing actual programming), and save the entire new
+revision (or version) of that document back into CouchDB. Each revision is
 identified by a new ``_rev`` value.
 
 If you want to update or delete a document, CouchDB expects you to include
@@ -450,23 +450,23 @@ CouchDB replies:
 .. code-block:: javascript
 
   {"error":"conflict","reason":"Document update conflict."}
-  
+
 If you see this, add the latest revision number of your document to the JSON
 structure::
 
   curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
        -d '{"_rev":"1-2902191555","title":"There is Nothing Left to Lose","artist":"Foo Fighters","year":"1997"}'
 
-Now you see why it was handy that CouchDB returned that ``_rev`` when we made 
+Now you see why it was handy that CouchDB returned that ``_rev`` when we made
 the initial request. CouchDB replies:
 
 .. code-block:: javascript
 
   {"ok":true,"id":"6e1295ed6c29495e54cc05947f18c8af","rev":"2-8aff9ee9d06671fa89c99d20a4b3ae"}
-  
-CouchDB accepted your write and also generated a new revision number. 
+
+CouchDB accepted your write and also generated a new revision number.
 The revision number is the *MD5 hash* of the transport representation of a
-document with an ``N-`` prefix denoting the number of times a document got 
+document with an ``N-`` prefix denoting the number of times a document got
 updated. This is useful for replication. See :ref:`replication/conflicts` for
 more information.
 
@@ -574,17 +574,17 @@ the album artwork to the ``6e1295ed6c29495e54cc05947f18c8af`` document
 
 .. note::
 
-  The ``--data-binary`` ``@`` option tells curl to read a file's contents into 
-  the HTTP request body. We're using the ``-H`` option to tell CouchDB that 
-  we're uploading a JPEG file. CouchDB will keep this information around and 
-  will send the appropriate header when requesting this attachment; in case of 
-  an image like this, a browser will render the image instead of offering you 
-  the data for download. This will come in handy later. Note that you need 
-  to provide the current revision number of the document you're attaching 
+  The ``--data-binary`` ``@`` option tells curl to read a file's contents into
+  the HTTP request body. We're using the ``-H`` option to tell CouchDB that
+  we're uploading a JPEG file. CouchDB will keep this information around and
+  will send the appropriate header when requesting this attachment; in case of
+  an image like this, a browser will render the image instead of offering you
+  the data for download. This will come in handy later. Note that you need
+  to provide the current revision number of the document you're attaching
   the artwork to, just as if you would update the document. Because, after all,
   attaching some data is changing the document.
 
-You should now see your artwork image if you point your browser to 
+You should now see your artwork image if you point your browser to
 http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg
 
 If you request the document again, you'll see a new member::
@@ -612,7 +612,7 @@ CouchDB replies:
 
 ``_attachments`` is a list of keys and values where the values are JSON objects
 containing the attachment metadata. ``stub=true`` tells us that this entry is
-just the metadata. If we use the ``?attachments=true`` HTTP option when 
+just the metadata. If we use the ``?attachments=true`` HTTP option when
 requesting this document, we'd get a `Base64`_ encoded string containing the
 attachment data.
 
@@ -626,7 +626,7 @@ Replication
 ===========
 
 CouchDB replication is a mechanism to synchronize databases. Much like `rsync`_
-synchronizes two directories locally or over a network, replication synchronizes 
+synchronizes two directories locally or over a network, replication synchronizes
 two databases locally or remotely.
 
 .. _rsync: http://en.wikipedia.org/wiki/Rsync
@@ -681,7 +681,7 @@ easily):
     "session_id": "924e75e914392343de89c99d29d06671",
     "ok": true
   }
-  
+
 CouchDB maintains a *session history* of replications. The response for a
 replication request contains the history entry for this *replication session*.
 It is also worth noting that the request for replication will stay open until
@@ -692,7 +692,7 @@ replication replicates the database only as it was at the point in time
 when replication was started. So, any additions, modifications,
 or deletions subsequent to the start of replication will not be replicated.
 
-We'll punt on the details again -- the ``"ok": true`` at the end tells us all 
+We'll punt on the details again -- the ``"ok": true`` at the end tells us all
 went well. If you now have a look at the albums-replica database,
 you should see all the documents that you created in the albums database.
 Neat, eh?
@@ -732,7 +732,7 @@ is used by others::
        -d '{"source":"http://example.org:5984/albums-replica","target":"albums"}' \
        -H "Content-Type:application/json"
 
-Finally, you can run remote replication, which is mostly useful for management 
+Finally, you can run remote replication, which is mostly useful for management
 operations::
 
   curl -vX POST http://127.0.0.1:5984/_replicate \
@@ -770,7 +770,7 @@ Wrapping Up
 ===========
 
 This is still not the full CouchDB API, but we discussed the essentials in
-great detail. We're going to fill in the blanks as we go. For now, we believe 
+great detail. We're going to fill in the blanks as we go. For now, we believe
 you're ready to start building CouchDB applications.
 
 .. seealso::

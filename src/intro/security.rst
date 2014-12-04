@@ -265,9 +265,9 @@ file and are wondering if regular users are also stored there. No, they are not.
 CouchDB has a special `authentication database`, named ``_users`` by default,
 that stores all registered users as JSON documents.
 
-This special database is a `system database`, this means that while it shares 
+This special database is a `system database`, this means that while it shares
 the common :ref:`database API <api/database>`, there are some
-special security-related constraints applied. Below is listed how the 
+special security-related constraints applied. Below is listed how the
 `authentication database` is different from the other databases.
 
 - Only administrators may browse list of all documents
@@ -380,8 +380,8 @@ CouchDB should respond with:
 
   {"ok":true,"name":"jan","roles":[]}
 
-This means that the username was recognized and the password's hash matches 
-with the stored one. If we specify an incorrect login and/or password, CouchDB 
+This means that the username was recognized and the password's hash matches
+with the stored one. If we specify an incorrect login and/or password, CouchDB
 will notify us with the following error message:
 
 .. code-block:: javascript
@@ -392,15 +392,15 @@ will notify us with the following error message:
 Password Changing
 =================
 
-Let's define what is password changing from the point of view of CouchDB and 
+Let's define what is password changing from the point of view of CouchDB and
 the authentication database. Since "users" are "documents", this operation is
 just updating the document with a special field ``password`` which contains
 the *plain text password*. Scared? No need to be, the authentication database
 has a special internal hook on  document update which looks for this field and
 replaces it with the *secured hash* depending on the chosen ``password_scheme``.
 
-Summarizing the above process - we need to get the document's content, add 
-the ``password`` field with the new password in plain text and then store the 
+Summarizing the above process - we need to get the document's content, add
+the ``password`` field with the new password in plain text and then store the
 JSON result to the authentication database.
 
 ::

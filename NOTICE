@@ -7,7 +7,7 @@ The Apache Software Foundation (http://www.apache.org/).
 This product also includes the following third-party components:
 
  * Sphinx (http://sphinx-doc.org/)
- 
+
    Copyright 2011, the Sphinx team
 
  * httpdomain.py (https://bitbucket.org/birkenfeld/sphinx-contrib/src/6a3a8ca714cfce957530890d0431d9a7b88c930f/httpdomain/sphinxcontrib/httpdomain.py?at=httpdomain-1.1.9)

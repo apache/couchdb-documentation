@@ -356,7 +356,7 @@ results.
     {"seq":6,"id":"updated","changes":[{"rev":"3-825cb35de44c433bfb2df415563a19de"}]}
 
 Obviously, `... tum tee tum ...` does not appear in the actual response, but
-represents a long pause before the change with seq 6 occurred.  
+represents a long pause before the change with seq 6 occurred.
 
 .. _Change Notifications in the book CouchDB The Definitive Guide: http://guide.couchdb.org/draft/notifications.html
 

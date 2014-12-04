@@ -17,7 +17,7 @@ COUCHDOCSHA  := $(shell git rev-parse --verify --short HEAD 2>/dev/null || echo 
 COUCHRELEASE := $(COUCHVERSION)-git-$(COUCHDOCSHA)
 SOURCE       := src/
 PAPERSIZE    := -D latex_paper_size=a4
-SPHINXFLAGS  := -a -E -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree 
+SPHINXFLAGS  := -a -E -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
 SPHINXOPTS   := $(SPHINXFLAGS) -D version=$(COUCHVERSION) -D release=$(COUCHRELEASE) $(SOURCE)
 
 all: distclean html pdf info man install clean

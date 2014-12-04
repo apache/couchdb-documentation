@@ -477,7 +477,7 @@ events (documents with status `new`). Our filter function will look like this:
     }
     return true; // passed!
   }
- 
+
 Filter functions must return ``true`` if a document passed all defined
 rules. Now, if you apply this function to the changes feed it will emit only changes
 about "new mails"::
@@ -614,7 +614,7 @@ by throwing one of two error objects:
 
   // user is not authorized to make the change but may re-authenticate
   throw({ unauthorized: 'Error message here.' });
-  
+
   // change is not allowed
   throw({ forbidden: 'Error message here.' });
 

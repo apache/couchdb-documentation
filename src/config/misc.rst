@@ -26,22 +26,22 @@ Configuration of Attachment Storage
 .. config:section:: attachments :: Configuration of Attachment Storage
 
   .. config:option:: compression_level
-    
+
     Defines zlib compression level for the attachments from ``1`` (lowest,
     fastest) to ``9`` (highest, slowest). A value of ``0`` disables compression
 
     ::
-    
+
       [attachments]
       compression_level = 8
-    
+
 
   .. config:option:: compressible_types
-    
+
     Since compression is ineffective for some types of files, it is possible
     to let CouchDB compress only some types of attachments, specified by their
     MIME type::
-    
+
       [attachments]
       compressible_types = text/*, application/javascript, application/json, application/xml
 
@@ -52,21 +52,21 @@ Statistic Calculation
 =====================
 
 .. config:section:: stats :: Statistic Calculation
-  
-  
+
+
   .. config:option:: rate
-    
+
     Rate of statistics gathering in milliseconds::
-    
+
       [stats]
       rate = 1000
 
-    
+
   .. config:option:: samples
-    
+
     Samples are used to track the mean and standard value deviation within
     specified intervals (in seconds)::
-    
+
       [stats]
       samples = [0, 60, 300, 900]
 
@@ -187,7 +187,7 @@ UUIDs Configuration
        algorithm unless you have a specific need and take into account
        the likely need for compaction to re-balance the B-tree and reclaim
        wasted space.
-  
+
 
   .. config:option:: utc_id_suffix :: UTC ID Suffix
 

@@ -108,7 +108,7 @@ The Query Server answers::
 When creating or updating a view the Query Server gets sent the view function
 for evaluation. The Query Server should parse, compile and evaluate the
 function it receives to make it callable later. If this fails, the Query Server
-returns an error. CouchDB might store several functions before sending in any 
+returns an error. CouchDB might store several functions before sending in any
 actual documents.
 
 CouchDB sends::
@@ -537,7 +537,7 @@ on three parts:
 
 There, we had made a big mistake: we had returned out result in a single
 message from the Query Server. That's ok when there are only a few rows in the
-view result, but it's not acceptable for millions documents and millions view 
+view result, but it's not acceptable for millions documents and millions view
 rows
 
 Let's fix our list function and see the changes in communication::

@@ -32,7 +32,7 @@ to modularization and scalability.
 Relax
 =====
 
-If there's one word to describe CouchDB, it is *relax*. It is the byline 
+If there's one word to describe CouchDB, it is *relax*. It is the byline
 to CouchDB's official logo and when you start CouchDB, you see::
 
   Apache CouchDB has started. Time to relax.
@@ -310,6 +310,6 @@ less powerful than today's phones.
 Wrapping Up
 ===========
 
-The next document :ref:`intro/consistency` further explores the distributed nature 
-of CouchDB. We should have given you enough bites to whet your interest. 
+The next document :ref:`intro/consistency` further explores the distributed nature
+of CouchDB. We should have given you enough bites to whet your interest.
 Let's go!
