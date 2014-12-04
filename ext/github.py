@@ -19,8 +19,8 @@ def get_github_url(app, view, path):
         view=view,
         branch=app.config.github_branch,
         path=path)
- 
- 
+
+
 def html_page_context(app, pagename, templatename, context, doctree):
     # base template for common sphinx pages like search or genindex
     # there is no need to provide github show/edit links for them
@@ -35,8 +35,8 @@ def html_page_context(app, pagename, templatename, context, doctree):
         os.path.relpath(doctree.get('source'), app.builder.srcdir))
     context['github_show_url'] = get_github_url(app, 'blob', path)
     context['github_edit_url'] = get_github_url(app, 'edit', path)
- 
- 
+
+
 def setup(app):
     app.add_config_value('github_project', '', True)
     app.add_config_value('github_branch', 'master', True)

@@ -258,7 +258,7 @@ should look like :ref:`intro/tour-04`.
 You'll notice that the document's _rev has changed. We'll go into more detail
 about this in later documents, but for now, the important thing to note is
 that _rev acts like a safety feature when saving a document. As long as you
-and CouchDB agree on the most recent _rev of a document, you can successfully 
+and CouchDB agree on the most recent _rev of a document, you can successfully
 save your changes.
 
 Futon also provides a way to display the underlying JSON data,
