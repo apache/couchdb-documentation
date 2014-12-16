@@ -175,6 +175,15 @@ Database HTTP Handlers
 
 
 
+  .. config:option:: _local_docs
+
+    ::
+
+      [httpd_db_handlers]
+      _local_docs = {couch_mrview_http, handle_local_docs_req}
+
+
+
   .. config:option:: _changes
 
     ::
