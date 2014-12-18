@@ -184,6 +184,15 @@ Database HTTP Handlers
 
 
 
+  .. config:option:: _design_docs
+
+    ::
+
+      [httpd_db_handlers]
+      _local_docs = {couch_mrview_http, handle_design_docs_req}
+
+
+
   .. config:option:: _changes
 
     ::
