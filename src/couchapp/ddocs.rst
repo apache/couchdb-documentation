@@ -172,16 +172,16 @@ JavaScript below:
 
    While `map` functions have limited access to stored modules through
    :func:`require` function there is no such feature for `reduce` functions.
-   The reason lies deep inside in mechanism how `map` and `reduce` functions
-   are processed by Query Server. Let's take a look on `map` functions first:
+   The reason lies deep inside in the mechanism how `map` and `reduce` functions
+   are processed by the Query Server. Let's take a look on `map` functions first:
 
-   #. CouchDB sends all `map` functions for processed design document to
+   #. CouchDB sends all `map` functions for a processed design document to
       Query Server.
    #. Query Server handles them one by one, compiles and puts them onto an
       internal stack.
    #. After all `map` functions had been processed, CouchDB will send the
       remaining documents to index one by one.
-   #. The Query Server receives the document object and applies it to every function
+   #. Query Server receives the document object and applies it to every function
       from the stack. The emitted results are then joined into a single array and sent
       back to CouchDB.
 
@@ -191,15 +191,15 @@ JavaScript below:
       with result list of key-value pairs that was previously received as
       result of `map` functions work.
    #. Query Server compiles reduce functions and applies them to key-value
-      lists. Reduced result sends back to CouchDB.
+      lists. Reduced result is sent back to CouchDB.
 
-   As you may note, `reduce` functions been applied in single shot while
-   `map` ones are applied in an iterative way per each document. This means that
-   it's possible for `map` functions to precompile CommonJS libraries and use them
-   during the entire view processing, but for `reduce` functions it will be
-   compiled again and again for each view result reduction, which will lead to
-   performance degradation (`reduce` function are already does hard work to make
-   large result smaller).
+   As you may note, `reduce` functions are applied in a single shot to the map results
+   while the `map` functions are applied in an iterative way to one document at a time.
+   This means that it's possible for `map` functions to precompile CommonJS libraries
+   and use them during the entire view processing, but for `reduce` functions they
+   would be compiled again and again for each view result reduction, which would lead
+   to performance degradation (`reduce` function are already working hard to make large
+   results smaller).
 
 
 .. _showfun:
