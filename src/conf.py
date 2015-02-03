@@ -44,7 +44,7 @@ pygments_style = "sphinx"
 
 html_theme = "couchdb"
 
-html_theme_path = ['../templates']
+html_theme_path = ['../themes']
 
 templates_path = ["../templates"]
 
