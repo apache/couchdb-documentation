@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/1.5.x:
 
 ============
@@ -18,13 +17,12 @@
 ============
 
 .. contents::
-   :depth: 1
-   :local:
+    :depth: 1
+    :local:
 
 .. warning::
-
-   :ref:`release/1.5.1` contains important security fixes. Previous `1.5.x`
-   releases are not recommended for regular usage.
+    :ref:`release/1.5.1` contains important security fixes. Previous `1.5.x`
+    releases are not recommended for regular usage.
 
 .. _release/1.5.1:
 

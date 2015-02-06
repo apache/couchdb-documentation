@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/1.0.x:
 
 ============
@@ -18,9 +17,8 @@
 ============
 
 .. contents::
-   :depth: 1
-   :local:
-
+    :depth: 1
+    :local:
 
 .. _release/1.0.x/upgrade:
 
@@ -44,10 +42,8 @@ replicator to use the ``application/json`` content type.
   converted to JSON before using.
 
 .. warning::
-
-   :ref:`release/1.0.4` contains important security fixes. Previous `1.0.x`
-   releases are not recommended for regular usage.
-
+    :ref:`release/1.0.4` contains important security fixes. Previous `1.0.x`
+    releases are not recommended for regular usage.
 
 .. _release/1.0.4:
 
@@ -81,7 +77,6 @@ View System
 -----------
 
 * Avoid invalidating view indexes when running out of file descriptors.
-
 
 .. _release/1.0.3:
 
@@ -138,7 +133,6 @@ Windows
 
 * Windows builds now require ICU >= 4.4.0 and Erlang >= R14B03. See
   :issue:`1152`, and :issue:`963` + OTP-9139 for more information.
-
 
 .. _release/1.0.2:
 
@@ -207,7 +201,6 @@ View Server
   this error is seen in the logs users should rebuild their views from
   scratch to fix the issue. See :issue:`999` for details.
 
-
 .. _release/1.0.1:
 
 Version 1.0.1
@@ -248,7 +241,6 @@ Storage System
 
 * Fix data corruption bug :issue:`844`. Please see
   http://couchdb.apache.org/notice/1.0.1.html for details.
-
 
 .. _release/1.0.0:
 

@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/1.4.x:
 
 ============
@@ -18,13 +17,12 @@
 ============
 
 .. contents::
-   :depth: 1
-   :local:
+    :depth: 1
+    :local:
 
 .. warning::
-
-   :ref:`release/1.4.x` is affected by the issue described in :ref:`cve/2014-2668`.
-   Upgrading to a more recent release is strongly recommended.
+    :ref:`release/1.4.x` is affected by the issue described in :ref:`cve/2014-2668`.
+    Upgrading to a more recent release is strongly recommended.
 
 .. _release/1.4.x/upgrade:
 
@@ -35,7 +33,6 @@ We now support Erlang/OTP R16B and R16B01; the minimum required version is R14B.
 
 User document role values must now be strings. Other types of values will be
 refused when saving the user document.
-
 
 .. _release/1.4.0:
 
