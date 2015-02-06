@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _cve/2014-2668:
 
 ==================================================================================
@@ -49,6 +48,5 @@ Work-Around
 Disable the :ref:`api/server/uuids` handler completely, by adapting
 `local.ini` and restarting CouchDB::
 
-  [httpd_global_handlers]
-  _uuids =
-
+    [httpd_global_handlers]
+    _uuids =
