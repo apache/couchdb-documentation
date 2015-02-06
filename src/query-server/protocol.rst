@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _query-server/protocol:
 
 =====================
@@ -27,9 +26,9 @@ the Query Server are always `array`-typed that could be matched by the pattern
 ``[<command>, <*arguments>]\n``.
 
 .. note::
-   To simplify examples reading we omitted trailing ``\n`` character to let
-   Sphinx highlight them well. Also, all examples contain formatted JSON values
-   while real data transfers in compact mode without formatting spaces.
+    To simplify examples reading we omitted trailing ``\n`` character to let
+    Sphinx highlight them well. Also, all examples contain formatted JSON values
+    while real data transfers in compact mode without formatting spaces.
 
 .. _qs/reset:
 
@@ -62,7 +61,6 @@ The Query Server answers::
 
     true
 
-
 .. _qs/add_lib:
 
 ``add_lib``
@@ -77,24 +75,22 @@ in `map` functions.
 
 CouchDB sends::
 
-  [
-    "add_lib",
-    {
-      "utils": "exports.MAGIC = 42;"
-    }
-  ]
+    [
+        "add_lib",
+        {
+            "utils": "exports.MAGIC = 42;"
+        }
+    ]
 
 The Query Server answers::
 
-  true
-
+    true
 
 .. note::
-
-   This library shouldn't have any side effects nor track its own state
-   or you'll have a lot of happy debugging time if something went wrong.
-   Remember that a complete index rebuild is a heavy operation and this is
-   the only way to fix your mistakes with shared state.
+    This library shouldn't have any side effects nor track its own state
+    or you'll have a lot of happy debugging time if something went wrong.
+    Remember that a complete index rebuild is a heavy operation and this is
+    the only way to fix your mistakes with shared state.
 
 .. _qs/add_fun:
 
@@ -114,14 +110,13 @@ actual documents.
 CouchDB sends::
 
     [
-      "add_fun",
-      "function(doc) { if(doc.score > 50) emit(null, {'player_name': doc.name}); }"
+        "add_fun",
+        "function(doc) { if(doc.score > 50) emit(null, {'player_name': doc.name}); }"
     ]
 
 The Query Server answers::
 
     true
-
 
 .. _qs/map_doc:
 
@@ -141,21 +136,21 @@ string.
 CouchDB sends::
 
     [
-      "map_doc",
-      {
-        "_id": "8877AFF9789988EE",
-        "_rev": "3-235256484",
-        "name": "John Smith",
-        "score": 60
-      }
+        "map_doc",
+        {
+            "_id": "8877AFF9789988EE",
+            "_rev": "3-235256484",
+            "name": "John Smith",
+            "score": 60
+        }
     ]
 
 If the function above is the only function stored, the Query Server answers::
 
     [
-      [
-        [null, {"player_name": "John Smith"}]
-      ]
+        [
+            [null, {"player_name": "John Smith"}]
+        ]
     ]
 
 That is, an array with the result for every function for the given document.
@@ -165,19 +160,18 @@ If a document is to be excluded from the view, the array should be empty.
 CouchDB sends::
 
     [
-      "map_doc",
-      {
-        "_id": "9590AEB4585637FE",
-        "_rev": "1-674684684",
-        "name": "Jane Parker",
-        "score": 43
-      }
+        "map_doc",
+        {
+            "_id": "9590AEB4585637FE",
+            "_rev": "1-674684684",
+            "name": "Jane Parker",
+            "score": 43
+        }
     ]
 
 The Query Server answers::
 
     [[]]
-
 
 .. _qs/reduce:
 
@@ -186,9 +180,11 @@ The Query Server answers::
 
 :Command: ``reduce``
 :Arguments:
-  - Reduce function source
-  - Array of :ref:`map function <mapfun>` results where each item represented
-    in format ``[[key, id-of-doc], value]``
+
+    - Reduce function source
+    - Array of :ref:`map function <mapfun>` results where each item represented
+      in format ``[[key, id-of-doc], value]``
+
 :Returns: Array with pair values: ``true`` and another array with reduced result
 
 If the view has a reduce function defined, CouchDB will enter into the reduce
@@ -197,24 +193,24 @@ results on which it can apply them.
 
 CouchDB sends::
 
-  [
-    "reduce",
     [
-      "function(k, v) { return sum(v); }"
-    ],
-    [
-      [[1, "699b524273605d5d3e9d4fd0ff2cb272"], 10],
-      [[2, "c081d0f69c13d2ce2050d684c7ba2843"], 20],
-      [[null, "foobar"], 3]
+        "reduce",
+        [
+            "function(k, v) { return sum(v); }"
+        ],
+        [
+            [[1, "699b524273605d5d3e9d4fd0ff2cb272"], 10],
+            [[2, "c081d0f69c13d2ce2050d684c7ba2843"], 20],
+            [[null, "foobar"], 3]
+        ]
     ]
-  ]
 
 The Query Server answers::
 
-  [
-    true,
-    [33]
-  ]
+    [
+        true,
+        [33]
+    ]
 
 Note that even though the view server receives the map results in the form
 ``[[key, id-of-doc], value]``, the function may receive them in a different
@@ -227,9 +223,10 @@ keys and the list of values.
 ============
 
 :Command: ``rereduce``
-:Arguments: 
-  - Reduce function source
-  - List of values
+:Arguments:
+
+    - Reduce function source
+    - List of values
 
 When building a view, CouchDB will apply the reduce step directly to the output
 of the map step and the rereduce step to the output of a previous reduce step.
@@ -239,25 +236,24 @@ document ids, to the rereduce step.
 
 CouchDB sends::
 
-  [
-    "rereduce",
     [
-      "function(k, v, r) { return sum(v); }"
-    ],
-    [
-      33,
-      55,
-      66
+        "rereduce",
+        [
+            "function(k, v, r) { return sum(v); }"
+        ],
+        [
+            33,
+            55,
+            66
+        ]
     ]
-  ]
 
 The Query Server answers::
 
-  [
-    true,
-    [154]
-  ]
-
+    [
+        true,
+        [154]
+    ]
 
 .. _qs/ddoc:
 
@@ -267,25 +263,23 @@ The Query Server answers::
 :Command: ``ddoc``
 :Arguments: Array of objects.
 
-  - First phase (ddoc initialization):
+    - First phase (ddoc initialization):
 
-    - ``"new"``
-    - Design document ``_id``
-    - Design document object
+      - ``"new"``
+      - Design document ``_id``
+      - Design document object
 
-  - Second phase (design function execution):
+    - Second phase (design function execution):
 
-    - Design document ``_id``
-    - Function path as an array of object keys
-    - Array of function arguments
+      - Design document ``_id``
+      - Function path as an array of object keys
+      - Array of function arguments
 
 :Returns:
 
-  - First phase (ddoc initialization): ``true``
-  - Second phase (design function execution): custom object depending on
-    executed function
-
-
+    - First phase (ddoc initialization): ``true``
+    - Second phase (design function execution): custom object depending on
+      executed function
 
 This command acts in two phases: `ddoc` registration and `design function`
 execution.
@@ -295,39 +289,36 @@ Server to let it cache it by ``_id`` value for further function execution.
 
 To do this, CouchDB sends::
 
-  [
-    "ddoc",
-    "new",
-    "_design/temp",
-    {
-      "_id": "_design/temp",
-      "_rev": "8-d7379de23a751dc2a19e5638a7bbc5cc",
-      "language": "javascript",
-      "shows": {
-        "request": "function(doc,req){ return {json: req}; }",
-        "hello": "function(doc,req){ return {body: 'Hello, ' + (doc || {})._id + '!'}; }"
-      }
-    }
-  ]
+    [
+        "ddoc",
+        "new",
+        "_design/temp",
+        {
+            "_id": "_design/temp",
+            "_rev": "8-d7379de23a751dc2a19e5638a7bbc5cc",
+            "language": "javascript",
+            "shows": {
+                "request": "function(doc,req){ return {json: req}; }",
+                "hello": "function(doc,req){ return {body: 'Hello, ' + (doc || {})._id + '!'}; }"
+            }
+        }
+    ]
 
 The Query Server answers::
 
-  true
-
+    true
 
 After than this design document is ready to serve next subcommands - that's the
 second phase.
 
 .. note::
+    Each ``ddoc`` subcommand is the root design document key, so they are not
+    actually subcommands, but first elements of the JSON path that may be handled
+    and processed.
 
-   Each ``ddoc`` subcommand is the root design document key, so they are not
-   actually subcommands, but first elements of the JSON path that may be handled
-   and processed.
+    The pattern for subcommand execution is common:
 
-   The pattern for subcommand execution is common:
-
-   ``["ddoc", <design_doc_id>, [<subcommand>, <funcname>], [<argument1>, <argument2>, ...]]``
-
+    ``["ddoc", <design_doc_id>, [<subcommand>, <funcname>], [<argument1>, <argument2>, ...]]``
 
 .. _qs/ddoc/shows:
 
@@ -338,90 +329,89 @@ second phase.
 :SubCommand: ``shows``
 :Arguments:
 
-  - Document object or ``null`` if document `id` wasn't specified in request
-  - :ref:`request_object`
+    - Document object or ``null`` if document `id` wasn't specified in request
+    - :ref:`request_object`
 
 :Returns: Array with two elements:
 
-  - ``"resp"``
-  - :ref:`response_object`
+    - ``"resp"``
+    - :ref:`response_object`
 
 Executes :ref:`show function <showfun>`.
 
 Couchdb sends::
 
-  [
-    "ddoc",
-    "_design/temp",
     [
-        "shows",
-        "doc"
-    ],
-    [
-      null,
-      {
-        "info": {
-          "db_name": "test",
-          "doc_count": 8,
-          "doc_del_count": 0,
-          "update_seq": 105,
-          "purge_seq": 0,
-          "compact_running": false,
-          "disk_size": 15818856,
-          "data_size": 1535048,
-          "instance_start_time": "1359952188595857",
-          "disk_format_version": 6,
-          "committed_update_seq": 105
-        },
-        "id": null,
-        "uuid": "169cb4cc82427cc7322cb4463d0021bb",
-        "method": "GET",
-        "requested_path": [
-          "api",
-          "_design",
-          "temp",
-          "_show",
-          "request"
+        "ddoc",
+        "_design/temp",
+        [
+            "shows",
+            "doc"
         ],
-        "path": [
-          "api",
-          "_design",
-          "temp",
-          "_show",
-          "request"
-        ],
-        "raw_path": "/api/_design/temp/_show/request",
-        "query": {},
-        "headers": {
-          "Accept": "*/*",
-          "Host": "localhost:5984",
-          "User-Agent": "curl/7.26.0"
-        },
-        "body": "undefined",
-        "peer": "127.0.0.1",
-        "form": {},
-        "cookie": {},
-        "userCtx": {
-          "db": "api",
-          "name": null,
-          "roles": [
-            "_admin"
-          ]
-        },
-        "secObj": {}
-      }
+        [
+            null,
+            {
+                "info": {
+                    "db_name": "test",
+                    "doc_count": 8,
+                    "doc_del_count": 0,
+                    "update_seq": 105,
+                    "purge_seq": 0,
+                    "compact_running": false,
+                    "disk_size": 15818856,
+                    "data_size": 1535048,
+                    "instance_start_time": "1359952188595857",
+                    "disk_format_version": 6,
+                    "committed_update_seq": 105
+                },
+                "id": null,
+                "uuid": "169cb4cc82427cc7322cb4463d0021bb",
+                "method": "GET",
+                "requested_path": [
+                    "api",
+                    "_design",
+                    "temp",
+                    "_show",
+                    "request"
+                ],
+                "path": [
+                    "api",
+                    "_design",
+                    "temp",
+                    "_show",
+                    "request"
+                ],
+                "raw_path": "/api/_design/temp/_show/request",
+                "query": {},
+                "headers": {
+                    "Accept": "*/*",
+                    "Host": "localhost:5984",
+                    "User-Agent": "curl/7.26.0"
+                },
+                "body": "undefined",
+                "peer": "127.0.0.1",
+                "form": {},
+                "cookie": {},
+                "userCtx": {
+                    "db": "api",
+                    "name": null,
+                    "roles": [
+                        "_admin"
+                    ]
+                },
+                "secObj": {}
+            }
+        ]
     ]
-  ]
 
 The Query Server sends::
 
-  [
-    "resp",
-    {
-      "body": "Hello, undefined!"
-    }
-  ]
-
+    [
+        "resp",
+        {
+            "body": "Hello, undefined!"
+        }
+    ]
 
 .. _qs/ddoc/lists:
 
@@ -432,8 +422,8 @@ The Query Server sends::
 :SubCommand: ``lists``
 :Arguments:
 
-  - :ref:`view_head_info_object`:
-  - :ref:`request_object`
+    - :ref:`view_head_info_object`:
+    - :ref:`request_object`
 
 :Returns: Array. See below for details.
 
@@ -444,23 +434,23 @@ an example for illustration.
 
 Let's assume that we have view a function that emits `id-rev` pairs::
 
-  function(doc) {
-    emit(doc._id, doc._rev);
-  }
+    function(doc) {
+        emit(doc._id, doc._rev);
+    }
 
 And we'd like to emulate ``_all_docs`` JSON response with list function. Our
 *first* version of the list functions looks like this::
 
-  function(head, req){
-    start({'headers': {'Content-Type': 'application/json'}});
-    var resp = head;
-    var rows = [];
-    while(row=getRow()){
-      rows.push(row);
+    function(head, req){
+        start({'headers': {'Content-Type': 'application/json'}});
+        var resp = head;
+        var rows = [];
+        while(row=getRow()){
+            rows.push(row);
+        }
+        resp.rows = rows;
+        return toJSON(resp);
     }
-    resp.rows = rows;
-    return toJSON(resp);
-  }
 
 The whole communication session during list function execution could be divided
 on three parts:
@@ -469,7 +459,7 @@ on three parts:
 
    The first returned object from list function is an array of next structure::
 
-      ["start", <chunks>, <headers>]
+       ["start", <chunks>, <headers>]
 
    Where ``<chunks>`` is an array of text chunks that will be sent to client
    and ``<headers>`` is an object with response HTTP headers.
@@ -477,15 +467,15 @@ on three parts:
    This message is sent from the Query Server to CouchDB on the
    :js:func:`start` call which initialize HTTP response to the client::
 
-     [
-       "start",
-       [],
-       {
-         "headers": {
-           "Content-Type": "application/json"
-         }
-       }
-     ]
+       [
+           "start",
+           [],
+           {
+               "headers": {
+                   "Content-Type": "application/json"
+               }
+           }
+       ]
 
    After this, the list function may start to process view rows.
 
@@ -498,29 +488,28 @@ on three parts:
 
    CouchDB sends a special array that carries view row data::
 
-     [
-       "list_row",
-       {
-         "id": "0cb42c267fe32d4b56b3500bc503e030",
-         "key": "0cb42c267fe32d4b56b3500bc503e030",
-         "value": "1-967a00dff5e02add41819138abb3284d"
-       }
-     ]
+       [
+           "list_row",
+           {
+               "id": "0cb42c267fe32d4b56b3500bc503e030",
+               "key": "0cb42c267fe32d4b56b3500bc503e030",
+               "value": "1-967a00dff5e02add41819138abb3284d"
+           }
+       ]
 
    If Query Server has something to return on this, it returns an array with a
    ``"chunks"`` item in the head and an array of data in the tail. Now, for our
    case it has nothing to return, so the response will be::
 
-     [
-       "chunks",
-       []
-     ]
+       [
+         "chunks",
+         []
+       ]
 
    When there is no more view rows to process, CouchDB sends special message,
    that signs about that there is no more data to send from its side::
 
-     ["list_end"]
-
+       ["list_end"]
 
 #. Finalization
 
@@ -530,12 +519,12 @@ on three parts:
 
    For our example the last message will be the next::
 
-     [
-       "end",
        [
-         "{\"total_rows\":2,\"offset\":0,\"rows\":[{\"id\":\"0cb42c267fe32d4b56b3500bc503e030\",\"key\":\"0cb42c267fe32d4b56b3500bc503e030\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"},{\"id\":\"431926a69504bde41851eb3c18a27b1f\",\"key\":\"431926a69504bde41851eb3c18a27b1f\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"}]}"
+           "end",
+           [
+               "{\"total_rows\":2,\"offset\":0,\"rows\":[{\"id\":\"0cb42c267fe32d4b56b3500bc503e030\",\"key\":\"0cb42c267fe32d4b56b3500bc503e030\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"},{\"id\":\"431926a69504bde41851eb3c18a27b1f\",\"key\":\"431926a69504bde41851eb3c18a27b1f\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"}]}"
+           ]
        ]
-     ]
 
 There, we had made a big mistake: we had returned out result in a single
 message from the Query Server. That's ok when there are only a few rows in the
@@ -544,33 +533,33 @@ rows
 
 Let's fix our list function and see the changes in communication::
 
-  function(head, req){
-    start({'headers': {'Content-Type': 'application/json'}});
-    send('{');
-    send('"total_rows":' + toJSON(head.total_rows) + ',');
-    send('"offset":' + toJSON(head.offset) + ',');
-    send('"rows":[');
-    if (row=getRow()){
-      send(toJSON(row));
+    function(head, req){
+        start({'headers': {'Content-Type': 'application/json'}});
+        send('{');
+        send('"total_rows":' + toJSON(head.total_rows) + ',');
+        send('"offset":' + toJSON(head.offset) + ',');
+        send('"rows":[');
+        if (row=getRow()){
+            send(toJSON(row));
+        }
+        while(row=getRow()){
+            send(',' + toJSON(row));
+        }
+        send(']');
+        return '}';
     }
-    while(row=getRow()){
-      send(',' + toJSON(row));
-    }
-    send(']');
-    return '}';
-  }
 
 "Wait, what?" - you'd like to ask. Yes, we'd build JSON response manually by
 string chunks, but let's take a look on logs::
 
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["start",["{","\"total_rows\":2,","\"offset\":0,","\"rows\":["],{"headers":{"Content-Type":"application/json"}}]
-  [Wed, 24 Jul 2013 05:45:30 GMT] [info] [<0.18963.1>] 127.0.0.1 - - GET /blog/_design/post/_list/index/all_docs 200
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Input  :: ["list_row",{"id":"0cb42c267fe32d4b56b3500bc503e030","key":"0cb42c267fe32d4b56b3500bc503e030","value":"1-967a00dff5e02add41819138abb3284d"}]
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["chunks",["{\"id\":\"0cb42c267fe32d4b56b3500bc503e030\",\"key\":\"0cb42c267fe32d4b56b3500bc503e030\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"}"]]
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Input  :: ["list_row",{"id":"431926a69504bde41851eb3c18a27b1f","key":"431926a69504bde41851eb3c18a27b1f","value":"1-967a00dff5e02add41819138abb3284d"}]
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["chunks",[",{\"id\":\"431926a69504bde41851eb3c18a27b1f\",\"key\":\"431926a69504bde41851eb3c18a27b1f\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"}"]]
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Input  :: ["list_end"]
-  [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["end",["]","}"]]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["start",["{","\"total_rows\":2,","\"offset\":0,","\"rows\":["],{"headers":{"Content-Type":"application/json"}}]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [info] [<0.18963.1>] 127.0.0.1 - - GET /blog/_design/post/_list/index/all_docs 200
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Input  :: ["list_row",{"id":"0cb42c267fe32d4b56b3500bc503e030","key":"0cb42c267fe32d4b56b3500bc503e030","value":"1-967a00dff5e02add41819138abb3284d"}]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["chunks",["{\"id\":\"0cb42c267fe32d4b56b3500bc503e030\",\"key\":\"0cb42c267fe32d4b56b3500bc503e030\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"}"]]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Input  :: ["list_row",{"id":"431926a69504bde41851eb3c18a27b1f","key":"431926a69504bde41851eb3c18a27b1f","value":"1-967a00dff5e02add41819138abb3284d"}]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["chunks",[",{\"id\":\"431926a69504bde41851eb3c18a27b1f\",\"key\":\"431926a69504bde41851eb3c18a27b1f\",\"value\":\"1-967a00dff5e02add41819138abb3284d\"}"]]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Input  :: ["list_end"]
+    [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["end",["]","}"]]
 
 Note, that now the Query Server sends response by lightweight chunks and if
 our communication process was extremely slow, the client will see how response
@@ -586,14 +575,14 @@ result, like they have for our previous list function.
 :SubCommand: ``updates``
 :Arguments:
 
-  - Document object or ``null`` if document `id` wasn't specified in request
-  - :ref:`request_object`
+    - Document object or ``null`` if document `id` wasn't specified in request
+    - :ref:`request_object`
 
 :Returns: Array with there elements:
 
-  - ``"up"``
-  - Document object or ``null`` if nothing should be stored
-  - :ref:`response_object`
+    - ``"up"``
+    - Document object or ``null`` if nothing should be stored
+    - :ref:`response_object`
 
 Executes :ref:`update function <updatefun>`.
 
@@ -665,23 +654,22 @@ CouchDB sends::
 
 The Query Server answers::
 
-  [
-    "up",
-    null,
-    {"body": "document id wasn't provided"}
-  ]
+    [
+        "up",
+        null,
+        {"body": "document id wasn't provided"}
+    ]
 
 or in case of successful update::
 
-  [
-    "up",
-    {
-      "_id": "7b695cb34a03df0316c15ab529002e69",
-      "hello": "world!"
-    },
-    {"body": "document was updated"}
-  ]
-
+    [
+        "up",
+        {
+            "_id": "7b695cb34a03df0316c15ab529002e69",
+            "hello": "world!"
+        },
+        {"body": "document was updated"}
+    ]
 
 .. _qs/ddoc/filters:
 
@@ -692,112 +680,110 @@ or in case of successful update::
 :SubCommand: ``filters``
 :Arguments:
 
-  - Array of document objects
-  - :ref:`request_object`
+    - Array of document objects
+    - :ref:`request_object`
 
 :Returns: Array of two elements:
 
-  - ``true``
-  - Array of booleans in the same order of input documents.
+    - ``true``
+    - Array of booleans in the same order of input documents.
 
 Executes :ref:`filter function <filterfun>`.
 
 CouchDB sends::
 
-  [
-      "ddoc",
-      "_design/test",
-      [
-          "filters",
-          "random"
-      ],
-      [
-          [
-              {
-                  "_id": "431926a69504bde41851eb3c18a27b1f",
-                  "_rev": "1-967a00dff5e02add41819138abb3284d",
-                  "_revisions": {
-                      "start": 1,
-                      "ids": [
-                          "967a00dff5e02add41819138abb3284d"
-                      ]
-                  }
-              },
-              {
-                  "_id": "0cb42c267fe32d4b56b3500bc503e030",
-                  "_rev": "1-967a00dff5e02add41819138abb3284d",
-                  "_revisions": {
-                      "start": 1,
-                      "ids": [
-                          "967a00dff5e02add41819138abb3284d"
-                      ]
-                  }
-              }
-          ],
-          {
-              "info": {
-                  "db_name": "test",
-                  "doc_count": 5,
-                  "doc_del_count": 0,
-                  "update_seq": 19,
-                  "purge_seq": 0,
-                  "compact_running": false,
-                  "disk_size": 8056936,
-                  "data_size": 7979745,
-                  "instance_start_time": "1374612186131612",
-                  "disk_format_version": 6,
-                  "committed_update_seq": 19
-              },
-              "id": null,
-              "uuid": "7b695cb34a03df0316c15ab529023a81",
-              "method": "GET",
-              "requested_path": [
-                  "test",
-                  "_changes?filter=test",
-                  "random"
-              ],
-              "path": [
-                  "test",
-                  "_changes"
-              ],
-              "raw_path": "/test/_changes?filter=test/random",
-              "query": {
-                  "filter": "test/random"
-              },
-              "headers": {
-                  "Accept": "application/json",
-                  "Accept-Encoding": "identity, gzip, deflate, compress",
-                  "Content-Length": "0",
-                  "Content-Type": "application/json; charset=utf-8",
-                  "Host": "localhost:5984"
-              },
-              "body": "",
-              "peer": "127.0.0.1",
-              "form": {},
-              "cookie": {},
-              "userCtx": {
-                  "db": "test",
-                  "name": null,
-                  "roles": [
-                      "_admin"
-                  ]
-              },
-              "secObj": {}
-          }
-      ]
-  ]
+    [
+        "ddoc",
+        "_design/test",
+        [
+            "filters",
+            "random"
+        ],
+        [
+            [
+                {
+                    "_id": "431926a69504bde41851eb3c18a27b1f",
+                    "_rev": "1-967a00dff5e02add41819138abb3284d",
+                    "_revisions": {
+                        "start": 1,
+                        "ids": [
+                            "967a00dff5e02add41819138abb3284d"
+                        ]
+                    }
+                },
+                {
+                    "_id": "0cb42c267fe32d4b56b3500bc503e030",
+                    "_rev": "1-967a00dff5e02add41819138abb3284d",
+                    "_revisions": {
+                        "start": 1,
+                        "ids": [
+                            "967a00dff5e02add41819138abb3284d"
+                        ]
+                    }
+                }
+            ],
+            {
+                "info": {
+                    "db_name": "test",
+                    "doc_count": 5,
+                    "doc_del_count": 0,
+                    "update_seq": 19,
+                    "purge_seq": 0,
+                    "compact_running": false,
+                    "disk_size": 8056936,
+                    "data_size": 7979745,
+                    "instance_start_time": "1374612186131612",
+                    "disk_format_version": 6,
+                    "committed_update_seq": 19
+                },
+                "id": null,
+                "uuid": "7b695cb34a03df0316c15ab529023a81",
+                "method": "GET",
+                "requested_path": [
+                    "test",
+                    "_changes?filter=test",
+                    "random"
+                ],
+                "path": [
+                    "test",
+                    "_changes"
+                ],
+                "raw_path": "/test/_changes?filter=test/random",
+                "query": {
+                    "filter": "test/random"
+                },
+                "headers": {
+                    "Accept": "application/json",
+                    "Accept-Encoding": "identity, gzip, deflate, compress",
+                    "Content-Length": "0",
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Host": "localhost:5984"
+                },
+                "body": "",
+                "peer": "127.0.0.1",
+                "form": {},
+                "cookie": {},
+                "userCtx": {
+                    "db": "test",
+                    "name": null,
+                    "roles": [
+                        "_admin"
+                    ]
+                },
+                "secObj": {}
+            }
+        ]
+    ]
 
 The Query Server answers::
 
-  [
-    true,
     [
-      true,
-      false
+        true,
+        [
+            true,
+            false
+        ]
     ]
-  ]
-
-
 
 .. _qs/ddoc/views:
 
@@ -809,8 +795,8 @@ The Query Server answers::
 :Arguments: Array of document objects
 :Returns: Array of two elements:
 
-  - ``true``
-  - Array of booleans in the same order of input documents.
+    - ``true``
+    - Array of booleans in the same order of input documents.
 
 .. versionadded:: 1.2
 
@@ -827,10 +813,10 @@ Acts in the same way as :ref:`qs/ddoc/filters` command.
 :SubCommand: ``validate_doc_update``
 :Arguments:
 
-  - Document object that will be stored
-  - Document object that will be replaced
-  - :ref:`userctx_object`
-  - :ref:`security_object`
+    - Document object that will be stored
+    - Document object that will be replaced
+    - :ref:`userctx_object`
+    - :ref:`security_object`
 
 :Returns: ``1``
 
@@ -838,43 +824,41 @@ Executes :ref:`validation function <vdufun>`.
 
 CouchDB send::
 
-  [
-    "ddoc",
-    "_design/id",
-    ["validate_doc_update"],
     [
-      {
-        "_id": "docid",
-        "_rev": "2-e0165f450f6c89dc6b071c075dde3c4d",
-        "score": 10
-      },
-      {
-        "_id": "docid",
-        "_rev": "1-9f798c6ad72a406afdbf470b9eea8375",
-        "score": 4
-      },
-      {
-        "name": "Mike",
-        "roles": ["player"]
-      },
-      {
-        "admins": {},
-        "members": []
-      }
+        "ddoc",
+        "_design/id",
+        ["validate_doc_update"],
+        [
+            {
+                "_id": "docid",
+                "_rev": "2-e0165f450f6c89dc6b071c075dde3c4d",
+                "score": 10
+            },
+            {
+                "_id": "docid",
+                "_rev": "1-9f798c6ad72a406afdbf470b9eea8375",
+                "score": 4
+            },
+            {
+                "name": "Mike",
+                "roles": ["player"]
+            },
+            {
+                "admins": {},
+                "members": []
+            }
+        ]
     ]
-  ]
 
 The Query Server answers::
 
-  1
+    1
 
 .. note::
-
-   While the only valid response for this command is ``true`` to prevent
-   document save the Query Server need to raise an error: ``forbidden`` or
-   ``unauthorized`` - these errors will be turned into correct ``HTTP 403`` and
-   ``HTTP 401`` responses respectively.
-
+    While the only valid response for this command is ``true`` to prevent
+    document save the Query Server need to raise an error: ``forbidden`` or
+    ``unauthorized`` - these errors will be turned into correct ``HTTP 403`` and
+    ``HTTP 401`` responses respectively.
 
 .. _qs/errors:
 
@@ -904,7 +888,7 @@ to CouchDB. All errors are logically divided into two groups:
 
 To raise an error, the Query Server have to answer::
 
-  ["error", "error_name", "reason why"]
+    ["error", "error_name", "reason why"]
 
 The ``"error_name"`` helps to classify problems by their type e.g. if it's
 ``"value_error"`` so probably user have entered wrong data, ``"not_found"``
@@ -914,11 +898,10 @@ invalid and non expected input from user.
 The ``"reason why"`` is the error message that explains why it raised and, if
 possible, what is needed to do to fix it.
 
-For example, calling :ref:`updatefun` against non existent document could produce
-next error message::
+For example, calling :ref:`updatefun` against non existent document could
+produce next error message::
 
-  ["error", "not_found", "Update function requires existent document"]
-
+    ["error", "not_found", "Update function requires existent document"]
 
 .. _qs/error/forbidden:
 
@@ -933,8 +916,7 @@ with error information object.
 
 To raise this error, the Query Server have to answer::
 
-  {"forbidden": "reason why"}
-
+    {"forbidden": "reason why"}
 
 .. _qs/error/unauthorized:
 
@@ -949,7 +931,7 @@ information object.
 
 To raise this error, the Query Server have to answer::
 
-  {"unauthorized": "reason why"}
+    {"unauthorized": "reason why"}
 
 .. _qs/log:
 
@@ -960,10 +942,10 @@ At any time, the Query Server may send some information that will be saved in
 CouchDB's log file. This is done by sending a special object with just one
 field, log, on a separate line::
 
-  ["log", "some message"]
+    ["log", "some message"]
 
 CouchDB responds nothing, but writes received message into log file::
 
-  [Sun, 13 Feb 2009 23:31:30 GMT] [info] [<0.72.0>] Query Server Log Message: some message
+    [Sun, 13 Feb 2009 23:31:30 GMT] [info] [<0.72.0>] Query Server Log Message: some message
 
 These messages are only logged at :config:option:`info level <log/level>`.
