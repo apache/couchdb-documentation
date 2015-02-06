@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _install/unix:
 
 =================================
@@ -26,13 +25,12 @@ trouble, be sure to check out the wiki. If you have any tips to share, please
 also update the wiki so that others can benefit from your experience.
 
 .. seealso::
-
-   `Community installation guides`_
+    `Community installation guides`_
 
 .. _Community installation guides: http://wiki.apache.org/couchdb/Installation
 
 Troubleshooting
----------------
+===============
 
 * There is a `troubleshooting guide`_.
 * There is a `wiki`_ for general documentation.
@@ -44,11 +42,10 @@ Please work through these in order if you experience any problems.
 .. _wiki: http://wiki.apache.org/couchdb
 .. _friendly mailing lists: http://couchdb.apache.org/community/lists.html
 
-
 .. _install/unix/dependencies:
 
 Dependencies
-------------
+============
 
 You should have the following installed:
 
@@ -69,7 +66,7 @@ help2man is only need if you plan on installing the CouchDB man pages.
 Python and Sphinx are only required for building the online documentation.
 
 Debian-based Systems
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 You can install the dependencies by running::
 
@@ -92,13 +89,11 @@ Be sure to update the version numbers to match your system's available packages.
 Unfortunately, it seems that installing dependencies on Ubuntu is troublesome.
 
 .. seealso::
-
-  * `Installing on Debian <http://wiki.apache.org/couchdb/Installing_on_Debian>`_
-  * `Installing on Ubuntu <http://wiki.apache.org/couchdb/Installing_on_Ubuntu>`_
-
+    * `Installing on Debian <http://wiki.apache.org/couchdb/Installing_on_Debian>`_
+    * `Installing on Ubuntu <http://wiki.apache.org/couchdb/Installing_on_Ubuntu>`_
 
 RedHat-based (Fedora, Centos, RHEL) Systems
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------
 
 You can install the dependencies by running::
 
@@ -121,13 +116,12 @@ While CouchDB builds against the default js-devel-1.7.0 included in some
 distributions, it's recommended to use a more recent js-devel-1.8.5.
 
 Mac OS X
-~~~~~~~~
+--------
 
 Follow :ref:`install/mac/homebrew` reference till `brew install couchdb` step.
 
-
 Installing
-----------
+==========
 
 Once you have satisfied the dependencies you should run::
 
@@ -158,7 +152,7 @@ If everything was successful you should see the following message::
 Relax.
 
 First Run
----------
+=========
 
 You can start the CouchDB server by running::
 
@@ -181,7 +175,7 @@ From here you should verify your installation by pointing your web browser to::
     http://localhost:5984/_utils/verify_install.html
 
 Security Considerations
------------------------
+=======================
 
 You should create a special `couchdb` user for CouchDB.
 
@@ -222,12 +216,11 @@ Change the permission of the CouchDB directories by running::
 
 .. _Workgroup Manager: http://www.apple.com/support/downloads/serveradmintools1047.html
 
-
 Running as a Daemon
--------------------
+===================
 
 SysV/BSD-style Systems
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 You can use the `couchdb` init script to control the CouchDB daemon.
 
