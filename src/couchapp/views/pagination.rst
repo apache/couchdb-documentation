@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _views/pagination:
 
 =================
@@ -33,27 +32,27 @@ Example Data
 To have some data to work with, we’ll create a list of bands,
 one document per band::
 
-  { "name":"Biffy Clyro" }
+    { "name":"Biffy Clyro" }
 
-  { "name":"Foo Fighters" }
+    { "name":"Foo Fighters" }
 
-  { "name":"Tool" }
+    { "name":"Tool" }
 
-  { "name":"Nirvana" }
+    { "name":"Nirvana" }
 
-  { "name":"Helmet" }
+    { "name":"Helmet" }
 
-  { "name":"Tenacious D" }
+    { "name":"Tenacious D" }
 
-  { "name":"Future of the Left" }
+    { "name":"Future of the Left" }
 
-  { "name":"A Perfect Circle" }
+    { "name":"A Perfect Circle" }
 
-  { "name":"Silverchair" }
+    { "name":"Silverchair" }
 
-  { "name":"Queens of the Stone Age" }
+    { "name":"Queens of the Stone Age" }
 
-  { "name":"Kerub" }
+    { "name":"Kerub" }
 
 A View
 =======
@@ -64,12 +63,12 @@ and “A” in front of band names to put them into the right position:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.name) {
-      var name = doc.name.replace(/^(A|The) /, "");
-      emit(name, null);
+    function(doc) {
+        if(doc.name) {
+            var name = doc.name.replace(/^(A|The) /, "");
+            emit(name, null);
+        }
     }
-  }
 
 The views result is an alphabetical list of band names. Now say we want to
 display band names five at a time and have a link pointing to the next five
@@ -82,19 +81,19 @@ the full result set:
 
 .. code-block:: javascript
 
-  {"total_rows":11,"offset":0,"rows":[
-    {"id":"a0746072bba60a62b01209f467ca4fe2","key":"Biffy Clyro","value":null},
-    {"id":"b47d82284969f10cd1b6ea460ad62d00","key":"Foo Fighters","value":null},
-    {"id":"45ccde324611f86ad4932555dea7fce0","key":"Tenacious D","value":null},
-    {"id":"d7ab24bb3489a9010c7d1a2087a4a9e4","key":"Future of the Left","value":null},
-    {"id":"ad2f85ef87f5a9a65db5b3a75a03cd82","key":"Helmet","value":null},
-    {"id":"a2f31cfa68118a6ae9d35444fcb1a3cf","key":"Nirvana","value":null},
-    {"id":"67373171d0f626b811bdc34e92e77901","key":"Kerub","value":null},
-    {"id":"3e1b84630c384f6aef1a5c50a81e4a34","key":"Perfect Circle","value":null},
-    {"id":"84a371a7b8414237fad1b6aaf68cd16a","key":"Queens of the Stone Age","value":null},
-    {"id":"dcdaf08242a4be7da1a36e25f4f0b022","key":"Silverchair","value":null},
-    {"id":"fd590d4ad53771db47b0406054f02243","key":"Tool","value":null}
-  ]}
+    {"total_rows":11,"offset":0,"rows":[
+        {"id":"a0746072bba60a62b01209f467ca4fe2","key":"Biffy Clyro","value":null},
+        {"id":"b47d82284969f10cd1b6ea460ad62d00","key":"Foo Fighters","value":null},
+        {"id":"45ccde324611f86ad4932555dea7fce0","key":"Tenacious D","value":null},
+        {"id":"d7ab24bb3489a9010c7d1a2087a4a9e4","key":"Future of the Left","value":null},
+        {"id":"ad2f85ef87f5a9a65db5b3a75a03cd82","key":"Helmet","value":null},
+        {"id":"a2f31cfa68118a6ae9d35444fcb1a3cf","key":"Nirvana","value":null},
+        {"id":"67373171d0f626b811bdc34e92e77901","key":"Kerub","value":null},
+        {"id":"3e1b84630c384f6aef1a5c50a81e4a34","key":"Perfect Circle","value":null},
+        {"id":"84a371a7b8414237fad1b6aaf68cd16a","key":"Queens of the Stone Age","value":null},
+        {"id":"dcdaf08242a4be7da1a36e25f4f0b022","key":"Silverchair","value":null},
+        {"id":"fd590d4ad53771db47b0406054f02243","key":"Tool","value":null}
+    ]}
 
 Setup
 =====
@@ -111,19 +110,18 @@ Or in a pseudo-JavaScript snippet:
 
 .. code-block:: javascript
 
+    var result = new Result();
+    var page = result.getPage();
 
-  var result = new Result();
-  var page = result.getPage();
+    page.display();
 
-  page.display();
+    if(result.hasPrev()) {
+        page.display_link('prev');
+    }
 
-  if(result.hasPrev()) {
-    page.display_link('prev');
-  }
-
-  if(result.hasNext()) {
-    page.display_link('next');
-  }
+    if(result.hasNext()) {
+        page.display_link('next');
+    }
 
 Paging
 ======
@@ -131,19 +129,19 @@ Paging
 To get the first five rows from the view result, you use the ``?limit=5``
 query parameter::
 
-  curl -X GET http://127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5
+    curl -X GET http://127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5
 
 The result:
 
 .. code-block:: javascript
 
-  {"total_rows":11,"offset":0,"rows":[
-    {"id":"a0746072bba60a62b01209f467ca4fe2","key":"Biffy Clyro","value":null},
-    {"id":"b47d82284969f10cd1b6ea460ad62d00","key":"Foo Fighters","value":null},
-    {"id":"45ccde324611f86ad4932555dea7fce0","key":"Tenacious D","value":null},
-    {"id":"d7ab24bb3489a9010c7d1a2087a4a9e4","key":"Future of the Left","value":null},
-    {"id":"ad2f85ef87f5a9a65db5b3a75a03cd82","key":"Helmet","value":null}
-  ]}
+    {"total_rows":11,"offset":0,"rows":[
+        {"id":"a0746072bba60a62b01209f467ca4fe2","key":"Biffy Clyro","value":null},
+        {"id":"b47d82284969f10cd1b6ea460ad62d00","key":"Foo Fighters","value":null},
+        {"id":"45ccde324611f86ad4932555dea7fce0","key":"Tenacious D","value":null},
+        {"id":"d7ab24bb3489a9010c7d1a2087a4a9e4","key":"Future of the Left","value":null},
+        {"id":"ad2f85ef87f5a9a65db5b3a75a03cd82","key":"Helmet","value":null}
+    ]}
 
 By comparing the ``total_rows`` value to our ``limit`` value,
 we can determine if there are more pages to display. We also know by the
@@ -152,13 +150,13 @@ we can determine if there are more pages to display. We also know by the
 
 .. code-block:: javascript
 
-  var rows_per_page = 5;
-  var page = (offset / rows_per_page) + 1; // == 1
-  var skip = page * rows_per_page; // == 5 for the first page, 10 for the second ...
+    var rows_per_page = 5;
+    var page = (offset / rows_per_page) + 1; // == 1
+    var skip = page * rows_per_page; // == 5 for the first page, 10 for the second ...
 
 So we query CouchDB with::
 
-  curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5&skip=5'
+    curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5&skip=5'
 
 Note we have to use ``'`` (single quotes) to escape the ``&`` character that is
 special to the shell we execute curl in.
@@ -167,31 +165,31 @@ The result:
 
 .. code-block:: javascript
 
-  {"total_rows":11,"offset":5,"rows":[
-    {"id":"a2f31cfa68118a6ae9d35444fcb1a3cf","key":"Nirvana","value":null},
-    {"id":"67373171d0f626b811bdc34e92e77901","key":"Kerub","value":null},
-    {"id":"3e1b84630c384f6aef1a5c50a81e4a34","key":"Perfect Circle","value":null},
-    {"id":"84a371a7b8414237fad1b6aaf68cd16a","key":"Queens of the Stone Age",
-    "value":null},
-    {"id":"dcdaf08242a4be7da1a36e25f4f0b022","key":"Silverchair","value":null}
-  ]}
+    {"total_rows":11,"offset":5,"rows":[
+        {"id":"a2f31cfa68118a6ae9d35444fcb1a3cf","key":"Nirvana","value":null},
+        {"id":"67373171d0f626b811bdc34e92e77901","key":"Kerub","value":null},
+        {"id":"3e1b84630c384f6aef1a5c50a81e4a34","key":"Perfect Circle","value":null},
+        {"id":"84a371a7b8414237fad1b6aaf68cd16a","key":"Queens of the Stone Age",
+        "value":null},
+        {"id":"dcdaf08242a4be7da1a36e25f4f0b022","key":"Silverchair","value":null}
+    ]}
 
 Implementing the ``hasPrev()`` and ``hasNext()`` method is pretty
 straightforward:
 
 .. code-block:: javascript
 
-  function hasPrev()
-  {
-    return page > 1;
-  }
+    function hasPrev()
+    {
+        return page > 1;
+    }
 
-  function hasNext()
-  {
-    var last_page = Math.floor(total_rows / rows_per_page) +
-      (total_rows % rows_per_page);
-    return page != last_page;
-  }
+    function hasNext()
+    {
+        var last_page = Math.floor(total_rows / rows_per_page) +
+            (total_rows % rows_per_page);
+        return page != last_page;
+    }
 
 Paging (Alternate Method)
 =========================

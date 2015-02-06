@@ -48,8 +48,8 @@ Map functions
 
    :param doc: Processed document object.
 
-Map functions accept a single document as the argument and (optionally) :func:`emit`
-key/value pairs that are stored in a view.
+Map functions accept a single document as the argument and (optionally)
+:func:`emit` key/value pairs that are stored in a view.
 
 .. code-block:: javascript
 
@@ -85,12 +85,12 @@ Reduce and rereduce functions
 
 .. function:: redfun(keys, values[, rereduce])
 
-   :param keys: Array of pairs docid-key for related map function result.
-                Always ``null`` if rereduce is running (has ``true`` value).
-   :param values: Array of map function result values.
-   :param rereduce: Boolean sign of rereduce run.
+    :param keys: Array of pairs docid-key for related map function result.
+                 Always ``null`` if rereduce is running (has ``true`` value).
+    :param values: Array of map function result values.
+    :param rereduce: Boolean sign of rereduce run.
 
-   :return: Reduces `values`
+    :return: Reduces `values`
 
 Reduce functions takes two required arguments of keys and values lists - the
 result of the related map function - and optional third one which indicates if
@@ -104,14 +104,13 @@ could be disabled by setting ``reduce_limit`` config option to ``false``:
 
 .. code-block:: ini
 
-   [query_server_config]
-   reduce_limit = false
+    [query_server_config]
+    reduce_limit = false
 
 While disabling ``reduce_limit`` might be useful for debug proposes, remember,
 that main task of reduce functions is to *reduce* mapped result, not to make it
 even bigger. Generally, your reduce function should converge rapidly to a single
 value - which could be an array or similar object.
-
 
 .. _reducefun/builtin:
 
@@ -127,80 +126,82 @@ JavaScript below:
 
     // could be replaced by _sum
     function(keys, values) {
-      return sum(values);
+        return sum(values);
     }
 
     // could be replaced by _count
     function(keys, values, rereduce) {
-      if (rereduce) {
-        return sum(values);
-      } else {
-        return values.length;
-      }
+        if (rereduce) {
+            return sum(values);
+        } else {
+            return values.length;
+        }
     }
 
     // could be replaced by _stats
     function(keys, values, rereduce) {
-      if (rereduce) {
-        return {
-          'sum': values.reduce(function(a, b) { return a + b.sum }, 0),
-          'min': values.reduce(function(a, b) { return Math.min(a, b.min) }, Infinity),
-          'max': values.reduce(function(a, b) { return Math.max(a, b.max) }, -Infinity),
-          'count': values.reduce(function(a, b) { return a + b.count }, 0),
-          'sumsqr': values.reduce(function(a, b) { return a + b.sumsqr }, 0)
-        }
-      } else {
-        return {
-          'sum': sum(values),
-          'min': Math.min.apply(null, values),
-          'max': Math.max.apply(null, values),
-          'count': values.length,
-          'sumsqr': (function() {
-            var sumsqr = 0;
+        if (rereduce) {
+            return {
+                'sum': values.reduce(function(a, b) { return a + b.sum }, 0),
+                'min': values.reduce(function(a, b) { return Math.min(a, b.min) }, Infinity),
+                'max': values.reduce(function(a, b) { return Math.max(a, b.max) }, -Infinity),
+                'count': values.reduce(function(a, b) { return a + b.count }, 0),
+                'sumsqr': values.reduce(function(a, b) { return a + b.sumsqr }, 0)
+            }
+        } else {
+            return {
+                'sum': sum(values),
+                'min': Math.min.apply(null, values),
+                'max': Math.max.apply(null, values),
+                'count': values.length,
+                'sumsqr': (function() {
+                var sumsqr = 0;
 
-            values.forEach(function (value) {
-              sumsqr += value * value;
-            });
+                values.forEach(function (value) {
+                    sumsqr += value * value;
+                });
 
-            return sumsqr;
-          })(),
+                return sumsqr;
+                })(),
+            }
         }
-      }
     }
 
-.. note:: **Why don't reduce functions support CommonJS modules?**
+.. note::
+    **Why don't reduce functions support CommonJS modules?**
 
-   While `map` functions have limited access to stored modules through
-   :func:`require` function there is no such feature for `reduce` functions.
-   The reason lies deep inside in the mechanism how `map` and `reduce` functions
-   are processed by the Query Server. Let's take a look on `map` functions first:
+    While `map` functions have limited access to stored modules through
+    :func:`require` function there is no such feature for `reduce` functions.
+    The reason lies deep inside in the mechanism how `map` and `reduce`
+    functions are processed by the Query Server. Let's take a look on `map`
+    functions first:
 
-   #. CouchDB sends all `map` functions for a processed design document to
-      Query Server.
-   #. Query Server handles them one by one, compiles and puts them onto an
-      internal stack.
-   #. After all `map` functions had been processed, CouchDB will send the
-      remaining documents to index one by one.
-   #. Query Server receives the document object and applies it to every function
-      from the stack. The emitted results are then joined into a single array and sent
-      back to CouchDB.
+    #. CouchDB sends all `map` functions for a processed design document to
+       Query Server.
+    #. Query Server handles them one by one, compiles and puts them onto an
+       internal stack.
+    #. After all `map` functions had been processed, CouchDB will send the
+       remaining documents to index one by one.
+    #. Query Server receives the document object and applies it to every
+       function from the stack. The emitted results are then joined into a
+       single array and sent back to CouchDB.
 
-   Now let's see how `reduce` functions are handled:
+    Now let's see how `reduce` functions are handled:
 
-   #. CouchDB sends *as single command* list of available `reduce` functions
-      with result list of key-value pairs that was previously received as
-      result of `map` functions work.
-   #. Query Server compiles reduce functions and applies them to key-value
-      lists. Reduced result is sent back to CouchDB.
+    #. CouchDB sends *as single command* list of available `reduce` functions
+       with result list of key-value pairs that was previously received as
+       result of `map` functions work.
+    #. Query Server compiles reduce functions and applies them to key-value
+       lists. Reduced result is sent back to CouchDB.
 
-   As you may note, `reduce` functions are applied in a single shot to the map results
-   while the `map` functions are applied in an iterative way to one document at a time.
-   This means that it's possible for `map` functions to precompile CommonJS libraries
-   and use them during the entire view processing, but for `reduce` functions they
-   would be compiled again and again for each view result reduction, which would lead
-   to performance degradation (`reduce` function are already working hard to make large
-   results smaller).
-
+    As you may note, `reduce` functions are applied in a single shot to the map
+    results while the `map` functions are applied in an iterative way to one
+    document at a time. This means that it's possible for `map` functions to
+    precompile CommonJS libraries and use them during the entire view
+    processing, but for `reduce` functions they would be compiled again and
+    again for each view result reduction, which would lead to performance
+    degradation (`reduce` function are already working hard to make large
+    results smaller).
 
 .. _showfun:
 
@@ -209,26 +210,26 @@ Show functions
 
 .. function:: showfun(doc, req)
 
-   :param doc: Processed document, may be omitted.
-   :param req: :ref:`Request object <request_object>`.
+    :param doc: Processed document, may be omitted.
+    :param req: :ref:`Request object <request_object>`.
 
-   :return: :ref:`Response object <response_object>`
-   :rtype: object or string
+    :return: :ref:`Response object <response_object>`
+    :rtype: object or string
 
 Show functions are used to represent documents in various formats, commonly as
-HTML page with nicer formatting. They can also be used to run server-side functions
-without requiring a pre-existing document.
+HTML page with nicer formatting. They can also be used to run server-side
+functions without requiring a pre-existing document.
 
 Basic example of show function could be:
 
 .. code-block:: javascript
 
     function(doc, req){
-      if (doc) {
-        return "Hello from " + doc._id + "!";
-      } else {
-        return "Hello, world!";
-      }
+        if (doc) {
+            return "Hello from " + doc._id + "!";
+        } else {
+            return "Hello, world!";
+        }
     }
 
 Also, there is more simple way to return json encoded data:
@@ -236,84 +237,83 @@ Also, there is more simple way to return json encoded data:
 .. code-block:: javascript
 
     function(doc, req){
-      return {
-        'json': {
-          'id': doc['_id'],
-          'rev': doc['_rev']
+        return {
+            'json': {
+                'id': doc['_id'],
+                'rev': doc['_rev']
+            }
         }
-      }
     }
-
 
 and even files (this one is CouchDB logo):
 
 .. code-block:: javascript
 
     function(doc, req){
-      return {
-        'headers': {
-          'Content-Type' : 'image/png',
-        },
-        'base64': ''.concat(
-          'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAsV',
-          'BMVEUAAAD////////////////////////5ur3rEBn////////////////wDBL/',
-          'AADuBAe9EB3IEBz/7+//X1/qBQn2AgP/f3/ilpzsDxfpChDtDhXeCA76AQH/v7',
-          '/84eLyWV/uc3bJPEf/Dw/uw8bRWmP1h4zxSlD6YGHuQ0f6g4XyQkXvCA36MDH6',
-          'wMH/z8/yAwX64ODeh47BHiv/Ly/20dLQLTj98PDXWmP/Pz//39/wGyJ7Iy9JAA',
-          'AADHRSTlMAbw8vf08/bz+Pv19jK/W3AAAAg0lEQVR4Xp3LRQ4DQRBD0QqTm4Y5',
-          'zMxw/4OleiJlHeUtv2X6RbNO1Uqj9g0RMCuQO0vBIg4vMFeOpCWIWmDOw82fZx',
-          'vaND1c8OG4vrdOqD8YwgpDYDxRgkSm5rwu0nQVBJuMg++pLXZyr5jnc1BaH4GT',
-          'LvEliY253nA3pVhQqdPt0f/erJkMGMB8xucAAAAASUVORK5CYII=')
-      }
+        return {
+            'headers': {
+                'Content-Type' : 'image/png',
+            },
+            'base64': ''.concat(
+                'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAsV',
+                'BMVEUAAAD////////////////////////5ur3rEBn////////////////wDBL/',
+                'AADuBAe9EB3IEBz/7+//X1/qBQn2AgP/f3/ilpzsDxfpChDtDhXeCA76AQH/v7',
+                '/84eLyWV/uc3bJPEf/Dw/uw8bRWmP1h4zxSlD6YGHuQ0f6g4XyQkXvCA36MDH6',
+                'wMH/z8/yAwX64ODeh47BHiv/Ly/20dLQLTj98PDXWmP/Pz//39/wGyJ7Iy9JAA',
+                'AADHRSTlMAbw8vf08/bz+Pv19jK/W3AAAAg0lEQVR4Xp3LRQ4DQRBD0QqTm4Y5',
+                'zMxw/4OleiJlHeUtv2X6RbNO1Uqj9g0RMCuQO0vBIg4vMFeOpCWIWmDOw82fZx',
+                'vaND1c8OG4vrdOqD8YwgpDYDxRgkSm5rwu0nQVBJuMg++pLXZyr5jnc1BaH4GT',
+                'LvEliY253nA3pVhQqdPt0f/erJkMGMB8xucAAAAASUVORK5CYII=')
+        }
     }
 
-But what if you need to represent data in different formats via a single function?
-Functions :func:`registerType` and :func:`provides` are your the best friends in
-that question:
+But what if you need to represent data in different formats via a single
+function? Functions :func:`registerType` and :func:`provides` are your the best
+friends in that question:
 
 .. code-block:: javascript
 
     function(doc, req){
-      provides('json', function(){
-        return {'json': doc}
-      });
-      provides('html', function(){
-        return '<pre>' + toJSON(doc) + '</pre>'
-      })
-      provides('xml', function(){
-        return {
-          'headers': {'Content-Type': 'application/xml'},
-          'body' : ''.concat(
-            '<?xml version="1.0" encoding="utf-8"?>\n',
-            '<doc>',
-            (function(){
-              escape = function(s){
-                return s.replace(/&quot;/g, '"')
-                        .replace(/&gt;/g, '>')
-                        .replace(/&lt;/g, '<')
-                        .replace(/&amp;/g, '&');
-              };
-              var content = '';
-              for(var key in doc){
-                if(!doc.hasOwnProperty(key)) continue;
-                var value = escape(toJSON(doc[key]));
-                var key = escape(key);
-                content += ''.concat(
-                  '<' + key + '>',
-                  value
-                  '</' + key + '>'
+        provides('json', function(){
+            return {'json': doc}
+        });
+        provides('html', function(){
+            return '<pre>' + toJSON(doc) + '</pre>'
+        })
+        provides('xml', function(){
+            return {
+                'headers': {'Content-Type': 'application/xml'},
+                'body' : ''.concat(
+                    '<?xml version="1.0" encoding="utf-8"?>\n',
+                    '<doc>',
+                    (function(){
+                        escape = function(s){
+                            return s.replace(/&quot;/g, '"')
+                                    .replace(/&gt;/g, '>')
+                                    .replace(/&lt;/g, '<')
+                                    .replace(/&amp;/g, '&');
+                        };
+                        var content = '';
+                        for(var key in doc){
+                            if(!doc.hasOwnProperty(key)) continue;
+                            var value = escape(toJSON(doc[key]));
+                            var key = escape(key);
+                            content += ''.concat(
+                                '<' + key + '>',
+                                value
+                                '</' + key + '>'
+                            )
+                        }
+                        return content;
+                    })(),
+                    '</doc>'
                 )
-              }
-              return content;
-            })(),
-            '</doc>'
-          )
-        }
-      })
-      registerType('text-json', 'text/json')
-      provides('text-json', function(){
-        return toJSON(doc);
-      })
+            }
+        })
+        registerType('text-json', 'text/json')
+        provides('text-json', function(){
+            return toJSON(doc);
+        })
     }
 
 This function may return `html`, `json` , `xml` or our custom `text json` format
@@ -322,13 +322,12 @@ the `xml` provider in our function needs more care to handle nested objects
 correctly, and keys with invalid characters, but you've got the idea!
 
 .. seealso::
+    CouchDB Wiki:
+        - `Showing Documents
+          <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Showing_Documents>`_
 
-   CouchDB Wiki:
-    - `Showing Documents <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Showing_Documents>`_
-
-   CouchDB Guide:
-     - `Show Functions <http://guide.couchdb.org/editions/1/en/show.html>`_
-
+    CouchDB Guide:
+        - `Show Functions <http://guide.couchdb.org/editions/1/en/show.html>`_
 
 .. _listfun:
 
@@ -337,52 +336,53 @@ List functions
 
 .. function:: listfun(head, req)
 
-   :param head: :ref:`view_head_info_object`
-   :param req: :ref:`Request object <request_object>`.
+    :param head: :ref:`view_head_info_object`
+    :param req: :ref:`Request object <request_object>`.
 
-   :return: Last chunk.
-   :rtype: string
+    :return: Last chunk.
+    :rtype: string
 
 While :ref:`showfun` are used to customize document presentation, :ref:`listfun`
 are used for same purpose, but against :ref:`viewfun` results.
 
-The next list function formats view and represents it as a very simple HTML page:
+The next list function formats view and represents it as a very simple HTML
+page:
 
 .. code-block:: javascript
 
     function(head, req){
-      start({
-        'headers': {
-          'Content-Type': 'text/html'
+        start({
+            'headers': {
+                'Content-Type': 'text/html'
+            }
+        });
+        send('<html><body><table>');
+        send('<tr><th>ID</th><th>Key</th><th>Value</th></tr>')
+        while(row = getRow()){
+            send(''.concat(
+                '<tr>',
+                '<td>' + toJSON(row.id) + '</td>',
+                '<td>' + toJSON(row.key) + '</td>',
+                '<td>' + toJSON(row.value) + '</td>',
+                '</tr>'
+            ));
         }
-      });
-      send('<html><body><table>');
-      send('<tr><th>ID</th><th>Key</th><th>Value</th></tr>')
-      while(row = getRow()){
-        send(''.concat(
-          '<tr>',
-          '<td>' + toJSON(row.id) + '</td>',
-          '<td>' + toJSON(row.key) + '</td>',
-          '<td>' + toJSON(row.value) + '</td>',
-          '</tr>'
-        ));
-      }
-      send('</table></body></html>');
+        send('</table></body></html>');
     }
 
-Templates and styles could obviously be used to present data in a nicer
-fashion, but this is an excellent starting point. Note that you may also
-use :func:`registerType` and :func:`provides` functions in the same
-way as for :ref:`showfun`!
+Templates and styles could obviously be used to present data in a nicer fashion,
+but this is an excellent starting point. Note that you may also use
+:func:`registerType` and :func:`provides` functions in the same way as for
+:ref:`showfun`!
 
 .. seealso::
+    CouchDB Wiki:
+        - `Listing Views with CouchDB 0.10 and later
+          <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Listing_Views_with_CouchDB_0.10_and_later>`_
 
-   CouchDB Wiki:
-    - `Listing Views with CouchDB 0.10 and later <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Listing_Views_with_CouchDB_0.10_and_later>`_
-
-   CouchDB Guide:
-    - `Transforming Views with List Functions <http://guide.couchdb.org/draft/transforming.html>`_
-
+    CouchDB Guide:
+        - `Transforming Views with List Functions
+          <http://guide.couchdb.org/draft/transforming.html>`_
 
 .. _updatefun:
 
@@ -391,17 +391,17 @@ Update functions
 
 .. function:: updatefun(doc, req)
 
-   :param doc: Update function target document.
-   :param req: :ref:`request_object`
+    :param doc: Update function target document.
+    :param req: :ref:`request_object`
 
-   :returns: Two-element array: the first element is the (updated or new)
-             document, which is committed to the database. If the first element
-             is ``null`` no document will be committed to the database.
-             If you are updating an existing, it should already have an ``_id``
-             set, and if you are creating a new document, make sure to set its
-             ``_id`` to something, either generated based on the input or the
-             ``req.uuid`` provided. The second element is the response that will
-             be sent back to the caller.
+    :returns: Two-element array: the first element is the (updated or new)
+      document, which is committed to the database. If the first element
+      is ``null`` no document will be committed to the database.
+      If you are updating an existing, it should already have an ``_id``
+      set, and if you are creating a new document, make sure to set its
+      ``_id`` to something, either generated based on the input or the
+      ``req.uuid`` provided. The second element is the response that will
+      be sent back to the caller.
 
 Update handlers are functions that clients can request to invoke server-side
 logic that will create or update a document. This feature allows a range of use
@@ -432,10 +432,9 @@ The basic example that demonstrates all use-cases of update handlers below:
     }
 
 .. seealso::
-
-   CouchDB Wiki:
-    - `Document Update Handlers <http://wiki.apache.org/couchdb/Document_Update_Handlers>`_
-
+    CouchDB Wiki:
+        - `Document Update Handlers
+          <http://wiki.apache.org/couchdb/Document_Update_Handlers>`_
 
 .. _filterfun:
 
@@ -444,10 +443,10 @@ Filter functions
 
 .. function:: filterfun(doc, req)
 
-   :param doc: Processed document object.
-   :param req: :ref:`request_object`
-   :return: Boolean value: ``true`` means that `doc` passes the filter rules,
-            ``false`` means that it does not.
+    :param doc: Processed document object.
+    :param req: :ref:`request_object`
+    :return: Boolean value: ``true`` means that `doc` passes the filter rules,
+      ``false`` means that it does not.
 
 Filter functions mostly act like :ref:`showfun` and :ref:`listfun`: they
 format, or *filter* the :ref:`changes feed<changes>`.
@@ -458,28 +457,28 @@ Classic filters
 By default the changes feed emits all database documents changes. But if you're
 waiting for some special changes, processing all documents is inefficient.
 
-Filters are special design document functions that allow the changes feed to emit
-only specific documents that pass filter rules.
+Filters are special design document functions that allow the changes feed to
+emit only specific documents that pass filter rules.
 
 Let's assume that our database is a mailbox and we need to handle only new mail
 events (documents with status `new`). Our filter function will look like this:
 
 .. code-block:: javascript
 
-  function(doc, req){
-    // we need only `mail` documents
-    if (doc.type != 'mail'){
-      return false;
+    function(doc, req){
+        // we need only `mail` documents
+        if (doc.type != 'mail'){
+            return false;
+        }
+        // we're interested only in `new` ones
+        if (doc.status != 'new'){
+            return false;
+        }
+        return true; // passed!
     }
-    // we're interested only in `new` ones
-    if (doc.status != 'new'){
-      return false;
-    }
-    return true; // passed!
-  }
 
-Filter functions must return ``true`` if a document passed all defined
-rules. Now, if you apply this function to the changes feed it will emit only changes
+Filter functions must return ``true`` if a document passed all defined rules.
+Now, if you apply this function to the changes feed it will emit only changes
 about "new mails"::
 
     GET /somedatabase/_changes?filter=mailbox/new_mail HTTP/1.1
@@ -497,9 +496,9 @@ Seems like any other changes were for documents that haven't passed our filter.
 
 We probably need to filter the changes feed of our mailbox by more than a single
 status value. We're also interested in statuses like "spam" to update
-spam-filter heuristic rules, "outgoing" to let a mail daemon actually send mails,
-and so on. Creating a lot of similar functions that actually do similar work
-isn't good idea - so we need a dynamic filter.
+spam-filter heuristic rules, "outgoing" to let a mail daemon actually send
+mails, and so on. Creating a lot of similar functions that actually do similar
+work isn't good idea - so we need a dynamic filter.
 
 You may have noticed that filter functions take a second argument named
 :ref:`request <request_object>` - it allows creating dynamic filters
@@ -509,20 +508,20 @@ The dynamic version of our filter looks like this:
 
 .. code-block:: javascript
 
-  function(doc, req){
-    // we need only `mail` documents
-    if (doc.type != 'mail'){
-      return false;
+    function(doc, req){
+        // we need only `mail` documents
+        if (doc.type != 'mail'){
+            return false;
+        }
+        // we're interested only in requested status
+        if (doc.status != req.query.status){
+            return false;
+        }
+        return true; // passed!
     }
-    // we're interested only in requested status
-    if (doc.status != req.query.status){
-      return false;
-    }
-    return true; // passed!
-  }
 
-and now we have passed the `status` query parameter in request to let our filter match
-only required documents::
+and now we have passed the `status` query parameter in request to let our filter
+match only required documents::
 
     GET /somedatabase/_changes?filter=mailbox/by_status&status=new HTTP/1.1
 
@@ -545,7 +544,6 @@ and we can easily change filter behavior with::
     ],
     "last_seq":27}
 
-
 Combining filters with a `continuous` feed allows creating powerful event-driven
 systems.
 
@@ -565,19 +563,18 @@ To use them just specify `_view` value for ``filter`` parameter and
     GET /somedatabase/_changes?filter=_view&view=dname/viewname  HTTP/1.1
 
 .. note::
-
-   Since view filters uses `map` functions as filters, they can't show any
-   dynamic behavior since :ref:`request object<request_object>` is not
-   available.
+    Since view filters uses `map` functions as filters, they can't show any
+    dynamic behavior since :ref:`request object<request_object>` is not
+    available.
 
 .. seealso::
+    CouchDB Guide:
+        - `Guide to filter change notification
+          <http://guide.couchdb.org/draft/notifications.html#filters>`_
 
-   CouchDB Guide:
-    - `Guide to filter change notification <http://guide.couchdb.org/draft/notifications.html#filters>`_
-
-   CouchDB Wiki:
-    - `Filtered replication <http://wiki.apache.org/couchdb/Replication#Filtered_Replication>`_
-
+    CouchDB Wiki:
+        - `Filtered replication
+          <http://wiki.apache.org/couchdb/Replication#Filtered_Replication>`_
 
 .. _vdufun:
 
@@ -586,14 +583,14 @@ Validate document update functions
 
 .. function:: validatefun(newDoc, oldDoc, userCtx, secObj)
 
-   :param newDoc: New version of document that will be stored.
-   :param oldDoc: Previous version of document that is already stored.
-   :param userCtx: :ref:`userctx_object`
-   :param secObj: :ref:`security_object`
+    :param newDoc: New version of document that will be stored.
+    :param oldDoc: Previous version of document that is already stored.
+    :param userCtx: :ref:`userctx_object`
+    :param secObj: :ref:`security_object`
 
-   :throws: ``forbidden`` error to gracefully prevent document storing.
-   :throws: ``unauthorized`` error to prevent storage and allow the user to
-            re-auth.
+    :throws: ``forbidden`` error to gracefully prevent document storing.
+    :throws: ``unauthorized`` error to prevent storage and allow the user to
+      re-auth.
 
 A design document may contain a function named `validate_doc_update`
 which can be used to prevent invalid or unauthorized document update requests
@@ -612,11 +609,11 @@ by throwing one of two error objects:
 
 .. code-block:: javascript
 
-  // user is not authorized to make the change but may re-authenticate
-  throw({ unauthorized: 'Error message here.' });
+    // user is not authorized to make the change but may re-authenticate
+    throw({ unauthorized: 'Error message here.' });
 
-  // change is not allowed
-  throw({ forbidden: 'Error message here.' });
+    // change is not allowed
+    throw({ forbidden: 'Error message here.' });
 
 Document validation is optional, and each design document in the database may
 have at most one validation function.  When a write request is received for
@@ -755,14 +752,14 @@ modified by a user with the ``_admin`` role:
     }
 
 .. note::
-
-   The ``return`` statement used only for function, it has no impact on
-   the validation process.
+    The ``return`` statement used only for function, it has no impact on
+    the validation process.
 
 .. seealso::
+    CouchDB Guide:
+        - `Validation Functions
+          <http://guide.couchdb.org/editions/1/en/validation.html>`_
 
-   CouchDB Guide:
-    - `Validation Functions <http://guide.couchdb.org/editions/1/en/validation.html>`_
-
-   CouchDB Wiki:
-    - `Document Update Validation <http://wiki.apache.org/couchdb/Document_Update_Validation>`_
+    CouchDB Wiki:
+        - `Document Update Validation
+          <http://wiki.apache.org/couchdb/Document_Update_Validation>`_

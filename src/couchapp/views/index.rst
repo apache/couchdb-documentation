@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _views:
 
 ==============
@@ -23,8 +22,8 @@ applications with CouchDB
 
 .. toctree::
 
-  intro
-  collation
-  joins
-  nosql
-  pagination
+    intro
+    collation
+    joins
+    nosql
+    pagination
