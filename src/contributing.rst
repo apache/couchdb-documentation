@@ -75,7 +75,8 @@ the other files and directories.
 
 First we should determine where we want to document this inside the
 documentation. We can look through http://docs.couchdb.org/en/latest/
-for inspiration. The `JSON Structure Reference`_ looks like a fine place to write this up.
+for inspiration. The `JSON Structure Reference`_ looks like a fine place to
+write this up.
 
 .. _JSON Structure Reference: http://docs.couchdb.org/en/latest/json-structure.html
 
@@ -113,8 +114,8 @@ Into::
 
     .. code-block:: erlang
 
-      ejson:encode(ejson:decode(<<"1.1">>)).
-      <<"1.1000000000000000888">>
+        ejson:encode(ejson:decode(<<"1.1">>)).
+        <<"1.1000000000000000888">>
 
 And we follow along with the other code samples. We turn::
 

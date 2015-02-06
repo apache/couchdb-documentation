@@ -21,8 +21,7 @@ a release because the development team is requesting feedback from the
 larger developer community. As such, please play around with these features
 and send us feedback, thanks!
 
-Use at your own risk! Do not rely on these features for critical
-applications.
+Use at your own risk! Do not rely on these features for critical applications.
 
 NodeJS Query Server
 ===================
@@ -30,7 +29,6 @@ NodeJS Query Server
 The NodeJS Query Server is an alternative runtime environment for
 the default JavaScript Query Server that runs on top of Node.JS and
 not SpiderMonkey like the default Query Server.
-
 
 Setup
 -----
@@ -47,16 +45,16 @@ Or via NPM::
 
     npm install -g couchjs
 
-.. note:: **NPM in non-standard locations**
-
+.. note::
+    **NPM in non-standard locations**
     If your Node.JS installation doesn’t store binaries in `/usr/local/bin`
-    you will need to adjust CouchDB’s configuration. Add this to your `local.ini`
-    file:
+    you will need to adjust CouchDB’s configuration. Add this to your
+    `local.ini` file:
 
     .. code-block:: ini
 
-      [query_servers]
-      nodejs = /path/to/couchjs-node /path/to/couchdb/share/server/main.js
+        [query_servers]
+        nodejs = /path/to/couchjs-node /path/to/couchdb/share/server/main.js
 
     And then restart your CouchDB instance.
 
@@ -66,20 +64,16 @@ be processed by the Node.JS query server.
 
 Enjoy!
 
-
 Differences from the SpiderMonkey Query Server
 ----------------------------------------------
 
-V8 and SpiderMonkey roughly behave similar, but there might be engine-
-specific differences that make or break a JavaScript function in one or
-the other server.
-
+V8 and SpiderMonkey roughly behave similar, but there might be engine- specific
+differences that make or break a JavaScript function in one or the other server.
 
 Plugins
 =======
 
 See `src/couch_plugins/README.md`.
-
 
 Content-Security-Policy (CSP) Header Support for /_utils (Fauxton)
 ==================================================================
@@ -90,8 +84,8 @@ the default header that is sent for everything in /_utils.
 
     .. code-block:: ini
 
-      [csp]
-      enable = true
+        [csp]
+        enable = true
 
 Then restart CouchDB.
 
