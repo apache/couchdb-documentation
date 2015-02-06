@@ -17,18 +17,18 @@ Configuring CouchDB
 ===================
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   intro
-   couchdb
-   http
-   auth
-   compaction
-   logging
-   replicator
-   query-servers
-   externals
-   http-handlers
-   services
-   misc
-   proxying
+    intro
+    couchdb
+    http
+    auth
+    compaction
+    logging
+    replicator
+    query-servers
+    externals
+    http-handlers
+    services
+    misc
+    proxying

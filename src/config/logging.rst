@@ -11,7 +11,6 @@
 .. the License.
 
 .. default-domain:: config
-
 .. highlight:: ini
 
 =======
@@ -25,52 +24,49 @@ Logging options
 
 .. config:section:: log :: Logging options
 
-  CouchDB logging configuration.
+    CouchDB logging configuration.
 
-  .. config:option:: file :: Logging file path
+    .. config:option:: file :: Logging file path
 
-    Specifies the location of file for logging output::
+        Specifies the location of file for logging output::
 
-      [log]
-      file = /var/log/couchdb/couch.log
+            [log]
+            file = /var/log/couchdb/couch.log
 
-    This path should be readable and writable for user that runs CouchDB service
-    (`couchdb` by default).
+        This path should be readable and writable for user that runs CouchDB
+        service (`couchdb` by default).
 
+    .. config:option:: level :: Logging verbose level
 
-  .. config:option:: level :: Logging verbose level
+        .. versionchanged:: 1.3: Added ``warning`` level.
 
-    .. versionchanged:: 1.3: Added ``warning`` level.
+        Logging level defines how verbose and detailed logging will be::
 
-    Logging level defines how verbose and detailed logging will be::
+            [log]
+            level = info
 
-      [log]
-      level = info
+        Available levels:
 
-    Available levels:
+        - ``debug``: Very informative and detailed debug logging. Includes HTTP
+          headers, external processes communications, authorization information
+          and more;
+        - ``info``: Informative logging. Includes HTTP requests headlines,
+          startup of an external processes etc.
+        - ``warning``: Warning messages are alerts about edge situations that
+          may lead to errors. For instance, compaction daemon alerts about low
+          or insufficient disk space at this level.
+        - ``error``: Error level includes only things that going wrong, crush
+          reports and HTTP error responses (5xx codes).
+        - ``none``: Disables logging any messages.
 
-    - ``debug``: Very informative and detailed debug logging. Includes HTTP
-      headers, external processes communications, authorization information and
-      more;
-    - ``info``: Informative logging. Includes HTTP requests headlines, startup
-      of an external processes etc.
-    - ``warning``: Warning messages are alerts about edge situations that may
-      lead to errors. For instance, compaction daemon alerts about low or
-      insufficient disk space at this level.
-    - ``error``: Error level includes only things that going wrong, crush
-      reports and HTTP error responses (5xx codes).
-    - ``none``: Disables logging any messages.
+    .. config:option:: include_sasl
 
+        Includes `SASL`_ information in logs::
 
-  .. config:option:: include_sasl
+            [log]
+            include_sasl = true
 
-    Includes `SASL`_ information in logs::
-
-      [log]
-      include_sasl = true
-
-    .. _SASL: http://www.erlang.org/doc/apps/sasl/
-
+        .. _SASL: http://www.erlang.org/doc/apps/sasl/
 
 .. _config/log_level_by_module:
 
@@ -79,16 +75,16 @@ Per module logging
 
 .. config:section:: log_level_by_module :: Per module logging
 
-  .. versionadded:: 1.3
+    .. versionadded:: 1.3
 
-  In this section you can specify :option:`log level <log/level>` on a
-  per-module basis::
+    In this section you can specify :option:`log level <log/level>` on a
+    per-module basis::
 
-    [log_level_by_module]
-    couch_httpd = debug
-    couch_replicator = info
-    couch_query_servers = error
+        [log_level_by_module]
+        couch_httpd = debug
+        couch_replicator = info
+        couch_query_servers = error
 
-  See `src/*/*.erl`_ for available modules.
+    See `src/*/*.erl`_ for available modules.
 
-  .. _src/*/*.erl: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=tree;f=src;hb=HEAD
+    .. _src/*/*.erl: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=tree;f=src;hb=HEAD

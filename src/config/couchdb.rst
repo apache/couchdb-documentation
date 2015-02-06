@@ -11,7 +11,6 @@
 .. the License.
 
 .. default-domain:: config
-
 .. highlight:: ini
 
 ==================
@@ -25,176 +24,145 @@ Base CouchDB Options
 
 .. config:section:: couchdb :: Base CouchDB Options
 
+    .. config:option:: attachment_stream_buffer_size :: Attachment streaming buffer
 
-  .. config:option:: attachment_stream_buffer_size :: Attachment streaming buffer
+        Higher values may result in better read performance due to fewer read
+        operations and/or more OS page cache hits. However, they can also
+        increase overall response time for writes when there are many
+        attachment write requests in parallel. ::
 
-    Higher values may result in better read performance due to fewer read
-    operations and/or more OS page cache hits. However, they can also increase
-    overall response time for writes when there are many attachment write
-    requests in parallel.
+            [couchdb]
+            attachment_stream_buffer_size = 4096
 
-    ::
+    .. config:option:: database_dir :: Databases location directory
 
-      [couchdb]
-      attachment_stream_buffer_size = 4096
+        Specifies location of CouchDB database files (``*.couch`` named). This
+        location should be writable and readable for the user the CouchDB
+        service runs as (``couchdb`` by default). ::
 
+            [couchdb]
+            database_dir = /var/lib/couchdb
 
-  .. config:option:: database_dir :: Databases location directory
+    .. config:option:: delayed_commits :: Delayed commits
 
-    Specifies location of CouchDB database files (``*.couch`` named).
-    This location should be writable and readable for the user the CouchDB
-    service runs as (``couchdb`` by default).
+        When this config value as ``false`` the CouchDB provides guaranty of
+        `fsync` call before return :http:statuscode:`201` response on each
+        document saving. Setting this config value as ``true`` may raise some
+        overall performance with cost of losing durability - it's strongly not
+        recommended to do such in production::
 
-    ::
+            [couchdb]
+            delayed_commits = false
 
-      [couchdb]
-      database_dir = /var/lib/couchdb
+        .. warning::
+            Delayed commits are a feature of CouchDB that allows it to achieve
+            better write performance for some workloads while sacrificing a
+            small amount of durability. The setting causes CouchDB to wait up
+            to a full second before committing new data after an update. If the
+            server crashes before the header is written then any writes since
+            the last commit are lost.
 
+    .. config:option:: file_compression :: Compression method for documents
 
-  .. config:option:: delayed_commits :: Delayed commits
+        .. versionchanged:: 1.2 Added `Google Snappy`_ compression algorithm.
 
-    When this config value as ``false`` the CouchDB provides guaranty of `fsync`
-    call before return :http:statuscode:`201` response on each document saving.
-    Setting this config value as ``true`` may raise some overall performance
-    with cost of losing durability - it's strongly not recommended to do such
-    in production::
+        Method used to compress everything that is appended to database and
+        view index files, except for attachments (see the
+        :section:`attachments` section). Available methods are:
 
-      [couchdb]
-      delayed_commits = false
+        * ``none``: no compression
+        * ``snappy``: use Google Snappy, a very fast compressor/decompressor
+        * ``deflate_N``: use zlib's deflate; ``N`` is the compression level
+          which ranges from ``1`` (fastest, lowest compression ratio) to ``9``
+          (slowest, highest compression ratio)
 
-    .. warning::
+        ::
 
-       Delayed commits are a feature of CouchDB that allows it to achieve better
-       write performance for some workloads while sacrificing a small amount of
-       durability. The setting causes CouchDB to wait up to a full second before
-       committing new data after an update. If the server crashes before
-       the header is written then any writes since the last commit are lost.
+            [couchdb]
+            file_compression = snappy
 
+        .. _Google Snappy: http://code.google.com/p/snappy/
 
-  .. config:option:: file_compression :: Compression method for documents
+    .. config:option:: fsync_options :: Fsync options
 
-    .. versionchanged:: 1.2 Added `Google Snappy`_ compression algorithm.
+        Specifies when to make `fsync` calls. `fsync` makes sure that the
+        contents of any file system buffers kept by the operating system are
+        flushed to disk. There is generally no need to modify this parameter. ::
 
-    Method used to compress everything that is appended to database and
-    view index files, except for attachments (see the :section:`attachments`
-    section). Available methods are:
+            [couchdb]
+            fsync_options = [before_header, after_header, on_file_open]
 
-    * ``none``: no compression
-    * ``snappy``: use Google Snappy, a very fast compressor/decompressor
-    * ``deflate_N``: use zlib's deflate; ``N`` is the compression level which
-      ranges from ``1`` (fastest, lowest compression ratio) to ``9`` (slowest,
-      highest compression ratio)
+    .. config:option:: max_dbs_open :: Limit of simultaneously opened databases
 
-    ::
+        This option places an upper bound on the number of databases that can
+        be open at once. CouchDB reference counts database accesses internally
+        and will close idle databases as needed. Sometimes it is necessary to
+        keep more than the default open at once, such as in deployments where
+        many databases will be replicating continuously. ::
 
-      [couchdb]
-      file_compression = snappy
+            [couchdb]
+            max_dbs_open = 100
 
-    .. _Google Snappy: http://code.google.com/p/snappy/
+    .. config:option:: max_document_size :: Maximum document size
 
+        .. versionchanged:: 1.3 This option now actually works.
 
-  .. config:option:: fsync_options :: Fsync options
+        Defines a maximum size for JSON documents, in bytes. This limit does
+        not apply to attachments, since they are transferred as a stream of
+        chunks. If you set this to a small value, you might be unable to modify
+        configuration options, database security and other larger documents
+        until a larger value is restored by editing the configuration file. ::
 
-    Specifies when to make `fsync` calls. `fsync` makes sure that
-    the contents of any file system buffers kept by the operating system are
-    flushed to disk. There is generally no need to modify this parameter.
+            [couchdb]
+            max_document_size = 4294967296 ; 4 GB
 
-    ::
+    .. config:option:: os_process_timeout :: External processes time limit
 
-      [couchdb]
-      fsync_options = [before_header, after_header, on_file_open]
+        If an external process, such as a query server or external process,
+        runs for this amount of microseconds without returning any results, it
+        will be terminated. Keeping this value smaller ensures you get
+        expedient errors, but you may want to tweak it for your specific
+        needs. ::
 
+            [couchdb]
+            os_process_timeout = 5000 ; 5 sec
 
-  .. config:option:: max_dbs_open :: Limit of simultaneously opened databases
+    .. config:option:: uri_file :: Discovery CouchDB help file
 
-    This option places an upper bound on the number of databases that can be
-    open at once. CouchDB reference counts database accesses internally and will
-    close idle databases as needed. Sometimes it is necessary to keep more than
-    the default open at once, such as in deployments where many databases will
-    be replicating continuously.
+        This file contains the full `URI`_ that can be used to access this
+        instance of CouchDB. It is used to help discover the port CouchDB is
+        running on (if it was set to ``0`` (e.g. automatically assigned any
+        free one). This file should be writable and readable for the user that
+        runs the CouchDB service (``couchdb`` by default). ::
 
-    ::
+            [couchdb]
+            uri_file = /var/run/couchdb/couchdb.uri
 
-      [couchdb]
-      max_dbs_open = 100
+        .. _URI: http://en.wikipedia.org/wiki/URI
 
+    .. config:option:: util_driver_dir :: CouchDB binary utility drivers
 
-  .. config:option:: max_document_size :: Maximum document size
+        Specifies location of binary drivers (`icu`, `ejson`, etc.). This
+        location and its contents should be readable for the user that runs the
+        CouchDB service. ::
 
-    .. versionchanged:: 1.3 This option now actually works.
+            [couchdb]
+            util_driver_dir = /usr/lib/couchdb/erlang/lib/couch-1.5.0/priv/lib
 
-    Defines a maximum size for JSON documents, in bytes. This limit does not
-    apply to attachments, since they are transferred as a stream of chunks.
-    If you set this to a small value, you might be unable to modify
-    configuration options, database security and other larger documents until
-    a larger value is restored by editing the configuration file.
+    .. config:option:: uuid :: CouchDB server UUID
 
-    ::
+        .. versionadded:: 1.3
 
-      [couchdb]
-      max_document_size = 4294967296 ; 4 GB
+        Unique identifier for this CouchDB server instance. ::
 
+            [couchdb]
+            uuid = 0a959b9b8227188afc2ac26ccdf345a6
 
-  .. config:option:: os_process_timeout :: External processes time limit
+    .. config:option:: view_index_dir :: View indexes location directory
 
-    If an external process, such as a query server or external process, runs for
-    this amount of microseconds without returning any results, it will be
-    terminated. Keeping this value smaller ensures you get expedient errors, but
-    you may want to tweak it for your specific needs.
+        Specifies location of CouchDB view index files. This location should be
+        writable and readable for the user that runs the CouchDB service
+        (``couchdb`` by default). ::
 
-    ::
-
-      [couchdb]
-      os_process_timeout = 5000 ; 5 sec
-
-
-  .. config:option:: uri_file :: Discovery CouchDB help file
-
-    This file contains the full `URI`_ that can be used to access this
-    instance of CouchDB. It is used to help discover the port CouchDB is running
-    on (if it was set to ``0`` (e.g. automatically assigned any free one).
-    This file should be writable and readable for the user that runs the CouchDB
-    service (``couchdb`` by default).
-
-    ::
-
-      [couchdb]
-      uri_file = /var/run/couchdb/couchdb.uri
-
-    .. _URI: http://en.wikipedia.org/wiki/URI
-
-
-  .. config:option:: util_driver_dir :: CouchDB binary utility drivers
-
-    Specifies location of binary drivers (`icu`, `ejson`, etc.). This location
-    and its contents should be readable for the user that runs the CouchDB
-    service.
-
-    ::
-
-      [couchdb]
-      util_driver_dir = /usr/lib/couchdb/erlang/lib/couch-1.5.0/priv/lib
-
-
-  .. config:option:: uuid :: CouchDB server UUID
-
-    .. versionadded:: 1.3
-
-    Unique identifier for this CouchDB server instance.
-
-    ::
-
-      [couchdb]
-      uuid = 0a959b9b8227188afc2ac26ccdf345a6
-
-
-  .. config:option:: view_index_dir :: View indexes location directory
-
-    Specifies location of CouchDB view index files. This location should be
-    writable and readable for the user that runs the CouchDB service
-    (``couchdb`` by default).
-
-    ::
-
-      [couchdb]
-      view_index_dir = /var/lib/couchdb
+            [couchdb]
+            view_index_dir = /var/lib/couchdb
