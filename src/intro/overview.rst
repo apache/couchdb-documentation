@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _intro/overview:
 
 ==================
@@ -43,7 +42,6 @@ entirely or failing completely. The database never contains partially saved
 or edited documents.
 
 .. _RESTful: http://en.wikipedia.org/wiki/REST
-
 
 ACID Properties
 ===============
@@ -97,7 +95,6 @@ after a crash or a power failure are never necessary.
 .. _MVCC: http://en.wikipedia.org/wiki/Multiversion_concurrency_control
 .. _B-trees: http://en.wikipedia.org/wiki/B-tree
 
-
 Compaction
 ==========
 
@@ -107,7 +104,6 @@ clones all the active data to a new file and then discards the old file.
 The database remains completely online the entire time and all updates and
 reads are allowed to complete successfully. The old database file is deleted only when
 all the data has been copied and all users transitioned to the new file.
-
 
 Views
 =====
@@ -126,9 +122,7 @@ and see our data in many different ways. What is needed is a way to filter,
 organize and report on data that hasn't been decomposed into tables.
 
 .. seealso::
-
-   :ref:`views`
-
+    :ref:`views`
 
 View Model
 ----------
@@ -147,7 +141,6 @@ and compatible with replication. CouchDB views are defined inside special
 regular documents, so that not only data replicates in CouchDB,
 but entire application designs replicate too.
 
-
 Javascript View Functions
 -------------------------
 
@@ -161,9 +154,7 @@ or it can add no rows at all.
 .. _map-reduce system: http://en.wikipedia.org/wiki/MapReduce
 
 .. seealso::
-
-  :ref:`viewfun`
-
+    :ref:`viewfun`
 
 View Indexes
 ------------
@@ -210,7 +201,6 @@ corruption of indexes. If a crash occurs while updating a view index,
 the incomplete index updates are simply lost and rebuilt incrementally from
 its previously committed state.
 
-
 Security and Validation
 =======================
 
@@ -219,9 +209,7 @@ access and update validation model that can be extended to implement custom
 security models.
 
 .. seealso::
-
-   :ref:`api/db/security`
-
+    :ref:`api/db/security`
 
 Administrator Access
 --------------------
@@ -230,7 +218,6 @@ CouchDB database instances have administrator accounts. Administrator
 accounts can create other administrator accounts and update design documents.
 Design documents are special documents containing view definitions and other
 special formulas, as well as regular fields and blobs.
-
 
 Update Validation
 -----------------
@@ -254,9 +241,7 @@ The update validations are enforced for both live usage and replicated
 updates, ensuring security and data validation in a shared, distributed system.
 
 .. seealso::
-
-   :ref:`vdufun`
-
+    :ref:`vdufun`
 
 Distributed Updates and Replication
 ===================================
@@ -284,7 +269,6 @@ by a javascript function, so that only particular documents or those meeting
 specific criteria are replicated. This can allow users to take subsets of a
 large shared database application offline for their own use, while maintaining
 normal interaction with the application and that subset of data.
-
 
 Conflicts
 ---------
@@ -317,9 +301,7 @@ more conflicts, the system accommodates them in the same manner, determining
 the same winner on each machine and maintaining single document semantics.
 
 .. seealso::
-
-   :ref:`replication/conflicts`
-
+    :ref:`replication/conflicts`
 
 Applications
 ------------
@@ -345,7 +327,6 @@ Like Subversion, conflicts would be resolved by doing a "pull" replication to
 force the conflicts locally, then merging and  re-replicating to the upstream
 server.
 
-
 Implementation
 ==============
 
@@ -356,7 +337,7 @@ reliability and availability.
 
 Both in syntax and semantics, Erlang is very different from conventional
 programming languages like C or Java. Erlang uses lightweight "processes" and
-message passing for concurrency, it has no shared state threading and all
+message passing for concurrency, it has no shared state threading and all 
 data is immutable. The robust, concurrent nature of Erlang is ideal for a
 database server.
 

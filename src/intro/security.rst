@@ -10,25 +10,23 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _intro/security:
 
-********
+========
 Security
-********
+========
 
 In this document, we'll look at the basic security mechanisms in CouchDB: the
 `Admin Party`, `Basic Authentication`, `Cookie Authentication`; how CouchDB
 handles users and protects their credentials.
 
-==============
 Authentication
 ==============
 
 .. _intro/security/admin_party:
 
 The Admin Party
-===============
+---------------
 
 When you start out fresh, CouchDB allows any request to be made by anyone.
 Create a database? No problem, here you go. Delete some documents? Same deal.
@@ -79,34 +77,30 @@ identification for certain requests:
 - Updating the active configuration (:put:`PUT /_config/section/key
   </_config/{section}/{key}>`)
 
-
 Creating New Admin User
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's do another walk through the API using `curl` to see how CouchDB behaves
-when you add admin users.
+when you add admin users. ::
 
-::
-
-  > HOST="http://127.0.0.1:5984"
-  > curl -X PUT $HOST/database
-  {"ok":true}
+    > HOST="http://127.0.0.1:5984"
+    > curl -X PUT $HOST/database
+    {"ok":true}
 
 When starting out fresh, we can add a database. Nothing unexpected. Now let's
 create an admin user. We'll call her ``anna``, and her password is ``secret``.
 Note the double quotes in the following code; they are needed to denote a string
 value for the :ref:`configuration API <api/config>`::
 
-  > curl -X PUT $HOST/_config/admins/anna -d '"secret"'
-  ""
+    > curl -X PUT $HOST/_config/admins/anna -d '"secret"'
+    ""
 
 As per the :ref:`_config <api/config>` API's behavior, we're getting
 the previous value for the config item we just wrote. Since our admin user
 didn't exist, we get an empty string.
 
-
 Hashing Passwords
------------------
+^^^^^^^^^^^^^^^^^
 
 Seeing the plain-text password is scary, isn't it? No worries, CouchDB doesn't
 show up the plain-text password anywhere. It gets hashed right away. The hash
@@ -146,29 +140,28 @@ hashed passwords. This means your plain-text password can't start with the
 characters ``-hashed-``, but that's pretty unlikely to begin with.
 
 .. note::
+    Since :ref:`1.3.0 release <release/1.3.0>` CouchDB uses ``-pbkdf2-`` prefix
+    by default to sign about using `PBKDF2`_ hashing algorithm instead of
+    `SHA1`.
 
-   Since :ref:`1.3.0 release <release/1.3.0>` CouchDB uses ``-pbkdf2-`` prefix
-   by default to sign about using `PBKDF2`_ hashing algorithm instead of `SHA1`.
-
-   .. _PBKDF2: http://en.wikipedia.org/wiki/PBKDF2
-
+    .. _PBKDF2: http://en.wikipedia.org/wiki/PBKDF2
 
 .. _intro/security/basicauth:
 
 Basic Authentication
-====================
+--------------------
 
 Now that we have defined an admin, CouchDB will not allow us to create new
 databases unless we give the correct admin user credentials. Let's verify::
 
-  > curl -X PUT $HOST/somedatabase
-  {"error":"unauthorized","reason":"You are not a server admin."}
+    > curl -X PUT $HOST/somedatabase
+    {"error":"unauthorized","reason":"You are not a server admin."}
 
 That looks about right. Now we try again with the correct credentials::
 
-  > HOST="http://anna:secret@127.0.0.1:5984"
-  > curl -X PUT $HOST/somedatabase
-  {"ok":true}
+    > HOST="http://anna:secret@127.0.0.1:5984"
+    > curl -X PUT $HOST/somedatabase
+    {"ok":true}
 
 If you have ever accessed a website or FTP server that was password-protected,
 the ``username:password@`` URL variant should look familiar.
@@ -187,14 +180,12 @@ scope of this documentation. CouchDB as of version :ref:`1.1.0 <release/1.1.0>`
 comes with :ref:`SSL built in <config/ssl>`.
 
 .. seealso::
-
-   :ref:`Basic Authentication API Reference <api/auth/basic>`
-
+    :ref:`Basic Authentication API Reference <api/auth/basic>`
 
 .. _intro/security/cookie:
 
 Cookie Authentication
-=====================
+---------------------
 
 Basic authentication that uses plain-text passwords is nice and convenient,
 but not very secure if no extra measures are taken. It is also a very poor
@@ -219,19 +210,19 @@ to resort to any smarts in your application.
 If you are not using HTML forms to log in, you need to send an HTTP request
 that looks as if an HTML form generated it. Luckily, this is super simple::
 
-  > HOST="http://127.0.0.1:5984"
-  > curl -vX POST $HOST/_session \
-         -H 'Content-Type:application/x-www-form-urlencoded' \
-         -d 'name=anna&password=secret'
+    > HOST="http://127.0.0.1:5984"
+    > curl -vX POST $HOST/_session \
+           -H 'Content-Type:application/x-www-form-urlencoded' \
+           -d 'name=anna&password=secret'
 
 CouchDB replies, and we'll give you some more detail::
 
-  < HTTP/1.1 200 OK
-  < Set-Cookie: AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw;
-  < Version=1; Path=/; HttpOnly
-  > ...
-  <
-  {"ok":true}
+    < HTTP/1.1 200 OK
+    < Set-Cookie: AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw;
+    < Version=1; Path=/; HttpOnly
+    > ...
+    <
+    {"ok":true}
 
 A :statuscode:`200` response code tells us all is well, a :header:`Set-Cookie`
 header includes the token we can use for the next request, and the standard JSON
@@ -240,11 +231,11 @@ response tells us again that the request was successful.
 Now we can use this token to make another request as the same user without
 sending the username and password again::
 
-  > curl -vX PUT $HOST/mydatabase \
-         --cookie AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw \
-         -H "X-CouchDB-WWW-Authenticate: Cookie" \
-         -H "Content-Type:application/x-www-form-urlencoded"
-  {"ok":true}
+    > curl -vX PUT $HOST/mydatabase \
+           --cookie AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw \
+           -H "X-CouchDB-WWW-Authenticate: Cookie" \
+           -H "Content-Type:application/x-www-form-urlencoded"
+    {"ok":true}
 
 You can keep using this token for 10 minutes by default. After 10 minutes you
 need to authenticate your user again. The token lifetime can be configured
@@ -252,11 +243,8 @@ with the timeout (in seconds) setting in the :ref:`couch_httpd_auth
 <config/couch_httpd_auth>` configuration section.
 
 .. seealso::
+    :ref:`Cookie Authentication API Reference <api/auth/cookie>`
 
-   :ref:`Cookie Authentication API Reference <api/auth/cookie>`
-
-
-=======================
 Authentication Database
 =======================
 
@@ -290,9 +278,8 @@ apart from sensitive personal information like: real name, email, phone, special
 internal identifications and more. This is not information that you
 want to share with the World.
 
-
 Users Documents
-===============
+---------------
 
 Each CouchDB user is stored in document format. These documents contain
 several *mandatory* fields, that CouchDB needs for authentication:
@@ -320,7 +307,7 @@ target user and CouchDB administrators may browse it.
 .. _org.couchdb.user:
 
 Why ``org.couchdb.user:`` prefix?
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The reason there is a special prefix before a user's login name is to have
 namespaces that users belong to. This prefix is designed to prevent
@@ -330,55 +317,54 @@ For current CouchDB releases, all users belong to the same
 ``org.couchdb.user`` namespace and this cannot be changed. This may be changed
 in future releases.
 
-
 Creating New User
-=================
+-----------------
 
 Creating a new user is a very trivial operation. You just need to do a
 :method:`PUT` request with user's data to CouchDB. Let's create a user with
 login `jan` and password `apple`::
 
-  curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
-       -H "Accept: application/json" \
-       -H "Content-Type: application/json" \
-       -d '{"name": "jan", "password": "apple", "roles": [], "type": "user"}'
+    curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
+         -H "Accept: application/json" \
+         -H "Content-Type: application/json" \
+         -d '{"name": "jan", "password": "apple", "roles": [], "type": "user"}'
 
 This `curl` command will produce the following HTTP request:
 
 .. code-block:: http
 
-  PUT /_users/org.couchdb.user:jan HTTP/1.1
-  Accept: application/json
-  Content-Length: 62
-  Content-Type: application/json
-  Host: localhost:5984
-  User-Agent: curl/7.31.0
+    PUT /_users/org.couchdb.user:jan HTTP/1.1
+    Accept: application/json
+    Content-Length: 62
+    Content-Type: application/json
+    Host: localhost:5984
+    User-Agent: curl/7.31.0
 
 And CouchDB responds with:
 
 .. code-block:: http
 
-  HTTP/1.1 201 Created
-  Cache-Control: must-revalidate
-  Content-Length: 83
-  Content-Type: application/json
-  Date: Fri, 27 Sep 2013 07:33:28 GMT
-  ETag: "1-e0ebfb84005b920488fc7a8cc5470cc0"
-  Location: http://localhost:5984/_users/org.couchdb.user:jan
-  Server: CouchDB (Erlang OTP)
+    HTTP/1.1 201 Created
+    Cache-Control: must-revalidate
+    Content-Length: 83
+    Content-Type: application/json
+    Date: Fri, 27 Sep 2013 07:33:28 GMT
+    ETag: "1-e0ebfb84005b920488fc7a8cc5470cc0"
+    Location: http://localhost:5984/_users/org.couchdb.user:jan
+    Server: CouchDB (Erlang OTP)
 
-  {"ok":true,"id":"org.couchdb.user:jan","rev":"1-e0ebfb84005b920488fc7a8cc5470cc0"}
+    {"ok":true,"id":"org.couchdb.user:jan","rev":"1-e0ebfb84005b920488fc7a8cc5470cc0"}
 
 The document was successfully created! The user `jan` should now exist in our
 database. Let's check if this is true::
 
-  curl -X POST http://localhost:5984/_session -d 'name=jan&password=apple'
+    curl -X POST http://localhost:5984/_session -d 'name=jan&password=apple'
 
 CouchDB should respond with:
 
 .. code-block:: javascript
 
-  {"ok":true,"name":"jan","roles":[]}
+    {"ok":true,"name":"jan","roles":[]}
 
 This means that the username was recognized and the password's hash matches
 with the stored one. If we specify an incorrect login and/or password, CouchDB
@@ -386,11 +372,10 @@ will notify us with the following error message:
 
 .. code-block:: javascript
 
-  {"error":"unauthorized","reason":"Name or password is incorrect."}
-
+    {"error":"unauthorized","reason":"Name or password is incorrect."}
 
 Password Changing
-=================
+-----------------
 
 Let's define what is password changing from the point of view of CouchDB and
 the authentication database. Since "users" are "documents", this operation is
@@ -401,60 +386,56 @@ replaces it with the *secured hash* depending on the chosen ``password_scheme``.
 
 Summarizing the above process - we need to get the document's content, add
 the ``password`` field with the new password in plain text and then store the
-JSON result to the authentication database.
+JSON result to the authentication database. ::
 
-::
-
-  curl -X GET http://localhost:5984/_users/org.couchdb.user:jan
+    curl -X GET http://localhost:5984/_users/org.couchdb.user:jan
 
 .. code-block:: javascript
 
-  {
-    "_id": "org.couchdb.user:jan",
-    "_rev": "1-e0ebfb84005b920488fc7a8cc5470cc0",
-    "derived_key": "e579375db0e0c6a6fc79cd9e36a36859f71575c3",
-    "iterations": 10,
-    "name": "jan",
-    "password_scheme": "pbkdf2",
-    "roles": [],
-    "salt": "1112283cf988a34f124200a050d308a1",
-    "type": "user"
-  }
+    {
+        "_id": "org.couchdb.user:jan",
+        "_rev": "1-e0ebfb84005b920488fc7a8cc5470cc0",
+        "derived_key": "e579375db0e0c6a6fc79cd9e36a36859f71575c3",
+        "iterations": 10,
+        "name": "jan",
+        "password_scheme": "pbkdf2",
+        "roles": [],
+        "salt": "1112283cf988a34f124200a050d308a1",
+        "type": "user"
+    }
 
-Here is our user's document. We may strip hashes from the stored document to reduce
-the amount of posted data::
+Here is our user's document. We may strip hashes from the stored document to
+reduce the amount of posted data::
 
-  curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
-       -H "Accept: application/json" \
-       -H "Content-Type: application/json" \
-       -H "If-Match: 1-e0ebfb84005b920488fc7a8cc5470cc0" \
-       -d '{"name":"jan", "roles":[], "type":"user", "password":"orange"}'
+    curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
+         -H "Accept: application/json" \
+         -H "Content-Type: application/json" \
+         -H "If-Match: 1-e0ebfb84005b920488fc7a8cc5470cc0" \
+         -d '{"name":"jan", "roles":[], "type":"user", "password":"orange"}'
 
 .. code-block:: javascript
 
-  {"ok":true,"id":"org.couchdb.user:jan","rev":"2-ed293d3a0ae09f0c624f10538ef33c6f"}
+    {"ok":true,"id":"org.couchdb.user:jan","rev":"2-ed293d3a0ae09f0c624f10538ef33c6f"}
 
 Updated! Now let's check that the password was really changed::
 
-  curl -X POST http://localhost:5984/_session -d 'name=jan&password=apple'
+    curl -X POST http://localhost:5984/_session -d 'name=jan&password=apple'
 
 CouchDB should respond with:
 
 .. code-block:: javascript
 
-  {"error":"unauthorized","reason":"Name or password is incorrect."}
+    {"error":"unauthorized","reason":"Name or password is incorrect."}
 
-Looks like the password ``apple`` is wrong, what about ``orange``?
+Looks like the password ``apple`` is wrong, what about ``orange``? ::
 
-::
-
-  curl -X POST http://localhost:5984/_session -d 'name=jan&password=orange'
+    curl -X POST http://localhost:5984/_session -d 'name=jan&password=orange'
 
 CouchDB should respond with:
 
 .. code-block:: javascript
 
-  {"ok":true,"name":"jan","roles":[]}
+    {"ok":true,"name":"jan","roles":[]}
 
 Hooray! You may wonder why this was so complex - we need to retrieve user's
 document,  add a special field to it, post it back - where is that one big
@@ -464,13 +445,11 @@ corner if are logged in. Using that will hide all the implementation details
 described above and keep it real simple for you.
 
 .. note::
-
-  There is no password confirmation for API request: you should implement it
-  on your application layer like Futon does.
-
+    There is no password confirmation for API request: you should implement it
+    on your application layer like Futon does.
 
 Users Public Information
-========================
+------------------------
 
 .. versionadded:: 1.4
 
@@ -484,11 +463,11 @@ a comma-separated lis of users document fields that will be publicly available.
 Normally, if you request a user document and you're not an administrator or
 document's owner, CouchDB will respond with :statuscode:`404`::
 
-  curl http://localhost:5984/_users/org.couchdb.user:robert
+    curl http://localhost:5984/_users/org.couchdb.user:robert
 
 .. code-block:: javascript
 
-  {"error":"not_found","reason":"missing"}
+    {"error":"not_found","reason":"missing"}
 
 This response is constant for both cases when user exists or doesn't exist for
 security reasons.
@@ -497,25 +476,23 @@ Now let's share the field ``name``. First, setup the ``public_fields``
 configuration option. Remember, that this action requires administrator
 privileges. The next command will prompt you for user  `admin`'s password:
 
-  curl -X PUT http://localhost:5984/_config/couch_http_auth/public_fields \
+    curl -X PUT http://localhost:5984/_config/couch_http_auth/public_fields \
        -H "Content-Type: application/json" \
        -d '"name"' \
        -u admin
 
 What has changed? Let's check Robert's document once again::
 
-  curl http://localhost:5984/_users/org.couchdb.user:robert
+    curl http://localhost:5984/_users/org.couchdb.user:robert
 
 .. code-block:: javascript
 
-  {"_id":"org.couchdb.user:robert","_rev":"6-869e2d3cbd8b081f9419f190438ecbe7","name":"robert"}
+    {"_id":"org.couchdb.user:robert","_rev":"6-869e2d3cbd8b081f9419f190438ecbe7","name":"robert"}
 
 Good news! Now, we may read the field ``name`` in *every user document without
 needing to be an administrator*. Keep in mind though not to publish sensitive
 information, especially without user's consent!
 
-
-==============
 Authorization
 ==============
 
@@ -543,36 +520,36 @@ normal user are treated as members, and those with server admin credentials
 are treated as database admins.  To change the default permissions, you must
 create a :ref:`_security <api/db/security>` document in the database::
 
-  > curl -X PUT http://localhost:5984/mydatabase/_security \
-       -u anna:secret \
-       -H "Content-Type: application/json" \
-       -d '{"admins": { "names": [], "roles": [] }, "members": { "names": ["jan"], "roles": [] } }'
+    > curl -X PUT http://localhost:5984/mydatabase/_security \
+         -u anna:secret \
+         -H "Content-Type: application/json" \
+         -d '{"admins": { "names": [], "roles": [] }, "members": { "names": ["jan"], "roles": [] } }'
 
 The HTTP request to create the `_security` document must contain the
 credentials of a server admin.  CouchDB will respond with:
 
 .. code-block:: javascript
 
-  {"ok":true}
+    {"ok":true}
 
 The database is now secured against anonymous reads and writes::
 
-  > curl http://localhost:5984/mydatabase/
+    > curl http://localhost:5984/mydatabase/
 
 .. code-block:: javascript
 
-  {"error":"unauthorized","reason":"You are not authorized to access this db."}
+    {"error":"unauthorized","reason":"You are not authorized to access this db."}
 
 You declared user "jan" as a member in this database, so he is able to read and
 write normal documents::
 
-  > curl -u jan:apple http://localhost:5984/mydatabase/
+    > curl -u jan:apple http://localhost:5984/mydatabase/
 
 .. code-block:: javascript
 
-  {"db_name":"mydatabase","doc_count":1,"doc_del_count":0,"update_seq":3,"purge_seq":0,
-  "compact_running":false,"disk_size":12376,"data_size":272,"instance_start_time":"1397672867731570",
-  "disk_format_version":6,"committed_update_seq":3}
+    {"db_name":"mydatabase","doc_count":1,"doc_del_count":0,"update_seq":3,"purge_seq":0,
+    "compact_running":false,"disk_size":12376,"data_size":272,"instance_start_time":"1397672867731570",
+    "disk_format_version":6,"committed_update_seq":3}
 
 If Jan attempted to create a design doc, however, CouchDB would return a
 401 Unauthorized error because the username "jan" is not in the list of
@@ -584,10 +561,10 @@ admin usernames is tedious, though, so you would likely prefer to create a
 database admin role and assign that role to the `org.couchdb.user:jan` user
 document::
 
-  > curl -X PUT http://localhost:5984/mydatabase/_security \
-       -u anna:secret \
-       -H "Content-Type: application/json" \
-       -d '{"admins": { "names": [], "roles": ["mydatabase_admin"] }, "members": { "names": [], "roles": [] } }'
+    > curl -X PUT http://localhost:5984/mydatabase/_security \
+         -u anna:secret \
+         -H "Content-Type: application/json" \
+         -d '{"admins": { "names": [], "roles": ["mydatabase_admin"] }, "members": { "names": [], "roles": [] } }'
 
 See the :ref:`_security document reference page <api/db/security>` for
 additional details about specifying database members and admins.
