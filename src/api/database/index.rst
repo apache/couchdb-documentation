@@ -37,11 +37,10 @@ For clarity, the form below is used in the URL paths:
 Where ``db`` is the name of any database.
 
 .. toctree::
-
-   common
-   bulk-api
-   changes
-   compact
-   security
-   temp-views
-   misc
+    common
+    bulk-api
+    changes
+    compact
+    security
+    temp-views
+    misc

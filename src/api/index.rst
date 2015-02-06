@@ -16,27 +16,26 @@
 API Reference
 =============
 
-The components of the API URL path help determine the part of the
-CouchDB server that is being accessed. The result is the structure of
-the URL request both identifies and effectively describes the area of
-the database you are accessing.
+The components of the API URL path help determine the part of the CouchDB
+server that is being accessed. The result is the structure of the URL request
+both identifies and effectively describes the area of the database you are
+accessing.
 
-As with all URLs, the individual components are separated by a forward
-slash.
+As with all URLs, the individual components are separated by a forward slash.
 
-As a general rule, URL components and JSON fields starting with the
-``_`` (underscore) character represent a special component or entity
-within the server or returned object. For example, the URL fragment
-``/_all_dbs`` gets a list of all of the databases in a CouchDB instance.
+As a general rule, URL components and JSON fields starting with the ``_``
+(underscore) character represent a special component or entity within the
+server or returned object. For example, the URL fragment ``/_all_dbs`` gets a
+list of all of the databases in a CouchDB instance.
 
 This reference is structured according to the URL structure, as below.
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   basics
-   server/index
-   database/index
-   document/index
-   ddoc/index
-   local
+    basics
+    server/index
+    database/index
+    document/index
+    ddoc/index
+    local
