@@ -166,3 +166,65 @@ the "Pull Request" button. Fill in the description with something useful and
 hit the "Send Pull Request" button.
 
 And we're done!
+
+Style Guidelines for this Documentation
+=======================================
+
+When you make a change to the documentation, you should make sure that you
+follow the style. Look through some files and you will see that the style is
+quite straightforward. If you do not know if your formating is in compliance
+with the style, ask yourself the following question::
+
+    Is it needed for correct syntax?
+
+If the answer is ``No.`` then it is probably not.
+
+These guidelines strive be simple, without contradictions and exceptions. The
+best style is the one that is followed because it seems to be the natural way of
+doing it.
+
+The guidelines
+--------------
+
+The guidelines are in descending priority.
+
+#. Syntax
+
+   * Correct syntax is always more important than style. This includes
+     configuration files, HTML responses, etc.
+
+#. Encoding
+
+   * All files are ``UTF-8``.
+
+#. Line ending
+
+   * All lines end with ``\n``.
+   * No trailing whitespaces.
+
+#. Line length
+
+   * The maximum line length is 80 characters.
+
+#. Links
+
+   * All internal links are relative.
+
+#. Indentation
+
+   * 4 spaces
+
+#. Titles
+
+   * The highest level titles in a file is over and underlined with =
+   * Lower level titles are underlined with the following characters in descending
+     order::
+
+        = - ^ *  + # ` : . " ~ _
+
+   * Over and underline match the title length.
+
+#. Empty lines
+
+   * No empty line at the end of the file.
+   * Lists may separated each item with an empty line.
