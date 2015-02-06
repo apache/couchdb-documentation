@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _fauxton/install:
 
 ============
@@ -23,41 +22,38 @@ A recent of `node.js`_ and `npm`_ is required.
 .. _npm: https://npmjs.org/doc/README.html
 
 Get the source
---------------
+==============
 
 Clone the CouchDB repo::
 
-  $ git clone http://git-wip-us.apache.org/repos/asf/couchdb.git
-  $ cd couchdb
-
+    $ git clone http://git-wip-us.apache.org/repos/asf/couchdb.git
+    $ cd couchdb
 
 Fauxton Setup
--------------
+=============
 
 Install all dependencies::
 
-  couchdb/ $ cd src/fauxton
-  couchdb/src/fauxton/ $ npm install
-
+    couchdb/ $ cd src/fauxton
+    couchdb/src/fauxton/ $ npm install
 
 .. note::
-
     To avoid a npm global install add ``node_modules/.bin`` to your path::
 
-      export PATH=./node_modules/.bin:$PATH
+        export PATH=./node_modules/.bin:$PATH
 
     Or just use the wrappers in ``./bin/``.
 
     Development mode, non minified files::
 
-      ./bin/grunt couchdebug
+        ./bin/grunt couchdebug
 
     Or fully compiled install::
 
-      ./bin/grunt couchdb
+        ./bin/grunt couchdb
 
 Dev Server
-----------
+==========
 
 Using the dev server is the easiest way to use Fauxton, specially when
 developing for it::
@@ -65,7 +61,7 @@ developing for it::
     grunt dev
 
 Deploy Fauxton
---------------
+==============
 
 Deploy Fauxton to your local CouchDB instance:
 
@@ -73,9 +69,8 @@ Deploy Fauxton to your local CouchDB instance:
 
 The Fauxton be available by http://localhost:5984/fauxton/_design/fauxton/index.html
 
-
 Understang Fauxton Code layout
-==============================
+------------------------------
 
 Each bit of functionality is its own separate module or addon.
 
@@ -100,9 +95,8 @@ layout, data, breadcrumbs and api point is required for the view.
 .. _backbone.js: http://backbonejs.org/
 .. _Backbone.layoutmanager: https://github.com/tbranyen/backbone.layoutmanager
 
-
 ToDo items
-==========
+----------
 
 Checkout `JIRA`_  for a list of items to do.
 
