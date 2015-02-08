@@ -204,7 +204,7 @@ The guidelines are in descending priority.
 
 #. Line length
 
-   * The maximum line length is 80 characters.
+   * The maximum line length is ``80`` characters.
 
 #. Links
 
@@ -212,11 +212,11 @@ The guidelines are in descending priority.
 
 #. Indentation
 
-   * 4 spaces
+   * ``4`` spaces.
 
 #. Titles
 
-   * The highest level titles in a file is over and underlined with =
+   * The highest level titles in a file is over and underlined with ``=``.
    * Lower level titles are underlined with the following characters in descending
      order::
 
