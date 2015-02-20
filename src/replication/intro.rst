@@ -12,6 +12,7 @@
 
 .. _replication/intro:
 
+===========================
 Introduction to Replication
 ===========================
 
@@ -25,23 +26,21 @@ the end of the process, all active documents on the source database are also in
 the destination database and all documents that were deleted in the source
 databases are also deleted on the destination database (if they even existed).
 
-
 Triggering Replication
-----------------------
+======================
 
-Replication is controlled through documents in the :ref:`_replicator <replicator>`
-database, where each document describes one replication process (see
-:ref:`replication-settings`).
+Replication is controlled through documents in the
+:ref:`_replicator <replicator>` database, where each document describes one
+replication process (see :ref:`replication-settings`).
 
 A replication is triggered by storing a replication document in the replicator
 database. Its status can be inspected through the active tasks API (see
-:ref:`api/server/active_tasks` and :ref:`replication-status`). A replication can be
-stopped by deleting the document, or by updating it with its `cancel` property
-set to `true`.
-
+:ref:`api/server/active_tasks` and :ref:`replication-status`). A replication can
+be stopped by deleting the document, or by updating it with its `cancel`
+property set to `true`.
 
 Replication Procedure
----------------------
+=====================
 
 During replication, CouchDB will compare the source and the destination
 database to determine which documents differ between the source and the
@@ -62,9 +61,8 @@ When a replication task is initiated on the sending node, it is called *push*
 replication, if it is initiated by the receiving node, it is called *pull*
 replication.
 
-
 Master - Master replication
----------------------------
+===========================
 
 One replication task will only transfer changes in one direction. To achieve
 master-master replication, it is possible to set up two replication tasks in
@@ -72,9 +70,8 @@ opposite direction. When a change is replicated from database A to B by the
 first task, the second task from B to A will discover that the new change on
 B already exists in A and will wait for further changes.
 
-
 Controlling which Documents to Replicate
-----------------------------------------
+========================================
 
 There are two ways for controlling which documents are replicated, and which
 are skipped. *Local* documents are never replicated (see :ref:`api/local`).
@@ -84,9 +81,8 @@ Additionally, :ref:`filterfun` can be used in a replication (see
 the filter function for each document in the changes feed. The document will
 only be replicated if the filter returns `true`.
 
-
 Migrating Data to Clients
--------------------------
+=========================
 
 Replication can be especially useful for bringing data closer to clients.
 `PouchDB <http://pouchdb.com/>`_ implements the replication algorithm of CouchDB

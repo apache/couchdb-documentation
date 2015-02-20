@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/0.8.x:
 
 ============
@@ -18,9 +17,8 @@
 ============
 
 .. contents::
-   :depth: 1
-   :local:
-
+    :depth: 1
+    :local:
 
 .. _release/0.8.1:
 
@@ -73,7 +71,6 @@ HTTP Interface
   (:issue:`55`)
 * CouchDB can now be bound to IPv6 addresses.
 * The HTTP `Server` header now contains the versions of CouchDB and Erlang.
-
 
 .. _release/0.8.0:
 

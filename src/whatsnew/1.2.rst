@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/1.2.x:
 
 ============
@@ -18,9 +17,8 @@
 ============
 
 .. contents::
-   :depth: 1
-   :local:
-
+    :depth: 1
+    :local:
 
 .. _release/1.2.x/upgrade:
 
@@ -28,15 +26,13 @@ Upgrade Notes
 =============
 
 .. warning::
-
-   This version drops support for the database format that was introduced in
-   version 0.9.0. Compact your older databases (that have not been compacted
-   for a long time) before upgrading, or they will become inaccessible.
+    This version drops support for the database format that was introduced in
+    version 0.9.0. Compact your older databases (that have not been compacted
+    for a long time) before upgrading, or they will become inaccessible.
 
 .. warning::
-
-   :ref:`release/1.2.1` contains important security fixes. Previous `1.2.x`
-   releases are not recommended for regular usage.
+    :ref:`release/1.2.1` contains important security fixes. Previous `1.2.x`
+    releases are not recommended for regular usage.
 
 Security changes
 ----------------
@@ -73,7 +69,6 @@ Compression can be disabled by setting ``compression = none`` in your
 ``local.ini`` ``[couchdb]`` section, but the on-disk format will still be
 upgraded.
 
-
 .. _release/1.2.2:
 
 Version 1.2.2
@@ -90,7 +85,6 @@ HTTP Interface
 
 * Reset rewrite counter on new request, avoiding unnecessary request failures
   due to bogus rewrite limit reports.
-
 
 .. _release/1.2.1:
 
@@ -132,7 +126,6 @@ View Server
 -----------
 
 * Change use of signals to avoid broken view groups.
-
 
 .. _release/1.2.0:
 

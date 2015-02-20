@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _views/json:
 
 ================
@@ -33,117 +32,117 @@ For example, if you have the following hierarchically-linked documents:
 
 .. code-block:: javascript
 
-  [
-    { "_id": "11111" },
-    { "_id": "22222", "ancestors": ["11111"], "value": "hello" },
-    { "_id": "33333", "ancestors": ["22222","11111"], "value": "world" }
-  ]
+    [
+        { "_id": "11111" },
+        { "_id": "22222", "ancestors": ["11111"], "value": "hello" },
+        { "_id": "33333", "ancestors": ["22222","11111"], "value": "world" }
+    ]
 
 You can emit the values with the ancestor documents adjacent to them in the view
 like this:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc.value) {
-      emit([doc.value, 0], null);
-      if (doc.ancestors) {
-        for (var i in doc.ancestors) {
-          emit([doc.value, Number(i)+1], {_id: doc.ancestors[i]});
+    function(doc) {
+        if (doc.value) {
+            emit([doc.value, 0], null);
+            if (doc.ancestors) {
+                for (var i in doc.ancestors) {
+                    emit([doc.value, Number(i)+1], {_id: doc.ancestors[i]});
+                }
+            }
         }
-      }
     }
-  }
 
 The result you get is:
 
 .. code-block:: javascript
 
-  {
-      "total_rows": 5,
-      "offset": 0,
-      "rows": [
-          {
-              "id": "22222",
-              "key": [
-                  "hello",
-                  0
-              ],
-              "value": null,
-              "doc": {
-                  "_id": "22222",
-                  "_rev": "1-0eee81fecb5aa4f51e285c621271ff02",
-                  "ancestors": [
-                      "11111"
-                  ],
-                  "value": "hello"
-              }
-          },
-          {
-              "id": "22222",
-              "key": [
-                  "hello",
-                  1
-              ],
-              "value": {
-                  "_id": "11111"
-              },
-              "doc": {
-                  "_id": "11111",
-                  "_rev": "1-967a00dff5e02add41819138abb3284d"
-              }
-          },
-          {
-              "id": "33333",
-              "key": [
-                  "world",
-                  0
-              ],
-              "value": null,
-              "doc": {
-                  "_id": "33333",
-                  "_rev": "1-11e42b44fdb3d3784602eca7c0332a43",
-                  "ancestors": [
-                      "22222",
-                      "11111"
-                  ],
-                  "value": "world"
-              }
-          },
-          {
-              "id": "33333",
-              "key": [
-                  "world",
-                  1
-              ],
-              "value": {
-                  "_id": "22222"
-              },
-              "doc": {
-                  "_id": "22222",
-                  "_rev": "1-0eee81fecb5aa4f51e285c621271ff02",
-                  "ancestors": [
-                      "11111"
-                  ],
-                  "value": "hello"
-              }
-          },
-          {
-              "id": "33333",
-              "key": [
-                  "world",
-                  2
-              ],
-              "value": {
-                  "_id": "11111"
-              },
-              "doc": {
-                  "_id": "11111",
-                  "_rev": "1-967a00dff5e02add41819138abb3284d"
-              }
-          }
-      ]
-  }
+    {
+        "total_rows": 5,
+        "offset": 0,
+        "rows": [
+            {
+                "id": "22222",
+                "key": [
+                    "hello",
+                    0
+                ],
+                "value": null,
+                "doc": {
+                    "_id": "22222",
+                    "_rev": "1-0eee81fecb5aa4f51e285c621271ff02",
+                    "ancestors": [
+                        "11111"
+                    ],
+                    "value": "hello"
+                }
+            },
+            {
+                "id": "22222",
+                "key": [
+                    "hello",
+                    1
+                ],
+                "value": {
+                    "_id": "11111"
+                },
+                "doc": {
+                    "_id": "11111",
+                    "_rev": "1-967a00dff5e02add41819138abb3284d"
+                }
+            },
+            {
+                "id": "33333",
+                "key": [
+                    "world",
+                    0
+                ],
+                "value": null,
+                "doc": {
+                    "_id": "33333",
+                    "_rev": "1-11e42b44fdb3d3784602eca7c0332a43",
+                    "ancestors": [
+                        "22222",
+                        "11111"
+                    ],
+                    "value": "world"
+                }
+            },
+            {
+                "id": "33333",
+                "key": [
+                    "world",
+                    1
+                ],
+                "value": {
+                    "_id": "22222"
+                },
+                "doc": {
+                    "_id": "22222",
+                    "_rev": "1-0eee81fecb5aa4f51e285c621271ff02",
+                    "ancestors": [
+                        "11111"
+                    ],
+                    "value": "hello"
+                }
+            },
+            {
+                "id": "33333",
+                "key": [
+                    "world",
+                    2
+                ],
+                "value": {
+                    "_id": "11111"
+                },
+                "doc": {
+                    "_id": "11111",
+                    "_rev": "1-967a00dff5e02add41819138abb3284d"
+                }
+            }
+        ]
+    }
 
 which makes it very cheap to fetch a document plus all its ancestors in one
 query.
@@ -156,7 +155,6 @@ the view is generated. This means that if a new revision of the linked document
 is added later, it will appear in view queries even though the view itself
 hasn't changed. To force a specific revision of a linked document to be used,
 emit a ``"_rev"`` property as well as ``"_id"``.
-
 
 Using View Collation
 ====================
@@ -183,21 +181,21 @@ comments inside that document:
 
 .. code-block:: javascript
 
-  {
-    "_id": "myslug",
-    "_rev": "123456",
-    "author": "john",
-    "title": "My blog post",
-    "content": "Bla bla bla …",
-    "comments": [
-      {"author": "jack", "content": "…"},
-      {"author": "jane", "content": "…"}
-    ]
-  }
+    {
+        "_id": "myslug",
+        "_rev": "123456",
+        "author": "john",
+        "title": "My blog post",
+        "content": "Bla bla bla …",
+        "comments": [
+            {"author": "jack", "content": "…"},
+            {"author": "jane", "content": "…"}
+        ]
+    }
 
 .. note::
-   Of course the model of an actual blogging system would be more extensive,
-   you'd have tags, timestamps, etc etc. This is just to demonstrate the basics.
+    Of course the model of an actual blogging system would be more extensive,
+    you'd have tags, timestamps, etc etc. This is just to demonstrate the basics.
 
 The obvious advantage of this approach is that the data that belongs together
 is stored in one place. Delete the post, and you automatically delete the
@@ -210,11 +208,11 @@ all blog posts, keyed by author:
 
 .. code-block:: javascript
 
-  function(doc) {
-    for (var i in doc.comments) {
-      emit(doc.comments[i].author, doc.comments[i].content);
+    function(doc) {
+        for (var i in doc.comments) {
+            emit(doc.comments[i].author, doc.comments[i].content);
+        }
     }
-  }
 
 Now you could list all comments by a particular user by invoking the view and
 passing it a ``?key="username"`` query string parameter.
@@ -248,14 +246,14 @@ can tell the difference between posts and comments:
 
 .. code-block:: javascript
 
-  {
-    "_id": "myslug",
-    "_rev": "123456",
-    "type": "post",
-    "author": "john",
-    "title": "My blog post",
-    "content": "Bla bla bla …"
-  }
+    {
+        "_id": "myslug",
+        "_rev": "123456",
+        "type": "post",
+        "author": "john",
+        "title": "My blog post",
+        "content": "Bla bla bla …"
+    }
 
 The comments themselves are stored in separate documents, which also have a type
 property (this time with the value “comment”), and in addition feature a post
@@ -263,36 +261,36 @@ property containing the ID of the post document they belong to:
 
 .. code-block:: javascript
 
-  {
-    "_id": "ABCDEF",
-    "_rev": "123456",
-    "type": "comment",
-    "post": "myslug",
-    "author": "jack",
-    "content": "…"
-  }
+    {
+        "_id": "ABCDEF",
+        "_rev": "123456",
+        "type": "comment",
+        "post": "myslug",
+        "author": "jack",
+        "content": "…"
+    }
 
 .. code-block:: javascript
 
-  {
-    "_id": "DEFABC",
-    "_rev": "123456",
-    "type": "comment",
-    "post": "myslug",
-    "author": "jane",
-    "content": "…"
-  }
+    {
+        "_id": "DEFABC",
+        "_rev": "123456",
+        "type": "comment",
+        "post": "myslug",
+        "author": "jane",
+        "content": "…"
+    }
 
 To list all comments per blog post, you'd add a simple view, keyed by blog post
 ID:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc.type == "comment") {
-      emit(doc.post, {author: doc.author, content: doc.content});
+    function(doc) {
+        if (doc.type == "comment") {
+            emit(doc.post, {author: doc.author, content: doc.content});
+        }
     }
-  }
 
 And you'd invoke that view passing it a ``?key="post_id"`` query string
 parameter.
@@ -301,11 +299,11 @@ Viewing all comments by author is just as easy as before:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc.type == "comment") {
-      emit(doc.author, {post: doc.post, content: doc.content});
+    function(doc) {
+        if (doc.type == "comment") {
+            emit(doc.author, {post: doc.post, content: doc.content});
+        }
     }
-  }
 
 So this is better in some ways, but it also has a disadvantage.
 Imagine you want to display a blog post with all the associated comments on the
@@ -334,13 +332,13 @@ some use of that:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc.type == "post") {
-      emit([doc._id, 0], doc);
-    } else if (doc.type == "comment") {
-      emit([doc.post, 1], doc);
+    function(doc) {
+        if (doc.type == "post") {
+            emit([doc._id, 0], doc);
+        } else if (doc.type == "comment") {
+            emit([doc.post, 1], doc);
+        }
     }
-  }
 
 Okay, this may be confusing at first. Let's take a step back and look at what
 views in CouchDB are really about.
@@ -362,7 +360,7 @@ This feature enables a whole class of tricks that are rather non-obvious...
 
 .. seealso::
 
-  :ref:`views/collation`
+    :ref:`views/collation`
 
 With that in mind, let's return to the view function above. First note that,
 unlike the previous view functions we've used here, this view handles both
@@ -378,39 +376,39 @@ the following:
 
 .. code-block:: javascript
 
-  {
-    "total_rows": 5, "offset": 0, "rows": [{
-        "id": "myslug",
-        "key": ["myslug", 0],
-        "value": {...}
-      }, {
-        "id": "ABCDEF",
-        "key": ["myslug", 1],
-        "value": {...}
-      }, {
-        "id": "DEFABC",
-        "key": ["myslug", 1],
-        "value": {...}
-      }, {
-        "id": "other_slug",
-        "key": ["other_slug", 0],
-        "value": {...}
-      }, {
-        "id": "CDEFAB",
-        "key": ["other_slug", 1],
-        "value": {...}
-      },
-    ]
-  }
+    {
+        "total_rows": 5, "offset": 0, "rows": [{
+                "id": "myslug",
+                "key": ["myslug", 0],
+                "value": {...}
+            }, {
+                "id": "ABCDEF",
+                "key": ["myslug", 1],
+                "value": {...}
+            }, {
+                "id": "DEFABC",
+                "key": ["myslug", 1],
+                "value": {...}
+            }, {
+                "id": "other_slug",
+                "key": ["other_slug", 0],
+                "value": {...}
+            }, {
+                "id": "CDEFAB",
+                "key": ["other_slug", 1],
+                "value": {...}
+            },
+        ]
+    }
 
 .. note::
-   The ``...`` placeholder here would contain the complete JSON encoding of the
-   corresponding document
+    The ``...`` placeholder here would contain the complete JSON encoding of the
+    corresponding document
 
 Now, to get a specific blog post and all associated comments, we'd invoke that
 view with the query string::
 
-  ?startkey=["myslug"]&endkey;=["myslug", 2]
+    ?startkey=["myslug"]&endkey;=["myslug", 2]
 
 We'd get back the first three rows, those that belong to the ``myslug`` post,
 but not the others. Et voila, we now have the data we need to display a post

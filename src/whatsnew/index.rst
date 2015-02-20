@@ -10,24 +10,23 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _releases:
 
+===============
 Release History
 ===============
 
 .. toctree::
-   :glob:
+    :glob:
 
-   1.6
-   1.5
-   1.4
-   1.3
-   1.2
-   1.1
-   1.0
-   0.11
-   0.10
-   0.9
-   0.8
-
+    1.6
+    1.5
+    1.4
+    1.3
+    1.2
+    1.1
+    1.0
+    0.11
+    0.10
+    0.9
+    0.8

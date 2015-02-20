@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _install/freebsd:
 
 =======================
@@ -68,8 +67,8 @@ The user is added to ``/etc/passwd`` and should look similar to the following:
 
 .. code-block:: text
 
-   shell#  grep couchdb /etc/passwd
-   couchdb:*:1013:1013:Couchdb, time to relax:/var/lib/couchdb/:/usr/sbin/nologin
+    shell#  grep couchdb /etc/passwd
+    couchdb:*:1013:1013:Couchdb, time to relax:/var/lib/couchdb/:/usr/sbin/nologin
 
 To change any of these settings, please refrain from editing `/etc/passwd` and
 instead use ``pw user mod ...`` or ``vipw``. Make sure that the user has no

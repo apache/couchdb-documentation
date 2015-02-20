@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _install/windows:
 
 =======================
@@ -44,26 +43,26 @@ This is the simplest way to go.
 #. It's time to Relax!
 
 .. note::
-   In some cases you might been asked to reboot Windows to complete
-   installation process, because of using on different Microsoft Visual C++
-   runtimes by CouchDB.
+    In some cases you might been asked to reboot Windows to complete
+    installation process, because of using on different Microsoft Visual C++
+    runtimes by CouchDB.
 
-.. note:: **Upgrading note**
+.. note::
+    **Upgrading note**
 
-   It's recommended to uninstall previous CouchDB version before upgrading,
-   especially if the new one is built against different Erlang release.
-   The reason is simple: there may be leftover libraries with alternative or
-   incompatible versions from old Erlang release that may create conflicts,
-   errors and weird crashes.
+    It's recommended to uninstall previous CouchDB version before upgrading,
+    especially if the new one is built against different Erlang release.
+    The reason is simple: there may be leftover libraries with alternative or
+    incompatible versions from old Erlang release that may create conflicts,
+    errors and weird crashes.
 
-   In this case, make sure you backup of your `local.ini` config and CouchDB
-   database/index files.
+    In this case, make sure you backup of your `local.ini` config and CouchDB
+    database/index files.
 
 .. _Open up Futon: http://localhost:5984/_utils
 .. _CouchDB web site: http://couchdb.org/
 .. _archive: http://archive.apache.org/dist/couchdb/binary/win/
 .. _the latest Windows binaries: http://couchdb.org/#download
-
 
 Installation from sources
 =========================
@@ -163,21 +162,21 @@ exactly the same version as required by the Erlang/OTP build process.
 
 However, you can skip the GUI tools by running::
 
-   echo "skipping gs" > lib/gs/SKIP
+    echo "skipping gs" > lib/gs/SKIP
 
-   echo "skipping ic" > lib/ic/SKIP
+    echo "skipping ic" > lib/ic/SKIP
 
-   echo "skipping jinterface" > lib/jinterface/SKIP
+    echo "skipping jinterface" > lib/jinterface/SKIP
 
 Follow the rest of the Erlang instructions as described.
 
 After running::
 
-   ./otp_build release -a
+    ./otp_build release -a
 
 You should run::
 
-   ./release/win32/Install.exe -s
+    ./release/win32/Install.exe -s
 
 This will set up the release/win32/bin directory correctly. The CouchDB
 installation scripts currently write their data directly into this
@@ -269,7 +268,6 @@ To check that everything has worked, point your web browser to::
 
 From here you should run the verification tests in Firefox.
 
-
 .. seealso::
-
-   `Glazier: Automate building of CouchDB from source on Windows <https://github.com/dch/glazier>`_
+    `Glazier: Automate building of CouchDB from source on Windows
+    <https://github.com/dch/glazier>`_

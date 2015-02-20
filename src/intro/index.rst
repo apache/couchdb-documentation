@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _intro:
 
 ============
@@ -44,13 +43,13 @@ teach how to use CouchDB.
 .. _distributed scaling: http://en.wikipedia.org/wiki/CAP_theorem
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   overview
-   why
-   consistency
-   tour
-   api
-   security
-   futon
-   curl
+    overview
+    why
+    consistency
+    tour
+    api
+    security
+    futon
+    curl

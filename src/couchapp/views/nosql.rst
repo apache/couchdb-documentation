@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _views/nosql:
 
 =============================
@@ -28,11 +27,11 @@ Using Views
 
 How you would do this in SQL::
 
-  CREATE TABLE
+    CREATE TABLE
 
 or::
 
-  ALTER TABLE
+    ALTER TABLE
 
 How you can do this in CouchDB?
 
@@ -52,16 +51,16 @@ format. Here is an example:
 
 .. code-block:: javascript
 
-  {
-    "_id": "_design/application",
-    "_rev": "1-C1687D17",
-    "views": {
-      "viewname": {
-        "map": "function(doc) { ... }",
-        "reduce": "function(keys, values) { ... }"
-      }
+    {
+        "_id": "_design/application",
+        "_rev": "1-C1687D17",
+        "views": {
+            "viewname": {
+                "map": "function(doc) { ... }",
+                "reduce": "function(keys, values) { ... }"
+            }
+        }
     }
-  }
 
 We are defining a view `viewname`. The definition of the view consists of two
 functions: the map function and the reduce function. Specifying a reduce
@@ -74,20 +73,20 @@ identified by a unique name:
 
 .. code-block:: javascript
 
-  {
-    "_id": "_design/application",
-    "_rev": "1-C1687D17",
-    "views": {
-      "viewname": {
-        "map": "function(doc) { ... }",
-        "reduce": "function(keys, values) { ... }"
-      },
-      "anotherview": {
-        "map": "function(doc) { ... }",
-        "reduce": "function(keys, values) { ... }"
-      }
+    {
+        "_id": "_design/application",
+        "_rev": "1-C1687D17",
+        "views": {
+            "viewname": {
+                "map": "function(doc) { ... }",
+                "reduce": "function(keys, values) { ... }"
+            },
+            "anotherview": {
+                "map": "function(doc) { ... }",
+                "reduce": "function(keys, values) { ... }"
+            }
+        }
     }
-  }
 
 Querying a View
 ---------------
@@ -96,7 +95,7 @@ The name of the design document and the name of the view are significant for
 querying the view. To query the view `viewname`, you perform an HTTP ``GET``
 request to the following URI::
 
-  /database/_design/application/_view/viewname
+    /database/_design/application/_view/viewname
 
 database is the name of the database you created your design document in. Next
 up is the design document name, and then the view name prefixed with ``_view/``.
@@ -131,11 +130,11 @@ The map result looks like this:
 
 .. code-block:: javascript
 
-  {"total_rows":3,"offset":0,"rows":[
-  {"id":"fc2636bf50556346f1ce46b4bc01fe30","key":"Lena","value":5},
-  {"id":"1fb2449f9b9d4e466dbfa47ebe675063","key":"Lisa","value":4},
-  {"id":"8ede09f6f6aeb35d948485624b28f149","key":"Sarah","value":6}
-  ]}
+    {"total_rows":3,"offset":0,"rows":[
+    {"id":"fc2636bf50556346f1ce46b4bc01fe30","key":"Lena","value":5},
+    {"id":"1fb2449f9b9d4e466dbfa47ebe675063","key":"Lisa","value":4},
+    {"id":"8ede09f6f6aeb35d948485624b28f149","key":"Sarah","value":6}
+    ]}
 
 It is a list of rows sorted by the value of key. The id is added automatically
 and refers back to the document that created this row. The value is the data
@@ -145,11 +144,11 @@ The map function that produces this result is:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.name && doc.age) {
-      emit(doc.name, doc.age);
+    function(doc) {
+        if(doc.name && doc.age) {
+            emit(doc.name, doc.age);
+        }
     }
-  }
 
 It includes the if statement as a sanity check to ensure that we’re operating
 on the right fields and calls the emit function with the name and age as the key
@@ -160,7 +159,7 @@ Look Up by Key
 
 How you would do this in SQL::
 
-  SELECT field FROM table WHERE value="searchterm"
+    SELECT field FROM table WHERE value="searchterm"
 
 How you can do this in CouchDB?
 
@@ -176,40 +175,40 @@ view. All we need is a simple map function:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.value) {
-      emit(doc.value, null);
+    function(doc) {
+        if(doc.value) {
+            emit(doc.value, null);
+        }
     }
-  }
 
 This creates a list of documents that have a value field sorted by the data in
 the value field. To find all the records that match "searchterm", we query the
 view and specify the search term as a query parameter::
 
-  /database/_design/application/_view/viewname?key="searchterm"
+    /database/_design/application/_view/viewname?key="searchterm"
 
 Consider the documents from the previous section, and say we’re indexing on the
 age field of the documents to find all the five-year-olds:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.age && doc.name) {
-      emit(doc.age, doc.name);
+    function(doc) {
+        if(doc.age && doc.name) {
+            emit(doc.age, doc.name);
+        }
     }
-  }
 
 Query::
 
-  /ladies/_design/ladies/_view/age?key=5
+    /ladies/_design/ladies/_view/age?key=5
 
 Result:
 
 .. code-block:: javascript
 
-  {"total_rows":3,"offset":1,"rows":[
-  {"id":"fc2636bf50556346f1ce46b4bc01fe30","key":5,"value":"Lena"}
-  ]}
+    {"total_rows":3,"offset":1,"rows":[
+    {"id":"fc2636bf50556346f1ce46b4bc01fe30","key":5,"value":"Lena"}
+    ]}
 
 Easy.
 
@@ -223,7 +222,7 @@ Look Up by Prefix
 
 How you would do this in SQL::
 
-  SELECT field FROM table WHERE value LIKE "searchterm%"
+    SELECT field FROM table WHERE value LIKE "searchterm%"
 
 How you can do this in CouchDB?
 
@@ -238,12 +237,12 @@ document:
 
 .. code-block:: javascript
 
-  {
-    "_id": "Hugh Laurie",
-    "_rev": "1-9fded7deef52ac373119d05435581edf",
-    "mime-type": "image/jpg",
-    "description": "some dude"
-  }
+    {
+        "_id": "Hugh Laurie",
+        "_rev": "1-9fded7deef52ac373119d05435581edf",
+        "mime-type": "image/jpg",
+        "description": "some dude"
+    }
 
 The clue lies in extracting the prefix that we want to search for from our
 document and putting it into our view index. We use a regular expression to
@@ -251,28 +250,28 @@ match our prefix:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc["mime-type"]) {
-      // from the start (^) match everything that is not a slash ([^\/]+) until
-      // we find a slash (\/). Slashes needs to be escaped with a backslash (\/)
-      var prefix = doc["mime-type"].match(/^[^\/]+\//);
-      if(prefix) {
-        emit(prefix, null);
-      }
+    function(doc) {
+        if(doc["mime-type"]) {
+            // from the start (^) match everything that is not a slash ([^\/]+) until
+            // we find a slash (\/). Slashes needs to be escaped with a backslash (\/)
+            var prefix = doc["mime-type"].match(/^[^\/]+\//);
+            if(prefix) {
+              emit(prefix, null);
+            }
+        }
     }
-  }
 
 We can now query this view with our desired MIME type prefix and not only find
 all images, but also text, video, and all other formats::
 
-  /files/_design/finder/_view/by-mime-type?key="image/"
+    /files/_design/finder/_view/by-mime-type?key="image/"
 
 Aggregate Functions
 ===================
 
 How you would do this in SQL::
 
-  SELECT COUNT(field) FROM table
+    SELECT COUNT(field) FROM table
 
 How you can do this in CouchDB?
 
@@ -293,30 +292,29 @@ Here’s what our summing reduce function looks like:
 
 .. code-block:: javascript
 
-  function(keys, values) {
-    var sum = 0;
-    for(var idx in values) {
-      sum = sum + values[idx];
+    function(keys, values) {
+        var sum = 0;
+        for(var idx in values) {
+            sum = sum + values[idx];
+        }
+        return sum;
     }
-    return sum;
-  }
 
 Here’s an alternate, more idiomatic JavaScript version:
 
 .. code-block:: javascript
 
-  function(keys, values) {
-    var sum = 0;
-    values.forEach(function(element) {
-      sum = sum + element;
-    });
-    return sum;
-  }
+    function(keys, values) {
+        var sum = 0;
+        values.forEach(function(element) {
+            sum = sum + element;
+        });
+        return sum;
+    }
 
 .. note::
-
-  Don't miss effective builtin :ref:`reduce functions <reducefun>` like ``_sum``
-  and ``_count``
+    Don't miss effective builtin :ref:`reduce functions <reducefun>` like
+    ``_sum`` and ``_count``
 
 This reduce function takes two arguments: a list of keys and a list of values.
 For our summing purposes we can ignore the keys-list and consider only the value
@@ -337,9 +335,9 @@ The reduce function to calculate the total age of all girls is:
 
 .. code-block:: javascript
 
-  function(keys, values) {
-    return sum(values);
-  }
+    function(keys, values) {
+        return sum(values);
+    }
 
 Note that, instead of the two earlier versions, we use CouchDB’s predefined
 :js:func:`sum` function. It does the same thing as the other two, but it is such
@@ -349,9 +347,9 @@ The result for our reduce view now looks like this:
 
 .. code-block:: javascript
 
-  {"rows":[
-    {"key":null,"value":15}
-  ]}
+    {"rows":[
+        {"key":null,"value":15}
+    ]}
 
 The total sum of all age fields in all our documents is 15. Just what we wanted.
 The key member of the result object is null, as we can’t know anymore which
@@ -366,17 +364,17 @@ if you try to use reduce “the wrong way”:
 
 .. code-block:: javascript
 
-  {
-    "error":"reduce_overflow_error",
-    "message":"Reduce output must shrink more rapidly: Current output: ..."
-  }
+    {
+        "error":"reduce_overflow_error",
+        "message":"Reduce output must shrink more rapidly: Current output: ..."
+    }
 
 Get Unique Values
 =================
 
 How you would do this in SQL::
 
-  SELECT DISTINCT field FROM table
+    SELECT DISTINCT field FROM table
 
 How you can do this in CouchDB?
 
@@ -389,52 +387,52 @@ attributes here:
 
 .. code-block:: javascript
 
-  {
-    "name":"Chris",
-    "tags":["mustache", "music", "couchdb"]
-  }
+    {
+        "name":"Chris",
+        "tags":["mustache", "music", "couchdb"]
+    }
 
 .. code-block:: javascript
 
-  {
-    "name":"Noah",
-    "tags":["hypertext", "philosophy", "couchdb"]
-  }
+    {
+        "name":"Noah",
+        "tags":["hypertext", "philosophy", "couchdb"]
+    }
 
 .. code-block:: javascript
 
-  {
-    "name":"Jan",
-    "tags":["drums", "bike", "couchdb"]
-  }
+    {
+        "name":"Jan",
+        "tags":["drums", "bike", "couchdb"]
+    }
 
 Next, we need a list of all tags. A map function will do the trick:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.name && doc.tags) {
-      doc.tags.forEach(function(tag) {
-        emit(tag, null);
-      });
+    function(doc) {
+        if(doc.name && doc.tags) {
+            doc.tags.forEach(function(tag) {
+                emit(tag, null);
+            });
+        }
     }
-  }
 
 The result will look like this:
 
 .. code-block:: javascript
 
-  {"total_rows":9,"offset":0,"rows":[
-  {"id":"3525ab874bc4965fa3cda7c549e92d30","key":"bike","value":null},
-  {"id":"3525ab874bc4965fa3cda7c549e92d30","key":"couchdb","value":null},
-  {"id":"53f82b1f0ff49a08ac79a9dff41d7860","key":"couchdb","value":null},
-  {"id":"da5ea89448a4506925823f4d985aabbd","key":"couchdb","value":null},
-  {"id":"3525ab874bc4965fa3cda7c549e92d30","key":"drums","value":null},
-  {"id":"53f82b1f0ff49a08ac79a9dff41d7860","key":"hypertext","value":null},
-  {"id":"da5ea89448a4506925823f4d985aabbd","key":"music","value":null},
-  {"id":"da5ea89448a4506925823f4d985aabbd","key":"mustache","value":null},
-  {"id":"53f82b1f0ff49a08ac79a9dff41d7860","key":"philosophy","value":null}
-  ]}
+    {"total_rows":9,"offset":0,"rows":[
+    {"id":"3525ab874bc4965fa3cda7c549e92d30","key":"bike","value":null},
+    {"id":"3525ab874bc4965fa3cda7c549e92d30","key":"couchdb","value":null},
+    {"id":"53f82b1f0ff49a08ac79a9dff41d7860","key":"couchdb","value":null},
+    {"id":"da5ea89448a4506925823f4d985aabbd","key":"couchdb","value":null},
+    {"id":"3525ab874bc4965fa3cda7c549e92d30","key":"drums","value":null},
+    {"id":"53f82b1f0ff49a08ac79a9dff41d7860","key":"hypertext","value":null},
+    {"id":"da5ea89448a4506925823f4d985aabbd","key":"music","value":null},
+    {"id":"da5ea89448a4506925823f4d985aabbd","key":"mustache","value":null},
+    {"id":"53f82b1f0ff49a08ac79a9dff41d7860","key":"philosophy","value":null}
+    ]}
 
 As promised, these are all the tags, including duplicates. Since each document
 gets run through the map function in isolation, it cannot know if the same key
@@ -443,28 +441,28 @@ uniqueness, we need a reduce:
 
 .. code-block:: javascript
 
-  function(keys, values) {
-    return true;
-  }
+    function(keys, values) {
+        return true;
+    }
 
 This reduce doesn’t do anything, but it allows us to specify a special query
 parameter when querying the view::
 
-  /dudes/_design/dude-data/_view/tags?group=true
+    /dudes/_design/dude-data/_view/tags?group=true
 
 CouchDB replies:
 
 .. code-block:: javascript
 
-  {"rows":[
-  {"key":"bike","value":true},
-  {"key":"couchdb","value":true},
-  {"key":"drums","value":true},
-  {"key":"hypertext","value":true},
-  {"key":"music","value":true},
-  {"key":"mustache","value":true},
-  {"key":"philosophy","value":true}
-  ]}
+    {"rows":[
+    {"key":"bike","value":true},
+    {"key":"couchdb","value":true},
+    {"key":"drums","value":true},
+    {"key":"hypertext","value":true},
+    {"key":"music","value":true},
+    {"key":"mustache","value":true},
+    {"key":"philosophy","value":true}
+    ]}
 
 In this case, we can ignore the value part because it is always true, but the
 result includes a list of all our tags and no duplicates!
@@ -476,43 +474,43 @@ we emit a 1 instead of null:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.name && doc.tags) {
-      doc.tags.forEach(function(tag) {
-        emit(tag, 1);
-      });
+    function(doc) {
+        if(doc.name && doc.tags) {
+            doc.tags.forEach(function(tag) {
+                emit(tag, 1);
+            });
+        }
     }
-  }
 
 In the reduce function, we return the sum of all values:
 
 .. code-block:: javascript
 
-  function(keys, values) {
-    return sum(values);
-  }
+    function(keys, values) {
+        return sum(values);
+    }
 
 Now, if we query the view with the ``?group=true`` parameter, we get back the
 count for each tag:
 
 .. code-block:: javascript
 
-  {"rows":[
-  {"key":"bike","value":1},
-  {"key":"couchdb","value":3},
-  {"key":"drums","value":1},
-  {"key":"hypertext","value":1},
-  {"key":"music","value":1},
-  {"key":"mustache","value":1},
-  {"key":"philosophy","value":1}
-  ]}
+    {"rows":[
+    {"key":"bike","value":1},
+    {"key":"couchdb","value":3},
+    {"key":"drums","value":1},
+    {"key":"hypertext","value":1},
+    {"key":"music","value":1},
+    {"key":"mustache","value":1},
+    {"key":"philosophy","value":1}
+    ]}
 
 Enforcing Uniqueness
 ====================
 
 How you would do this in SQL::
 
-  UNIQUE KEY(column)
+    UNIQUE KEY(column)
 
 How you can do this in CouchDB?
 

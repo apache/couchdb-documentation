@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _about:
 
 ===========================
@@ -21,5 +20,4 @@ License
 =======
 
 .. literalinclude:: ../LICENSE
-   :lines: 1-202
-
+    :lines: 1-202

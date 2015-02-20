@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _intro/why:
 
 ============
@@ -28,14 +27,13 @@ for common applications, how the built-in query engine is a powerful way
 to use and process your data, and how CouchDB's design lends itself
 to modularization and scalability.
 
-
 Relax
 =====
 
 If there's one word to describe CouchDB, it is *relax*. It is the byline
 to CouchDB's official logo and when you start CouchDB, you see::
 
-  Apache CouchDB has started. Time to relax.
+    Apache CouchDB has started. Time to relax.
 
 Why is relaxation important? Developer productivity roughly doubled in the
 last five years. The chief reason for the boost is more powerful tools that
@@ -78,10 +76,9 @@ that if CouchDB supported them, it would allow a programmer to create
 applications that couldn't deal with scaling up or down.
 
 .. note::
-  CouchDB doesn't let you do things that would get you in trouble later on.
-  This sometimes means you'll have to unlearn best practices you might have
-  picked up in your current or past work.
-
+    CouchDB doesn't let you do things that would get you in trouble later on.
+    This sometimes means you'll have to unlearn best practices you might have
+    picked up in your current or past work.
 
 A Different Way to Model Your Data
 ==================================
@@ -104,7 +101,6 @@ to query, map, combine, and filter your data. Add fault tolerance, extreme
 scalability, and incremental replication, and CouchDB defines a sweet spot
 for document databases.
 
-
 A Better Fit for Common Applications
 ====================================
 
@@ -113,7 +109,6 @@ involves taking some mundane information such as contacts, invoices,
 or receipts and manipulating it using a computer application. CouchDB is a
 great fit for common applications like this because it embraces the natural
 idea of evolving, self-contained documents as the very core of its data model.
-
 
 Self-Contained Data
 -------------------
@@ -125,15 +120,13 @@ piece of paper that points to some other piece of paper with the seller's
 name and address. Accountants appreciate the simplicity of having everything
 in one place. And given the choice, programmers appreciate that, too.
 
-
 .. _intro/why-01:
 
 .. figure:: ../../images/intro-why-01.png
-   :align: center
-   :alt: Self-contained documents
+    :align: center
+    :alt: Self-contained documents
 
-   Figure 1. Self-contained documents
-
+    Figure 1. Self-contained documents
 
 Yet using references is exactly how we model our data in a relational
 database! Each invoice is stored in a table as a row that refers to other
@@ -152,7 +145,6 @@ way of modeling data, one that more closely “fits” its real-world counterpar
 contains all the important information, right there on the cardstock.
 We call this “self-contained” data, and it's an important concept
 in understanding document databases like CouchDB.
-
 
 Syntax and Semantics
 --------------------
@@ -181,7 +173,6 @@ aggregate your data *after the fact*, just like we do with real-world
 documents. We'll look in depth at how to design applications with this
 underlying storage paradigm.
 
-
 Building Blocks for Larger Systems
 ==================================
 
@@ -197,31 +188,28 @@ performance hit, CouchDB lets you build these systems.
 
 There are a multitude of knobs you could turn to make a system work better in
 one area, but you'll affect another area when doing so. One example would be
-the CAP theorem discussed in :ref:`intro/consistency`. To give you an idea of other
-things that affect storage systems, see :ref:`Figure 2 <intro/why-figure-02>`
-and :ref:`Figure 3 <intro/why-figure-03>`.
+the CAP theorem discussed in :ref:`intro/consistency`. To give you an idea of
+other things that affect storage systems, see
+:ref:`Figure 2 <intro/why-figure-02>` and :ref:`Figure 3 <intro/why-figure-03>`.
 
 By reducing latency for a given system (and that is true not only for storage
 systems), you affect concurrency and throughput capabilities.
 
-
 .. _intro/why-figure-02:
 
 .. figure:: ../../images/intro-why-02.png
-   :align: center
-   :alt: Throughput, latency, or concurrency
+    :align: center
+    :alt: Throughput, latency, or concurrency
 
-   Figure 2. Throughput, latency, or concurrency
-
+    Figure 2. Throughput, latency, or concurrency
 
 .. _intro/why-figure-03:
 
 .. figure:: ../../images/intro-why-03.png
-   :align: center
-   :alt: Scaling: read requests, write requests, or data
+    :align: center
+    :alt: Scaling: read requests, write requests, or data
 
-   Figure 3. Scaling: read requests, write requests, or data
-
+    Figure 3. Scaling: read requests, write requests, or data
 
 When you want to scale out, there are three distinct issues to deal with:
 scaling read requests, write requests, and data. Orthogonal to all three and
@@ -234,7 +222,6 @@ CouchDB is very flexible and gives you enough building blocks to create a
 system shaped to suit your exact problem. That's not saying that CouchDB can
 be bent to solve any problem -- CouchDB is no silver bullet -- but in the
 area of data storage, it can get you a long way.
-
 
 CouchDB Replication
 ===================
@@ -277,7 +264,6 @@ errors gracefully and lets you know when actions on your end are required.
 
 .. _Fallacies of Distributed Computing: http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing
 
-
 Local Data Is King
 ==================
 
@@ -306,10 +292,9 @@ Can you really use CouchDB on a phone? Erlang, CouchDB's implementation
 language has been designed to run on embedded devices magnitudes smaller and
 less powerful than today's phones.
 
-
 Wrapping Up
 ===========
 
-The next document :ref:`intro/consistency` further explores the distributed nature
-of CouchDB. We should have given you enough bites to whet your interest.
+The next document :ref:`intro/consistency` further explores the distributed
+nature of CouchDB. We should have given you enough bites to whet your interest.
 Let's go!

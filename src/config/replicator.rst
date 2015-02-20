@@ -23,178 +23,155 @@ Replicator Database Configuration
 
 .. config:section:: replicator :: Replicator Database Configuration
 
-  .. versionadded:: 1.2
+    .. versionadded:: 1.2
 
+    .. config:option:: db
 
-  .. config:option:: db
+        Specifies replicator database name::
 
-    Specifies replicator database name::
+            [replicator]
+            db = _replicator
 
-      [replicator]
-      db = _replicator
+    .. config:option:: max_replication_retry_count
 
+        Maximum replication retry count can be a non-negative integer or
+        "infinity"::
 
+            [replicator]
+            max_replication_retry_count = 10
 
-  .. config:option:: max_replication_retry_count
+    .. config:option:: worker_batch_size
 
-    Maximum replication retry count can be a non-negative integer or "infinity"
-    ::
+        With lower batch sizes checkpoints are done more frequently. Lower
+        batch sizes also reduce the total amount of used RAM memory::
 
-      [replicator]
-      max_replication_retry_count = 10
+            [replicator]
+            worker_batch_size = 500
 
+    .. config:option:: worker_processes
 
+        More worker processes can give higher network throughput but can also
+        imply more disk and network IO::
 
-  .. config:option:: worker_batch_size
+            [replicator]
+            worker_processes = 4
 
-    With lower batch sizes checkpoints are done more frequently. Lower batch
-    sizes also reduce the total amount of used RAM memory::
+    .. config:option:: http_connections
 
-      [replicator]
-      worker_batch_size = 500
+        Maximum number of HTTP connections per replication::
 
+            [replicator]
+            http_connections = 20
 
+    .. config:option:: connection_timeout
 
-  .. config:option:: worker_processes
+        HTTP connection timeout per replication.
+        Even for very fast/reliable networks it might need to be increased if
+        a remote database is too busy::
 
-    More worker processes can give higher network throughput but can also imply
-    more disk and network IO::
+            [replicator]
+            connection_timeout = 30000
 
-      [replicator]
-      worker_processes = 4
+    .. config:option:: retries_per_request
 
+        If a request fails, the replicator will retry it up to N times::
 
+            [replicator]
+            retries_per_request = 10
 
-  .. config:option:: http_connections
+    .. config:option:: socket_options
 
-    Maximum number of HTTP connections per replication::
+        Some socket options that might boost performance in some scenarios:
 
-      [replicator]
-      http_connections = 20
+        - ``{nodelay, boolean()}``
+        - ``{sndbuf, integer()}``
+        - ``{recbuf, integer()}``
+        - ``{priority, integer()}``
 
+        See the `inet`_ Erlang module's man page for the full list of options::
 
+            [replicator]
+            socket_options = [{keepalive, true}, {nodelay, false}]
 
-  .. config:option:: connection_timeout
+        .. _inet: http://www.erlang.org/doc/man/inet.html#setopts-2
 
-    HTTP connection timeout per replication.
-    Even for very fast/reliable networks it might need to be increased if
-    a remote database is too busy::
+    .. config:option:: checkpoint_interval
 
-      [replicator]
-      connection_timeout = 30000
+        .. versionadded:: 1.6
 
+        Defines replication checkpoint interval in milliseconds.
+        :ref:`Replicator <replicator>` will :get:`requests </{db}>` from the
+        Source database at the specified interval::
 
+            [replicator]
+            checkpoint_interval = 5000
 
-  .. config:option:: retries_per_request
+        Lower intervals may be useful for frequently changing data, while
+        higher values will lower bandwidth and make fewer requests for
+        infrequently updated databases.
 
-    If a request fails, the replicator will retry it up to N times::
+    .. config:option:: use_checkpoints
 
-      [replicator]
-      retries_per_request = 10
+        .. versionadded:: 1.6
 
+        If ``use_checkpoints`` is set to ``true``, CouchDB will make
+        checkpoints during replication and at the completion of replication.
+        CouchDB can efficiently resume replication from any of these
+        checkpoints::
 
+            [replicator]
+            use_checkpoints = true
 
-  .. config:option:: socket_options
+        .. note::
+            Checkpoints are stored in :ref:`local documents <api/local>`
+            on both the source and target databases (which requires write
+            access).
 
-    Some socket options that might boost performance in some scenarios:
+        .. warning::
+            Disabling checkpoints is **not recommended** as CouchDB will scan
+            the Source database's changes feed from the beginning.
 
-    - ``{nodelay, boolean()}``
-    - ``{sndbuf, integer()}``
-    - ``{recbuf, integer()}``
-    - ``{priority, integer()}``
+    .. config:option:: cert_file
 
-    See the `inet`_ Erlang module's man page for the full list of options::
+        Path to a file containing the user's certificate::
 
-      [replicator]
-      socket_options = [{keepalive, true}, {nodelay, false}]
+            [replicator]
+            cert_file = /full/path/to/server_cert.pem
 
-    .. _inet: http://www.erlang.org/doc/man/inet.html#setopts-2
+    .. config:option:: key_file
 
+        Path to file containing user's private PEM encoded key::
 
-  .. config:option:: checkpoint_interval
+            [replicator]
+            key_file = /full/path/to/server_key.pem
 
-    .. versionadded:: 1.6
+    .. config:option:: password
 
-    Defines replication checkpoint interval in milliseconds. :ref:`Replicator
-    <replicator>` will :get:`requests </{db}>` from the Source database at
-    the specified interval::
+        String containing the user's password. Only used if the private keyfile
+        is  password protected::
 
-      [replicator]
-      checkpoint_interval = 5000
+            [replicator]
+            password = somepassword
 
-    Lower intervals may be useful for frequently changing data, while higher
-    values will lower bandwidth and make fewer requests for infrequently
-    updated databases.
+    .. config:option:: verify_ssl_certificates
 
+        Set to true to validate peer certificates::
 
-  .. config:option:: use_checkpoints
+            [replicator]
+            verify_ssl_certificates = false
 
-     .. versionadded:: 1.6
+    .. config:option:: ssl_trusted_certificates_file
 
-     If ``use_checkpoints`` is set to ``true``, CouchDB will make checkpoints
-     during replication and at the completion of replication. CouchDB can
-     efficiently resume replication from any of these checkpoints::
+        File containing a list of peer trusted certificates (in the PEM
+        format)::
 
-      [replicator]
-      use_checkpoints = true
+            [replicator]
+            ssl_trusted_certificates_file = /etc/ssl/certs/ca-certificates.crt
 
-     .. note:: Checkpoints are stored in :ref:`local documents <api/local>`
-        on both the source and target databases (which requires write access).
+    .. config:option:: ssl_certificate_max_depth
 
-     .. warning:: Disabling checkpoints is **not recommended** as CouchDB
-        will scan the Source database's changes feed from the beginning.
+        Maximum peer certificate depth (must be set even if certificate
+        validation is off)::
 
-
-  .. config:option:: cert_file
-
-    Path to a file containing the user's certificate::
-
-      [replicator]
-      cert_file = /full/path/to/server_cert.pem
-
-
-
-  .. config:option:: key_file
-
-    Path to file containing user's private PEM encoded key::
-
-      [replicator]
-      key_file = /full/path/to/server_key.pem
-
-
-
-  .. config:option:: password
-
-    String containing the user's password. Only used if the private keyfile is
-    password protected::
-
-      [replicator]
-      password = somepassword
-
-
-
-  .. config:option:: verify_ssl_certificates
-
-    Set to true to validate peer certificates::
-
-      [replicator]
-      verify_ssl_certificates = false
-
-
-
-  .. config:option:: ssl_trusted_certificates_file
-
-    File containing a list of peer trusted certificates (in the PEM format)::
-
-      [replicator]
-      ssl_trusted_certificates_file = /etc/ssl/certs/ca-certificates.crt
-
-
-
-  .. config:option:: ssl_certificate_max_depth
-
-    Maximum peer certificate depth (must be set even if certificate validation
-    is off)::
-
-      [replicator]
-      ssl_certificate_max_depth = 3
+            [replicator]
+            ssl_certificate_max_depth = 3

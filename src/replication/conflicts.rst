@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _replication/conflicts:
 
 ==============================
@@ -46,33 +45,33 @@ The answer is simple: both versions exist on both sides!
 
 .. code-block:: text
 
-     DESKTOP                          LAPTOP
-   +---------+
-   | /db/bob |                                     INITIAL
-   |   v1    |                                     CREATION
-   +---------+
+      DESKTOP                          LAPTOP
+    +---------+
+    | /db/bob |                                     INITIAL
+    |   v1    |                                     CREATION
+    +---------+
 
-   +---------+                      +---------+
-   | /db/bob |  ----------------->  | /db/bob |     PUSH
-   |   v1    |                      |   v1    |
-   +---------+                      +---------+
+    +---------+                      +---------+
+    | /db/bob |  ----------------->  | /db/bob |     PUSH
+    |   v1    |                      |   v1    |
+    +---------+                      +---------+
 
-   +---------+                      +---------+  INDEPENDENT
-   | /db/bob |                      | /db/bob |     LOCAL
-   |   v2a   |                      |   v2b   |     EDITS
-   +---------+                      +---------+
+    +---------+                      +---------+  INDEPENDENT
+    | /db/bob |                      | /db/bob |     LOCAL
+    |   v2a   |                      |   v2b   |     EDITS
+    +---------+                      +---------+
 
-   +---------+                      +---------+
-   | /db/bob |  ----------------->  | /db/bob |     PUSH
-   |   v2a   |                      |   v2a   |
-   +---------+                      |   v2b   |
-                                    +---------+
+    +---------+                      +---------+
+    | /db/bob |  ----------------->  | /db/bob |     PUSH
+    |   v2a   |                      |   v2a   |
+    +---------+                      |   v2b   |
+                                     +---------+
 
-   +---------+                      +---------+
-   | /db/bob |  <-----------------  | /db/bob |     PULL
-   |   v2a   |                      |   v2a   |
-   |   v2b   |                      |   v2b   |
-   +---------+                      +---------+
+    +---------+                      +---------+
+    | /db/bob |  <-----------------  | /db/bob |     PULL
+    |   v2a   |                      |   v2a   |
+    |   v2b   |                      |   v2b   |
+    +---------+                      +---------+
 
 After all, this is not a filesystem, so there's no restriction that only one
 document can exist with the name /db/bob. These are just "conflicting" revisions
@@ -119,17 +118,17 @@ it concurrently, and writing it back:
 
 .. code-block:: text
 
-  USER1    ----------->  GET /db/bob
-           <-----------  {"_rev":"1-aaa", ...}
+    USER1    ----------->  GET /db/bob
+             <-----------  {"_rev":"1-aaa", ...}
 
-  USER2    ----------->  GET /db/bob
-           <-----------  {"_rev":"1-aaa", ...}
+    USER2    ----------->  GET /db/bob
+             <-----------  {"_rev":"1-aaa", ...}
 
-  USER1    ----------->  PUT /db/bob?rev=1-aaa
-           <-----------  {"_rev":"2-bbb", ...}
+    USER1    ----------->  PUT /db/bob?rev=1-aaa
+             <-----------  {"_rev":"2-bbb", ...}
 
-  USER2    ----------->  PUT /db/bob?rev=1-aaa
-           <-----------  409 Conflict  (not saved)
+    USER2    ----------->  PUT /db/bob?rev=1-aaa
+             <-----------  409 Conflict  (not saved)
 
 User2's changes are rejected, so it's up to the app to fetch /db/bob again,
 and either:
@@ -176,18 +175,18 @@ database, which is what you'd have to do in a multi-master application anyway.
 
 .. code-block:: http
 
-  POST /db/_bulk_docs
+    POST /db/_bulk_docs
 
 .. code-block:: javascript
 
-  {
-    "all_or_nothing": true,
-    "docs": [
-      {"_id":"x", "_rev":"1-xxx", ...},
-      {"_id":"y", "_rev":"1-yyy", ...},
-      ...
-    ]
-  }
+    {
+        "all_or_nothing": true,
+        "docs": [
+            {"_id":"x", "_rev":"1-xxx", ...},
+            {"_id":"y", "_rev":"1-yyy", ...},
+            ...
+        ]
+    }
 
 Revision tree
 =============
@@ -242,11 +241,11 @@ and get no indication as to whether other conflicting revisions exist or not:
 
 .. code-block:: javascript
 
-  {
-    "_id":"test",
-    "_rev":"2-b91bb807b4685080c6a651115ff558f5",
-    "hello":"bar"
-  }
+    {
+        "_id":"test",
+        "_rev":"2-b91bb807b4685080c6a651115ff558f5",
+        "hello":"bar"
+    }
 
 If you do ``GET /db/bob?conflicts=true``, and the document is in a conflict
 state, then you will get the winner plus a _conflicts member containing an array
@@ -255,15 +254,15 @@ individually using subsequent ``GET /db/bob?rev=xxxx`` operations:
 
 .. code-block:: javascript
 
-  {
-    "_id":"test",
-    "_rev":"2-b91bb807b4685080c6a651115ff558f5",
-    "hello":"bar",
-    "_conflicts":[
-      "2-65db2a11b5172bf928e3bcf59f728970",
-      "2-5bc3c6319edf62d4c624277fdd0ae191"
-    ]
-  }
+    {
+        "_id":"test",
+        "_rev":"2-b91bb807b4685080c6a651115ff558f5",
+        "hello":"bar",
+        "_conflicts":[
+            "2-65db2a11b5172bf928e3bcf59f728970",
+            "2-5bc3c6319edf62d4c624277fdd0ae191"
+        ]
+    }
 
 If you do ``GET /db/bob?open_revs=all`` then you will get all the leaf nodes of
 the revision tree. This will give you all the current conflicts, but will also
@@ -273,11 +272,11 @@ with ``"_deleted":true``:
 
 .. code-block:: javascript
 
-  [
-    {"ok":{"_id":"test","_rev":"2-5bc3c6319edf62d4c624277fdd0ae191","hello":"foo"}},
-    {"ok":{"_id":"test","_rev":"2-65db2a11b5172bf928e3bcf59f728970","hello":"baz"}},
-    {"ok":{"_id":"test","_rev":"2-b91bb807b4685080c6a651115ff558f5","hello":"bar"}}
-  ]
+    [
+        {"ok":{"_id":"test","_rev":"2-5bc3c6319edf62d4c624277fdd0ae191","hello":"foo"}},
+        {"ok":{"_id":"test","_rev":"2-65db2a11b5172bf928e3bcf59f728970","hello":"baz"}},
+        {"ok":{"_id":"test","_rev":"2-b91bb807b4685080c6a651115ff558f5","hello":"bar"}}
+    ]
 
 The ``"ok"`` tag is an artifact of ``open_revs``, which also lets you list
 explicit revisions as a JSON array, e.g. ``open_revs=[rev1,rev2,rev3]``. In this
@@ -285,10 +284,10 @@ form, it would be possible to request a revision which is now missing, because
 the database has been compacted.
 
 .. note::
-  The order of revisions returned by ``open_revs=all`` is **NOT** related to
-  the deterministic "winning" algorithm. In the above example, the winning
-  revision is 2-b91b... and happens to be returned last, but in other cases it
-  can be returned in a different position.
+    The order of revisions returned by ``open_revs=all`` is **NOT** related to
+    the deterministic "winning" algorithm. In the above example, the winning
+    revision is 2-b91b... and happens to be returned last, but in other cases it
+    can be returned in a different position.
 
 Once you have retrieved all the conflicting revisions, your application can then
 choose to display them all to the user. Or it could attempt to merge them, write
@@ -310,42 +309,42 @@ to determine for each document whether it is in a conflicting state:
 
 .. code-block:: bash
 
-  $ curl 'http://127.0.0.1:5984/conflict_test/_all_docs?include_docs=true&conflicts=true'
+    $ curl 'http://127.0.0.1:5984/conflict_test/_all_docs?include_docs=true&conflicts=true'
 
 .. code-block:: javascript
 
-  {
-    "total_rows":1,
-    "offset":0,
-    "rows":[
-      {
-        "id":"test",
-        "key":"test",
-        "value":{"rev":"2-b91bb807b4685080c6a651115ff558f5"},
-        "doc":{
-          "_id":"test",
-          "_rev":"2-b91bb807b4685080c6a651115ff558f5",
-          "hello":"bar"
-        }
-      }
-    ]
-  }
+    {
+        "total_rows":1,
+        "offset":0,
+        "rows":[
+            {
+                "id":"test",
+                "key":"test",
+                "value":{"rev":"2-b91bb807b4685080c6a651115ff558f5"},
+                "doc":{
+                    "_id":"test",
+                    "_rev":"2-b91bb807b4685080c6a651115ff558f5",
+                    "hello":"bar"
+                }
+            }
+        ]
+    }
 
 .. code-block:: bash
 
-  $ curl 'http://127.0.0.1:5984/conflict_test/test?conflicts=true'
+    $ curl 'http://127.0.0.1:5984/conflict_test/test?conflicts=true'
 
 .. code-block:: javascript
 
-  {
-    "_id":"test",
-    "_rev":"2-b91bb807b4685080c6a651115ff558f5",
-    "hello":"bar",
-    "_conflicts":[
-      "2-65db2a11b5172bf928e3bcf59f728970",
-      "2-5bc3c6319edf62d4c624277fdd0ae191"
-    ]
-  }
+    {
+        "_id":"test",
+        "_rev":"2-b91bb807b4685080c6a651115ff558f5",
+        "hello":"bar",
+        "_conflicts":[
+            "2-65db2a11b5172bf928e3bcf59f728970",
+            "2-5bc3c6319edf62d4c624277fdd0ae191"
+        ]
+    }
 
 View map functions
 ==================
@@ -357,31 +356,31 @@ Here is a simple map function which achieves this:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc._conflicts) {
-      emit(null, [doc._rev].concat(doc._conflicts));
+    function(doc) {
+        if (doc._conflicts) {
+            emit(null, [doc._rev].concat(doc._conflicts));
+        }
     }
-  }
 
 which gives the following output:
 
 .. code-block:: javascript
 
-  {
-    "total_rows":1,
-    "offset":0,
-    "rows":[
-      {
-        "id":"test",
-        "key":null,
-        "value":[
-          "2-b91bb807b4685080c6a651115ff558f5",
-          "2-65db2a11b5172bf928e3bcf59f728970",
-          "2-5bc3c6319edf62d4c624277fdd0ae191"
+    {
+        "total_rows":1,
+        "offset":0,
+        "rows":[
+            {
+                "id":"test",
+                "key":null,
+                "value":[
+                    "2-b91bb807b4685080c6a651115ff558f5",
+                    "2-65db2a11b5172bf928e3bcf59f728970",
+                    "2-5bc3c6319edf62d4c624277fdd0ae191"
+                ]
+            }
         ]
-      }
-    ]
-  }
+    }
 
 If you do this, you can have a separate "sweep" process which periodically scans
 your database, looks for documents which have conflicts, fetches the conflicting
@@ -427,73 +426,73 @@ And here is an example of this in Ruby using the low-level `RestClient`_:
 
 .. code-block:: ruby
 
-  require 'rubygems'
-  require 'rest_client'
-  require 'json'
-  DB="http://127.0.0.1:5984/conflict_test"
+    require 'rubygems'
+    require 'rest_client'
+    require 'json'
+    DB="http://127.0.0.1:5984/conflict_test"
 
-  # Write multiple documents as all_or_nothing, can introduce conflicts
-  def writem(docs)
-    JSON.parse(RestClient.post("#{DB}/_bulk_docs", {
-      "all_or_nothing" => true,
-      "docs" => docs,
-    }.to_json))
-  end
+    # Write multiple documents as all_or_nothing, can introduce conflicts
+    def writem(docs)
+        JSON.parse(RestClient.post("#{DB}/_bulk_docs", {
+            "all_or_nothing" => true,
+            "docs" => docs,
+        }.to_json))
+    end
 
-  # Write one document, return the rev
-  def write1(doc, id=nil, rev=nil)
-    doc['_id'] = id if id
-    doc['_rev'] = rev if rev
-    writem([doc]).first['rev']
-  end
+    # Write one document, return the rev
+    def write1(doc, id=nil, rev=nil)
+        doc['_id'] = id if id
+        doc['_rev'] = rev if rev
+        writem([doc]).first['rev']
+    end
 
-  # Read a document, return *all* revs
-  def read1(id)
-    retries = 0
-    loop do
-      # FIXME: escape id
-      res = [JSON.parse(RestClient.get("#{DB}/#{id}?conflicts=true"))]
-      if revs = res.first.delete('_conflicts')
-        begin
-          revs.each do |rev|
-            res << JSON.parse(RestClient.get("#{DB}/#{id}?rev=#{rev}"))
-          end
-        rescue
-          retries += 1
-          raise if retries >= 5
-          next
+    # Read a document, return *all* revs
+    def read1(id)
+        retries = 0
+        loop do
+            # FIXME: escape id
+            res = [JSON.parse(RestClient.get("#{DB}/#{id}?conflicts=true"))]
+            if revs = res.first.delete('_conflicts')
+                begin
+                    revs.each do |rev|
+                        res << JSON.parse(RestClient.get("#{DB}/#{id}?rev=#{rev}"))
+                    end
+                rescue
+                    retries += 1
+                    raise if retries >= 5
+                    next
+                end
+            end
+            return res
         end
-      end
-      return res
     end
-  end
 
-  # Create DB
-  RestClient.delete DB rescue nil
-  RestClient.put DB, {}.to_json
+    # Create DB
+    RestClient.delete DB rescue nil
+    RestClient.put DB, {}.to_json
 
-  # Write a document
-  rev1 = write1({"hello"=>"xxx"},"test")
-  p read1("test")
+    # Write a document
+    rev1 = write1({"hello"=>"xxx"},"test")
+    p read1("test")
 
-  # Make three conflicting versions
-  write1({"hello"=>"foo"},"test",rev1)
-  write1({"hello"=>"bar"},"test",rev1)
-  write1({"hello"=>"baz"},"test",rev1)
+    # Make three conflicting versions
+    write1({"hello"=>"foo"},"test",rev1)
+    write1({"hello"=>"bar"},"test",rev1)
+    write1({"hello"=>"baz"},"test",rev1)
 
-  res = read1("test")
-  p res
+    res = read1("test")
+    p res
 
-  # Now let's replace these three with one
-  res.first['hello'] = "foo+bar+baz"
-  res.each_with_index do |r,i|
-    unless i == 0
-      r.replace({'_id'=>r['_id'], '_rev'=>r['_rev'], '_deleted'=>true})
+    # Now let's replace these three with one
+    res.first['hello'] = "foo+bar+baz"
+    res.each_with_index do |r,i|
+        unless i == 0
+            r.replace({'_id'=>r['_id'], '_rev'=>r['_rev'], '_deleted'=>true})
+        end
     end
-  end
-  writem(res)
+    writem(res)
 
-  p read1("test")
+    p read1("test")
 
 An application written this way never has to deal with a ``PUT 409``, and is
 automatically multi-master capable.
@@ -527,11 +526,11 @@ has been compacted, the content of that document revision will have been lost.
 ``revs_info`` will still show that v1 was an ancestor, but report it as
 "missing"::
 
-  BEFORE COMPACTION           AFTER COMPACTION
+    BEFORE COMPACTION           AFTER COMPACTION
 
-       ,-> v2a                     v2a
-     v1
-       `-> v2b                     v2b
+         ,-> v2a                     v2a
+       v1
+         `-> v2b                     v2b
 
 So if you want to work with diffs, the recommended way is to store those diffs
 within the new revision itself. That is: when you replace v1 with v2a, include
@@ -582,9 +581,8 @@ So it's not going to be known from inspection alone which of v2a and v2b has the
 most up-to-date E-mail address for Bob, and which has the most up-to-date mobile
 number. Alice has to remember which she entered last.
 
-
 Git
-----
+---
 
 `Git`_ is a well-known distributed source control system. Like Unison, git deals
 with files. However, git considers the state of a whole set of files as a single
@@ -613,28 +611,29 @@ Now let's consider the business card. Alice has created a git repo containing
 ``bob.vcf``, and cloned it across to the other machine. The branches look like
 this, where ``AAAAAAAA`` is the SHA1 of the commit::
 
-  ---------- desktop ----------           ---------- laptop ----------
-  master: AAAAAAAA                        master: AAAAAAAA
-  remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
+    ---------- desktop ----------           ---------- laptop ----------
+    master: AAAAAAAA                        master: AAAAAAAA
+    remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
 
 Now she makes a change on the desktop, and commits it into the desktop repo;
 then she makes a different change on the laptop, and commits it into the laptop
 repo::
 
-  ---------- desktop ----------           ---------- laptop ----------
-  master: BBBBBBBB                        master: CCCCCCCC
-  remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
+    ---------- desktop ----------           ---------- laptop ----------
+    master: BBBBBBBB                        master: CCCCCCCC
+    remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
 
 Now on the desktop she does ``git pull laptop``. Firstly, the remote objects
 are copied across into the local repo and the remote tracking branch is
 updated::
 
-  ---------- desktop ----------           ---------- laptop ----------
-  master: BBBBBBBB                        master: CCCCCCCC
-  remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
+    ---------- desktop ----------           ---------- laptop ----------
+    master: BBBBBBBB                        master: CCCCCCCC
+    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
 
 .. note::
-  repo still contains AAAAAAAA because commits BBBBBBBB and CCCCCCCC point to it
+    repo still contains AAAAAAAA because commits BBBBBBBB and CCCCCCCC point to
+    it
 
 Then git will attempt to merge the changes in. It can do this because it knows
 the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, so it takes a diff between
@@ -642,25 +641,25 @@ the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, so it takes a diff between
 
 If this is successful, then you'll get a new version with a merge commit::
 
-  ---------- desktop ----------           ---------- laptop ----------
-  master: DDDDDDDD                        master: CCCCCCCC
-  remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
+    ---------- desktop ----------           ---------- laptop ----------
+    master: DDDDDDDD                        master: CCCCCCCC
+    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
 
 Then Alice has to logon to the laptop and run ``git pull desktop``. A similar
 process occurs. The remote tracking branch is updated::
 
-  ---------- desktop ----------           ---------- laptop ----------
-  master: DDDDDDDD                        master: CCCCCCCC
-  remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
+    ---------- desktop ----------           ---------- laptop ----------
+    master: DDDDDDDD                        master: CCCCCCCC
+    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
 
 Then a merge takes place. This is a special-case: ``CCCCCCCC`` one of the parent
 commits of ``DDDDDDDD``, so the laptop can `fast forward` update from
 ``CCCCCCCC`` to ``DDDDDDDD`` directly without having to do any complex merging.
 This leaves the final state as::
 
-  ---------- desktop ----------           ---------- laptop ----------
-  master: DDDDDDDD                        master: DDDDDDDD
-  remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
+    ---------- desktop ----------           ---------- laptop ----------
+    master: DDDDDDDD                        master: DDDDDDDD
+    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
 
 Now this is all and good, but you may wonder how this is relevant when thinking
 about CouchDB.
@@ -682,10 +681,10 @@ multiple remote tracking branches, some of which may match your local branch,
 some of which may be behind you, and some of which may be ahead of you
 (i.e. contain changes that you haven't yet merged)::
 
-  master: AAAAAAAA
-  remotes/foo/master: BBBBBBBB
-  remotes/bar/master: CCCCCCCC
-  remotes/baz/master: AAAAAAAA
+    master: AAAAAAAA
+    remotes/foo/master: BBBBBBBB
+    remotes/bar/master: CCCCCCCC
+    remotes/baz/master: AAAAAAAA
 
 Note that each peer is explicitly tracked, and therefore has to be explicitly
 created. If a peer becomes stale or is no longer needed, it's up to you to
@@ -698,7 +697,6 @@ size, but CouchDB discards them. If you are constantly updating a document,
 the size of a git repo would grow forever. It is possible (with some effort)
 to use "history rewriting" to make git forget commits earlier than a particular
 one.
-
 
 .. _replication/conflicts/git:
 
@@ -788,4 +786,3 @@ useful characteristics:
 **Final notes**
 
 At least one sentence in this writeup (possibly this one) is complete BS.
-

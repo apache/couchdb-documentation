@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _fauxton/addons:
 
 ===============
@@ -20,16 +19,15 @@ Writting Addons
 Addons allow you to extend Fauxton for a specific use case. Usually, they
 have the following structure::
 
-  + my_addon/
-  | ---+ assets [optional]
-  |    \ ---+ less
-  |         \ ---- my_addon.less
-  | ---+ templates/
-  |    \ ---- my_addon.html - underscore template fragments
-  | ---- resources.js - models and collections of the addon
-  | ---- routes.js - URL routing for the addon
-  | ---- views.js - views that the model provides
-
+    + my_addon/
+    | ---+ assets [optional]
+    |    \ ---+ less
+    |         \ ---- my_addon.less
+    | ---+ templates/
+    |    \ ---- my_addon.html - underscore template fragments
+    | ---- resources.js - models and collections of the addon
+    | ---- routes.js - URL routing for the addon
+    | ---- views.js - views that the model provides
 
 Generating an Addon
 ===================
@@ -77,14 +75,14 @@ selector for a named set of routes, for example:
 
     var Search = new FauxtonAPI.addon();
     Search.hooks = {
-      // Render additional content into the sidebar
-      "#sidebar-content": {
-        routes:[
-          "database/:database/_design/:ddoc/_search/:search",
-          "database/:database/_design/:ddoc/_view/:view",
-          "database/:database/_:handler"],
-        callback: searchSidebar
-      }
+        // Render additional content into the sidebar
+        "#sidebar-content": {
+          routes:[
+              "database/:database/_design/:ddoc/_search/:search",
+              "database/:database/_design/:ddoc/_view/:view",
+              "database/:database/_:handler"],
+          callback: searchSidebar
+        }
     };
     return Search;
 
@@ -120,75 +118,73 @@ you may want to have a views.js) that renders that template:
 .. code-block:: javascript
 
     define([
-      "app",
-      "api"
+        "app",
+        "api"
     ],
 
     function (app, FauxtonAPI) {
-      var Resources = {};
+        var Resources = {};
 
-      Resources.Hello = FauxtonAPI.View.extend({
-        template: "addons/hello/templates/hello"
-      });
+        Resources.Hello = FauxtonAPI.View.extend({
+            template: "addons/hello/templates/hello"
+        });
 
-      return Resources;
+        return Resources;
     });
-
 
 Then define a route in `routes.js` that the addon is accessible at:
 
 .. code-block:: javascript
 
     define([
-      "app",
-      "api",
-      "addons/hello/resources"
+        "app",
+        "api",
+        "addons/hello/resources"
     ],
 
     function(app, FauxtonAPI, Resources) {
-      var helloRoute = function () {
-        console.log('helloRoute callback yo');
-        return {
-          layout: "one_pane",
-          crumbs: [
-            {"name": "Hello","link": "_hello"}
-          ],
-          views: {
-            "#dashboard-content": new Resources.Hello({})
-          },
-          apiUrl: 'hello'
+        var helloRoute = function () {
+            console.log('helloRoute callback yo');
+            return {
+                layout: "one_pane",
+                crumbs: [
+                    {"name": "Hello","link": "_hello"}
+                ],
+                views: {
+                    "#dashboard-content": new Resources.Hello({})
+                },
+                apiUrl: 'hello'
+            };
         };
-      };
 
-      Routes = {
-        "_hello": helloRoute
-      };
+        Routes = {
+            "_hello": helloRoute
+        };
 
-      return Routes;
+        return Routes;
     });
-
 
 Then wire it all together in base.js:
 
 .. code-block:: javascript
 
     define([
-      "app",
-      "api",
-      "addons/hello/routes"
+        "app",
+        "api",
+        "addons/hello/routes"
     ],
 
     function(app, FauxtonAPI, HelloRoutes) {
-      var Hello = new FauxtonAPI.addon();
-      console.log('hello from hello');
+        var Hello = new FauxtonAPI.addon();
+        console.log('hello from hello');
 
-      Hello.initialize = function() {
-        FauxtonAPI.addHeaderLink({title: "Hello", href: "#_hello"});
-      };
+        Hello.initialize = function() {
+            FauxtonAPI.addHeaderLink({title: "Hello", href: "#_hello"});
+        };
 
-      Hello.Routes = HelloRoutes;
-      console.log(Hello);
-      return Hello;
+        Hello.Routes = HelloRoutes;
+        console.log(Hello);
+        return Hello;
     });
 
 Once the code is in place include the add on in your `settings.json` so that it

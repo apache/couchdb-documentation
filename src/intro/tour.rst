@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _intro/tour:
 
 ===============
@@ -20,7 +19,6 @@ Getting Started
 In this document, we'll take a quick tour of CouchDB's features,
 familiarizing ourselves with Futon, the built-in administration interface.
 We'll create our first document and experiment with CouchDB views.
-
 
 All Systems Are Go!
 ===================
@@ -34,7 +32,7 @@ going on "underneath the hood" of your database.
 
 Make sure CouchDB is still running, and then do::
 
-  curl http://127.0.0.1:5984/
+    curl http://127.0.0.1:5984/
 
 This issues a GET request to your newly installed CouchDB instance.
 
@@ -42,115 +40,113 @@ The reply should look something like:
 
 .. code-block:: javascript
 
-  {
-    "couchdb": "Welcome",
-    "uuid": "85fb71bf700c17267fef77535820e371",
-    "version": "1.4.0",
-    "vendor": {
+    {
+        "couchdb": "Welcome",
+        "uuid": "85fb71bf700c17267fef77535820e371",
         "version": "1.4.0",
-        "name": "The Apache Software Foundation"
+        "vendor": {
+            "version": "1.4.0",
+            "name": "The Apache Software Foundation"
+        }
     }
-  }
 
 Not all that spectacular. CouchDB is saying "hello" with the running version
 number.
 
 Next, we can get a list of databases::
 
-  curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://127.0.0.1:5984/_all_dbs
 
 All we added to the previous request is the _all_dbs string.
 
 The response should look like::
 
-  ["_replicator","_users"]
+    ["_replicator","_users"]
 
 Oh, that's right, we didn't create any databases yet! All we see is an empty
 list.
 
 .. note::
+    The curl command issues GET requests by default. You can issue POST requests
+    using ``curl -X POST``. To make it easy to work with our terminal history,
+    we usually use the ``-X`` option even when issuing GET requests.
+    If we want to send a POST next time, all we have to change is the method.
 
-  The curl command issues GET requests by default. You can issue POST requests
-  using ``curl -X POST``. To make it easy to work with our terminal history,
-  we usually use the ``-X`` option even when issuing GET requests.
-  If we want to send a POST next time, all we have to change is the method.
-
-  HTTP does a bit more under the hood than you can see in the examples here.
-  If you're interested in every last detail that goes over the wire,
-  pass in the ``-v`` option (e.g., ``curl -vX GET``), which will show you
-  the server curl tries to connect to, the request headers it sends,
-  and response headers it receives back. Great for debugging!
+    HTTP does a bit more under the hood than you can see in the examples here.
+    If you're interested in every last detail that goes over the wire,
+    pass in the ``-v`` option (e.g., ``curl -vX GET``), which will show you
+    the server curl tries to connect to, the request headers it sends,
+    and response headers it receives back. Great for debugging!
 
 Let's create a database::
 
-  curl -X PUT http://127.0.0.1:5984/baseball
+    curl -X PUT http://127.0.0.1:5984/baseball
 
 CouchDB will reply with::
 
-  {"ok":true}
+    {"ok":true}
 
 Retrieving the list of databases again shows some useful results this time::
 
-  curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://127.0.0.1:5984/_all_dbs
 
 ::
 
-  ["baseball"]
+    ["baseball"]
 
 .. note::
+    We should mention JavaScript Object Notation (JSON) here, the data format
+    CouchDB speaks. JSON is a lightweight data interchange format based on
+    JavaScript syntax. Because JSON is natively compatible with JavaScript, your
+    web browser is an ideal client for CouchDB.
 
-  We should mention JavaScript Object Notation (JSON) here,
-  the data format CouchDB speaks. JSON is a lightweight data interchange format
-  based on JavaScript syntax. Because JSON is natively compatible with
-  JavaScript, your web browser is an ideal client for CouchDB.
-
-  Brackets (``[]``) represent ordered lists, and curly braces (``{}``) represent
-  key/value dictionaries. Keys must be strings, delimited by quotes (``"``),
-  and values can be strings, numbers, booleans, lists,
-  or key/value dictionaries. For a more detailed description of JSON,
-  see Appendix E, JSON Primer.
+    Brackets (``[]``) represent ordered lists, and curly braces (``{}``)
+    represent key/value dictionaries. Keys must be strings, delimited by quotes
+    (``"``), and values can be strings, numbers, booleans, lists, or key/value
+    dictionaries. For a more detailed description of JSON, see Appendix E, JSON
+    Primer.
 
 Let's create another database::
 
-  curl -X PUT http://127.0.0.1:5984/baseball
+    curl -X PUT http://127.0.0.1:5984/baseball
 
 CouchDB will reply with::
 
-  {"error":"file_exists","reason":"The database could not be created,
-  the file already exists."}
+    {"error":"file_exists","reason":"The database could not be created,
+    the file already exists."}
 
 We already have a database with that name, so CouchDB will respond with an
 error. Let's try again with a different database name::
 
-  curl -X PUT http://127.0.0.1:5984/plankton
+    curl -X PUT http://127.0.0.1:5984/plankton
 
 CouchDB will reply with::
 
-  {"ok":true}
+    {"ok":true}
 
 Retrieving the list of databases yet again shows some useful results::
 
-  curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://127.0.0.1:5984/_all_dbs
 
 CouchDB will respond with::
 
-  ["baseball", "plankton"]
+    ["baseball", "plankton"]
 
 To round things off, let's delete the second database::
 
-  curl -X DELETE http://127.0.0.1:5984/plankton
+    curl -X DELETE http://127.0.0.1:5984/plankton
 
 CouchDB will reply with::
 
-  {"ok":true}
+    {"ok":true}
 
 The list of databases is now the same as it was before::
 
-  curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://127.0.0.1:5984/_all_dbs
 
 CouchDB will respond with::
 
-  ["baseball"]
+    ["baseball"]
 
 For brevity, we'll skip working with documents, as the next section covers a
 different and potentially easier way of working with CouchDB that should
@@ -158,7 +154,6 @@ provide experience with this. As we work through the example,
 keep in mind that "under the hood" everything is being done by the
 application exactly as you have been doing here manually.
 Everything is done using GET, PUT, POST, and DELETE with a URI.
-
 
 Welcome to Futon
 ================
@@ -172,7 +167,7 @@ between databases.
 
 To load Futon in your browser, visit::
 
-  http://127.0.0.1:5984/_utils/
+    http://127.0.0.1:5984/_utils/
 
 If you're running version 0.9 or later, you should see something similar to
 :ref:`intro/tour-01`. In later documents, we'll focus on using CouchDB from
@@ -189,20 +184,17 @@ telling us to double-check our installation before attempting to use a
 potentially broken database server, saving us the confusion when nothing
 seems to be working quite like we expect!
 
-
 .. _intro/tour-01:
 
 .. figure:: ../../images/intro-tour-01.png
-   :align: center
-   :alt: The Futon welcome screen
+    :align: center
+    :alt: The Futon welcome screen
 
-   Figure 1. The Futon welcome screen
-
+    Figure 1. The Futon welcome screen
 
 Some common network configurations cause the replication test to fail when
 accessed via the localhost address. You can fix this by accessing CouchDB via
 127.0.0.1, e.g. http://127.0.0.1:5984/_utils/.
-
 
 Your First Database and Document
 ================================
@@ -236,24 +228,21 @@ You can experiment with other JSON values; e.g., ``[1, 2, "c"]`` or
 make a note of its ``_rev`` attribute and click "Save Document." The result
 should look like :ref:`intro/tour-04`.
 
-
 .. _intro/tour-03:
 
 .. figure:: ../../images/intro-tour-03.png
-   :align: center
-   :alt: An empty database in Futon
+    :align: center
+    :alt: An empty database in Futon
 
-   Figure 3. An empty database in Futon
-
+    Figure 3. An empty database in Futon
 
 .. _intro/tour-04:
 
 .. figure:: ../../images/intro-tour-04.png
-   :align: center
-   :alt: A "hello world" document in Futon
+    :align: center
+    :alt: A "hello world" document in Futon
 
-   Figure 4. A "hello world" document in Futon
-
+    Figure 4. A "hello world" document in Futon
 
 You'll notice that the document's _rev has changed. We'll go into more detail
 about this in later documents, but for now, the important thing to note is
@@ -266,15 +255,13 @@ which can be more compact and easier to read, depending on what sort of data
 you are dealing with. To see the JSON version of our "hello world" document,
 click the Source tab. The result should look like :ref:`intro/tour-05`.
 
-
 .. _intro/tour-05:
 
 .. figure:: ../../images/intro-tour-05.png
-   :align: center
-   :alt: The JSON source of a "hello world" document in Futon
+    :align: center
+    :alt: The JSON source of a "hello world" document in Futon
 
-   Figure 5. The JSON source of a "hello world" document in Futon
-
+    Figure 5. The JSON source of a "hello world" document in Futon
 
 Running a Query Using MapReduce
 ===============================
@@ -313,58 +300,56 @@ to create documents that have a final JSON structure that looks like this:
 
 .. code-block:: javascript
 
-  {
-   "_id": "00a271787f89c0ef2e10e88a0c0001f4",
-   "_rev": "1-2628a75ac8c3abfffc8f6e30c9949fd6",
-   "item": "apple",
-   "prices": {
-       "Fresh Mart": 1.59,
-       "Price Max": 5.99,
-       "Apples Express": 0.79
-   }
-  }
+    {
+        "_id": "00a271787f89c0ef2e10e88a0c0001f4",
+        "_rev": "1-2628a75ac8c3abfffc8f6e30c9949fd6",
+        "item": "apple",
+        "prices": {
+            "Fresh Mart": 1.59,
+            "Price Max": 5.99,
+            "Apples Express": 0.79
+        }
+    }
 
 This document should look like :ref:`intro/tour-06` when entered into Futon.
-
 
 .. _intro/tour-06:
 
 .. figure:: ../../images/intro-tour-06.png
-   :align: center
-   :alt: An example document with apple prices in Futon
+    :align: center
+    :alt: An example document with apple prices in Futon
 
-   Figure 6. An example document with apple prices in Futon
-
+    Figure 6. An example document with apple prices in Futon
 
 OK, now that that's done, let's create the document for oranges:
 
 .. code-block:: javascript
 
-  {
-   "_id": "00a271787f89c0ef2e10e88a0c0003f0",
-   "_rev": "1-e9680c5d9a688b4ff8dd68549e8e072c",
-   "item": "orange",
-   "prices": {
-       "Fresh Mart": 1.99,
-       "Price Max": 3.19,
-       "Citrus Circus": 1.09
-   }
-  }
+    {
+        "_id": "00a271787f89c0ef2e10e88a0c0003f0",
+        "_rev": "1-e9680c5d9a688b4ff8dd68549e8e072c",
+        "item": "orange",
+        "prices": {
+            "Fresh Mart": 1.99,
+            "Price Max": 3.19,
+            "Citrus Circus": 1.09
+        }
+    }
 
 And finally, the document for bananas:
 
 .. code-block:: javascript
 
-  {
-   "_id": "00a271787f89c0ef2e10e88a0c00048b",
-   "_rev": "1-60e25d93dc12884676d037400a6fa189",
-   "item": "banana",
-   "prices": {
-       "Fresh Mart": 1.99,
-       "Price Max": 0.79,
-       "Banana Montana": 4.22
-   }
-  }
+    {
+        "_id": "00a271787f89c0ef2e10e88a0c00048b",
+        "_rev": "1-60e25d93dc12884676d037400a6fa189",
+        "item": "banana",
+        "prices": {
+            "Fresh Mart": 1.99,
+            "Price Max": 0.79,
+            "Banana Montana": 4.22
+        }
+    }
 
 Imagine we're catering a big luncheon, but the client is very price-sensitive.
 To find the lowest prices, we're going to create our first view,
@@ -372,28 +357,26 @@ which shows each fruit sorted by price. Click "hello-world" to return to the
 hello-world overview, and then from the "View" select field choose "Temporary
 view…" to create a new view.
 
-
 .. figure:: ../../images/intro-tour-07.png
-   :align: center
-   :alt: A temporary view in Futon
+    :align: center
+    :alt: A temporary view in Futon
 
-   Figure 7. A temporary view in Futon
-
+    Figure 7. A temporary view in Futon
 
 Edit the map function, on the left, so that it looks like the following:
 
 .. code-block:: javascript
 
-  function(doc) {
-    var shop, price, value;
-    if (doc.item && doc.prices) {
-        for (shop in doc.prices) {
-            price = doc.prices[shop];
-            value = [doc.item, shop];
-            emit(price, value);
+    function(doc) {
+        var shop, price, value;
+        if (doc.item && doc.prices) {
+            for (shop in doc.prices) {
+                price = doc.prices[shop];
+                value = [doc.item, shop];
+                emit(price, value);
+            }
         }
     }
-  }
 
 This is a JavaScript function that CouchDB runs for each of our documents as
 it computes the view. We'll leave the reduce function blank for the time being.
@@ -405,30 +388,28 @@ next to each other in the result set. CouchDB's key sorting system allows any
 valid JSON object as a key. In this case, we'll emit an array of [item, price]
 so that CouchDB groups by item type and price.
 
-
 .. _intro/tour-08:
 
 .. figure:: ../../images/intro-tour-08.png
-   :align: center
-   :alt: The results of running a view in Futon
+    :align: center
+    :alt: The results of running a view in Futon
 
-   Figure 8. The results of running a view in Futon
-
+    Figure 8. The results of running a view in Futon
 
 Let's modify the view function so that it looks like this:
 
 .. code-block:: javascript
 
-  function(doc) {
-    var shop, price, key;
-    if (doc.item && doc.prices) {
-        for (shop in doc.prices) {
-            price = doc.prices[shop];
-            key = [doc.item, price];
-            emit(key, shop);
+    function(doc) {
+        var shop, price, key;
+        if (doc.item && doc.prices) {
+            for (shop in doc.prices) {
+                price = doc.prices[shop];
+                key = [doc.item, price];
+                emit(key, shop);
+            }
         }
     }
-  }
 
 Here, we first check that the document has the fields we want to use. CouchDB
 recovers gracefully from a few isolated map function failures,
@@ -440,15 +421,14 @@ our map function will skip the first "hello world" document we created
 without emitting any rows or encountering any errors. The result of this
 query should look like :ref:`intro/tour-09`.
 
-
 .. _intro/tour-09:
 
 .. figure:: ../../images/intro-tour-09.png
-   :align: center
-   :alt: The results of running a view after grouping by item type and price
+    :align: center
+    :alt: The results of running a view after grouping by item type and price
 
-   Figure 9. The results of running a view after grouping by item type and price
-
+    Figure 9. The results of running a view after grouping by item type and
+    price
 
 Once we know we've got a document with an item type and some prices,
 we iterate over the item's prices and emit key/values pairs. The key is an
@@ -466,7 +446,6 @@ functions give you an opportunity to sort your data using any key you choose,
 and that CouchDB's design is focused on providing fast,
 efficient access to data within a range of keys.
 
-
 Triggering Replication
 ======================
 
@@ -482,26 +461,22 @@ Now click "Replicator" in the sidebar and choose hello-world as the source
 and hello-replication as the target. Click "Replicate" to replicate your
 database. The result should look something like :ref:`intro/tour-10`.
 
-
 .. _intro/tour-10:
 
 .. figure:: ../../images/intro-tour-10.png
-   :align: center
-   :alt: Running database replication in Futon
+    :align: center
+    :alt: Running database replication in Futon
 
-   Figure 10. Running database replication in Futon
-
+    Figure 10. Running database replication in Futon
 
 .. note::
-
-  For larger databases, replication can take much longer. It is important to
-  leave the browser window open while replication is taking place.
-  As an alternative, you can trigger replication via curl or some other HTTP
-  client that can handle long-running connections. If your client closes the
-  connection before replication finishes, you'll have to retrigger it.
-  Luckily, CouchDB's replication can take over from where it left off
-  instead of starting from scratch.
-
+    For larger databases, replication can take much longer. It is important to
+    leave the browser window open while replication is taking place.
+    As an alternative, you can trigger replication via curl or some other HTTP
+    client that can handle long-running connections. If your client closes the
+    connection before replication finishes, you'll have to retrigger it.
+    Luckily, CouchDB's replication can take over from where it left off
+    instead of starting from scratch.
 
 Wrapping Up
 ===========

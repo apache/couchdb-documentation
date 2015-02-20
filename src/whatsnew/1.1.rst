@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/1.1.x:
 
 ============
@@ -21,17 +20,14 @@
    :depth: 1
    :local:
 
-
 .. _release/1.1.x/upgrade:
 
 Upgrade Notes
 =============
 
 .. warning::
-
-   :ref:`release/1.1.2` contains important security fixes. Previous `1.1.x`
-   releases are not recommended for regular usage.
-
+    :ref:`release/1.1.2` contains important security fixes. Previous `1.1.x`
+    releases are not recommended for regular usage.
 
 .. _release/1.1.2:
 
@@ -77,7 +73,6 @@ View Server
 
 * Avoid invalidating view indexes when running out of file descriptors.
 
-
 .. _release/1.1.1:
 
 Version 1.1.1
@@ -109,13 +104,13 @@ Version 1.1.1
 * Fixes to the document multipart PUT API.
 * Fixes regarding file descriptor leaks for databases with views.
 
-
 .. _release/1.1.0:
 
 Version 1.1.0
 =============
 
-.. note:: All CHANGES for 1.0.2 and 1.0.3 also apply to 1.1.0.
+.. note::
+    All CHANGES for 1.0.2 and 1.0.3 also apply to 1.1.0.
 
 Externals
 ---------

@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _views/intro:
 
 ===========================
@@ -40,36 +39,36 @@ documents as we walk through how views work:
 
 .. code-block:: javascript
 
-  {
-    "_id":"biking",
-    "_rev":"AE19EBC7654",
+    {
+        "_id":"biking",
+        "_rev":"AE19EBC7654",
 
-    "title":"Biking",
-    "body":"My biggest hobby is mountainbiking. The other day...",
-    "date":"2009/01/30 18:04:11"
-  }
-
-.. code-block:: javascript
-
-  {
-    "_id":"bought-a-cat",
-    "_rev":"4A3BBEE711",
-
-    "title":"Bought a Cat",
-    "body":"I went to the the pet store earlier and brought home a little kitty...",
-    "date":"2009/02/17 21:13:39"
-  }
+        "title":"Biking",
+        "body":"My biggest hobby is mountainbiking. The other day...",
+        "date":"2009/01/30 18:04:11"
+    }
 
 .. code-block:: javascript
 
-  {
-    "_id":"hello-world",
-    "_rev":"43FBA4E7AB",
+    {
+        "_id":"bought-a-cat",
+        "_rev":"4A3BBEE711",
 
-    "title":"Hello World",
-    "body":"Well hello and welcome to my new blog...",
-    "date":"2009/01/15 15:52:20"
-  }
+        "title":"Bought a Cat",
+        "body":"I went to the the pet store earlier and brought home a little kitty...",
+        "date":"2009/02/17 21:13:39"
+    }
+
+.. code-block:: javascript
+
+    {
+        "_id":"hello-world",
+        "_rev":"43FBA4E7AB",
+
+        "title":"Hello World",
+        "body":"Well hello and welcome to my new blog...",
+        "date":"2009/01/15 15:52:20"
+    }
 
 Three will do for the example. Note that the documents are sorted by "_id",
 which is how they are stored in the database. Now we define a view.
@@ -77,11 +76,11 @@ Bear with us without an explanation while we show you some code:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if(doc.date && doc.title) {
-      emit(doc.date, doc.title);
+    function(doc) {
+        if(doc.date && doc.title) {
+            emit(doc.date, doc.title);
+        }
     }
-  }
 
 This is a `map function`, and it is written in JavaScript. If you are not
 familiar with JavaScript but have used C or any other C-like language such as
@@ -123,7 +122,6 @@ Table 1. View results:
 | "2009/02/17 21:13:39" | "Bought a Cat"   |
 +-----------------------+------------------+
 
-
 When you query your view, CouchDB takes the source code and runs it for you on
 every document in the database. If you have a lot of documents, that takes
 quite a bit of time and you might wonder if it is not horribly inefficient
@@ -147,30 +145,30 @@ The actual result is JSON-encoded and contains a little more metadata:
 
 .. code-block:: javascript
 
-  {
-    "total_rows": 3,
-    "offset": 0,
-    "rows": [
-      {
-        "key": "2009/01/15 15:52:20",
-        "id": "hello-world",
-        "value": "Hello World"
-      },
+    {
+        "total_rows": 3,
+        "offset": 0,
+        "rows": [
+            {
+                "key": "2009/01/15 15:52:20",
+                "id": "hello-world",
+                "value": "Hello World"
+            },
 
-      {
-        "key": "2009/01/30 18:04:11",
-        "id": "biking",
-        "value": "Biking"
-      },
+            {
+                "key": "2009/01/30 18:04:11",
+                "id": "biking",
+                "value": "Biking"
+            },
 
-      {
-        "key": "2009/02/17 21:13:39",
-        "id": "bought-a-cat",
-        "value": "Bought a Cat"
-      }
+            {
+                "key": "2009/02/17 21:13:39",
+                "id": "bought-a-cat",
+                "value": "Bought a Cat"
+            }
 
-    ]
-  }
+        ]
+    }
 
 Now, the actual result is not as nicely formatted and doesn’t include any
 superfluous whitespace or newlines, but this is better for you (and us!)
@@ -243,15 +241,15 @@ to change the format of our date field. Instead of a string, we are going to use
 an array, where individual members are part of a timestamp in decreasing
 significance. This sounds fancy, but it is rather easy. Instead of::
 
-  {
-    "date": "2009/01/31 00:00:00"
-  }
+    {
+        "date": "2009/01/31 00:00:00"
+    }
 
 we use::
 
-  {
-    "date": [2009, 1, 31, 0, 0, 0]
-  }
+    {
+        "date": [2009, 1, 31, 0, 0, 0]
+    }
 
 Our map function does not have to change for this, but our view result looks
 a little different:
@@ -268,8 +266,8 @@ Table 2. New view results:
 | [2009, 1, 30, 18, 4, 11]  | "Bought a Cat"   |
 +---------------------------+------------------+
 
-
-And our queries change to ``/blog/_design/docs/_view/by_date?startkey=[2010, 1, 1, 0, 0, 0]&endkey=[2010, 2, 1, 0, 0, 0]``.
+And our queries change to
+``/blog/_design/docs/_view/by_date?startkey=[2010, 1, 1, 0, 0, 0]&endkey=[2010, 2, 1, 0, 0, 0]``.
 For all you care, this is just a change in syntax, not meaning. But it shows
 you the power of views. Not only can you construct an index with scalar values
 like strings and integers, you can also use JSON structures as keys for your
@@ -278,30 +276,29 @@ but we don’t care for documents that have not been tagged.
 
 .. code-block:: javascript
 
-  {
-    ...
-    tags: ["cool", "freak", "plankton"],
-    ...
-  }
-
-.. code-block:: javascript
-
-  {
-    ...
-    tags: [],
-    ...
-  }
-
-.. code-block:: javascript
-
-  function(doc) {
-    if(doc.tags.length > 0) {
-      for(var idx in doc.tags) {
-        emit(doc.tags[idx], null);
-      }
+    {
+        ...
+        tags: ["cool", "freak", "plankton"],
+        ...
     }
-  }
 
+.. code-block:: javascript
+
+    {
+        ...
+        tags: [],
+        ...
+    }
+
+.. code-block:: javascript
+
+    function(doc) {
+        if(doc.tags.length > 0) {
+            for(var idx in doc.tags) {
+                emit(doc.tags[idx], null);
+            }
+        }
+    }
 
 This shows a few new things. You can have conditions on structure
 (``if(doc.tags.length > 0)``) instead of just values. This is also an example of
@@ -395,9 +392,9 @@ the reduce view:
 
 .. code-block:: javascript
 
-  function(keys, values, rereduce) {
-    return sum(values)
-  }
+    function(keys, values, rereduce) {
+        return sum(values)
+    }
 
 returns the total number of rows between the start and end key.
 So with ``startkey=["a","b"]&endkey=["b"]`` (which includes the first three of
@@ -407,26 +404,24 @@ on the ``rereduce`` parameter:
 
 .. code-block:: javascript
 
-  function(keys, values, rereduce) {
-    if (rereduce) {
-      return sum(values);
-    } else {
-      return values.length;
+    function(keys, values, rereduce) {
+        if (rereduce) {
+            return sum(values);
+        } else {
+            return values.length;
+        }
     }
-  }
 
 .. note::
-
-   JavaScript function about could be effectively replaced by builtin ``_count``
-   one.
+    JavaScript function about could be effectively replaced by builtin
+    ``_count`` one.
 
 .. figure:: ../../../images/views-intro-01.png
-   :align: center
-   :scale: 50 %
-   :alt:  Comments map function
+    :align: center
+    :scale: 50 %
+    :alt:  Comments map function
 
-   Figure 1. Comments map function
-
+    Figure 1. Comments map function
 
 This is the reduce view used by the example app to count comments, while
 utilizing the map to output the comments, which are more useful than just
@@ -442,16 +437,16 @@ Let’s reprint the key list from earlier, grouped at level ``1``:
 
 .. code-block:: javascript
 
-  ["a"]   3
-  ["b"]   2
+    ["a"]   3
+    ["b"]   2
 
 And at ``group_level=2``:
 
 .. code-block:: javascript
 
-  ["a","b"]   2
-  ["a","c"]   1
-  ["b","a"]   2
+    ["a","b"]   2
+    ["a","c"]   1
+    ["b","a"]   2
 
 Using the parameter ``group=true`` makes it behave as though it were
 ``group_level=999``, so in the case of our current example, it would give the
@@ -470,18 +465,18 @@ Consider the map result are:
 
 .. code-block:: javascript
 
-  "afrikan", 1
-  "afrikan", 1
-  "chinese", 1
-  "chinese", 1
-  "chinese", 1
-  "chinese", 1
-  "french", 1
-  "italian", 1
-  "italian", 1
-  "spanish", 1
-  "vietnamese", 1
-  "vietnamese", 1
+    "afrikan", 1
+    "afrikan", 1
+    "chinese", 1
+    "chinese", 1
+    "chinese", 1
+    "chinese", 1
+    "french", 1
+    "italian", 1
+    "italian", 1
+    "spanish", 1
+    "vietnamese", 1
+    "vietnamese", 1
 
 Example 1. Example view result (mmm, food)
 
@@ -490,18 +485,18 @@ the simple reduce function shown earlier:
 
 .. code-block:: javascript
 
-  function(keys, values, rereduce) {
-    return sum(values);
-  }
+    function(keys, values, rereduce) {
+        return sum(values);
+    }
 
 Figure 2, “The B-tree index” shows a simplified version of what the B-tree index
 looks like. We abbreviated the key strings.
 
 .. figure:: ../../../images/views-intro-02.png
-   :align: center
-   :alt: The B-tree index
+    :align: center
+    :alt: The B-tree index
 
-   Figure 2. The B-tree index
+    Figure 2. The B-tree index
 
 The view result is what computer science grads call a “pre-order” walk through
 the tree. We look at each element in each node starting from the left. Whenever
@@ -518,21 +513,20 @@ inside the parent node along with the edge to the subnode. In our case, each
 edge has a 3 representing the reduce value for the node it points to.
 
 .. note::
-
-   In reality, nodes have more than 1,600 elements in them. CouchDB computes
-   the result for all the elements in multiple iterations over the elements in
-   a single node, not all at once (which would be disastrous for memory
-   consumption).
+    In reality, nodes have more than 1,600 elements in them. CouchDB computes
+    the result for all the elements in multiple iterations over the elements in
+    a single node, not all at once (which would be disastrous for memory
+    consumption).
 
 Now let’s see what happens when we run a query. We want to know how many
 "chinese" entries we have. The query option is simple: ``?key="chinese"``.
 See Figure 3, “The B-tree index reduce result”.
 
 .. figure:: ../../../images/views-intro-03.png
-   :align: center
-   :alt: The B-tree index reduce result
+    :align: center
+    :alt: The B-tree index reduce result
 
-   Figure 3. The B-tree index reduce result
+    Figure 3. The B-tree index reduce result
 
 CouchDB detects that all values in the subnode include the "chinese" key.
 It concludes that it can take just the 3 values associated with that node to
@@ -548,10 +542,9 @@ invocation of the reduce function with actual values:
 
 .. code-block:: javascript
 
-  function(null, [3, 1], true) {
-    return sum([3, 1]);
-  }
-
+    function(null, [3, 1], true) {
+        return sum([3, 1]);
+    }
 
 Now, we said your reduce function must actually reduce your values. If you see
 the B-tree, it should become obvious what happens when you don’t reduce your
@@ -560,35 +553,34 @@ want to get a list of all the unique labels in our view:
 
 .. code-block:: javascript
 
-  "abc", "afrikan"
-  "cef", "afrikan"
-  "fhi", "chinese"
-  "hkl", "chinese"
-  "ino", "chinese"
-  "lqr", "chinese"
-  "mtu", "french"
-  "owx", "italian"
-  "qza", "italian"
-  "tdx", "spanish"
-  "xfg", "vietnamese"
-  "zul", "vietnamese"
+    "abc", "afrikan"
+    "cef", "afrikan"
+    "fhi", "chinese"
+    "hkl", "chinese"
+    "ino", "chinese"
+    "lqr", "chinese"
+    "mtu", "french"
+    "owx", "italian"
+    "qza", "italian"
+    "tdx", "spanish"
+    "xfg", "vietnamese"
+    "zul", "vietnamese"
 
 We don’t care for the key here and only list all the labels we have. Our reduce
 function removes duplicates:
 
 .. code-block:: javascript
 
-  function(keys, values, rereduce) {
-    var unique_labels = {};
-    values.forEach(function(label) {
-      if(!unique_labels[label]) {
-        unique_labels[label] = true;
-      }
-    });
+    function(keys, values, rereduce) {
+        var unique_labels = {};
+        values.forEach(function(label) {
+            if(!unique_labels[label]) {
+                unique_labels[label] = true;
+            }
+        });
 
-    return unique_labels;
-  }
-
+        return unique_labels;
+    }
 
 This translates to Figure 4, “An overflowing reduce index”.
 
@@ -603,11 +595,10 @@ To help with that, CouchDB since version 0.10.0 will throw an error if your
 reduce function does not reduce its input values.
 
 .. figure:: ../../../images/views-intro-04.png
-   :align: center
-   :alt: An overflowing reduce index
+    :align: center
+    :alt: An overflowing reduce index
 
-   Figure 4. An overflowing reduce index
-
+    Figure 4. An overflowing reduce index
 
 Lessons Learned
 ===============

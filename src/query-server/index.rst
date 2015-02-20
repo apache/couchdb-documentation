@@ -32,9 +32,8 @@ are assumed to be of type `javascript`, as are ad hoc queries that are POSTed to
 .. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   protocol
-   javascript
-   erlang
-
+    protocol
+    javascript
+    erlang

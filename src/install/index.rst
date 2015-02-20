@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _install:
 
 ============
@@ -18,9 +17,9 @@ Installation
 ============
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   unix
-   windows
-   mac
-   freebsd
+    unix
+    windows
+    mac
+    freebsd

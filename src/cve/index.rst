@@ -10,20 +10,21 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _cve:
 
+===========================
 Security Issues Information
 ===========================
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+    :maxdepth: 1
+    :glob:
 
-   *
+    *
 
 .. _cve/report:
 
+===================================================
 Reporting New Security Problems with Apache CouchDB
 ===================================================
 
@@ -70,4 +71,3 @@ size of inputs.
 .. _how the Apache Software Foundation handles security: http://apache.org/security/committers.html
 .. _security@couchdb.apache.org: mailto:security@couchdb.apache.org
 .. _users mailing list: mailto:user@couchdb.apache.org
-

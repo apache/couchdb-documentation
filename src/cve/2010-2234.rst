@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _cve/2010-2234:
 
 ===============================================================
@@ -24,7 +23,6 @@ CVE-2010-2234: Apache CouchDB Cross Site Request Forgery Attack
 :Severity: Important
 
 :Vendor: The Apache Software Foundation
-
 
 Description
 ===========
@@ -61,4 +59,3 @@ Credit
 
 This CSRF issue was discovered by a source that wishes to stay
 anonymous.
-

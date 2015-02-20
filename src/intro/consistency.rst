@@ -10,18 +10,16 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _intro/consistency:
 
 ====================
 Eventual Consistency
 ====================
 
-In the previous document :ref:`intro/why`, we saw that CouchDB's flexibility allows us to
-evolve our data as our applications grow and change. In this topic,
+In the previous document :ref:`intro/why`, we saw that CouchDB's flexibility
+allows us to evolve our data as our applications grow and change. In this topic,
 we'll explore how working "with the grain" of CouchDB promotes simplicity in
 our applications and helps us naturally build scalable, distributed systems.
-
 
 Working with the Grain
 ======================
@@ -56,7 +54,6 @@ intuitive and useful way for modeling applications around high availability.
 .. _RDBMS: http://en.wikipedia.org/wiki/Relational_database_management_system
 .. _Paxos: http://en.wikipedia.org/wiki/Paxos_%28computer_science%29
 
-
 .. _cap:
 
 The CAP Theorem
@@ -84,10 +81,10 @@ Pick two.
 .. _intro/consistency-01:
 
 .. figure:: ../../images/intro-consistency-01.png
-   :align: center
-   :alt: The CAP theorem
+    :align: center
+    :alt: The CAP theorem
 
-   Figure 1. The CAP theorem
+    Figure 1. The CAP theorem
 
 When a system grows large enough that a single database node is unable to
 handle the load placed on it, a sensible solution is to add more servers.
@@ -116,7 +113,7 @@ However, there are situations where availability trumps consistency:
     concerned about scalability, any algorithm that forces you to run
     agreement will eventually become your bottleneck. Take that as a given.
 
-     -- Werner Vogels, Amazon CTO and Vice President
+    -- Werner Vogels, Amazon CTO and Vice President
 
 If availability is a priority, we can let clients write data to one node of
 the database without waiting for other nodes to come into agreement.
@@ -130,7 +127,6 @@ CouchDB makes it really simple to build applications that sacrifice immediate
 consistency for the huge performance improvements that come with simple
 distribution.
 
-
 Local Consistency
 =================
 
@@ -139,7 +135,6 @@ it's important that we understand the inner workings of a single CouchDB node.
 The CouchDB API is designed to provide a convenient but thin wrapper around
 the database core. By taking a closer look at the structure of the database
 core, we'll have a better understanding of the API that surrounds it.
-
 
 The Key to Your Data
 --------------------
@@ -150,15 +145,13 @@ and deletions in logarithmic time. As :ref:`intro/consistency-02`
 illustrates, CouchDB uses this B-tree storage engine for all internal data,
 documents, and views. If we understand one, we will understand them all.
 
-
 .. _intro/consistency-02:
 
 .. figure:: ../../images/intro-consistency-02.png
-   :align: center
-   :alt: Anatomy of a view request
+    :align: center
+    :alt: Anatomy of a view request
 
-   Figure 2. Anatomy of a view request
-
+    Figure 2. Anatomy of a view request
 
 CouchDB uses MapReduce to compute the results of a view. MapReduce makes use
 of two functions, "map" and "reduce", which are applied to each document in
@@ -188,7 +181,6 @@ by key for  exactly these reasons.
 .. _SimpleDB: http://aws.amazon.com/simpledb/
 .. _memcached: http://memcached.org
 
-
 No Locking
 ----------
 
@@ -205,9 +197,9 @@ Under high load, a relational database can spend more time figuring out who
 is allowed to do what, and in which order, than it does doing any actual work.
 
 .. note::
-  Modern relational databases avoid locks by implementing MVCC under
-  the hood, but hide it from the end user, requiring them to coordinate
-  concurrent changes of single rows or fields.
+    Modern relational databases avoid locks by implementing MVCC under
+    the hood, but hide it from the end user, requiring them to coordinate
+    concurrent changes of single rows or fields.
 
 Instead of locks, CouchDB uses `Multi-Version Concurrency Control` (MVCC) to
 manage concurrent access to the database. :ref:`intro/consistency-03`
@@ -216,15 +208,13 @@ MVCC means that CouchDB can run at full speed, all the time,
 even under high load. Requests are run in parallel, making excellent use of
 every last drop of processing power your server has to offer.
 
-
 .. _intro/consistency-03:
 
 .. figure:: ../../images/intro-consistency-03.png
-   :align: center
-   :alt: MVCC means no locking
+    :align: center
+    :alt: MVCC means no locking
 
-   Figure 3. MVCC means no locking
-
+    Figure 3. MVCC means no locking
 
 Documents in CouchDB are versioned, much like they would be in a regular
 version control system such as `Subversion`_. If you want to change
@@ -248,7 +238,6 @@ the time of the beginning of the request.
 
 .. _Subversion: http://subversion.apache.org/
 
-
 Validation
 ==========
 
@@ -270,7 +259,6 @@ we save ourselves a tremendous amount of CPU cycles that would otherwise have
 been spent serializing object graphs from SQL, converting them into domain
 objects, and using those objects to do application-level validation.
 
-
 Distributed Consistency
 =======================
 
@@ -282,7 +270,6 @@ server `B`, or `C`, or `D`? For relational databases, this is a very complex
 problem with entire books devoted to its solution. You could use
 multi-master, single-master, partitioning, sharding, write-through caches,
 and all sorts of other complex techniques.
-
 
 Incremental Replication
 =======================
@@ -309,15 +296,13 @@ or you could use it to synchronize data with your laptop for offline work as
 you travel. Each database can be used in the usual fashion,
 and changes between databases can be synchronized later in both directions.
 
-
 .. _intro/consistency-04:
 
 .. figure:: ../../images/intro-consistency-04.png
-   :align: center
-   :alt: Incremental replication between CouchDB nodes
+    :align: center
+    :alt: Incremental replication between CouchDB nodes
 
-   Figure 4. Incremental replication between CouchDB nodes
-
+    Figure 4. Incremental replication between CouchDB nodes
 
 What happens when you change the same document in two different databases and
 want to synchronize these with each other? CouchDB's replication system
@@ -339,7 +324,6 @@ application. You can leave the chosen document versions in place,
 revert to the older version, or try to merge the two versions and save the
 result.
 
-
 Case Study
 ==========
 
@@ -350,11 +334,11 @@ document revisions to ensure that Songbird playlists are backed up robustly
 between nodes.
 
 .. note::
-  `Songbird`_ is a free software media player with an integrated web browser,
-  based on the Mozilla XULRunner platform. Songbird is available for Microsoft
-  Windows, Apple Mac OS X, Solaris, and Linux.
+    `Songbird`_ is a free software media player with an integrated web browser,
+    based on the Mozilla XULRunner platform. Songbird is available for Microsoft
+    Windows, Apple Mac OS X, Solaris, and Linux.
 
-  .. _Songbird: http://en.wikipedia.org/wiki/Songbird_%28software%29
+    .. _Songbird: http://en.wikipedia.org/wiki/Songbird_%28software%29
 
 Let's examine the workflow of the Songbird backup application,
 first as a user backing up from a single computer, and then using Songbird to
@@ -368,15 +352,13 @@ object and handed to a CouchDB database. As illustrated in
 :ref:`intro/consistency-05`, CouchDB hands back the document ID and
 revision of each playlist as it's saved to the database.
 
-
 .. _intro/consistency-05:
 
 .. figure:: ../../images/intro-consistency-05.png
-   :align: center
-   :alt: Backing up to a single database
+    :align: center
+    :alt: Backing up to a single database
 
-   Figure 5. Backing up to a single database
-
+    Figure 5. Backing up to a single database
 
 After a few days, we find that our playlists have been updated and we want to
 back up our changes. After we have fed our playlists to the backup
@@ -411,15 +393,13 @@ in :ref:`intro/consistency-06`, the backup application copies the new document
 and the new revision to the desktop CouchDB database. Both CouchDB databases
 now have the same document revision.
 
-
 .. _intro/consistency-06:
 
 .. figure:: ../../images/intro-consistency-06.png
-   :align: center
-   :alt: Synchronizing between two databases
+    :align: center
+    :alt: Synchronizing between two databases
 
-   Figure 6. Synchronizing between two databases
-
+    Figure 6. Synchronizing between two databases
 
 Because CouchDB tracks document revisions, it ensures that updates like these
 will work only if they are based on current information. If we had made
@@ -439,15 +419,13 @@ perspective. Just download CouchDB's version of the playlist and provide an
 opportunity to merge the changes or save local modifications into a new
 playlist.
 
-
 .. _intro/consistency-07:
 
 .. figure:: ../../images/intro-consistency-07.png
-   :align: center
-   :alt: Synchronization conflicts between two databases
+    :align: center
+    :alt: Synchronization conflicts between two databases
 
-   Figure 7. Synchronization conflicts between two databases
-
+    Figure 7. Synchronization conflicts between two databases
 
 Wrapping Up
 ===========

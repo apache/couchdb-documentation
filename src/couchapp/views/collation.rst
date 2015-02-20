@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _views/collation:
 
 ===============
@@ -26,11 +25,11 @@ property serves as the key, thus the result will be sorted by ``LastName``:
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc.Type == "customer") {
-      emit(doc.LastName, {FirstName: doc.FirstName, Address: doc.Address});
+    function(doc) {
+        if (doc.Type == "customer") {
+            emit(doc.LastName, {FirstName: doc.FirstName, Address: doc.Address});
+        }
     }
-  }
 
 CouchDB allows arbitrary JSON structures to be used as keys. You can use JSON
 arrays as keys for fine-grained control over sorting and grouping.
@@ -47,19 +46,23 @@ associated orders. The values 0 and 1 for the sorting token are arbitrary.
 
 .. code-block:: javascript
 
-  function(doc) {
-    if (doc.Type == "customer") {
-      emit([doc._id, 0], null);
-    } else if (doc.Type == "order") {
-      emit([doc.customer_id, 1], null);
+    function(doc) {
+        if (doc.Type == "customer") {
+            emit([doc._id, 0], null);
+        } else if (doc.Type == "order") {
+            emit([doc.customer_id, 1], null);
+        }
     }
-  }
 
-To list a specific customer with ``_id`` XYZ, and all of that customer's orders, limit the startkey and endkey ranges to cover only documents for that customer's ``_id``::
+To list a specific customer with ``_id`` XYZ, and all of that customer's orders,
+limit the startkey and endkey ranges to cover only documents for that customer's
+``_id``::
 
-  startkey=["XYZ"]&endkey=["XYZ", {}]
+    startkey=["XYZ"]&endkey=["XYZ", {}]
 
-It is not recommended to emit the document itself in the view. Instead, to include the bodies of the documents when requesting the view, request the view with ``?include_docs=true``.
+It is not recommended to emit the document itself in the view. Instead, to
+include the bodies of the documents when requesting the view, request the view
+with ``?include_docs=true``.
 
 Sorting by Dates
 ================
@@ -72,14 +75,14 @@ the following emit function would sort by date:
 
 .. code-block:: javascript
 
-  emit(Date.parse(doc.created_at).getTime(), null);
+    emit(Date.parse(doc.created_at).getTime(), null);
 
 Alternatively, if you use a date format which sorts lexicographically,
 such as ``"2013/06/09 13:52:11 +0000"`` you can just
 
 .. code-block:: javascript
 
-  emit(doc.created_at, null);
+    emit(doc.created_at, null);
 
 and avoid the conversion. As a bonus, this date format is compatible with the
 JavaScript date parser, so you can use ``new Date(doc.created_at)`` in your
@@ -94,11 +97,11 @@ suffix.
 
 That is, rather than::
 
-  startkey="abc"&endkey="abcZZZZZZZZZ"
+    startkey="abc"&endkey="abcZZZZZZZZZ"
 
 You should use::
 
-  startkey="abc"&endkey="abc\ufff0"
+    startkey="abc"&endkey="abc\ufff0"
 
 Collation Specification
 =======================
@@ -109,47 +112,47 @@ This section is based on the view_collation function in `view_collation.js`_:
 
 .. code-block:: javascript
 
-  // special values sort before all other types
-  null
-  false
-  true
+    // special values sort before all other types
+    null
+    false
+    true
 
-  // then numbers
-  1
-  2
-  3.0
-  4
+    // then numbers
+    1
+    2
+    3.0
+    4
 
-  // then text, case sensitive
-  "a"
-  "A"
-  "aa"
-  "b"
-  "B"
-  "ba"
-  "bb"
+    // then text, case sensitive
+    "a"
+    "A"
+    "aa"
+    "b"
+    "B"
+    "ba"
+    "bb"
 
-  // then arrays. compared element by element until different.
-  // Longer arrays sort after their prefixes
-  ["a"]
-  ["b"]
-  ["b","c"]
-  ["b","c", "a"]
-  ["b","d"]
-  ["b","d", "e"]
+    // then arrays. compared element by element until different.
+    // Longer arrays sort after their prefixes
+    ["a"]
+    ["b"]
+    ["b","c"]
+    ["b","c", "a"]
+    ["b","d"]
+    ["b","d", "e"]
 
-  // then object, compares each key value in the list until different.
-  // larger objects sort after their subset objects.
-  {a:1}
-  {a:2}
-  {b:1}
-  {b:2}
-  {b:2, a:1} // Member order does matter for collation.
-             // CouchDB preserves member order
-             // but doesn't require that clients will.
-             // this test might fail if used with a js engine
-             // that doesn't preserve order
-  {b:2, c:2}
+    // then object, compares each key value in the list until different.
+    // larger objects sort after their subset objects.
+    {a:1}
+    {a:2}
+    {b:1}
+    {b:2}
+    {b:2, a:1} // Member order does matter for collation.
+               // CouchDB preserves member order
+               // but doesn't require that clients will.
+               // this test might fail if used with a js engine
+               // that doesn't preserve order
+    {b:2, c:2}
 
 Comparison of strings is done using `ICU`_ which implements the
 `Unicode Collation Algorithm`_, giving a dictionary sorting of keys.
@@ -172,50 +175,50 @@ You can demonstrate the collation sequence for 7-bit ASCII characters like this:
 
 .. code-block:: ruby
 
-  require 'rubygems'
-  require 'restclient'
-  require 'json'
+    require 'rubygems'
+    require 'restclient'
+    require 'json'
 
-  DB="http://127.0.0.1:5984/collator"
+    DB="http://127.0.0.1:5984/collator"
 
-  RestClient.delete DB rescue nil
-  RestClient.put "#{DB}",""
+    RestClient.delete DB rescue nil
+    RestClient.put "#{DB}",""
 
-  (32..126).each do |c|
-    RestClient.put "#{DB}/#{c.to_s(16)}", {"x"=>c.chr}.to_json
-  end
+    (32..126).each do |c|
+        RestClient.put "#{DB}/#{c.to_s(16)}", {"x"=>c.chr}.to_json
+    end
 
-  RestClient.put "#{DB}/_design/test", <<EOS
-  {
-    "views":{
-      "one":{
-        "map":"function (doc) { emit(doc.x,null); }"
-      }
+    RestClient.put "#{DB}/_design/test", <<EOS
+    {
+        "views":{
+            "one":{
+                "map":"function (doc) { emit(doc.x,null); }"
+            }
+        }
     }
-  }
-  EOS
+    EOS
 
-  puts RestClient.get("#{DB}/_design/test/_view/one")
+    puts RestClient.get("#{DB}/_design/test/_view/one")
 
 This shows the collation sequence to be::
 
-  ` ^ _ - , ; : ! ? . ' " ( ) [ ] { } @ * / \ & # % + < = > | ~ $ 0 1 2 3 4 5 6 7 8 9
-  a A b B c C d D e E f F g G h H i I j J k K l L m M n N o O p P q Q r R s S t T u U v V w W x X y Y z Z
+    ` ^ _ - , ; : ! ? . ' " ( ) [ ] { } @ * / \ & # % + < = > | ~ $ 0 1 2 3 4 5 6 7 8 9
+    a A b B c C d D e E f F g G h H i I j J k K l L m M n N o O p P q Q r R s S t T u U v V w W x X y Y z Z
 
 Key ranges
 ----------
 
 Take special care when querying key ranges. For example: the query::
 
-  startkey="Abc"&endkey="AbcZZZZ"
+    startkey="Abc"&endkey="AbcZZZZ"
 
 will match "ABC" and "abc1", but not "abc". This is because UCA sorts as::
 
-  abc < Abc < ABC < abc1 < AbcZZZZZ
+    abc < Abc < ABC < abc1 < AbcZZZZZ
 
 For most applications, to avoid problems you should lowercase the `startkey`::
 
-  startkey="abc"&endkey="abcZZZZZZZZ"
+    startkey="abc"&endkey="abcZZZZZZZZ"
 
 will match all keys starting with ``[aA][bB][cC]``
 
@@ -232,12 +235,12 @@ _all_docs
 The :ref:`_all_docs <api/db/all_docs>`  view is a special case because it uses
 ASCII collation for doc ids, not UCA::
 
-  startkey="_design/"&endkey="_design/ZZZZZZZZ"
+    startkey="_design/"&endkey="_design/ZZZZZZZZ"
 
 will not find ``_design/abc`` because `'Z'` comes before `'a'` in the ASCII
 sequence. A better solution is::
 
-  startkey="_design/"&endkey="_design0"
+    startkey="_design/"&endkey="_design0"
 
 Raw collation
 =============
@@ -249,13 +252,13 @@ sequence:
 
 .. code-block:: javascript
 
-  1
-  false
-  null
-  true
-  {"a":"a"},
-  ["a"]
-  "a"
+    1
+    false
+    null
+    true
+    {"a":"a"},
+    ["a"]
+    "a"
 
 Beware that ``{}`` is no longer a suitable "high" key sentinel value. Use a
 string like ``"\ufff0"`` instead.

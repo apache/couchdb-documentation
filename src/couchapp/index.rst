@@ -24,8 +24,7 @@ your app is as simple as replicating it to the production server).
 .. _CouchApps: http://couchapp.org/
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   ddocs
-   views/index
-
+    ddocs
+    views/index

@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/0.10.x:
 
 =============
@@ -18,9 +17,8 @@
 =============
 
 .. contents::
-   :depth: 1
-   :local:
-
+    :depth: 1
+    :local:
 
 .. _release/0.10.x/upgrade:
 
@@ -28,9 +26,8 @@ Upgrade Notes
 =============
 
 .. warning::
-
-   :ref:`release/0.10.2` contains important security fixes. Previous `0.10.x`
-   releases are not recommended for regular usage.
+    :ref:`release/0.10.2` contains important security fixes. Previous `0.10.x`
+    releases are not recommended for regular usage.
 
 Modular Configuration Directories
 ---------------------------------
@@ -49,7 +46,6 @@ The configuration options for `couchdb` script have changed to::
   -A DIR      add configuration DIR to chain
   -n          reset configuration file chain (including system default)
   -c          print configuration file chain and exit
-
 
 .. _glob(7): http://linux.die.net/man/7/glob
 
@@ -72,7 +68,6 @@ View query reduce parameter strictness
 CouchDB now considers the parameter ``reduce=false`` to be an error for queries
 of map-only views, and responds with status code 400.
 
-
 .. _release/0.10.2:
 
 Version 0.10.2
@@ -92,7 +87,6 @@ Replicator
 ----------
 
 * Avoid leaking file descriptors on automatic replication restarts.
-
 
 .. _release/0.10.1:
 
@@ -119,7 +113,6 @@ Stats
 -----
 
 * Eliminate new process flood on system wake
-
 
 .. _release/0.10.0:
 

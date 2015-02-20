@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _release/0.11.x:
 
 =============
@@ -18,9 +17,8 @@
 =============
 
 .. contents::
-   :depth: 1
-   :local:
-
+    :depth: 1
+    :local:
 
 .. _release/0.11.x/upgrade:
 
@@ -28,9 +26,8 @@ Upgrade Notes
 =============
 
 .. warning::
-
-   :ref:`release/0.11.2` contains important security fixes. Previous `0.11.x`
-   releases are not recommended for regular usage.
+    :ref:`release/0.11.2` contains important security fixes. Previous `0.11.x`
+    releases are not recommended for regular usage.
 
 Changes Between 0.11.0 and 0.11.1
 ---------------------------------
@@ -45,7 +42,6 @@ Changes Between 0.11.0 and 0.11.1
   contain JSON objects representing the URL encoded string values in the query
   string. Previously, these properties contained strings which needed to be
   converted to JSON before using.
-
 
 Changes Between 0.10.x and 0.11.0
 ---------------------------------
@@ -89,7 +85,6 @@ to return a string value. :commit:`8d3b7ab3`
 
 .. _json2.js: https://github.com/douglascrockford/JSON-js/blob/master/json2.js
 
-
 WWW-Authenticate
 ^^^^^^^^^^^^^^^^
 
@@ -120,7 +115,6 @@ _changes line format
 
 Continuous changes are now newline delimited, instead of having each line
 followed by a comma.
-
 
 .. _release/0.11.2:
 
@@ -155,7 +149,6 @@ Security
 
 * Avoid potential DOS attack by guarding all creation of atoms.
 * Fixed :ref:`cve/2010-2234`
-
 
 .. _release/0.11.1:
 
@@ -268,7 +261,6 @@ URL Rewriter & Vhosts
 * Allow global rewrites so system defaults are available in vhosts.
 * Allow isolation of databases with vhosts.
 * Fix issue with passing variables to query parameters.
-
 
 .. _release/0.11.0:
 

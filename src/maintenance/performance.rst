@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _performance:
 
 ===========
@@ -20,7 +19,6 @@ Performance
 With up to tens of thousands of documents you will generally find CouchDB to
 perform well no matter how you write your code. Once you start getting into
 the millions of documents you need to be a lot more careful.
-
 
 Disk I/O
 ========
@@ -36,7 +34,6 @@ that are hundreds of characters long, but your program would be hard to
 maintain if you only used single character keys. Carefully consider data
 that is duplicated by putting it in views.
 
-
 Disk and File System Performance
 --------------------------------
 
@@ -45,10 +42,10 @@ up your CouchDB deployment. However, there is one option that can increase
 the responsiveness of your CouchDB server when disk performance is a
 bottleneck. From the Erlang documentation for the file module:
 
-  On operating systems with thread support, it is possible to let file
-  operations be performed in threads of their own, allowing other Erlang
-  processes to continue executing in parallel with the file operations.
-  See the `command line flag +A in erl(1)`_.
+    On operating systems with thread support, it is possible to let file
+    operations be performed in threads of their own, allowing other Erlang
+    processes to continue executing in parallel with the file operations.
+    See the `command line flag +A in erl(1)`_.
 
 Setting this argument to a number greater than zero can keep your CouchDB
 installation responsive even during periods of heavy disk utilization. The
@@ -57,11 +54,9 @@ variable. For example, to give Erlang four threads with which to perform I/O
 operations add the following to ``(prefix)/etc/defaults/couchdb``
 (or equivalent)::
 
-  export ERL_FLAGS="+A 4"
-
+    export ERL_FLAGS="+A 4"
 
 .. _command line flag +A in erl(1): http://erlang.org/doc/man/erl.html
-
 
 System Resource Limits
 ======================
@@ -70,7 +65,6 @@ One of the problems that administrators run into as their deployments become
 large are resource limits imposed by the system and by the application
 configuration. Raising these limits can allow your deployment to grow beyond
 what the default configuration will support.
-
 
 CouchDB Configuration Options
 -----------------------------
@@ -93,15 +87,14 @@ yourself with the :config:option:`couchdb/max_dbs_open`:
 
 .. code-block:: ini
 
-  [couchdb]
-  max_dbs_open = 100
+    [couchdb]
+    max_dbs_open = 100
 
 This option places an upper bound on the number of databases that can be
 open at one time. CouchDB reference counts database accesses internally and
 will close idle databases when it must. Sometimes it is necessary to keep
 more than the default open at once, such as in deployments where many databases
 will be continuously replicating.
-
 
 Erlang
 ------
@@ -111,7 +104,7 @@ the Erlang runtime system will not allow more than 1024 connections by
 default. Adding the following directive to ``(prefix)/etc/default/couchdb`` (or
 equivalent) will increase this limit (in this case to 4096)::
 
-  export ERL_MAX_PORTS=4096
+    export ERL_MAX_PORTS=4096
 
 CouchDB versions up to 1.1.x also create Erlang Term Storage (`ETS`_) tables for
 each replication. If you are using a version of CouchDB older than 1.2 and
@@ -127,7 +120,6 @@ explanation`_.
 .. _this tip for a possible workaround: http://erlang.org/pipermail/erlang-questions/2011-December/063119.html
 .. _this thread for a deeper explanation: http://erlang.org/pipermail/erlang-questions/2011-October/061971.html
 
-
 PAM and ulimit
 --------------
 
@@ -138,9 +130,9 @@ creating a file named ``/etc/security/limits.d/100-couchdb.conf`` with the
 following contents will ensure that CouchDB can open enough file descriptors
 to service your increased maximum open databases and Erlang ports::
 
-  #<domain>    <type>    <item>    <value>
-  couchdb      hard      nofile    4096
-  couchdb      soft      nofile    4096
+    #<domain>    <type>    <item>    <value>
+    couchdb      hard      nofile    4096
+    couchdb      soft      nofile    4096
 
 If your system does not use PAM, a `ulimit` command is usually available for
 use in a custom script to launch CouchDB with increased resource limits.
@@ -148,7 +140,6 @@ If necessary, feel free to increase this limits as long as your hardware can
 handle the load.
 
 .. _PAM: http://www.linux-pam.org/
-
 
 Network
 =======
@@ -179,15 +170,13 @@ This TCP buffering behaviour can be disabled via
 
 .. code-block:: ini
 
-  [httpd]
-  socket_options = [{nodelay, true}]
+    [httpd]
+    socket_options = [{nodelay, true}]
 
 .. _SO_NODELAY: http://en.wikipedia.org/wiki/Nagle%27s_algorithm
 
 .. seealso::
-
-   Bulk :ref:`load <api/db/all_docs>` and :ref:`store <api/db/bulk_docs>` API.
-
+    Bulk :ref:`load <api/db/all_docs>` and :ref:`store <api/db/bulk_docs>` API.
 
 CouchDB
 =======
@@ -207,7 +196,6 @@ deleted documents (for example, if you are storing short-term data like logfile
 entries, message queues, etc), you might want to periodically switch to a new
 database and delete the old one (once the entries in it have all expired).
 
-
 Document's ID
 -------------
 
@@ -224,7 +212,6 @@ Consequently you should consider generating ids yourself, allocating them
 sequentially and using an encoding scheme that consumes fewer bytes.
 For example, something that takes 16 hex digits to represent can be done in
 4 base 62 digits (10 numerals, 26 lower case, 26 upper case).
-
 
 Views
 =====
@@ -246,7 +233,6 @@ minutes to load into CouchDB but about 4 hours to do view generation).
 View information isn't replicated - it is rebuilt on each database so you
 can't do the view generation on a separate sever.
 
-
 Builtin Reduce Functions
 ------------------------
 
@@ -262,32 +248,31 @@ Before:
 
 .. code-block:: javascript
 
-  {
-    "_id": "_design/foo",
-    "views": {
-      "bar": {
-        "map": "function (doc) { emit(doc.author, 1); }",
-        "reduce": "function (keys, values, rereduce) { return sum(values); }"
-      }
+    {
+        "_id": "_design/foo",
+        "views": {
+            "bar": {
+                "map": "function (doc) { emit(doc.author, 1); }",
+                "reduce": "function (keys, values, rereduce) { return sum(values); }"
+            }
+        }
     }
-  }
 
 After:
 
 .. code-block:: javascript
 
-  {
-    "_id": "_design/foo",
-    "views": {
-      "bar": {
-        "map": "function (doc) { emit(doc.author, 1); }",
-        "reduce": "_sum"
-      }
+    {
+        "_id": "_design/foo",
+        "views": {
+            "bar": {
+                "map": "function (doc) { emit(doc.author, 1); }",
+                "reduce": "_sum"
+            }
+        }
     }
-  }
 
 .. _mentioned on the mailing list: http://mail-archives.apache.org/mod_mbox/couchdb-user/201003.mbox/%3c5E07E00E-3D69-4A8C-ADA3-1B20CF0BA4C8@julianstahnke.com%3e
 
 .. seealso::
-
-   :ref:`reducefun/builtin`
+    :ref:`reducefun/builtin`

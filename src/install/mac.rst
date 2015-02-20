@@ -10,13 +10,11 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _install/mac:
 
 ========================
 Installation on Mac OS X
 ========================
-
 
 .. _install/mac/binary:
 
@@ -76,12 +74,11 @@ Now it's time to brew CouchDB::
 
     brew install couchdb
 
-
 The above Erlang install will use the bottled (pre-compiled) version if you are:
 using `/usr/local` for `homebrew`, and on 10.6 or 10.7. If you're not on one of
 these, `homebrew` will build from source, so consider doing::
 
-  brew install erlang --no-docs
+    brew install erlang --no-docs
 
 to trim down compilation time.
 
@@ -91,18 +88,15 @@ git-based master (head) branch, or the next development release using this
 This will allow quick installation of the future release branch when it becomes
 active. If you're not sure if you need this, then you probably don't.
 In both cases we assume you are comfortable identifying bugs, and handling any
-potential upgrades between commits to the codebase.
+potential upgrades between commits to the codebase. ::
 
-::
-
-  brew install [--devel|--head] couchdb
+    brew install [--devel|--head] couchdb
 
 .. note::
-
-   OS X Lion might hang on the final brew.
-   See the thread at https://github.com/mxcl/homebrew/issues/7024 it seems in
-   most cases to be resolved by breaking out with ``CTRL-C`` and then repeating
-   with ``brew install -v couchdb``.
+    OS X Lion might hang on the final brew.
+    See the thread at https://github.com/mxcl/homebrew/issues/7024 it seems in
+    most cases to be resolved by breaking out with ``CTRL-C`` and then repeating
+    with ``brew install -v couchdb``.
 
 If you wish to have CouchDB run as a daemon then, set up the account,
 using the "User & Groups" preference pane:
@@ -120,7 +114,6 @@ experiencing troubles with CouchDB crashing intermittently with a segmentation
 fault or a bus error, you will need to install your own version of OpenSSL.
 
 .. _Homebrew: http://mxcl.github.com/homebrew/
-
 
 Running as a Daemon
 -------------------
@@ -168,20 +161,20 @@ To install CouchDB using MacPorts you have 2 package choices:
 
 ::
 
-  $ sudo port install couchdb
+    $ sudo port install couchdb
 
 should be enough. MacPorts takes care of installing all necessary dependencies.
 If you have already installed some of the CouchDB dependencies via MacPorts,
 run this command to check and upgrade any outdated ones, after installing
 CouchDB::
 
-  $ sudo port upgrade couchdb
+    $ sudo port upgrade couchdb
 
 This will upgrade dependencies recursively, if there are more recent versions
 available. If you want to run CouchDB as a service controlled by the OS, load
 the launchd configuration which comes with the project, with this command::
 
-  $ sudo port load couchdb
+    $ sudo port load couchdb
 
 and it should be up and accessible via Futon at http://127.0.0.1:5984/_utils.
 It should also be restarted automatically after reboot.
@@ -189,6 +182,6 @@ It should also be restarted automatically after reboot.
 Updating the ports collection. The collection of port files has to be updated
 to reflect the latest versions of available packages. In order to do that run::
 
-  $ sudo port selfupdate
+    $ sudo port selfupdate
 
 to update the port tree, and then install just as explained.

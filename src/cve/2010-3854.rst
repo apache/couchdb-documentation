@@ -10,7 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _cve/2010-3854:
 
 ========================================================
@@ -24,7 +23,6 @@ CVE-2010-3854: Apache CouchDB Cross Site Scripting Issue
 :Severity: Important
 
 :Vendor: The Apache Software Foundation
-
 
 Description
 ===========

@@ -29,9 +29,9 @@ previous revisions that were only on the source database are not copied to the
 destination database.
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   intro
-   protocol
-   replicator
-   conflicts
+    intro
+    protocol
+    replicator
+    conflicts

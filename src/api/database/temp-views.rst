@@ -10,70 +10,70 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-
 .. _api/db/temp_view:
 
+==================
 ``/db/_temp_view``
 ==================
 
 .. http:post:: /{db}/_temp_view
-  :synopsis: Executes a given view function for all documents and returns the result
+    :synopsis: Executes a given view function for all documents and returns the result
 
-  Creates (and executes) a temporary view based on the view function
-  supplied in the JSON request.
+    Creates (and executes) a temporary view based on the view function
+    supplied in the JSON request.
 
-  The arguments also available to standard view requests also apply to
-  temporary views, but the execution of the view may take some time as it
-  relies on being executed at the time of the request. This means that for
-  every temporary view you create, the entire database will be read
-  one doc at a time and passed through the view function.
+    The arguments also available to standard view requests also apply to
+    temporary views, but the execution of the view may take some time as it
+    relies on being executed at the time of the request. This means that for
+    every temporary view you create, the entire database will be read
+    one doc at a time and passed through the view function.
 
-  This should not be used on production CouchDB instances, and is purely a
-  convenience function for quick development testing. You should use a
-  defined view if you want to achieve the best performance.
+    This should not be used on production CouchDB instances, and is purely a
+    convenience function for quick development testing. You should use a
+    defined view if you want to achieve the best performance.
 
-  See :ref:`api/ddoc/view` for more info.
+    See :ref:`api/ddoc/view` for more info.
 
-  **Request**:
+    **Request**:
 
-  .. code-block:: http
+    .. code-block:: http
 
-    POST /db/_temp_view?group=true HTTP/1.1
-    Accept: application/json
-    Content-Length: 92
-    Content-Type: application/json
-    Host: localhost:5984
+        POST /db/_temp_view?group=true HTTP/1.1
+        Accept: application/json
+        Content-Length: 92
+        Content-Type: application/json
+        Host: localhost:5984
 
-    {
-        "map": "function(doc) { if (doc.value) { emit(doc.value, null); } }",
-        "reduce": "_count"
-    }
+        {
+            "map": "function(doc) { if (doc.value) { emit(doc.value, null); } }",
+            "reduce": "_count"
+        }
 
-  **Response**:
+    **Response**:
 
-  .. code-block:: http
+    .. code-block:: http
 
-    HTTP/1.1 200 OK
-    Cache-Control: must-revalidate
-    Content-Type: application/json
-    Date: Tue, 13 Aug 2013 12:28:12 GMT
-    ETag: "AU33B3N7S9K4SAZSFA048HVB4"
-    Server: CouchDB (Erlang/OTP)
-    Transfer-Encoding: chunked
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Tue, 13 Aug 2013 12:28:12 GMT
+        ETag: "AU33B3N7S9K4SAZSFA048HVB4"
+        Server: CouchDB (Erlang/OTP)
+        Transfer-Encoding: chunked
 
-    {
-        "rows": [
-            {
-                "key": -10,
-                "value": 1
-            },
-            {
-                "key": 10,
-                "value": 2
-            },
-            {
-                "key": 15,
-                "value": 1
-            }
-        ]
-    }
+        {
+            "rows": [
+                {
+                    "key": -10,
+                    "value": 1
+                },
+                {
+                    "key": 10,
+                    "value": 2
+                },
+                {
+                    "key": 15,
+                    "value": 1
+                }
+            ]
+        }
