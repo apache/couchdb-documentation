@@ -115,7 +115,7 @@ extlinks = {
     'commit': ('https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=commit;h=%s', '#')
 }
 
-github_project = 'apache/couchdb'
+github_project = 'apache/couchdb-documentation'
 
 html_context['git_branch'] = github_branch = 'master'
 
