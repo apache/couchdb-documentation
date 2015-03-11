@@ -12,13 +12,10 @@
 
 SPHINXBUILD  := sphinx-build
 BUILDDIR     := build
-COUCHVERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo unknown)
-COUCHDOCSHA  := $(shell git rev-parse --verify --short HEAD 2>/dev/null || echo src)
-COUCHRELEASE := $(COUCHVERSION)-git-$(COUCHDOCSHA)
 SOURCE       := src/
 PAPERSIZE    := -D latex_paper_size=a4
 SPHINXFLAGS  := -a -E -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
-SPHINXOPTS   := $(SPHINXFLAGS) -D version=$(COUCHVERSION) -D release=$(COUCHRELEASE) $(SOURCE)
+SPHINXOPTS   := $(SPHINXFLAGS) $(SOURCE)
 
 all: distclean html pdf info man install clean
 
