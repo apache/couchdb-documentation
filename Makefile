@@ -50,6 +50,9 @@ info:
 man:
 	$(SPHINXBUILD) -b man $(SPHINXOPTS) $(BUILDDIR)/man
 
+check:
+	python ext/linter.py $(SOURCE)
+
 install-html:
 install-pdf:
 install-info:
