@@ -247,10 +247,10 @@ and get no indication as to whether other conflicting revisions exist or not:
         "hello":"bar"
     }
 
-If you do ``GET /db/bob?conflicts=true``, and the document is in a conflict
+If you do ``GET /db/test?conflicts=true``, and the document is in a conflict
 state, then you will get the winner plus a _conflicts member containing an array
 of the revs of the other, conflicting revision(s). You can then fetch them
-individually using subsequent ``GET /db/bob?rev=xxxx`` operations:
+individually using subsequent ``GET /db/test?rev=xxxx`` operations:
 
 .. code-block:: javascript
 
@@ -264,7 +264,7 @@ individually using subsequent ``GET /db/bob?rev=xxxx`` operations:
         ]
     }
 
-If you do ``GET /db/bob?open_revs=all`` then you will get all the leaf nodes of
+If you do ``GET /db/test?open_revs=all`` then you will get all the leaf nodes of
 the revision tree. This will give you all the current conflicts, but will also
 give you leaf nodes which have been deleted (i.e. parts of the conflict history
 which have since been resolved). You can remove these by filtering out documents
