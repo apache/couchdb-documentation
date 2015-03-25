@@ -121,7 +121,8 @@ Erlang
     :param Headers: Proplist of :ref:`response object<response_object>`.
 
     Initialize :ref:`listfun` response. At this point, response code and headers
-    may be defined. For example, this function redirects to the CouchDB web site:
+    may be defined. For example, this function redirects to the CouchDB
+    web site:
 
     .. code-block:: erlang
 

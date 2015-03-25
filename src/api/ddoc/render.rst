@@ -138,7 +138,8 @@
 ====================================================
 
 .. http:get:: /{db}/_design/{ddoc}/_list/{func}/{view}
-    :synopsis: Executes a list function against the view from the same design document
+    :synopsis: Executes a list function against the view from the same
+               design document
 
 .. http:post:: /{db}/_design/{ddoc}/_list/{func}/{view}
     :synopsis: Same as GET method for the related endpoint
@@ -204,7 +205,8 @@
 ===============================================================
 
 .. http:get:: /{db}/_design/{ddoc}/_list/{func}/{other-ddoc}/{view}
-    :synopsis: Executes a list function against the view from other design document
+    :synopsis: Executes a list function against the view from other
+               design document
 
 .. http:post:: /{db}/_design/{ddoc}/_list/{func}/{other-ddoc}/{view}
     :synopsis: Same as GET method for the related endpoint

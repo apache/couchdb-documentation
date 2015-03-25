@@ -127,7 +127,8 @@ an expensive operation as every document in the database must be examined.
 =====================
 
 .. http:post:: /{db}/_missing_revs
-    :synopsis: By given list of document revisions returns the document revisions that do not exist in the database
+    :synopsis: By given list of document revisions returns the document
+               revisions that do not exist in the database
 
     With given a list of document revisions, returns the document revisions
     that do not exist in the database.
@@ -187,7 +188,8 @@ an expensive operation as every document in the database must be examined.
 ==================
 
 .. http:post:: /{db}/_revs_diff
-    :synopsis: By given list of document revisions returns differences between the given revisions and ones that are in the database
+    :synopsis: By given list of document revisions returns differences between
+               the given revisions and ones that are in the database
 
     Given a set of document/revision IDs, returns the subset of those that do
     not correspond to revisions stored in the database.
@@ -270,7 +272,8 @@ an expensive operation as every document in the database must be examined.
 ===================
 
 .. http:get:: /{db}/_revs_limit
-    :synopsis: Returns the limit of historical revisions to store for a single document in the database
+    :synopsis: Returns the limit of historical revisions to store for
+               a single document in the database
 
     Gets the current ``revs_limit`` (revision limit) setting.
 
@@ -303,7 +306,8 @@ an expensive operation as every document in the database must be examined.
         1000
 
 .. http:put:: /{db}/_revs_limit
-    :synopsis: Sets the limit of historical revisions to store for a single document in the database
+    :synopsis: Sets the limit of historical revisions to store for
+               a single document in the database
 
     Sets the maximum number of document revisions that will be tracked by
     CouchDB, even after compaction has occurred. You can set the revision limit

@@ -17,7 +17,8 @@
 ==========================
 
 .. http:head:: /{db}/_design/{ddoc}
-    :synopsis: Returns bare information in the HTTP Headers for the design document
+    :synopsis: Returns bare information in the HTTP Headers for
+               the design document
 
     Returns the HTTP Headers containing a minimal amount of information about
     the specified design document.

@@ -87,7 +87,8 @@
 ===========================
 
 .. http:post:: /{db}/_compact/{ddoc}
-    :synopsis: Starts a compaction for all the views in the selected design document
+    :synopsis: Starts a compaction for all the views in the selected
+               design document
 
     Compacts the view indexes associated with the specified design document.
     If may be that compacting a large view can return more storage than
@@ -145,7 +146,8 @@
 ===========================
 
 .. http:post:: /{db}/_ensure_full_commit
-    :synopsis: Makes sure all uncommitted changes are written and synchronized to the disk
+    :synopsis: Makes sure all uncommitted changes are written and synchronized
+               to the disk
 
     Commits any recent changes to the specified database to disk. You should
     call this if you want to ensure that recent changes have been flushed.
@@ -160,8 +162,8 @@
     :<header Content-Type: :mimetype:`application/json`
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>json string instance_start_time: Timestamp of when the database was opened,
-      expressed in microseconds since the epoch.
+    :>json string instance_start_time: Timestamp of when the database
+        was opened, expressed in microseconds since the epoch.
     :>json boolean ok: Operation status
     :code 201: Commit completed successfully
     :code 400: Invalid database name
@@ -204,7 +206,8 @@
     Removes view index files that are no longer required by CouchDB as a result
     of changed views within design documents. As the view filename is based on
     a hash of the view functions, over time old views will remain, consuming
-    storage. This call cleans up the cached view output on disk for a given view.
+    storage. This call cleans up the cached view output on disk for
+    a given view.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`

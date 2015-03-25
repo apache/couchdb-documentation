@@ -22,70 +22,73 @@
     Returns a sorted list of changes made to documents in the database, in time
     order of application, can be obtained from the database's ``_changes``
     resource. Only the most recent change for a given document is guaranteed to
-    be provided, for example if a document has had fields added, and then deleted,
-    an API client checking for changes will not necessarily receive the
-    intermediate state of added documents.
+    be provided, for example if a document has had fields added, and then
+    deleted, an API client checking for changes will not necessarily receive
+    the intermediate state of added documents.
 
     This can be used to listen for update and modifications to the database for
-    post processing or synchronization, and for practical purposes, a continuously
-    connected ``_changes`` feed is a reasonable approach for generating a
-    real-time log for most applications.
+    post processing or synchronization, and for practical purposes,
+    a continuously connected ``_changes`` feed is a reasonable approach for
+    generating a real-time log for most applications.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/event-stream`
                      - :mimetype:`text/plain`
     :<header Last-Event-ID: ID of the last events received by the server on a
-      previous connection. Overrides `since` query parameter.
+        previous connection. Overrides `since` query parameter.
     :query array doc_ids: List of document IDs to filter the changes feed as
-     valid JSON array. Used with :ref:`_doc_ids <changes/filter/doc_ids>` filter.
-     Since `length of URL is limited`_, it is better to use
-     :post:`/{db}/_changes` instead.
+        valid JSON array. Used with :ref:`_doc_ids <changes/filter/doc_ids>`
+        filter. Since `length of URL is limited`_, it is better to use
+        :post:`/{db}/_changes` instead.
     :query boolean conflicts: Includes `conflicts` information in response.
-      Ignored if `include_docs` isn't ``true``. Default is ``false``.
+        Ignored if `include_docs` isn't ``true``. Default is ``false``.
     :query boolean descending: Return the change results in descending sequence
-      order (most recent change first). Default is ``false``.
+        order (most recent change first). Default is ``false``.
     :query string feed: see :ref:`changes`. Default is ``normal``.
     :query string filter: Reference to a :ref:`filter function <filterfun>`
-      from a design document that will filter whole stream emitting only filtered
-      events. See the section `Change Notifications in the book
-      CouchDB The Definitive Guide`_ for more information.
-    :query number heartbeat: Period in *milliseconds* after which an empty line is
-      sent in the results. Only applicable for :ref:`longpoll <changes/longpoll>`
-      or :ref:`continuous <changes/continuous>` feeds. Overrides any timeout to
-      keep the feed alive indefinitely. Default is ``60000``. May be ``true`` to
-      use default value.
-    :query boolean include_docs: Include the associated document with each result.
-      If there are conflicts, only the winning revision is returned.
-      Default is ``false``.
+        from a design document that will filter whole stream emitting only
+        filtered events. See the section `Change Notifications in the book
+        CouchDB The Definitive Guide`_ for more information.
+    :query number heartbeat: Period in *milliseconds* after which an empty
+        line is sent in the results. Only applicable for :ref:`longpoll
+        <changes/longpoll>` or :ref:`continuous <changes/continuous>` feeds.
+        Overrides any timeout to keep the feed alive indefinitely.
+        Default is ``60000``. May be ``true`` to use default value.
+    :query boolean include_docs: Include the associated document with each
+        result. If there are conflicts, only the winning revision is returned.
+        Default is ``false``.
     :query boolean attachments: Include the Base64-encoded content of
-      :ref:`attachments <api/doc/attachments>` in the documents that are included
-      if `include_docs` is ``true``. Ignored if `include_docs` isn't ``true``.
-      Default is ``false``.
+        :ref:`attachments <api/doc/attachments>` in the documents that
+        are included if `include_docs` is ``true``. Ignored if `include_docs`
+        isn't ``true``. Default is ``false``.
     :query boolean att_encoding_info: Include encoding information in attachment
-      stubs if `include_docs` is ``true`` and the particular attachment is
-      compressed. Ignored if `include_docs` isn't ``true``. Default is ``false``.
+        stubs if `include_docs` is ``true`` and the particular attachment is
+        compressed. Ignored if `include_docs` isn't ``true``.
+        Default is ``false``.
     :query number last-event-id: Alias of `Last-Event-ID` header.
     :query number limit: Limit number of result rows to the specified value
-      (note that using ``0`` here has the same effect as ``1``).
+        (note that using ``0`` here has the same effect as ``1``).
     :query since: Start the results from the change immediately after the given
-      sequence number. Can be integer number or ``now`` value. Default is ``0``.
-    :query string style: Specifies how many revisions are returned in the changes
-      array. The default, ``main_only``, will only return the current "winning"
-      revision; ``all_docs`` will return all leaf revisions (including conflicts
-      and deleted former conflicts).
+        sequence number. Can be integer number or ``now`` value.
+        Default is ``0``.
+    :query string style: Specifies how many revisions are returned in
+        the changes array. The default, ``main_only``, will only return
+        the current "winning" revision; ``all_docs`` will return all leaf
+        revisions (including conflicts and deleted former conflicts).
     :query number timeout: Maximum period in *milliseconds* to wait for a change
-      before the response is sent, even if there are no results. Only applicable
-      for :ref:`longpoll <changes/longpoll>` or :ref:`continuous
-      <changes/continuous>` feeds. Default value is specified by
-      :config:option:`httpd/changes_timeout` configuration option.
-      Note that ``60000`` value is also the default maximum timeout to prevent
-      undetected dead connections.
+        before the response is sent, even if there are no results.
+        Only applicable for :ref:`longpoll <changes/longpoll>` or
+        :ref:`continuous <changes/continuous>` feeds.
+        Default value is specified by :config:option:`httpd/changes_timeout`
+        configuration option. Note that ``60000`` value is also the default
+        maximum timeout to prevent undetected dead connections.
     :query string view: Allows to use view functions as filters. Documents
-      counted as "passed" for view filter in case if map function emits at least
-      one record for them. See :ref:`changes/filter/view` for more info.
+        counted as "passed" for view filter in case if map function emits
+        at least one record for them.
+        See :ref:`changes/filter/view` for more info.
     :>header Cache-Control: ``no-cache`` if changes feed is
-      :ref:`eventsource <changes/eventsource>`
+        :ref:`eventsource <changes/eventsource>`
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/event-stream`
                            - :mimetype:`text/plain; charset=utf-8`

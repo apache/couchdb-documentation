@@ -221,11 +221,13 @@
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
-    :query string feed: - **longpoll**: Closes the connection after the first event.
-      - **continuous**: Send a line of JSON per event. Keeps the socket open
-        until ``timeout``.
-      - **eventsource**: Like, ``continuous``, but sends the events in
-        `EventSource <http://dev.w3.org/html5/eventsource/>`_ format.
+    :query string feed: - **longpoll**: Closes the connection after the first
+                          event.
+                        - **continuous**: Send a line of JSON per event.
+                          Keeps the socket open until ``timeout``.
+                        - **eventsource**: Like, ``continuous``, but sends
+                          the events in `EventSource
+                          <http://dev.w3.org/html5/eventsource/>`_ format.
     :query number timeout: Number of seconds until CouchDB closes the
       connection. Default is ``60``.
     :query boolean heartbeat: Whether CouchDB will send a newline character
@@ -472,8 +474,8 @@ Replication can be described as either push or pull replication:
   Pull replication is the most useful solution to use if your source database
   has a permanent IP address, and your destination (local) database may have a
   dynamically assigned IP address (for example, through DHCP). This is
-  particularly important if you are replicating to a mobile or other device from a
-  central server.
+  particularly important if you are replicating to a mobile or other device
+  from a central server.
 
 - *Push replication* is where the ``source`` is a local database, and
   ``target`` is a remote database.
@@ -766,6 +768,8 @@ The statistics are divided into the following top-level sections:
 
 Describes statistics specific to the internals of CouchDB
 
+.. lint: ignore errors for the next 17 lines
+
 +-------------------------+-------------------------------------------------------+----------------+
 | Statistic ID            | Description                                           | Unit           |
 +=========================+=======================================================+================+
@@ -806,6 +810,8 @@ Describes statistics specific to the internals of CouchDB
 ``httpd_status_codes``
 ======================
 
+.. lint: ignore errors for the next 29 lines
+
 +----------------+------------------------------------------------------+----------+
 | Statistic ID   | Description                                          | Unit     |
 +================+======================================================+==========+
@@ -838,6 +844,8 @@ Describes statistics specific to the internals of CouchDB
 
 ``httpd``
 =========
+
+.. lint: ignore errors for the next 13 lines
 
 +----------------------------------+----------------------------------------------+----------+
 | Statistic ID                     | Description                                  | Unit     |

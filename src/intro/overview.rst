@@ -102,8 +102,9 @@ Wasted space is recovered by occasional compaction. On schedule, or when the
 database file exceeds a certain amount of wasted space, the compaction process
 clones all the active data to a new file and then discards the old file.
 The database remains completely online the entire time and all updates and
-reads are allowed to complete successfully. The old database file is deleted only when
-all the data has been copied and all users transitioned to the new file.
+reads are allowed to complete successfully. The old database file is deleted
+only when all the data has been copied and all users transitioned to the new
+file.
 
 Views
 =====
@@ -130,9 +131,9 @@ View Model
 To address this problem of adding structure back to unstructured and
 semi-structured data, CouchDB integrates a view model. Views are the method
 of aggregating and reporting on the documents in a database, and are built
-on-demand to aggregate, join and report on database documents. Because views are built
-dynamically and don’t affect the underlying document, you can have as many
-different view representations of the same data as you like.
+on-demand to aggregate, join and report on database documents. Because views
+are built dynamically and don’t affect the underlying document, you can have
+as many different view representations of the same data as you like.
 
 View definitions are strictly virtual and only display the documents from the
 current database instance, making them separate from the data they display
@@ -337,7 +338,7 @@ reliability and availability.
 
 Both in syntax and semantics, Erlang is very different from conventional
 programming languages like C or Java. Erlang uses lightweight "processes" and
-message passing for concurrency, it has no shared state threading and all 
+message passing for concurrency, it has no shared state threading and all
 data is immutable. The robust, concurrent nature of Erlang is ideal for a
 database server.
 

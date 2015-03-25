@@ -232,7 +232,10 @@ Find Many
 ---------
 
 We talked about “getting all posts for last month.” If it’s February now,
-this is as easy as ``/blog/_design/docs/_view/by_date?startkey="2010/01/01 00:00:00"&endkey="2010/02/00 00:00:00"``.
+this is as easy as::
+
+    /blog/_design/docs/_view/by_date?startkey="2010/01/01 00:00:00"&endkey="2010/02/00 00:00:00"
+
 The ``startkey`` and ``endkey`` parameters specify an inclusive range on which
 we can search.
 
@@ -266,8 +269,10 @@ Table 2. New view results:
 | [2009, 1, 30, 18, 4, 11]  | "Bought a Cat"   |
 +---------------------------+------------------+
 
-And our queries change to
-``/blog/_design/docs/_view/by_date?startkey=[2010, 1, 1, 0, 0, 0]&endkey=[2010, 2, 1, 0, 0, 0]``.
+And our queries change to::
+
+    /blog/_design/docs/_view/by_date?startkey=[2010, 1, 1, 0, 0, 0]&endkey=[2010, 2, 1, 0, 0, 0]
+
 For all you care, this is just a change in syntax, not meaning. But it shows
 you the power of views. Not only can you construct an index with scalar values
 like strings and integers, you can also use JSON structures as keys for your

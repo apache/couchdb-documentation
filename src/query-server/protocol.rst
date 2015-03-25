@@ -231,8 +231,8 @@ keys and the list of values.
 When building a view, CouchDB will apply the reduce step directly to the output
 of the map step and the rereduce step to the output of a previous reduce step.
 
-CouchDB will send a list of reduce functions and a list of values, with no keys or
-document ids, to the rereduce step.
+CouchDB will send a list of reduce functions and a list of values, with no keys
+or document ids, to the rereduce step.
 
 CouchDB sends::
 

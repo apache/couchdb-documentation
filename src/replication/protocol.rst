@@ -1252,7 +1252,6 @@ it as stream with lesser memory footprint.
         5. ...
         6. PROFIT!
 
-
         --a81a77b0ca68389dda3243a43ca946f2--
         --7b1596fc4940bc1be725ad67f11ec1c4
         Content-Type: application/json; error="true"
@@ -1479,7 +1478,6 @@ any serialization overhead.
         4. Add tomato sauce
         5. ...
         6. PROFIT!
-
 
         --2fa48cba80d0cdba7829931fe8acce9d--
 

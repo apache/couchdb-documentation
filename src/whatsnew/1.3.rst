@@ -21,8 +21,9 @@
     :local:
 
 .. warning::
-    :ref:`release/1.3.x` is affected by the issue described in :ref:`cve/2014-2668`.
-    Upgrading to a more recent release is strongly recommended.
+    :ref:`release/1.3.x` is affected by the issue described in
+    :ref:`cve/2014-2668`. Upgrading to a more recent release is strongly
+    recommended.
 
 .. _release/1.3.x/upgrade:
 
@@ -112,7 +113,7 @@ HTTP Interface
 * :issue:`764`, :issue:`514`, :issue:`430`: Fix sending HTTP headers from
   ``_list`` function, :commit:`2a74f88375`
 * :issue:`887`: Fix ``bytes`` and ``offset`` parameters semantic for `_log`
-  resource (`explanation <https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blobdiff;f=src/couchdb/couch_log.erl;h=1b05f4db2;hp=0befe7aab;hb=ad700014;hpb=7809f3ca>`_)
+  resource (`explanation`_)
   :commit:`ad700014`
 * :issue:`986`: Added Server-Sent Events protocol to db changes API.
   See http://www.w3.org/TR/eventsource/ for details. :commit:`093d2aa6`
@@ -158,6 +159,8 @@ HTTP Interface
 * Restore 400 error for empty PUT, :commit:`2057b895`
 * Return ``X-Couch-Id`` header if doc is created, :commit:`98515bf0b9`
 * Support auth cookies with ``:`` characters, :commit:`d9566c831d`
+
+.. _explanation: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blobdiff;f=src/couchdb/couch_log.erl;h=1b05f4db2;hp=0befe7aab;hb=ad700014;hpb=7809f3ca
 
 Log System
 ----------

@@ -67,10 +67,11 @@ Deploy Fauxton to your local CouchDB instance:
 
     ./bin/grunt couchapp_deploy
 
-The Fauxton be available by http://localhost:5984/fauxton/_design/fauxton/index.html
+The Fauxton be available by `/fauxton/_design/fauxton/index.html
+<http://localhost:5984/fauxton/_design/fauxton/index.html>`_
 
-Understang Fauxton Code layout
-------------------------------
+Understanding Fauxton Code layout
+---------------------------------
 
 Each bit of functionality is its own separate module or addon.
 

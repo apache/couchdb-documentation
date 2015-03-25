@@ -192,7 +192,8 @@
 ==================
 
 .. http:post:: /{db}/_bulk_docs
-    :synopsis: Inserts or updates multiple documents in to the database in a single request
+    :synopsis: Inserts or updates multiple documents in to the database in
+               a single request
 
     The bulk document API allows you to create and update multiple documents
     at the same time within a single request. The basic operation is similar

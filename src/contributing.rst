@@ -217,8 +217,8 @@ The guidelines are in descending priority.
 #. Titles
 
    * The highest level titles in a file is over and underlined with ``=``.
-   * Lower level titles are underlined with the following characters in descending
-     order::
+   * Lower level titles are underlined with the following characters in
+     descending order::
 
         = - ^ *  + # ` : . " ~ _
 

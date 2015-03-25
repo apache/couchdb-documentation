@@ -16,7 +16,8 @@
 Replication and conflict model
 ==============================
 
-Let's take the following example to illustrate replication and conflict handling.
+Let's take the following example to illustrate replication and conflict
+handling.
 
 - Alice has a document containing Bob's business card;
 - She synchronizes it between her desktop PC and her laptop;
@@ -705,7 +706,7 @@ What is the CouchDB replication protocol? Is it like Git?
 
 :Author: Jason Smith
 :Date: 2011-01-29
-:Source: http://stackoverflow.com/questions/4766391/what-is-the-couchdb-replication-protocol-is-it-like-git
+:Source: `StackOverflow <http://stackoverflow.com/questions/4766391/what-is-the-couchdb-replication-protocol-is-it-like-git>`_
 
 **Key points**
 

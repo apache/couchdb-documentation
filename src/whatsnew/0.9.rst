@@ -59,8 +59,14 @@ Moved View URLs
 ---------------
 
 The view URLs have been moved to design document resources. This means that
-paths that used to be like http://hostname:5984/mydb/_view/designname/viewname?limit=10
-will now look like http://hostname:5984/mydb/_design/designname/_view/viewname?limit=10.
+paths that used to be like::
+
+    http://hostname:5984/mydb/_view/designname/viewname?limit=10
+
+will now look like::
+
+    http://hostname:5984/mydb/_design/designname/_view/viewname?limit=10.
+
 See the `REST, Hypermedia, and CouchApps`_  thread on dev for details.
 
 .. _REST, Hypermedia, and CouchApps: http://mail-archives.apache.org/mod_mbox/couchdb-dev/200902.mbox/%3Ce282921e0902242116n2cd207c4x7a9d0feced3f10d9@mail.gmail.com%3E
