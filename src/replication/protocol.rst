@@ -51,7 +51,7 @@ JSON:
     :rfc:`4627`.
 
 URI:
-    An URI is defined by :rfc:`2396`. It can be an URL as defined
+    A URI is defined by :rfc:`3986`. It can be a URL as defined
     in :rfc:`1738`.
 
 ID:
@@ -68,8 +68,8 @@ Leaf Revision:
 
 Document:
     A document is a JSON object with an ID and Revision defined in ``_id`` and
-    ``_rev`` fields respectively. Document's ID MUST be unique across
-    the Database where it stored.
+    ``_rev`` fields respectively. A Document's ID MUST be unique within
+    the Database where it is stored.
 
 Database:
     A collection of Documents with a unique URI.
@@ -80,7 +80,7 @@ Changes Feed:
 
 Sequence ID:
     An ID provided by the Changes Feed. It MUST be incremental,
-    but MAY NOT be always an integer.
+    but MAY NOT always be an integer.
 
 Source:
     Database from where the Documents are replicated.
@@ -92,7 +92,7 @@ Replication:
     The one-way directed synchronization process of Source and Target endpoints.
 
 Checkpoint:
-    Intermediate Recorded Sequence ID that used for Replication recovery.
+    Intermediate Recorded Sequence ID used for Replication recovery.
 
 Replicator:
     A service or an application which initiates and runs Replication.
@@ -106,7 +106,7 @@ Filter Function Name:
     callback function) to apply the related Filter Function to Replication.
 
 Filtered Replication:
-    Replication of Documents from Source to Target which pass a Filter Function.
+    Replication of Documents from Source to Target using a Filter Function.
 
 Full Replication:
     Replication of all Documents from Source to Target.
@@ -118,13 +118,13 @@ Pull Replication:
     Replication process where Source is a remote endpoint and Target is local.
 
 Continuous Replication:
-    Replication that "never stops": after processing all events from
-    Changes Feed, Replicator doesn't close the connection, but awaits new change
-    events from the Source. The connection keeps alive by periodical heartbeats.
+    Replication that "never stops": after processing all events from the
+    Changes Feed, the Replicator doesn't close the connection, but awaits new change
+    events from the Source. The connection is kept alive by periodic heartbeats.
 
 Replication Log:
     A special Document that holds Replication history (recorded Checkpoints
-    and few more statistics) between Source and Target.
+    and a few more statistics) between Source and Target.
 
 Replication ID:
     A unique value that unambiguously identifies the Replication Log.
@@ -132,20 +132,20 @@ Replication ID:
 Replication Protocol Algorithm
 ==============================
 
-The `CouchDB Replication Protocol` is not something *magical*, but
-an agreement on usage of the public :ref:`CouchDB HTTP REST API <api>` in some
-specific way to effectively replicate Documents from Source to Target.
+The `CouchDB Replication Protocol` is not *magical*, but
+an agreement on usage of the public :ref:`CouchDB HTTP REST API <api>` to
+enable Documents to be replicated from Source to Target.
 
 The reference implementation, written in Erlang_, is provided by the
 couch_replicator_ module in Apache CouchDB.
 
-It is RECOMMENDED to follow this algorithm specification and use the same
-HTTP endpoints and run requests with the same parameters to provide completely
-compatible solution. Custom Replicator implementations MAY use different
-HTTP API endpoints and requests parameters depending on their local specifics
-as like as they MAY implement only part of Replication Protocol to run only Push
-or Pull Replication. However, while such solutions could also run Replication
-process, they loose compatibility with CouchDB Replicator.
+It is RECOMMENDED that one follow this algorithm specification, use the same
+HTTP endpoints, and run requests with the same parameters to provide a completely
+compatible implementation. Custom Replicator implementations MAY use different
+HTTP API endpoints and request parameters depending on their local specifics
+and they MAY implement only part of the Replication Protocol to run only Push
+or Pull Replication. However, while such solutions could also run the Replication
+process, they loose compatibility with the CouchDB Replicator.
 
 Verify Peers
 ------------
@@ -172,7 +172,7 @@ Verify Peers
     '       |                          | 404 Not Found                      |   '
     '       v                          v                                    |   '
     '   +-------+    No              +--------------------------------+     |   '
-    '   | Abort | <----------------- |      May be Create Target?     |     |   '
+    '   | Abort | <----------------- |         Create Target?         |     |   '
     '   +-------+                    +--------------------------------+     |   '
     '       ^                          |                                    |   '
     '       |                          | Yes                                |   '
@@ -198,7 +198,7 @@ Verify Peers
     '                                                                           '
     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 
-First of all, Replicator MUST ensure that both Source and Target are exists
+The Replicator MUST ensure that both Source and Target exist
 by using :head:`/{db}` requests.
 
 Check Source Existence
@@ -243,10 +243,10 @@ Check Target Existence
         Date: Sat, 05 Oct 2013 08:51:11 GMT
         Server: CouchDB (Erlang/OTP)
 
-May be Create Target?
-^^^^^^^^^^^^^^^^^^^^^
+Create Target?
+^^^^^^^^^^^^^^
 
-In case of non-existent Target, Replicator MAY made additional :put:`/{db}`
+In case of a non-existent Target, the Replicator MAY make a :put:`/{db}` 
 request to create the Target:
 
     **Request**:
@@ -272,10 +272,10 @@ request to create the Target:
             "ok": true
         }
 
-However, Replicator MAY NOT succeeded on this operation due to insufficient
-privileges (which are granted by provided credential) and receiving
-:statuscode:`401` or :statuscode:`403` error SHOULD be expected and
-well handled:
+However, the Replicator's PUT request MAY NOT succeeded due to insufficient
+privileges (which are granted by the provided credential) and so receive a
+:statuscode:`401` or a :statuscode:`403` error. Such errors SHOULD be expected 
+and well handled:
 
     .. code-block:: http
 
@@ -294,7 +294,7 @@ well handled:
 Abort
 ^^^^^
 
-In case of non-existent Source or Target, Replication SHOULD be aborted with
+In case of a non-existent Source or Target, Replication SHOULD be aborted with
 an HTTP error response:
 
     .. code-block:: http
@@ -348,7 +348,7 @@ Get Peers Information
     + - - - - - - - - - - - - - - - - - - | - - - - - - - - - - - - - -+
                                           |
     + - - - - - - - - - - - - - - - - - - | - - - - - - - - - - - - - -+
-    ' Find out Common Ancestry:           |                            '
+    ' Find Common Ancestry:               |                            '
     '                                     |                            '
     '                                     v                            '
     '                         +-------------------------+              '
@@ -357,17 +357,17 @@ Get Peers Information
     '                                                                  '
     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
 
-Replicator retrieves basic information both from Source and Target using
-:get:`/{db}` request to them. The response MUST contains JSON object with
-the next mandatory fields:
+The Replicator retrieves basic information both from Source and Target using
+:get:`/{db}` requests. The GET response MUST contain JSON objects with
+the following mandatory fields:
 
-- **instance_start_time** (*string*): Timestamp of when the Database was
+- **instance_start_time** (*string*): Timestamp when the Database was
   opened, expressed in *microseconds* since the epoch.
 - **update_seq** (*number* / *string*): The current database Sequence ID.
 
-Any other fields are optional. The information that Replicator seeks
-is the ``update_seq`` field: this value will be used to define *temporary*
-(because Database data always could be updated) upper bounder for changes feed
+Any other fields are optional. The information that the Replicator needs
+is the ``update_seq`` field: this value will be used to define a *temporary*
+(because Database data is subject to change) upper bound for changes feed
 listening and statistic calculating to show proper Replication progress.
 
 Get Source Information
@@ -444,7 +444,7 @@ Get Target Information
             "update_seq": "1841-g1AAAADveJzLYWBgYMlgTmGQT0lKzi9KdUhJMtbLSs1LLUst0k"
         }
 
-Find out Common Ancestry
+Find Common Ancestry
 ------------------------
 
 .. code-block:: text
@@ -459,7 +459,7 @@ Find out Common Ancestry
     + - - - - - - - - - - - - - - - | - - - - - - - - - - - - - - - - - - - - - +
                                     |
     + - - - - - - - - - - - - - - - | - - - - - - - - - - - - - - - - - - - - - +
-    ' Find out Common Ancestry:     v                                           '
+    ' Find Common Ancestry:         v                                           '
     '                             +-------------------------------------------+ '
     '                             |          Generate Replication ID          | '
     '                             +-------------------------------------------+ '
@@ -506,26 +506,26 @@ Find out Common Ancestry
 Generate Replication ID
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Before Replication will be started, Replicator MUST generate the Replication ID.
+Before Replication is started, the Replicator MUST generate a Replication ID.
 This value is used to track Replication History, resume and continue previously
 interrupted Replication process.
 
-The algorithm of Replication ID generation is depends on Replicator
-implementation with the only one restriction: it MUST unique define Replication
-process. As for CouchDB Replicator, the algorithm takes into account:
+The Replication ID generation algorithm is implementation specific. Whatever 
+algorithm is used it MUST uniquely identify the Replication process. CouchDB's
+Replicator, for example, uses the following factors in generating a Replication ID:
 
 - Persistent Peer UUID value. For CouchDB, the local
   :config:option:`Server UUID <couchdb/uuid>` is used
-- Source and Target URI and is Source or Target local or remote Databases
-- If Target need to be created or not
-- If Replication Continuous or not
+- Source and Target URI and if Source or Target are local or remote Databases
+- If Target needed to be created
+- If Replication is Continuous
 - OAuth headers if any
 - Any custom headers
 - :ref:`Filter function <filterfun>` code if used
-- Changes Feed query parameters if any
+- Changes Feed query parameters, if any
 
 .. note::
-    See `couch_replicator_utils.erl`_ for the detailed Replication ID generation
+    See `couch_replicator_utils.erl`_ for an example of a Replication ID generation
     implementation.
 
     .. _couch_replicator_utils.erl: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob;f=src/couch_replicator/src/couch_replicator_utils.erl;h=d7778db;hb=HEAD
@@ -533,9 +533,8 @@ process. As for CouchDB Replicator, the algorithm takes into account:
 Retrieve Replication Logs from Source and Target
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Once Replication ID have been generated, Replicator SHOULD seek Replication Log
-by this ID value both on Source and Target using :get:`/{db}/_local/{docid}`
-request:
+Once the Replication ID has been generated, the Replicator SHOULD retrieve
+the Replication Log from both Source and Target using :get:`/{db}/_local/{docid}`:
 
     **Request**:
 
@@ -607,23 +606,23 @@ request:
             "source_last_seq": 5
         }
 
-The Replication Log SHOULD contain the next fields:
+The Replication Log SHOULD contain the following fields:
 
 - **history** (*array* of *object*): Replication history. **Required**
 
-  - **doc_write_failures** (*number*): Amount of failed writes
-  - **docs_read** (*number*): Amount of read documents
-  - **docs_written** (*number*): Amount of written documents
+  - **doc_write_failures** (*number*): Number of failed writes
+  - **docs_read** (*number*): Number of read documents
+  - **docs_written** (*number*): Number of written documents
   - **end_last_seq** (*number*): Last processed Update Sequence ID
-  - **end_time** (*string*): Replication completion datetime in :rfc:`2822`
+  - **end_time** (*string*): Replication completion datetime in :rfc:`5322`
     format
-  - **missing_checked** (*number*): Amount of checked revisions on Source
-  - **missing_found** (*number*): Amount of missing revisions found on Target
+  - **missing_checked** (*number*): Number of checked revisions on Source
+  - **missing_found** (*number*): Number of missing revisions found on Target
   - **recorded_seq** (*number*): Recorded intermediate Checkpoint. **Required**
   - **session_id** (*string*): Unique session ID. Commonly, a random UUID value
     is used. **Required**
   - **start_last_seq** (*number*): Start update Sequence ID
-  - **start_time** (*string*): Replication start datetime in :rfc:`2822` format
+  - **start_time** (*string*): Replication start datetime in :rfc:`5322` format
 
 - **replication_id_version** (*number*): Replication protocol version. Defines
   Replication ID calculation algorithm, HTTP API calls and the others
@@ -633,7 +632,7 @@ The Replication Log SHOULD contain the next fields:
 - **source_last_seq** (*number*): Last processed Checkpoint. Shortcut to
   the ``recorded_seq`` field of the latest ``history`` object. **Required**
 
-This requests also MAY fall with :statuscode:`404` response:
+This request MAY fall with a :statuscode:`404` response:
 
     **Request**:
 
@@ -660,21 +659,21 @@ This requests also MAY fall with :statuscode:`404` response:
             "reason": "missing"
         }
 
-That's OK. This means that there is no information about current Replication
-and it seems that it wasn't ever been run and Replicator MUST run
-Full Replication.
+That's OK. This means that there is no information about the current Replication
+so it must not have been run previously and as such the Replicator MUST run
+a Full Replication.
 
 Compare Replication Logs
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-In case of successful retrieval of Replication Logs both from Source and Target,
-Replicator MUST determine their common ancestry by following the next algorithm:
+If the Replication Logs are successfully retrieved from both Source and Target
+then the Replicator MUST determine their common ancestry by following the next algorithm:
 
 - Compare ``session_id`` values for the chronological last session - if they
-  matches, Source and Target has common Replication history and it seems
-  to be valid. Use ``source_last_seq`` value for startup Checkpoint
+  match both Source and Target have a common Replication history and it seems
+  to be valid. Use ``source_last_seq`` value for the startup Checkpoint
 
-- In case of mismatch, iterate over ``history`` collection to search the latest
+- In case of mismatch, iterate over the ``history`` collection to search for the latest
   (chronologically) common ``session_id`` for Source and Target. Use value of
   ``recorded_seq`` field as startup Checkpoint
 
@@ -687,7 +686,7 @@ Locate Changed Documents
 .. code-block:: text
 
     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
-    ' Find out Common Ancestry:                                                 '
+    ' Find Common Ancestry:                                                     '
     '                                                                           '
     '             +------------------------------+                              '
     '             |   Compare Replication Logs   |                              '
@@ -702,7 +701,7 @@ Locate Changed Documents
     '                                          |                                '
     '                                          v                                '
     '            +-------------------------------+                              '
-    '   +------> |      Listen Changes Feed      | -----+                       '
+    '   +------> |     Listen to Changes Feed    | -----+                       '
     '   |        +-------------------------------+      |                       '
     '   |        |     GET  /source/_changes     |      |                       '
     '   |        |     POST /source/_changes     |      |                       '
@@ -727,7 +726,7 @@ Locate Changed Documents
     '   |                               200 OK |                                '
     '   |                                      v                                '
     '   |        +-------------------------------+                              '
-    '   +------- |     Any Difference Found?     |                              '
+    '   +------- |     Any Differences Found?    |                              '
     '            +-------------------------------+                              '
     '                                          |                                '
     '                                      Yes |                                '
@@ -743,42 +742,42 @@ Locate Changed Documents
     '                                                                           '
     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 
-Listen Changes Feed
-^^^^^^^^^^^^^^^^^^^
+Listen to Changes Feed
+^^^^^^^^^^^^^^^^^^^^^^
 
-When start up Checkpoint has been defined, Replicator SHOULD read
-Source :ref:`Changes Feed <changes>` by using :get:`/{db}/_changes` request.
+When the start up Checkpoint has been defined, the Replicator SHOULD read
+the Source's :ref:`Changes Feed <changes>` by using a :get:`/{db}/_changes` request.
 This request MUST be made with the following query parameters:
 
-- ``feed`` parameter defines Changes Feed response style: for Continuous
-  Replication ``continuous`` value SHOULD be used, otherwise - ``normal``.
+- ``feed`` parameter defines the Changes Feed response style: for Continuous
+  Replication the ``continuous`` value SHOULD be used, otherwise - ``normal``.
 
-- ``style=all_docs`` query parameter instructs Source that it MUST include
+- ``style=all_docs`` query parameter tells the Source that it MUST include
   all Revision leaves for each document's event in output.
 
-- For Continuous Replication the ``heartbeat`` parameter defines heartbeat
+- For Continuous Replication the ``heartbeat`` parameter defines the heartbeat
   period in *milliseconds*. The RECOMMENDED value by default is ``10000``
   (10 seconds).
 
-- If startup Checkpoint was found during Replication Logs comparison,
+- If a startup Checkpoint was found during the Replication Logs comparison,
   the ``since`` query parameter MUST be passed with this value.
-  In case of Full Replication it MAY be equaled ``0`` (number zero) or
+  In case of Full Replication it MAY be ``0`` (number zero) or
   be omitted.
 
-Additionally, ``filter`` query parameter MAY be specified in case of using
-:ref:`filter function <changes/filter>` on Source server side as well as other
-custom parameters if any was provided.
+Additionally, the ``filter`` query parameter MAY be specified to enable a
+:ref:`filter function <changes/filter>` on Source side. Other
+custom parameters MAY also be provided.
 
 Read Batch of Changes
 ^^^^^^^^^^^^^^^^^^^^^
 
-Reading whole feed with single shot may be not resource optimal solution and
-it is RECOMMENDED to process the feed by small chunks. However, there is
-no specific recommendation on chunks size since it heavily depended from
-available resources: large chunks requires more memory while they are reduces
+Reading the whole feed in a single shot may not be an optimal use of resources.
+It is RECOMMENDED to process the feed in small chunks. However, there is
+no specific recommendation on chunk size since it is heavily dependent on
+available resources: large chunks requires more memory while they reduce
 I/O operations and vice versa.
 
-Note, that Changes Feed output format is different for request with
+Note, that Changes Feed output format is different for a request with
 :ref:`feed=normal <changes/normal>` and with
 :ref:`feed=continuous <changes/continuous>` query parameter.
 
@@ -884,9 +883,9 @@ iterative fetching and decoding JSON objects with less memory footprint.
 Calculate Revision Difference
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After reading batch of changes from Changes Feed, Replicator forms special
+After reading the batch of changes from the Changes Feed, the Replicator forms a
 JSON mapping object for Document ID and related leaf Revisions and sends
-the result to Target via :post:`/{db}/_revs_diff` request:
+the result to Target via a :post:`/{db}/_revs_diff` request:
 
     **Request**:
 
@@ -936,12 +935,12 @@ the result to Target via :post:`/{db}/_revs_diff` request:
             }
         }
 
-In the response Replicator receives Document ID -- Revisions mapping as well,
-but for Revisions that are not exists in Target and REQUIRED to be transferred
+In the response the Replicator receives a Document ID -- Revisions mapping,
+but only for Revisions that do not exist in Target and are REQUIRED to be transferred
 from Source.
 
-If all Revisions was found for specified Documents the response will contains
-empty JSON object:
+If all Revisions in the request match the current state of the Documents then
+the response will contain an empty JSON object:
 
     **Request**
 
@@ -979,9 +978,9 @@ empty JSON object:
 Replication Completed
 ^^^^^^^^^^^^^^^^^^^^^
 
-When no more changes left to process and no more Documents left to replicate,
-Replicator finishes the Replication process. If Replication wasn't Continuous,
-Replicator MAY return response to client with some statistic about the process.
+When there are no more changes left to process and no more Documents left to replicate,
+the Replicator finishes the Replication process. If Replication wasn't Continuous,
+the Replicator MAY return a response to client with statistics about the process.
 
     .. code-block:: http
 
@@ -1023,7 +1022,7 @@ Replicate Changes
     ' Locate Changed Documents:                                                       '
     '                                                                                 '
     '               +-------------------------------------+                           '
-    '               |      Any Difference was Found?      |                           '
+    '               |      Any Differences Found?         |                           '
     '               +-------------------------------------+                           '
     '                                                   |                             '
     '                                                   |                             '
@@ -1112,7 +1111,7 @@ Replicate Changes
     ' Locate Changed Documents:                         |                             '
     '                                                   v                             '
     '               +-------------------------------------+                           '
-    '               |         Listen Changes Feed         |                           '
+    '               |       Listen to Changes Feed        |                           '
     '               +-------------------------------------+                           '
     '                                                                                 '
     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
@@ -1120,45 +1119,45 @@ Replicate Changes
 Fetch Changed Documents
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-At this step Replicator MUST fetch all Document Leaf Revisions from Source
+At this step the Replicator MUST fetch all Document Leaf Revisions from Source
 that are missed at Target. This operation is effective if Replication WILL
-use previously calculated Revisions difference since there are defined all
-missed Documents and their Revisions.
+use previously calculated Revision differences since they define
+missing Documents and their Revisions.
 
-To fetch the Document Replicator made :get:`/{db}/{docid}` request with
-the next query parameters:
+To fetch the Document the Replicator will make a :get:`/{db}/{docid}` request with
+the following query parameters:
 
-- ``revs=true``: Instructs the Source to include list of all known revisions
-  into the Document at ``_revisions`` field. This information is needed to
-  synchronize Document's ancestors history between Source and Target
+- ``revs=true``: Instructs the Source to include the list of all known revisions
+  into the Document in the ``_revisions`` field. This information is needed to
+  synchronize the Document's ancestors history between Source and Target
 
-- The ``open_revs`` query parameter contains value as JSON array with list of
-  Leaf Revisions that are need to be fetched. If specified Revision exists,
-  Document MUST be returned for this Revision. Otherwise, Source MUST return
-  object with single field ``missing`` with missed Revision as value. In case
-  when Document contains attachments Source MUST return information only for
-  those ones that had been changed (added or updated) since specified Revision
-  values. If attachment was deleted, Document MUST NOT have stub information
-  for him
+- The ``open_revs`` query parameter contains a JSON array with a list of
+  Leaf Revisions that are needed to be fetched. If the specified Revision exists
+  then the Document MUST be returned for this Revision. Otherwise, Source MUST return
+  an object with the single field ``missing`` with the missed Revision as the value. 
+  In case the Document contains attachments, Source MUST return information only for
+  those ones that had been changed (added or updated) since the specified Revision
+  values. If an attachment was deleted, the Document MUST NOT have stub information
+  for it
 
-- ``latest=true``: Ensures, that Source will return latest Document Revision
-  regardless which one was specified in ``open_revs`` query parameter.
-  This parameter solves race condition problem when requested Document may be
-  changed in between this step and handling related event on Changes Feed
+- ``latest=true``: Ensures, that Source will return the latest Document Revision
+  regardless of which one was specified in the ``open_revs`` query parameter.
+  This parameter solves a race condition problem where the requested Document may be
+  changed in between this step and handling related events on the Changes Feed
 
-In the response Source SHOULD return :mimetype:`multipart/mixed` or response
-instead of :mimetype:`application/json` unless :header:`Accept` isn't instructs
-to return such response. The :mimetype:`multipart/mixed` content type allows
-to handle the response data as stream, since there could be multiple documents
-(one per each Leaf Revision) plus several attachments data. These attachments
+In the response Source SHOULD return :mimetype:`multipart/mixed` or respond
+instead with :mimetype:`application/json` unless the :header:`Accept` header
+specifies a different mime type. The :mimetype:`multipart/mixed` content type allows
+handling the response data as a stream, since there could be multiple documents
+(one per each Leaf Revision) plus several attachments. These attachments
 are mostly binary and JSON has no way to handle such data except as base64
-encoded string what is very ineffective for transfer and processing operations.
+encoded strings which are very ineffective for transfer and processing operations.
 
-With :mimetype:`multipart/mixed` response Replicator handles multiple Document
+With a :mimetype:`multipart/mixed` response the Replicator handles multiple Document
 Leaf Revisions and their attachments one by one as raw data without any
 additional encoding applied. There is also one agreement to make data processing
-more effective: Document ALWAYS goes before his attachments, so Replicator has
-no need to process all data to map related Documents-Attachments and may handle
+more effective: the Document ALWAYS goes before its attachments, so the Replicator has
+no need to process all the data to map related Documents-Attachments and may handle
 it as stream with lesser memory footprint.
 
     **Request**:
@@ -1259,20 +1258,19 @@ it as stream with lesser memory footprint.
         {"missing":"3-6bcedf1"}
         --7b1596fc4940bc1be725ad67f11ec1c4--
 
-After receiving the response, Replicator puts all received data into local stack
+After receiving the response, the Replicator puts all the received data into a local stack
 for further bulk upload to utilize network bandwidth effectively. The local
-stack size could be limited by Documents amount or bytes of handled JSON data.
-When stack going to be full, Replicator uploads all handled Document in bulk
-mode to Target. While bulk operations are highly RECOMMENDED to be used,
-in certain cases  Replicator MAY upload Documents to Target one by one.
-See below for explanations.
+stack size could be limited by number of Documents or bytes of handled JSON data.
+When the stack is full the Replicator uploads all the handled Document in bulk
+mode to the Target. While bulk operations are highly RECOMMENDED to be used,
+in certain cases the Replicator MAY upload Documents to Target one by one.
 
 .. note::
     Alternative Replicator implementations MAY use alternative ways to retrieve
     Documents from Source. For instance, `PouchDB`_ doesn't uses Multipart API
     and fetches only latest Document Revision with inline attachments as single
     JSON object. While this is still valid CouchDB HTTP API usage, such
-    solutions MAY require to have different API implementation for non-CouchDB
+    solutions MAY require a different API implementation for non-CouchDB
     Peers.
 
 .. _PouchDB: https://github.com/daleharvey/pouchdb/blob/master/src/pouch.replicate.js
@@ -1280,21 +1278,21 @@ See below for explanations.
 Upload Batch of Changed Documents
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To upload multiple Documents with single shot, Replicator send
-:post:`/{db}/_bulk_docs` request to Target with payload as JSON object contained
-next mandatory fields:
+To upload multiple Documents in a single shot the Replicator sends a
+:post:`/{db}/_bulk_docs` request to Target with payload containing a JSON object 
+with the following mandatory fields:
 
 - **docs** (*array* of *objects*): List of Document objects to update on Target.
-  These Documents MUST contains ``_revisions`` field that holds list of his full
-  Revision history to let Target create Leaf Revision that correctly preserve
-  his ancestry
+  These Documents MUST contain the ``_revisions`` field that holds a list of the full
+  Revision history to let Target create Leaf Revisions that correctly preserve
+  ancestry
 - **new_edits** (*boolean*): Special flag that instructs Target to store
-  Documents with specified Revision (field ``_rev``) value as-is without
-  generating new one. Always ``false``
+  Documents with the specified Revision (field ``_rev``) value as-is without
+  generating a new revision. Always ``false``
 
-The request also MAY contains :header:`X-Couch-Full-Commit` that controls
+The request also MAY contain :header:`X-Couch-Full-Commit` that controls
 CouchDB :config:option:`commit policy <couchdb/delayed_commits>`. Other Peers
-implementations MAY ignore this header or use it to control similar local
+MAY ignore this header or use it to control similar local
 feature.
 
     **Request**:
@@ -1358,20 +1356,20 @@ feature.
             "new_edits": false
         }
 
-In response Target MUST return JSON array with list of Document update status.
-If Document have been stored successfully, the list item MUST contains field
-``ok`` with ``true`` value. Otherwise it MUST contains ``error`` and ``reason``
-fields with error type and human-friendly reason description.
+In its response Target MUST return a JSON array with a list of Document update statuses.
+If the Document has been stored successfully, the list item MUST contain the field
+``ok`` with ``true`` value. Otherwise it MUST contain ``error`` and ``reason``
+fields with error type and a human-friendly reason description.
 
-Document updating failure isn't fatal fatal situation since Target MAY reject
-it by some reasons. It's RECOMMENDED to use error type ``forbidden`` for
-rejections, but some other errors might take in place (like invalid field name
-etc.). Replicator SHOULD NOT retry to upload rejected documents unless he has
-serious reasons for that (e.g. there is special error type for that).
+Document updating failure isn't fatal as Target MAY reject the update for its own
+reasons. It's RECOMMENDED to use error type ``forbidden`` for
+rejections, but other error types can also be used (like invalid field name
+etc.). The Replicator SHOULD NOT retry uploading rejected documents unless there are
+good reasons for doing so (e.g. there is special error type for that).
 
-Note that while updating failed for one Document in the response below,
-Target still returned :statuscode:`201` response. Same will be true if all
-updating will fall for all uploaded Documents.
+Note that while a update may fail for one Document in the response,
+Target can still return a :statuscode:`201` response. Same will be true if all
+updates fail for all uploaded Documents.
 
     **Response**:
 
@@ -1406,19 +1404,19 @@ updating will fall for all uploaded Documents.
 Upload Document with Attachments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There is a special optimization case when Replicator WILL NOT use bulk upload
-of changed Documents. This case is applied when Documents contains a lot of
-attached files or they are too big to been effectively encoded with Base64.
+There is a special optimization case when then Replicator WILL NOT use bulk upload
+of changed Documents. This case is applied when Documents contain a lot of
+attached files or the files are too big to be efficiently encoded with Base64.
 
 .. note::
-    CouchDB defines limit of ``8`` attachments per Document and each attached
-    file size should not be greater than ``64 KiB``. While this is RECOMMENDED
-    limitations, other Replicator implementations MAY have their own values.
+    CouchDB defines a limit of ``8`` attachments per Document and each attached
+    file size should not be greater than ``64 KiB``. While this is a RECOMMENDED
+    limitation, other Replicator implementations MAY have their own values.
 
-For this case Replicator makes :put:`/{db}/{docid}?new_edits=false
+For this case the Replicator issues a :put:`/{db}/{docid}?new_edits=false
 </{db}/{docid}>` request with :mimetype:`multipart/related` content type. Such
-request allows easily stream Document and all his attachments one by one without
-any serialization overhead.
+a request allows one to easily stream the Document and all its attachments 
+one by one without any serialization overhead.
 
     **Request**:
 
@@ -1499,8 +1497,8 @@ any serialization overhead.
         }
 
 Unlike bulk updating via :post:`/{db}/_bulk_docs` endpoint, the response MAY
-come with different status code. For instance, in case when Document is rejected
-Target SHOULD response with :statuscode:`403`:
+come with a different status code. For instance, in the case when the Document is rejected,
+Target SHOULD respond with a :statuscode:`403`:
 
     **Response**:
 
@@ -1518,17 +1516,17 @@ Target SHOULD response with :statuscode:`403`:
             "reason": "sorry"
         }
 
-Replicator SHOULD NOT retry requests in case of :statuscode:`401`,
-:statuscode:`403`, :statuscode:`409` and :statuscode:`412` since repeating
-couldn't solve the issue with user credentials or uploaded data.
+Replicator SHOULD NOT retry requests in case of a :statuscode:`401`,
+:statuscode:`403`, :statuscode:`409` or :statuscode:`412` since repeating
+the request couldn't solve the issue with user credentials or uploaded data.
 
 Ensure In Commit
 ^^^^^^^^^^^^^^^^
 
-Once batch of changes was successfully uploaded to Target, Replicator makes
-:post:`/{db}/_ensure_full_commit` request to ensure that every transferred bit
-is lay down on disk or other *persistent* storage place. Target MUST return
-:statuscode:`201` response with JSON object contained next mandatory fields:
+Once a batch of changes has been successfully uploaded to Target, the Replicator
+issues a :post:`/{db}/_ensure_full_commit` request to ensure that every transferred bit
+is laid down on disk or other *persistent* storage place. Target MUST return
+:statuscode:`201` response with a JSON object containing the following mandatory fields:
 
 - **instance_start_time** (*string*): Timestamp of when the database was
   opened, expressed in *microseconds* since the epoch
@@ -1562,10 +1560,10 @@ is lay down on disk or other *persistent* storage place. Target MUST return
 Record Replication Checkpoint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Since batch of changes was uploaded and committed successfully, Replicator
-updates Replication Log both on Source and Target recording current Replication
-state. This operation is REQUIRED to let in case of Replication failure resume
-it from last point of success, not from very begin.
+Since batches of changes were uploaded and committed successfully, the Replicator
+updates the Replication Log both on Source and Target recording the current Replication
+state. This operation is REQUIRED so that in the case of Replication failure the replication
+can resume from last point of success, not from the very beginning.
 
 Replicator updates Replication Log on Source:
 
@@ -1685,32 +1683,32 @@ Replicator updates Replication Log on Source:
             "rev": "2-9b5d1e36bed6ae08611466e30af1259a"
         }
 
-Continue Read the Changes
--------------------------
+Continue Reading Changes
+------------------------
 
-Once batch of changes had been processed and transferred to Target successfully,
-Replicator continue listen Changes Feed for new changes. In there is no new
-changes to process the Replication considered to be done.
+Once a batch of changes had been processed and transferred to Target successfully,
+the Replicator can continue to listen to the Changes Feed for new changes. If there 
+are no new changes to process the Replication is considered to be done.
 
-For Continuous Replication Replicator MUST continue await for new changes from
-Source side.
+For Continuous Replication, the Replicator MUST continue to wait for new changes from
+Source.
 
 Protocol Robustness
 ===================
 
-Since `CouchDB Replication Protocol` works on top of HTTP, which is based on
-TCP/IP itself, Replicator SHOULD expect to be working within unstable
+Since the `CouchDB Replication Protocol` works on top of HTTP, which is based on
+TCP/IP, the Replicator SHOULD expect to be working within an unstable
 environment with delays, losses and other bad surprises that might eventually
-occurs. Replicator SHOULD NOT count every HTTP request failure as *fatal error*.
-It SHOULD be smart enough to detect timeouts, repeat fallen requests, be ready
+occur. The Replicator SHOULD NOT count every HTTP request failure as a *fatal error*.
+It SHOULD be smart enough to detect timeouts, repeat failed requests, be ready
 to process incomplete or malformed data and so on. *Data must flow* - that's
 the rule.
 
 Error Responses
 ===============
 
-In case when something goes wrong, Peer MUST response with JSON object with
-the next REQUIRED fields:
+In case something goes wrong the Peer MUST respond with a JSON object with
+the following REQUIRED fields:
 
 - **error** (*string*): Error type for programs and developers
 - **reason** (*string*): Error description for humans
@@ -1718,8 +1716,8 @@ the next REQUIRED fields:
 Bad Request
 -----------
 
-If request contains malformed data (like invalid JSON) the Peer MUST response
-with HTTP :statuscode:`400` and ``bad_request`` as error type:
+If a request contains malformed data (like invalid JSON) the Peer MUST respond
+with a HTTP :statuscode:`400` and ``bad_request`` as error type:
 
 .. code-block:: javascript
 
@@ -1731,9 +1729,9 @@ with HTTP :statuscode:`400` and ``bad_request`` as error type:
 Unauthorized
 ------------
 
-If Peer REQUIRES for providing user's credentials and the request miss them,
-the Peer MUST response with HTTP :statuscode:`401` and ``unauthorized`` as error
-type:
+If a Peer REQUIRES credentials be included with the request and the request
+does not contain acceptable credentials then the Peer MUST respond with the 
+HTTP :statuscode:`401` and ``unauthorized`` as error type:
 
 .. code-block:: javascript
 
@@ -1745,9 +1743,9 @@ type:
 Forbidden
 ---------
 
-If Peer receives valid user's credentials, but rejects to fulfill the request
-due to insufficient permissions or other restrictions it MUST response with
-HTTP :statuscode:`403` and ``forbidden`` as error type:
+If a Peer receives valid user credentials, but the requester does not have
+sufficient permissions to perform the operation then the Peer 
+MUST respond with a HTTP :statuscode:`403` and ``forbidden`` as error type:
 
 .. code-block:: javascript
 
@@ -1759,8 +1757,8 @@ HTTP :statuscode:`403` and ``forbidden`` as error type:
 Resource Not Found
 ------------------
 
-If requested resource, Database or Document wasn't found on Peer, it MUST
-response with HTTP :statuscode:`404` and ``not_found`` as error type:
+If the requested resource, Database or Document wasn't found on a Peer, the Peer
+MUST respond with a HTTP :statuscode:`404` and ``not_found`` as error type:
 
 .. code-block:: javascript
 
@@ -1772,7 +1770,7 @@ response with HTTP :statuscode:`404` and ``not_found`` as error type:
 Method Not Allowed
 ------------------
 
-If requested Database or Document wasn't found on Peer, it MUST response with
+If an unsupported method was used then the Peer MUST respond with a 
 HTTP :statuscode:`405` and ``method_not_allowed`` as error type:
 
 .. code-block:: javascript
@@ -1785,9 +1783,9 @@ HTTP :statuscode:`405` and ``method_not_allowed`` as error type:
 Resource Conflict
 -----------------
 
-Resource conflict error raises for concurrent updates of the same resource by
-multiple clients. In this case Peer MUST response with HTTP :statuscode:`409`
-and ``conflict`` as error type:
+A resource conflict error occurs when there are concurrent updates of the same 
+resource by multiple clients. In this case the Peer MUST respond with a HTTP 
+:statuscode:`409` and ``conflict`` as error type:
 
 .. code-block:: javascript
 
@@ -1799,10 +1797,10 @@ and ``conflict`` as error type:
 Precondition Failed
 -------------------
 
-The HTTP :statuscode:`412` response may be sent in case on attempt to run
-request of Database creation (error type ``db_exists``) while it already exists
-or some attachments information missed (error type ``missing_stub``.
-There is no explicit error type restrictions, but it RECOMMEND to use error
+The HTTP :statuscode:`412` response may be sent in case of an attempt to
+create a Database (error type ``db_exists``) that already exists
+or some attachment information is missing (error type ``missing_stub``).
+There is no explicit error type restrictions, but it is RECOMMEND to use error
 types that are previously mentioned:
 
 .. code-block:: javascript
@@ -1815,9 +1813,9 @@ types that are previously mentioned:
 Server Error
 ------------
 
-Raised in case when error is *fatal* and Replicator cannot do anything to
-continue Replication. In this case Replicator MUST return HTTP :statuscode:`500`
-response with error description (no restrictions on error type applied):
+Raised in case an error is *fatal* and the Replicator cannot do anything to
+continue Replication. In this case the Replicator MUST return a HTTP :statuscode:`500`
+response with an error description (no restrictions on error type applied):
 
 .. code-block:: javascript
 
@@ -1829,19 +1827,19 @@ response with error description (no restrictions on error type applied):
 Optimisations
 =============
 
-There are next RECOMMENDED solutions to optimize Replication process:
+There are RECOMMENDED approaches to optimize the Replication process:
 
-- Keep amount of HTTP requests at reasonable minimum
-- Try to work with connection pool and make parallel/multiple requests whatever
-  it's possible
-- Don't close socket after each request: respect keep-alive option
+- Keep the number of HTTP requests at a reasonable minimum
+- Try to work with a connection pool and make parallel/multiple requests whenever
+  possible
+- Don't close sockets after each request: respect the keep-alive option
 - Use continuous sessions (cookies, etc.) to reduce authentication overhead
 - Try to use bulk requests for every operations with Documents
 - Find out optimal batch size for Changes feed processing
 - Preserve Replication Logs and resume Replication from the last Checkpoint
-  whatever it's possible
-- Optimize filter functions: let them run faster as possible
-- Get ready for surprises: network is very unstable environment
+  whenever possible
+- Optimize filter functions: let them run as fast as possible
+- Get ready for surprises: networks are very unstable environments
 
 API Reference
 =============
@@ -1857,7 +1855,7 @@ Common Methods
 For Target
 ----------
 
-- :put:`/{db}` -- Create Target if it not exists and option was provided
+- :put:`/{db}` -- Create Target if it not exists and the option was provided
 - :post:`/{db}/_revs_diff` -- Locate Revisions that are not known to Target
 - :post:`/{db}/_bulk_docs` -- Upload Revisions to Target
 - :put:`/{db}/{docid}` -- Upload a single Document with attachments to Target
