@@ -17,37 +17,47 @@ PAPERSIZE    := -D latex_paper_size=a4
 SPHINXFLAGS  := -a -E -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
 SPHINXOPTS   := $(SPHINXFLAGS) $(SOURCE)
 
-all: distclean html pdf info man install clean
+all: html pdf info man
 
 clean:
 	rm -rf $(BUILDDIR)
 
-html:
+html: build/html
+
+build/html:
     ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
     $(error ensure that $(SPHINXBUILD) is installed and on your path)
     endif
 	$(SPHINXBUILD) -b html $(SPHINXOPTS) $(BUILDDIR)/html
 
-latex:
+latex: build/latex
+
+build/latex:
     ifeq ($(shell which tex >/dev/null 2>&1; echo $$?), 1)
     $(error ensure that tex is installed and on your path)
     endif
 	$(SPHINXBUILD) -b latex $(SPHINXOPTS) $(BUILDDIR)/latex
 
-pdf: latex
+pdf: latex build/latex/CouchDB.pdf
+
+build/latex/CouchDB.pdf:
     ifeq ($(shell which pdflatex >/dev/null 2>&1; echo $$?), 1)
     $(error ensure that pdflatex is installed and on your path)
     endif
 	$(MAKE) -C $(BUILDDIR)/latex all-pdf
 
-info:
+info: build/texinfo
+
+build/texinfo:
     ifeq ($(shell which makeinfo >/dev/null 2>&1; echo $$?), 1)
     $(error ensure that makeinfo is installed and on your path)
     endif
 	$(SPHINXBUILD) -b texinfo $(SPHINXOPTS) $(BUILDDIR)/texinfo
 	make -C $(BUILDDIR)/texinfo info
 
-man:
+man: build/man
+
+build/man:
 	$(SPHINXBUILD) -b man $(SPHINXOPTS) $(BUILDDIR)/man
 
 check:
