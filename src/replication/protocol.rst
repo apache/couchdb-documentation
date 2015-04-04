@@ -1829,7 +1829,7 @@ Server Error
 Raised in case an error is *fatal* and the Replicator cannot do anything to
 continue Replication. In this case the Replicator MUST return a HTTP
 :statuscode:`500` response with an error description (no restrictions on error
- type applied):
+type applied):
 
 .. code-block:: javascript
 
