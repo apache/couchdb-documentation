@@ -28,6 +28,7 @@
     query-server/index
     fauxton/index
     api/index
+    cluster/index
     json-structure
     experimental
     contributing
