@@ -13,7 +13,7 @@
 .. _fauxton/addons:
 
 ===============
-Writting Addons
+Writing Addons
 ===============
 
 Addons allow you to extend Fauxton for a specific use case. Usually, they
