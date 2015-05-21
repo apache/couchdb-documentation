@@ -107,7 +107,7 @@ small there. Let us look in it. Yes, you can get it with curl too:
 * ``_rev`` The current revision of the metadata.
 * ``shard_suffix`` The numbers after small and before .couch. The number of
   seconds after UNIX epoch that the database was created. Stored in ASCII.
-* ``changelog`` Self explaining.　Only for admins to read.
+* ``changelog`` Self explaining. Only for admins to read.
 * ``by_node`` Which shards each node have.
 * ``by_rage`` On which nodes each shard is.
 
