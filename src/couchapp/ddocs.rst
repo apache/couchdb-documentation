@@ -372,8 +372,11 @@ page:
 
 Templates and styles could obviously be used to present data in a nicer fashion,
 but this is an excellent starting point. Note that you may also use
-:func:`registerType` and :func:`provides` functions in the same way as for
-:ref:`showfun`!
+:func:`registerType` and :func:`provides` functions in a similar way as for
+:ref:`showfun`! However, note that :func:`provides` expects the return value to
+be a string when used inside a list function, so you'll need to use
+:func:`start` to set any custom headers and stringify your JSON before
+returning it.
 
 .. seealso::
     CouchDB Wiki:
