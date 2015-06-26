@@ -563,13 +563,13 @@ Security Object
 +--------------------------------+---------------------------------------------+
 |         roles [array]          | List of roles with parent privilege         |
 +--------------------------------+---------------------------------------------+
-|         users [array]          | List of users with parent privilege         |
+|         names [array]          | List of users with parent privilege         |
 +--------------------------------+---------------------------------------------+
-| readers                        | Roles/Users with reader privileges          |
+| members                        | Roles/Users with non-admin privileges       |
 +--------------------------------+---------------------------------------------+
 |         roles [array]          | List of roles with parent privilege         |
 +--------------------------------+---------------------------------------------+
-|         users [array]          | List of users with parent privilege         |
+|         names [array]          | List of users with parent privilege         |
 +--------------------------------+---------------------------------------------+
 
 .. code-block:: javascript

@@ -37,7 +37,7 @@
     Both ``members`` and ``admins`` objects are contains two array-typed
     fields:
 
-    - ``users``: List of CouchDB user names
+    - ``names``: List of CouchDB user names
     - ``roles``: List of users roles
 
     Any other additional fields in the security object are optional.
