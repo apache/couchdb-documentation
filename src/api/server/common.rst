@@ -267,6 +267,60 @@
             "type": "created"
         }
 
+.. _api/server/membership:
+
+================
+``/_membership``
+================
+
+.. versionadded:: 2.0
+
+.. http:get:: /_membership
+    :synopsis: Returns a list of nodes
+
+    Displays the nodes that are part of the cluster as ``cluster_nodes``. The
+    field ``all_nodes`` displays all nodes this node knows about, including the
+    ones that are part of the cluster. The endpoint is useful when setting up a
+    cluster, see :ref:`cluster/nodes`
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_membership HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Sat, 11 Jul 2015 07:02:41 GMT
+        Server: CouchDB (Erlang/OTP)
+        Content-Length: 142
+
+        {
+            "all_nodes": [
+                "node1@127.0.0.1",
+                "node2@127.0.0.1",
+                "node3@127.0.0.1"
+            ],
+            "cluster_nodes": [
+                "node1@127.0.0.1",
+                "node2@127.0.0.1",
+                "node3@127.0.0.1"
+            ]
+        }
+
 .. _api/server/log:
 
 =========
