@@ -143,11 +143,22 @@ to apply these changes.
 Setting parameters via the HTTP API
 ===================================
 
-Alternatively, configuration parameters could be set via the
-:ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration
-on-the-fly without requiring a server restart::
+For 2.0 we highly recommend against configuring nodes in your cluster using
+the HTTP API. Instead, we recommend using configuration management tools
+like Chef, Puppet, Ansible or Salt (in no particular order) to avoid most of
+the issues that will appear for a nodes with different configurations in a
+cluster.
 
-    curl -X PUT http://localhost:5984/_config/uuids/algorithm -d '"random"'
+However, you can read and set the configuration of any node in the cluster
+using the :ref:`HTTP API <api/node>`. The old ``/_config`` endpoint returns
+a 404.
+
+For a "cluster-of-one", a cluster that has just a single node there is no
+reason against using the HTTP API. The API allows to change CouchDB
+configuration on-the-fly without requiring a node restart. Given your node is
+named ``node1``::
+
+    curl -X PUT http://localhost:5984/_node/node1/_config/uuids/algorithm -d '"random"'
 
 In the response the old parameter's value returns::
 
@@ -157,7 +168,7 @@ You should be careful with changing configuration via the HTTP API since it's
 easy to make CouchDB unavailable. For instance, if you'd like to change the
 :option:`httpd/bind_address` for a new one::
 
-    curl -X PUT http://localhost:5984/_config/httpd/bind_address -d '"10.10.0.128"'
+    curl -X PUT http://localhost:5984/_node/node1/_config/httpd/bind_address -d '"10.10.0.128"'
 
 However, if you make a typo, or the specified IP address is not available
 from your network, CouchDB will be unavailable for you in both cases and
