@@ -61,7 +61,8 @@
     :>json string db_name: The name of the database.
     :>json number disk_format_version: The version of the physical format used
       for the data when it is stored on disk.
-    :>json number data_size: The number of bytes of live data inside the database file.
+    :>json number data_size: The number of bytes of live data inside
+      the database file.
     :>json number disk_size: The length of the database file on disk.
       Views indexes are not included in the calculation.
     :>json number doc_count: A count of the documents in the specified
