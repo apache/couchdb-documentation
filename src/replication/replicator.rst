@@ -230,6 +230,23 @@ yet the ``_replication_state`` field set.
     with the value ``triggered``, therefore they're always restarted
     when CouchDB is restarted.
 
+Updating Documents in the Replicator Database
+=============================================
+
+Once the replicator has started work on a job defined in the ``_replicator``
+database, modifying the replication document is no longer allowed. Attempting
+to do this will result in the following response
+
+.. code-block:: javascript
+
+    {
+        "error": "forbidden",
+        "reason": "Only the replicator can edit replication documents that are in the triggered state."
+    }
+
+The way to accomplish this is to first delete the old version and then insert
+the new one.
+
 Changing the Replicator Database
 ================================
 
