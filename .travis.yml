@@ -24,13 +24,3 @@ env:
     - TARGET=check
 
 cache: apt
-
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#couchdb-ci"
-    template:
-      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} Amazing details: %{build_url}"
-    skip_join: true
-    on_success: "never"
-    on_failure: "change"
