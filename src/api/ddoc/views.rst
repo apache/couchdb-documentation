@@ -36,7 +36,8 @@
       reached. *Optional*
     :query json end_key: Alias for `endkey` param
     :query string endkey_docid: Stop returning records when the specified
-      document ID is reached. *Optional*
+      document ID is reached. Requires ``endkey`` to be specified for this to
+      have any effect. *Optional*
     :query string end_key_doc_id: Alias for `endkey_docid` param
     :query boolean group: Group the results using the reduce function to a
       group or single row. Default is ``false``
@@ -68,7 +69,8 @@
       *Optional*
     :query json start_key: Alias for `startkey` param
     :query string startkey_docid: Return records starting with the specified
-      document ID. *Optional*
+      document ID. Requires ``startkey`` to be specified for this to have any
+      effect. *Optional*
     :query string start_key_doc_id: Alias for `startkey_docid` param
     :query boolean update_seq: Response includes an ``update_seq`` value
       indicating which sequence id of the database the view reflects.
