@@ -18,7 +18,7 @@ MAKEINFO     := makeinfo
 BUILDDIR     := build
 SOURCE       := src/
 PAPERSIZE    := -D latex_paper_size=a4
-SPHINXFLAGS  := -a -E -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
+SPHINXFLAGS  := -a -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
 SPHINXOPTS   := $(SPHINXFLAGS) $(SOURCE)
 
 ENSURECMD=\
@@ -32,31 +32,21 @@ all: html pdf info man
 clean:
 	rm -rf $(BUILDDIR)
 
-html: build/html
+html: $(SPHINXBUILD)
+	$(SPHINXBUILD) -b $@ $(SPHINXOPTS) $(BUILDDIR)/$@
 
-build/html: $(SPHINXBUILD)
-	$(SPHINXBUILD) -b html $(SPHINXOPTS) $(BUILDDIR)/html
+latex: $(TEX)
+	$(SPHINXBUILD) -b $@ $(SPHINXOPTS) $(BUILDDIR)/$@
 
-latex: build/latex
-
-build/latex: $(SPHINXBUILD) $(TEX)
-	$(SPHINXBUILD) -b latex $(SPHINXOPTS) $(BUILDDIR)/latex
-
-pdf: latex build/latex/CouchDB.pdf
-
-build/latex/CouchDB.pdf: $(PDFLATEX)
+pdf: latex $(PDFLATEX)
 	$(MAKE) -C $(BUILDDIR)/latex all-pdf
 
-info: build/texinfo
-
-build/texinfo: $(SPHINXBUILD) $(MAKEINFO)
+info: $(SPHINXBUILD) $(MAKEINFO)
 	$(SPHINXBUILD) -b texinfo $(SPHINXOPTS) $(BUILDDIR)/texinfo
 	make -C $(BUILDDIR)/texinfo info
 
-man: build/man
-
-build/man: $(SPHINXBUILD)
-	$(SPHINXBUILD) -b man $(SPHINXOPTS) $(BUILDDIR)/man
+man: $(SPHINXBUILD)
+	$(SPHINXBUILD) -b $@ $(SPHINXOPTS) $(BUILDDIR)/$@
 
 check:
 	python ext/linter.py $(SOURCE)
