@@ -507,6 +507,22 @@ Cross-Origin Resource Sharing
         - `COS tutorial <http://www.html5rocks.com/en/tutorials/cors/>`_
         - `XHR with CORS <http://hacks.mozilla.org/2009/07/cross-site-xmlhttprequest-with-cors/>`_
 
+Per Virtual Host Configuration
+------------------------------
+
+To set the options for a :section:`vhosts`, you will need to create a section
+with the vhost name prefixed by ``cors:``. Example case for the vhost
+`example.com`::
+
+    [cors:example.com]
+    credentials = false
+    ; List of origins separated by a comma
+    origins = *
+    ; List of accepted headers separated by a comma
+    headers = X-CouchDB-Header
+    ; List of accepted methods
+    methods = HEAD, GET
+
 Cross-site Request Forgery protection
 =====================================
 
@@ -585,22 +601,6 @@ Cross-site Request Forgery protection
 
             [csrf]
             timeout = 3600
-
-Per Virtual Host Configuration
-------------------------------
-
-To set the options for a :section:`vhosts`, you will need to create a section
-with the vhost name prefixed by ``cors:``. Example case for the vhost
-`example.com`::
-
-    [cors:example.com]
-    credentials = false
-    ; List of origins separated by a comma
-    origins = *
-    ; List of accepted headers separated by a comma
-    headers = X-CouchDB-Header
-    ; List of accepted methods
-    methods = HEAD, GET
 
 .. _config/vhosts:
 
