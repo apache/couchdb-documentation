@@ -540,8 +540,9 @@ Cross-site Request Forgery protection
     reset form or cause damage by issuing a database delete request.
 
     To prevent this, CouchDB can require a matching request header
-    before processing any request. The correct value of this header is
-    unknown to the attacker and so their attack fails.
+    before processing any write request (defined as any method other
+    than `GET`, `HEAD` or `OPTIONS`). The correct value of this header
+    is unknown to the attacker and so their attack fails.
 
     To enable CSRF protection, add the custom request header
     `X-CouchDB-CSRF` wih value `true` to any request. The response will
