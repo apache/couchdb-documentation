@@ -12,9 +12,9 @@
 
 .. _views/intro:
 
-===========================
-Introduction Into The Views
-===========================
+=====================
+Introduction to Views
+=====================
 
 Views are useful for many purposes:
 
@@ -418,8 +418,8 @@ on the ``rereduce`` parameter:
     }
 
 .. note::
-    JavaScript function about could be effectively replaced by builtin
-    ``_count`` one.
+    The JavaScript function above could be effectively replaced by the builtin
+    ``_count``.
 
 .. figure:: ../../../images/views-intro-01.png
     :align: center
@@ -460,7 +460,7 @@ number ``1`` for each key, as there are no exactly duplicated keys.
 Reduce/Rereduce
 ===============
 
-We briefly talked about the ``rereduce`` parameter to your reduce function.
+We briefly talked about the ``rereduce`` parameter to the reduce function.
 We’ll explain what’s up with it in this section. By now, you should have learned
 that your view result is stored in B-tree index structure for efficiency.
 The existence and use of the ``rereduce`` parameter is tightly coupled to how
@@ -541,7 +541,7 @@ the beginning and the end are the same value). It concludes that it has to use
 the "chinese" element’s value and the other node’s value and run them through
 the reduce function with the ``rereduce`` parameter set to true.
 
-The reduce function effectively calculates 3 + 1 on query time and returns the
+The reduce function effectively calculates 3 + 1 at query time and returns the
 desired result. The next example shows some pseudocode that shows the last
 invocation of the reduce function with actual values:
 
@@ -591,7 +591,7 @@ This translates to Figure 4, “An overflowing reduce index”.
 
 We hope you get the picture. The way the B-tree storage works means that if you
 don’t actually reduce your data in the reduce function, you end up having
-CouchDB copy huge amounts of data around that grow linearly, if not faster
+CouchDB copy huge amounts of data around that grow linearly, if not faster,
 with the number of rows in your view.
 
 CouchDB will be able to compute the final result, but only for views with a few

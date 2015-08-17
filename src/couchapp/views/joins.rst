@@ -163,11 +163,11 @@ Using View Collation
 :Date: 2007-10-05
 :Source: http://www.cmlenz.net/archives/2007/10/couchdb-joins
 
-Just today, there was a discussion on IRC how you'd go about modeling a simple
-blogging system with “post” and “comment” entities, where any blog post might
-have N comments. If you'd be using an SQL database, you'd obviously have two
-tables with foreign keys and you'd be using joins. (At least until you needed
-to add some `denormalization`_).
+Just today, there was a discussion on IRC on how you'd go about modeling a
+simple blogging system with “post” and “comment” entities, where any blog
+post might have N comments. If you'd be using an SQL database, you'd obviously
+have two tables with foreign keys and you'd be using joins. (At least until you
+needed to add some `denormalization`_).
 
 .. _denormalization: http://en.wikipedia.org/wiki/Denormalization
 
@@ -195,7 +195,7 @@ comments inside that document:
 
 .. note::
     Of course the model of an actual blogging system would be more extensive,
-    you'd have tags, timestamps, etc etc. This is just to demonstrate the basics.
+    you'd have tags, timestamps, etc, etc. This is just to demonstrate the basics.
 
 The obvious advantage of this approach is that the data that belongs together
 is stored in one place. Delete the post, and you automatically delete the
@@ -256,7 +256,7 @@ can tell the difference between posts and comments:
     }
 
 The comments themselves are stored in separate documents, which also have a type
-property (this time with the value “comment”), and in addition feature a post
+property (this time with the value “comment”), and additionally feature a post
 property containing the ID of the post document they belong to:
 
 .. code-block:: javascript
@@ -312,7 +312,7 @@ CouchDB server, namely a ``GET`` request to the document. With this second
 approach, we need two requests: a ``GET`` request to the post document, and a
 ``GET`` request to the view that returns all comments for the post.
 
-That is okay, but not quite satisfactory. Just imagine you wanted to added
+That is okay, but not quite satisfactory. Just imagine you wanted to add
 threaded comments: you'd now need an additional fetch per comment. What we'd
 probably want then would be a way to join the blog post and the various comments
 together to be able to retrieve them with a single HTTP request.
@@ -402,8 +402,8 @@ the following:
     }
 
 .. note::
-    The ``...`` placeholder here would contain the complete JSON encoding of the
-    corresponding document
+    The ``...`` placeholders here would contain the complete JSON encoding of the
+    corresponding documents
 
 Now, to get a specific blog post and all associated comments, we'd invoke that
 view with the query string::

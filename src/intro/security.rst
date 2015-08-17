@@ -103,7 +103,7 @@ Hashing Passwords
 ^^^^^^^^^^^^^^^^^
 
 Seeing the plain-text password is scary, isn't it? No worries, CouchDB doesn't
-show up the plain-text password anywhere. It gets hashed right away. The hash
+show the plain-text password anywhere. It gets hashed right away. The hash
 is that big, ugly, long string that starts out with ``-hashed-``.
 How does that work?
 
@@ -253,9 +253,9 @@ file and are wondering if regular users are also stored there. No, they are not.
 CouchDB has a special `authentication database`, named ``_users`` by default,
 that stores all registered users as JSON documents.
 
-This special database is a `system database`, this means that while it shares
+This special database is a `system database`. This means that while it shares
 the common :ref:`database API <api/database>`, there are some
-special security-related constraints applied. Below is listed how the
+special security-related constraints applied. Below is a list of how the
 `authentication database` is different from the other databases.
 
 - Only administrators may browse list of all documents
@@ -272,9 +272,9 @@ special security-related constraints applied. Below is listed how the
   </{db}/{docid}>`) documents that they own
 
 These draconian rules are necessary since CouchDB cares about its users'
-personal information and takes not to disclose it to just anyone. Often, user
+personal information and will not disclose it to just anyone. Often, user
 documents contain system information like `login`, `password hash` and `roles`,
-apart from sensitive personal information like: real name, email, phone, special
+apart from sensitive personal information like real name, email, phone, special
 internal identifications and more. This is not information that you
 want to share with the World.
 
@@ -288,8 +288,8 @@ several *mandatory* fields, that CouchDB needs for authentication:
   :ref:`org.couchdb.user`
 - **derived_key** (*string*): `PBKDF2`_ key
 - **name** (*string*): User's name aka login. **Immutable** e.g. you cannot
-  rename existed user - you have to create new one
-- **roles** (*array* of *string*): List of user roles. CouchDB doesn't provides
+  rename an existing user - you have to create new one
+- **roles** (*array* of *string*): List of user roles. CouchDB doesn't provide
   any builtin roles, so you're free to define your own depending on your needs.
   However, you cannot set system roles like ``_admin`` there. Also, only
   administrators may assign roles to users - by default all users have no roles
@@ -298,7 +298,7 @@ several *mandatory* fields, that CouchDB needs for authentication:
 - **password_scheme** (*string*): Password hashing scheme. May be ``simple`` or
   ``pbkdf2``
 - **salt** (*string*): Hash salt. Used for ``simple`` `password_scheme`
-- **type** (*string*): Document type. Constantly have value ``user``
+- **type** (*string*): Document type. Constantly has the value ``user``
 
 Additionally, you may specify any custom fields that relate to the target
 user. This is a good place to store user's private information because only the
@@ -306,22 +306,22 @@ target user and CouchDB administrators may browse it.
 
 .. _org.couchdb.user:
 
-Why ``org.couchdb.user:`` prefix?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Why the ``org.couchdb.user:`` prefix?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The reason there is a special prefix before a user's login name is to have
 namespaces that users belong to. This prefix is designed to prevent
-replication conflicts when you try merging two `_user` databases or more.
+replication conflicts when you try merging two or more `_user` databases.
 
 For current CouchDB releases, all users belong to the same
 ``org.couchdb.user`` namespace and this cannot be changed. This may be changed
 in future releases.
 
-Creating New User
------------------
+Creating a New User
+-------------------
 
 Creating a new user is a very trivial operation. You just need to do a
-:method:`PUT` request with user's data to CouchDB. Let's create a user with
+:method:`PUT` request with the user's data to CouchDB. Let's create a user with
 login `jan` and password `apple`::
 
     curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
@@ -380,8 +380,8 @@ Password Changing
 Let's define what is password changing from the point of view of CouchDB and
 the authentication database. Since "users" are "documents", this operation is
 just updating the document with a special field ``password`` which contains
-the *plain text password*. Scared? No need to be, the authentication database
-has a special internal hook on  document update which looks for this field and
+the *plain text password*. Scared? No need to be. The authentication database
+has a special internal hook on document update which looks for this field and
 replaces it with the *secured hash* depending on the chosen ``password_scheme``.
 
 Summarizing the above process - we need to get the document's content, add
@@ -438,11 +438,11 @@ CouchDB should respond with:
     {"ok":true,"name":"jan","roles":[]}
 
 Hooray! You may wonder why this was so complex - we need to retrieve user's
-document,  add a special field to it, post it back - where is that one big
+document, add a special field to it, and post it back. Where is that one big
 button that changes the password without worrying about the document's content?
 Actually, :ref:`Futon <intro/futon>` has one such thing at the bottom right
-corner if are logged in. Using that will hide all the implementation details
-described above and keep it real simple for you.
+corner if you are logged in. Using that will hide all the implementation details
+described above and keep it really simple for you.
 
 .. note::
     There is no password confirmation for API request: you should implement it
@@ -458,9 +458,9 @@ their contact email to let other users get in touch with them. To solve this
 problem, but still keep sensitive and private information secured, there is
 a special :ref:`configuration <config>` option :config:option:`public_fields
 <couch_httpd_auth/public_fields>`. In this option you may define
-a comma-separated lis of users document fields that will be publicly available.
+a comma-separated list of users document fields that will be publicly available.
 
-Normally, if you request a user document and you're not an administrator or
+Normally, if you request a user document and you're not an administrator or the
 document's owner, CouchDB will respond with :statuscode:`404`::
 
     curl http://localhost:5984/_users/org.couchdb.user:robert
@@ -472,9 +472,9 @@ document's owner, CouchDB will respond with :statuscode:`404`::
 This response is constant for both cases when user exists or doesn't exist for
 security reasons.
 
-Now let's share the field ``name``. First, setup the ``public_fields``
+Now let's share the field ``name``. First, set up the ``public_fields``
 configuration option. Remember, that this action requires administrator
-privileges. The next command will prompt you for user  `admin`'s password:
+privileges. The next command will prompt you for user `admin`'s password:
 
     curl -X PUT http://localhost:5984/_config/couch_http_auth/public_fields \
        -H "Content-Type: application/json" \
@@ -489,8 +489,8 @@ What has changed? Let's check Robert's document once again::
 
     {"_id":"org.couchdb.user:robert","_rev":"6-869e2d3cbd8b081f9419f190438ecbe7","name":"robert"}
 
-Good news! Now, we may read the field ``name`` in *every user document without
-needing to be an administrator*. Keep in mind though not to publish sensitive
+Good news! Now we may read the field ``name`` in *every user document without
+needing to be an administrator*. Keep in mind, though, not to publish sensitive
 information, especially without user's consent!
 
 Authorization

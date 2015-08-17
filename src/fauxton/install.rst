@@ -16,7 +16,7 @@
 Installation
 ============
 
-A recent of `node.js`_ and `npm`_ is required.
+Recent versions of `node.js`_ and `npm`_ are required.
 
 .. _node.js: http://nodejs.org/
 .. _npm: https://npmjs.org/doc/README.html

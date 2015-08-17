@@ -223,9 +223,10 @@ special formulas, as well as regular fields and blobs.
 Update Validation
 -----------------
 
-As documents written to disk, they can be validated dynamically by javascript
-functions for both security and data validation. When the document passes
-all the formula validation criteria, the update is allowed to continue.
+
+As documents are written to disk, they can be validated dynamically by
+javascript functions for both security and data validation. When the document
+passes all the formula validation criteria, the update is allowed to continue.
 If the validation fails, the update is aborted and the user client gets an
 error response.
 

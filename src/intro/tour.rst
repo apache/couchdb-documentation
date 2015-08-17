@@ -210,7 +210,7 @@ button in the pop up. Make sure to leave the document ID blank,
 and CouchDB will generate a UUID for you.
 
 For demoing purposes, having CouchDB assign a UUID is fine. When you write
-your first programs, we recommend assigning your own UUIDs. If your rely on
+your first programs, we recommend assigning your own UUIDs. If you rely on
 the server to generate the UUID and you end up making two POST requests
 because the first POST request bombed out, you might generate two docs and
 never find out about the first one because only the second one will be

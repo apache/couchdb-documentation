@@ -57,7 +57,7 @@ HTTP Server Options
             [httpd]
             bind_address = 127.0.0.1
 
-        To let CouchDB listen any available IP address, just setup ``0.0.0.0``
+        To let CouchDB listen any available IP address, just set up ``0.0.0.0``
         value::
 
             [httpd]
@@ -229,7 +229,7 @@ Secure Socket Level Options
 .. config:section:: ssl :: Secure Socket Level Options
 
     CouchDB supports SSL natively. All your secure connection needs can now be
-    served without needing to setup and maintain a separate proxy server that
+    served without needing to set up and maintain a separate proxy server that
     handles SSL.
 
     SSL setup can be tricky, but the configuration in CouchDB was designed to
@@ -263,7 +263,7 @@ Secure Socket Level Options
         [daemons]
         httpsd = {couch_httpd, start_link, [https]}
 
-    Next, under ``[ssl]`` section setup newly generated certificates::
+    Next, under the ``[ssl]`` section set up the newly generated certificates::
 
         [ssl]
         cert_file = /etc/couchdb/cert/couchdb.pem
