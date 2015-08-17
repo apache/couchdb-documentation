@@ -499,7 +499,7 @@ Cross-Origin Resource Sharing
         - `Same origin policy for URIs <https://developer.mozilla.org/en-US/docs/Same-origin_policy_for_file:_URIs>`_
         - `HTTP Access Control <https://developer.mozilla.org/En/HTTP_access_control>`_
         - `Server-side Access Control <https://developer.mozilla.org/En/Server-Side_Access_Control>`_
-        - `Javascript same origin policy <https://developer.mozilla.org/en-US/docs/Same_origin_policy_for_JavaScript>`_
+        - `JavaScript same origin policy <https://developer.mozilla.org/en-US/docs/Same_origin_policy_for_JavaScript>`_
 
         Client-side CORS support and usage:
 
