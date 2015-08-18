@@ -107,9 +107,9 @@ can be disabled by setting ``reduce_limit`` config option to ``false``:
     reduce_limit = false
 
 While disabling ``reduce_limit`` might be useful for debug proposes, remember
-that the main task of reduce functions is to *reduce* mapped result, not to make
-them bigger. Generally, your reduce function should converge rapidly to a single
-value - which could be an array or similar object.
+that the main task of reduce functions is to *reduce* the mapped result, not to
+make it bigger. Generally, your reduce function should converge rapidly to a
+single value - which could be an array or similar object.
 
 .. _reducefun/builtin:
 
