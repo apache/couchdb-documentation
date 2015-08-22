@@ -276,7 +276,7 @@ Build and System Integration
 * Bug fix for building couch.app's module list.
 * ETap tests are now run during make distcheck. This included a number of
   updates to the build system to properly support VPATH builds.
-* Gavin McDonald setup a build-bot instance. More info can be found at
+* Gavin McDonald set up a build-bot instance. More info can be found at
   http://ci.apache.org/buildbot.html
 
 Futon

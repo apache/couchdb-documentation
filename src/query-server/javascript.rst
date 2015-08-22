@@ -103,7 +103,7 @@ modules and functions:
 
     A helper function to check if the provided value is an `Array`.
 
-    :param obj: Any Javascript value
+    :param obj: Any JavaScript value
     :return: ``true`` if `obj` is `Array`-typed, ``false`` otherwise
     :rtype: boolean
 

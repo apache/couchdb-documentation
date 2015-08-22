@@ -56,7 +56,7 @@ Global HTTP Handlers
 
         .. note::
             Sometimes you don't want to disclose database names for everyone,
-            but you also don't like/want/able to setup any proxies in front of
+            but you also don't like/want/able to set up any proxies in front of
             CouchDB. Removing this handler disables ``_all_dbs`` resource and
             there will be no way to get list of available databases.
 
@@ -123,7 +123,7 @@ Global HTTP Handlers
             [httpd_global_handlers]
             _utils = {couch_httpd_misc_handlers, handle_utils_dir_req, "/usr/share/couchdb/www"}
 
-        In similar way, you may setup custom handler to let CouchDB serve any
+        In similar way, you may set up custom handler to let CouchDB serve any
         static files.
 
     .. config:option:: _uuids

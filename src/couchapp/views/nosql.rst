@@ -18,9 +18,10 @@ View Cookbook for SQL Jockeys
 
 This is a collection of some common SQL queries and how to get the same result
 in CouchDB. The key to remember here is that CouchDB does not work like an SQL
-database at all and that best practices from the SQL world do not translate well
-or at all to CouchDB. This documents’s “cookbook” assumes that you are familiar
-with the CouchDB basics such as creating and updating databases and documents.
+database at all, and that best practices from the SQL world do not translate
+well or at all to CouchDB. This document’s “cookbook” assumes that you are
+familiar with the CouchDB basics such as creating and updating databases and
+documents.
 
 Using Views
 ===========
@@ -215,7 +216,7 @@ Easy.
 Note that you have to emit a value. The view result includes the associated
 document ID in every row. We can use it to look up more data from the document
 itself. We can also use the ``?include_docs=true`` parameter to have CouchDB
-fetch the documents individually for us.
+fetch the individual documents for us.
 
 Look Up by Prefix
 =================

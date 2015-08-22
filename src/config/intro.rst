@@ -112,7 +112,7 @@ For example::
 
 Each configuration file line may contains `section` definition, `parameter`
 specification, empty (space and newline characters only) or `commented` line.
-You can setup `inline` commentaries for `sections` or `parameters`.
+You can set up `inline` commentaries for `sections` or `parameters`.
 
 The `section` defines group of parameters that are belongs to some specific
 CouchDB subsystem. For instance, :section:`httpd` section holds not only HTTP

@@ -66,17 +66,16 @@ of a document with a `type` of "post". Note that :func:`emit` may be called many
 times for a single document, so the same document may be available by several
 different keys.
 
-Also keep in mind that each document is *sealed* to prevent situation when one
-map function changes document state and the other one received a modified
-version.
+Also keep in mind that each document is *sealed* to prevent the situation where
+one map function changes document state and another receives a modified version.
 
 For efficiency reasons, documents are passed to a group of map functions -
 each document is processed by group of map functions from all views of
 related design document. This means that if you trigger index update for one
 view in ddoc, all others will get updated too.
 
-Since `1.1.0` release `map` function supports
-:ref:`CommonJS <commonjs>` modules and access to :func:`require` function.
+Since version `1.1.0`, `map` supports :ref:`CommonJS <commonjs>` modules and
+the :func:`require` function.
 
 .. _reducefun:
 
@@ -85,7 +84,7 @@ Reduce and rereduce functions
 
 .. function:: redfun(keys, values[, rereduce])
 
-    :param keys: Array of pairs docid-key for related map function result.
+    :param keys: Array of pairs of docid-key for related map function results.
                  Always ``null`` if rereduce is running (has ``true`` value).
     :param values: Array of map function result values.
     :param rereduce: Boolean sign of rereduce run.
@@ -93,24 +92,24 @@ Reduce and rereduce functions
     :return: Reduces `values`
 
 Reduce functions takes two required arguments of keys and values lists - the
-result of the related map function - and optional third one which indicates if
-`rereduce` mode is active or not. `Rereduce` is using for additional reduce
+result of the related map function - and an optional third value which indicates
+if `rereduce` mode is active or not. `Rereduce` is used for additional reduce
 values list, so when it is ``true`` there is no information about related `keys`
 (first argument is ``null``).
 
-Note, that if produced result by `reduce` function is longer than initial
+Note that if the result of a `reduce` function is longer than the initial
 values list then a Query Server error will be raised. However, this behavior
-could be disabled by setting ``reduce_limit`` config option to ``false``:
+can be disabled by setting ``reduce_limit`` config option to ``false``:
 
 .. code-block:: ini
 
     [query_server_config]
     reduce_limit = false
 
-While disabling ``reduce_limit`` might be useful for debug proposes, remember,
-that main task of reduce functions is to *reduce* mapped result, not to make it
-even bigger. Generally, your reduce function should converge rapidly to a single
-value - which could be an array or similar object.
+While disabling ``reduce_limit`` might be useful for debug proposes, remember
+that the main task of reduce functions is to *reduce* the mapped result, not to
+make it bigger. Generally, your reduce function should converge rapidly to a
+single value - which could be an array or similar object.
 
 .. _reducefun/builtin:
 
@@ -118,9 +117,9 @@ Builtin reduce functions
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Additionally, CouchDB has three built-in reduce functions. These are implemented
-in Erlang and runs inside CouchDB, so they are much faster than the equivalent
+in Erlang and run inside CouchDB, so they are much faster than the equivalent
 JavaScript functions: ``_sum``, ``_count`` and ``_stats``. Their equivalents in
-JavaScript below:
+JavaScript:
 
 .. code-block:: javascript
 
@@ -171,17 +170,17 @@ JavaScript below:
     **Why don't reduce functions support CommonJS modules?**
 
     While `map` functions have limited access to stored modules through
-    :func:`require` function there is no such feature for `reduce` functions.
-    The reason lies deep inside in the mechanism how `map` and `reduce`
-    functions are processed by the Query Server. Let's take a look on `map`
+    :func:`require`, there is no such feature for `reduce` functions.
+    The reason lies deep inside the way `map` and `reduce`
+    functions are processed by the Query Server. Let's take a look at `map`
     functions first:
 
     #. CouchDB sends all `map` functions for a processed design document to
        Query Server.
     #. Query Server handles them one by one, compiles and puts them onto an
        internal stack.
-    #. After all `map` functions had been processed, CouchDB will send the
-       remaining documents to index one by one.
+    #. After all `map` functions have been processed, CouchDB will send the
+       remaining documents to index, one by one.
     #. Query Server receives the document object and applies it to every
        function from the stack. The emitted results are then joined into a
        single array and sent back to CouchDB.
@@ -189,8 +188,8 @@ JavaScript below:
     Now let's see how `reduce` functions are handled:
 
     #. CouchDB sends *as single command* list of available `reduce` functions
-       with result list of key-value pairs that was previously received as
-       result of `map` functions work.
+       with result list of key-value pairs that was previously received as the
+       result of `map` functions' work.
     #. Query Server compiles reduce functions and applies them to key-value
        lists. Reduced result is sent back to CouchDB.
 
@@ -217,7 +216,7 @@ Show functions
     :rtype: object or string
 
 Show functions are used to represent documents in various formats, commonly as
-HTML page with nicer formatting. They can also be used to run server-side
+HTML pages with nice formatting. They can also be used to run server-side
 functions without requiring a pre-existing document.
 
 Basic example of show function could be:
@@ -397,8 +396,8 @@ Update functions
     :returns: Two-element array: the first element is the (updated or new)
       document, which is committed to the database. If the first element
       is ``null`` no document will be committed to the database.
-      If you are updating an existing, it should already have an ``_id``
-      set, and if you are creating a new document, make sure to set its
+      If you are updating an existing document, it should already have an
+      ``_id`` set, and if you are creating a new document, make sure to set its
       ``_id`` to something, either generated based on the input or the
       ``req.uuid`` provided. The second element is the response that will
       be sent back to the caller.
@@ -491,7 +490,7 @@ about "new mails"::
     ],
     "last_seq":27}
 
-Note that the value of ``last_seq`` is 27, but we'd received only two records.
+Note that the value of ``last_seq`` is 27, but we received only two records.
 Seems like any other changes were for documents that haven't passed our filter.
 
 We probably need to filter the changes feed of our mailbox by more than a single
@@ -501,7 +500,7 @@ mails, and so on. Creating a lot of similar functions that actually do similar
 work isn't good idea - so we need a dynamic filter.
 
 You may have noticed that filter functions take a second argument named
-:ref:`request <request_object>` - it allows creating dynamic filters
+:ref:`request <request_object>`. This allows the creation of dynamic filters
 based on query parameters, :ref:`user context <userctx_object>` and more.
 
 The dynamic version of our filter looks like this:
@@ -554,8 +553,8 @@ View filters
 
 View filters are the same as above, with one small difference: they use
 views `map` function instead to `filter` one to process the changes feed. Each
-time when a key-value pair could be emitted, a change is returned. This allows
-to avoid creating filter functions that are mostly does same works as views.
+time a key-value pair could be emitted, a change is returned. This allows us
+to avoid creating filter functions that mostly do the same works as views.
 
 To use them just specify `_view` value for ``filter`` parameter and
 `designdoc/viewname` for ``view`` one::
@@ -752,7 +751,7 @@ modified by a user with the ``_admin`` role:
     }
 
 .. note::
-    The ``return`` statement used only for function, it has no impact on
+    The ``return`` statement is used only for function, it has no impact on
     the validation process.
 
 .. seealso::

@@ -219,7 +219,7 @@ Views
 Views Generation
 ----------------
 
-Views with the Javascript query server are extremely slow to generate when
+Views with the JavaScript query server are extremely slow to generate when
 there are a non-trivial number of documents to process. The generation process
 won't even saturate a single CPU let alone your I/O. The cause is the latency
 involved in the CouchDB server and separate `couchjs` query server, dramatically

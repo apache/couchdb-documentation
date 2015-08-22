@@ -143,7 +143,7 @@ Configuring Replication
 
 When you click the Replicator option within the Tools menu you are
 presented with the Replicator screen. This allows you to start
-replication between two databases by filling in or select the
+replication between two databases by filling in or selecting the
 appropriate options within the form provided.
 
 .. figure:: ../../images/futon-replform.png

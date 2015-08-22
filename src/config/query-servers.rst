@@ -43,7 +43,7 @@ Query Servers Definition
       query servers in wild. This value is also used for `ddoc` field
       ``language`` to determine which query server processes the functions.
 
-      Note, that you may setup multiple query servers for the same programming
+      Note, that you may set up multiple query servers for the same programming
       language, but you have to name them different (like `python-dev` etc.).
 
     - ``PATH``: is a system path to the executable binary program that runs the

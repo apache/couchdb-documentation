@@ -142,10 +142,10 @@ and compatible with replication. CouchDB views are defined inside special
 regular documents, so that not only data replicates in CouchDB,
 but entire application designs replicate too.
 
-Javascript View Functions
+JavaScript View Functions
 -------------------------
 
-Views are defined using Javascript functions acting as the map part in a
+Views are defined using JavaScript functions acting as the map part in a
 `map-reduce system`_. A :ref:`view function <viewfun>` takes a CouchDB document
 as an argument and then does whatever computation it needs to do to determine
 the data that is to be made available through the view, if any.
@@ -223,9 +223,9 @@ special formulas, as well as regular fields and blobs.
 Update Validation
 -----------------
 
-As documents written to disk, they can be validated dynamically by javascript
-functions for both security and data validation. When the document passes
-all the formula validation criteria, the update is allowed to continue.
+As documents are written to disk, they can be validated dynamically by
+JavaScript functions for both security and data validation. When the document
+passes all the formula validation criteria, the update is allowed to continue.
 If the validation fails, the update is aborted and the user client gets an
 error response.
 
@@ -266,7 +266,7 @@ problems or crash for example, the next replication restarts at the same
 document where it left off.
 
 Partial replicas can be created and maintained. Replication can be filtered
-by a javascript function, so that only particular documents or those meeting
+by a JavaScript function, so that only particular documents or those meeting
 specific criteria are replicated. This can allow users to take subsets of a
 large shared database application offline for their own use, while maintaining
 normal interaction with the application and that subset of data.

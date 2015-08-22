@@ -19,8 +19,8 @@ Authentication
 Interfaces for obtaining session and authorization data.
 
 .. note::
-    We're also strongly recommend you to :ref:`setup SSL <config/ssl>` to
-    improve all authentication methods security.
+    We also strongly recommend you :ref:`set up SSL <config/ssl>` to
+    improve all authentication methods' security.
 
 .. _api/auth/basic:
 
@@ -30,7 +30,7 @@ Basic Authentication
 `Basic authentication`_ (:rfc:`2617`) is a quick and simple way to authenticate
 with CouchDB. The main drawback is the need to send user credentials with each
 request which may be insecure and could hurt operation performance (since
-CouchDB must compute password hash with every request):
+CouchDB must compute the password hash with every request):
 
 **Request**:
 
@@ -72,10 +72,10 @@ Cookie Authentication
 For cookie authentication (:rfc:`2109`) CouchDB generates a token that the
 client can use for the next few requests to CouchDB. Tokens are valid until
 a timeout. When CouchDB sees a valid token in a subsequent request, it will
-authenticate user by this token without requesting the password again. By
+authenticate the user by this token without requesting the password again. By
 default, cookies are valid for 10 minutes, but it's :config:option:`adjustable
 <couch_httpd_auth/timeout>`. Also it's possible to make cookies
-:config:option:`persistent <couch_httpd_auth/allow_persistent_cookies>`
+:config:option:`persistent <couch_httpd_auth/allow_persistent_cookies>`.
 
 To obtain the first token and thus authenticate a user for the first time, the
 `username` and `password` must be sent to the :ref:`_session API
