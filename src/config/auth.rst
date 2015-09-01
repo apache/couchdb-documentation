@@ -212,7 +212,7 @@ Authentication Configuration
             [couch_httpd_auth]
             require_valid_user = false
 
-    .. config:option:: secret :: Proxy Auth secret token
+    .. config:option:: secret :: Authentication with secret token
 
         The secret token is used for :ref:`api/auth/proxy` and for :ref:`api/auth/cookie`. ::
 
