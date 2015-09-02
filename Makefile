@@ -21,7 +21,7 @@ PAPERSIZE    := -D latex_paper_size=a4
 SPHINXFLAGS  := -a -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
 SPHINXOPTS   := $(SPHINXFLAGS) $(SOURCE)
 
-ENSURECMD=which $(1) /dev/null 2>&1 || (echo "*** Make sure that $(1) is installed and on your path" && exit 1)
+ENSURECMD=which $(1) > /dev/null 2>&1 || (echo "*** Make sure that $(1) is installed and on your path" && exit 1)
 
 all: html pdf info man
 
