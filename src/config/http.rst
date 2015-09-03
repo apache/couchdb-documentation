@@ -584,6 +584,15 @@ Cross-site Request Forgery protection
             [csrf]
             mandatory = true
 
+    .. config:option:: mime_types
+
+        CouchDB will only enforce CSRF protection for the listed mime
+        types. The default list is application/x-www-form-urlencoded,
+        multipart/form-data, text/plain::
+
+            [csrf]
+            mime_types = text/plain
+
     .. config:option:: secret
 
         All CSRF cookies are signed by the server using this value. A
