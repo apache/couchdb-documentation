@@ -532,12 +532,12 @@ Cross-site Request Forgery protection
 
     `CSRF`, or "Cross-site Request Forgery" is a web-based exploit
     where an attacker can cause a user agent to make an authenticated
-    form post or XHR request against a foreign site without their
-    consent. The attack works because a user agent will send any
-    cookies it has along with the request. The attacker does not see
-    the response, nor can they see the user agent's cookies. The
-    attacker hopes to gain indirectly, e.g, by posting to a password
-    reset form or cause damage by issuing a database delete request.
+    form post against a foreign site without their consent. The attack
+    works because a user agent will send any cookies it has along with
+    the request. The attacker does not see the response, nor can they
+    see the user agent's cookies. The attacker hopes to gain
+    indirectly, e.g, by posting to a password reset form or cause
+    damage by issuing a database delete request.
 
     To prevent this, CouchDB can require a matching request header
     before processing any write request (defined as any method other
