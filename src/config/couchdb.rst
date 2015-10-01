@@ -121,7 +121,7 @@ Base CouchDB Options
     .. config:option:: os_process_timeout :: External processes time limit
 
         If an external process, such as a query server or external process,
-        runs for this amount of microseconds without returning any results, it
+        runs for this amount of milliseconds without returning any results, it
         will be terminated. Keeping this value smaller ensures you get
         expedient errors, but you may want to tweak it for your specific
         needs. ::
