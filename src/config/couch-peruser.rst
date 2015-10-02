@@ -26,18 +26,18 @@ couch_peruser Options
 
     .. config:option:: enable
 
-	If set to ``true``, couch_peruser ensures that a private per-user
-	database exists for each document in ``_users``. These databases are
-	writable only by the corresponding user. Databases are in the following
-	form: ``userdb-{hex encoded username}``. ::
+    If set to ``true``, couch_peruser ensures that a private per-user
+    database exists for each document in ``_users``. These databases are
+    writable only by the corresponding user. Databases are in the following
+    form: ``userdb-{hex encoded username}``. ::
 
-	    [couch_peruser]
-	    enable = false
+        [couch_peruser]
+        enable = false
 
     .. config:option:: delete_dbs
 
-	If set to ``true`` and a user is deleted, the respective database gets
-	deleted as well. ::
+    If set to ``true`` and a user is deleted, the respective database gets
+    deleted as well. ::
 
-	    [couch_peruser]
-	    delete_dbs = false
+        [couch_peruser]
+        delete_dbs = false
