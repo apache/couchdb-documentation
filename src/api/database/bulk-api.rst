@@ -44,6 +44,8 @@
       should be included in the result. Default is ``true``.
     :query string key: Return only documents that match the specified key.
       *Optional*.
+    :query string keys: Return only documents that match the specified keys.
+      *Optional*.
     :query number limit: Limit the number of the returned documents to the
       specified number. *Optional*.
     :query number skip: Skip this number of records before starting to return
