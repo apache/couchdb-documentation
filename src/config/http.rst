@@ -523,9 +523,6 @@ with the vhost name prefixed by ``cors:``. Example case for the vhost
     ; List of accepted methods
     methods = HEAD, GET
 
-Cross-site Request Forgery protection
-=====================================
-
 .. _config/vhosts:
 
 Virtual Hosts
