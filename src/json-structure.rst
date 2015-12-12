@@ -449,6 +449,47 @@ Request object
         "uuid": "3184f9d1ea934e1f81a24c71bde5c168"
     }
 
+.. _request2_object:
+
+Request2 object
+===============
+
++--------------------------------+---------------------------------------------+
+| Field                          | Description                                 |
++================================+=============================================+
+| body                           | Request body data as `string`.              |
+|                                | If the request method is `GET` this field   |
+|                                | contains the value ``"undefined"``. If the  |
+|                                | method is `DELETE` or `HEAD` the value is   |
+|                                | ``""`` (empty string).                      |
++--------------------------------+---------------------------------------------+
+| cookie                         | Cookies `object`.                           |
++--------------------------------+---------------------------------------------+
+| headers                        | Request headers `object`.                   |
++--------------------------------+---------------------------------------------+
+| method                         | Request method as `string` or `array`.      |
+|                                | String value is a method as one of: `HEAD`, |
+|                                | `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`,  |
+|                                | and `TRACE`. Otherwise it will be           |
+|                                | represented as an array of char codes.      |
++--------------------------------+---------------------------------------------+
+| path                           | List of requested path sections.            |
++--------------------------------+---------------------------------------------+
+| peer                           | Request source IP address.                  |
++--------------------------------+---------------------------------------------+
+| query                          | URL query parameters `object`.              |
+|                                | Note that multiple keys are not supported   |
+|                                | and the last key value suppresses others.   |
++--------------------------------+---------------------------------------------+
+| requested_path                 | List of actual requested path section.      |
++--------------------------------+---------------------------------------------+
+| raw_path                       | Raw requested path `string`.                |
++--------------------------------+---------------------------------------------+
+| secObj                         | :ref:`security_object`.                     |
++--------------------------------+---------------------------------------------+
+| userCtx                        | :ref:`userctx_object`.                      |
++--------------------------------+---------------------------------------------+
+
 .. _response_object:
 
 Response object

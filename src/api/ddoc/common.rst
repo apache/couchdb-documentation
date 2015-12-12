@@ -52,7 +52,7 @@
     * **options** (*object*): View's default options
     * **filters** (*object*): :ref:`Filter functions <filterfun>` definition
     * **lists** (*object*): :ref:`List functions <listfun>` definition
-    * **rewrites** (*array*): Rewrite rules definition
+    * **rewrites** (*array* or *string*): Rewrite rules definition
     * **shows** (*object*): :ref:`Show functions <showfun>` definition
     * **updates** (*object*): :ref:`Update functions <updatefun>` definition
     * **validate_doc_update** (*string*): :ref:`Validate document update
