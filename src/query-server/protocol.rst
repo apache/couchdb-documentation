@@ -860,6 +860,101 @@ The Query Server answers::
     ``unauthorized`` - these errors will be turned into correct ``HTTP 403`` and
     ``HTTP 401`` responses respectively.
 
+.. _qs/ddoc/rewrites:
+
+``rewrites``
+-----------------------
+
+:Command: ``ddoc``
+:SubCommand: ``rewrites``
+:Arguments:
+
+    - :ref:`request2_object`
+
+:Returns: ``1``
+
+Executes :ref:`rewrite function <api/ddoc/rewrite>`.
+
+CouchDB send::
+
+    [
+        "ddoc",
+        "_design/id",
+        ["rewrites"],
+        [
+            {
+                "method": "POST",
+                "requested_path": [
+                    "test",
+                    "_design",
+                    "1139",
+                    "_update",
+                    "nothing"
+                ],
+                "path": [
+                    "test",
+                    "_design",
+                    "1139",
+                    "_update",
+                    "nothing"
+                ],
+                "raw_path": "/test/_design/1139/_update/nothing",
+                "query": {},
+                "headers": {
+                    "Accept": "*/*",
+                    "Accept-Encoding": "identity, gzip, deflate, compress",
+                    "Content-Length": "0",
+                    "Host": "localhost:5984"
+                },
+                "body": "",
+                "peer": "127.0.0.1",
+                "cookie": {},
+                "userCtx": {
+                    "db": "test",
+                    "name": null,
+                    "roles": [
+                        "_admin"
+                    ]
+                },
+                "secObj": {}
+            }
+        ]
+    ]
+
+The Query Server answers::
+
+    [
+        "ok",
+        {
+            "path": "some/path",
+            "query": {"key1": "value1", "key2": "value2"},
+            "method": "METHOD",
+            "headers": {"Header1": "value1", "Header2": "value2"},
+            "body": ""
+        }
+    ]
+
+or in case of direct response::
+
+    [
+        "ok",
+        {
+            "headers": {"Content-Type": "text/plain"},
+            "body": "Welcome!",
+            "code": 200
+        }
+    ]
+
+or for immidiate redirect::
+
+    [
+        "ok",
+        {
+            "headers": {"Location": "http://example.com/path/"},
+            "code": 302
+        }
+    ]
+
 .. _qs/errors:
 
 Raising errors
