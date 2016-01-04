@@ -325,7 +325,6 @@ supplied document IDs, and one which will have a document ID generated:
                 "title": "LambStew"
             },
             {
-                "_id": "BeefStew",
                 "servings": 8,
                 "subtitle": "Hand-made dumplings make a great accompaniment",
                 "title": "BeefStew"
@@ -361,7 +360,7 @@ documents created, here with the combination and their revision IDs:
             "rev": "1-648f1b989d52b8e43f05aa877092cc7c"
         },
         {
-            "id": "BeefStew",
+            "id": "00a271787f89c0ef2e10e88a0c0003f0",
             "ok": true,
             "rev": "1-e4602845fc4c99674f50b1d5a804fdfa"
         }
