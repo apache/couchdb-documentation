@@ -35,7 +35,7 @@ latex: $(TEX)
 	$(SPHINXBUILD) -b $@ $(SPHINXOPTS) $(BUILDDIR)/$@
 
 pdf: latex $(PDFLATEX)
-	$(MAKE) -C $(BUILDDIR)/latex all-pdf
+	$(MAKE) LATEXOPTS=' -interaction=batchmode ' -C $(BUILDDIR)/latex all-pdf
 
 info: $(SPHINXBUILD) $(MAKEINFO)
 	$(SPHINXBUILD) -b texinfo $(SPHINXOPTS) $(BUILDDIR)/texinfo
