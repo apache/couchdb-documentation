@@ -27,6 +27,12 @@ Upgrade Notes
 
 .. note:: TBD
 
+* It is possible to have multiple replicator databases.
+  `replicator/db` config option has been removed.
+  Instead `_replicator` and any database names ending
+  with `/_replicator` suffix will be recognized as
+  replicator databases by the system.
+
 .. _release/2.0.0:
 
 Version 2.0.0

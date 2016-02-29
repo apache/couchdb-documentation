@@ -30,8 +30,9 @@ Replication documents can have a user defined ``_id`` (handy for finding a
 specific replication request later). Design Documents (and ``_local`` documents)
 added to the replicator database are ignored.
 
-The default name of this database is ``_replicator``. The name can be changed in
-the ``local.ini`` configuration, section ``[replicator]``, parameter ``db``.
+The default name of this database is ``_replicator``. Additional replicator
+databases can be created. To be recognized as such by the system, their database
+names should end with ``/_replicator``.
 
 Basics
 ======
@@ -43,7 +44,7 @@ Let's say you POST the following document into ``_replicator``:
     {
         "_id": "my_rep",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar",
+        "target":  "http://user:pass@localhost:5984/bar",
         "create_target":  true
     }
 
@@ -62,7 +63,7 @@ CouchDB with 3 new fields:
     {
         "_id": "my_rep",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar",
+        "target":  "http://user:pass@localhost:5984/bar",
         "create_target":  true,
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "triggered",
@@ -96,12 +97,12 @@ Special fields set by the replicator start with the prefix
     {
         "_id": "my_rep",
         "_rev": "2-9f2c0d9372f4ee4dc75652ab8f8e7c70",
-        "source": "foodb",
-        "target": "bardb",
+        "source":  "http://myserver.com:5984/foo",
+        "target":  "http://user:pass@localhost:5984/bar",
         "_replication_state": "error",
         "_replication_state_time": "2013-12-13T18:48:00+01:00",
         "_replication_state_reason": "db_not_found: could not open foodb",
-        "_replication_id": "fe965cdc47b4d5f6c02811d9d351ac3d"
+        "_replication_id": "c0ebe9256695ff083347cbf95f93e280"
     }
 
 When the replication finishes, it will update the ``_replication_state``
@@ -113,7 +114,7 @@ the document will look like:
     {
         "_id": "my_rep",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar",
+        "target":  "http://user:pass@localhost:5984/bar",
         "create_target":  true,
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "completed",
@@ -156,7 +157,7 @@ the following order:
     {
         "_id": "doc_A",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar"
+        "target":  "http://user:pass@localhost:5984/bar"
     }
 
 and
@@ -166,7 +167,7 @@ and
     {
         "_id": "doc_B",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar"
+        "target":  "http://user:pass@localhost:5984/bar"
     }
 
 Both describe exactly the same replication (only their ``_ids`` differ). In this
@@ -181,7 +182,7 @@ look like this:
     {
         "_id": "doc_B",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar",
+        "target":  "http://user:pass@localhost:5984/bar",
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280"
     }
 
@@ -192,7 +193,7 @@ While document ``doc_A`` will look like this:
     {
         "_id": "doc_A",
         "source":  "http://myserver.com:5984/foo",
-        "target":  "bar",
+        "target":  "http://user:pass@localhost:5984/bar",
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "triggered",
         "_replication_state_time":  1297974122
@@ -247,18 +248,18 @@ to do this will result in the following response
 The way to accomplish this is to first delete the old version and then insert
 the new one.
 
-Changing the Replicator Database
+Additional Replicator Databases
 ================================
 
-Imagine your replicator database (default name is ``_replicator``) has the two
-following documents that represent pull replications from servers A and B:
+Imagine replicator database (``_replicator``) has these two
+documents which represent pull replications from servers A and B:
 
 .. code-block:: javascript
 
     {
         "_id": "rep_from_A",
         "source":  "http://aserver.com:5984/foo",
-        "target":  "foo_a",
+        "target":  "http://user:pass@localhost:5984/foo_a",
         "continuous":  true,
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "triggered",
@@ -270,55 +271,48 @@ following documents that represent pull replications from servers A and B:
     {
         "_id": "rep_from_B",
         "source":  "http://bserver.com:5984/foo",
-        "target":  "foo_b",
+        "target":  "http://user:pass@localhost:5984/foo_b",
         "continuous":  true,
         "_replication_id":  "231bb3cf9d48314eaa8d48a9170570d1",
         "_replication_state":  "triggered",
         "_replication_state_time":  1297974122
     }
 
-Now without stopping and restarting CouchDB, you change the name of the
-replicator database to ``another_replicator_db``:
+Now without stopping and restarting CouchDB, add another replicator database.
+For example ``another/_replicator``:
 
 .. code-block:: bash
 
-    $ curl -X PUT http://localhost:5984/_config/replicator/db -d '"another_replicator_db"'
-    "_replicator"
+    $ curl -X PUT http://user:pass@localhost:5984/another%2F_replicator/
+    {"ok":true}
 
-As soon as this is done, both pull replications defined before, are
-stopped. This is explicitly mentioned in CouchDB's log:
+.. note::
+   A / character in a database name, when used in a URL, should be escaped.
 
-.. code-block:: text
-
-    [Fri, 11 Mar 2011 07:44:20 GMT] [info] [<0.104.0>] Stopping all ongoing replications because the replicator database was deleted or changed
-    [Fri, 11 Mar 2011 07:44:20 GMT] [info] [<0.127.0>] 127.0.0.1 - - PUT /_config/replicator/db 200
-
-Imagine now you add a replication document to the new replicator
-database named ``another_replicator_db``:
+Then add a replication document to the new replicator database:
 
 .. code-block:: javascript
 
     {
         "_id": "rep_from_X",
         "source":  "http://xserver.com:5984/foo",
-        "target":  "foo_x",
+        "target":  "http://user:pass@localhost:5984/foo_x",
         "continuous":  true
     }
 
-From now own you have a single replication going on in your system: a
-pull replication pulling from server X. Now you change back the
-replicator database to the original one ``_replicator``::
+From now on, there are three replications active in the system: two replications
+from A and B, and a new one from X.
 
-    $ curl -X PUT http://localhost:5984/_config/replicator/db -d '"_replicator"'
-    "another_replicator_db"
+Then remove the additional replicator database:
 
-Immediately after this operation, the replication pulling from server X
-will be stopped and the replications defined in the ``_replicator``
-database (pulling from servers A and B) will be resumed.
+.. code-block:: bash
 
-Changing again the replicator database to ``another_replicator_db`` will
-stop the pull replications pulling from servers A and B, and resume the
-pull replication pulling from server X.
+    $ curl -X DELETE http://user:pass@localhost:5984/another%2F_replicator/
+    {"ok":true}
+
+After this operation, replication pulling from server X
+will be stopped and the replications in the ``_replicator``
+database (pulling from servers A and B) will continue.
 
 Replicating the replicator database
 ===================================
@@ -331,7 +325,7 @@ following pull replication documents in it:
     {
          "_id": "rep_from_A",
          "source":  "http://aserver.com:5984/foo",
-         "target":  "foo_a",
+         "target":  "http://user:pass@localhost:5984/foo_a",
          "continuous":  true,
          "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
          "_replication_state":  "triggered",
@@ -343,7 +337,7 @@ following pull replication documents in it:
     {
          "_id": "rep_from_B",
          "source":  "http://bserver.com:5984/foo",
-         "target":  "foo_b",
+         "target":  "http://user:pass@localhost:5984/foo_b",
          "continuous":  true,
          "_replication_id":  "231bb3cf9d48314eaa8d48a9170570d1",
          "_replication_state":  "triggered",
@@ -402,7 +396,7 @@ Example delegated replication document:
     {
         "_id": "my_rep",
         "source":  "http://bserver.com:5984/foo",
-        "target":  "bar",
+        "target":  "http://user:pass@localhost:5984/bar",
         "continuous":  true,
         "user_ctx": {
             "name": "joe",
