@@ -25,13 +25,6 @@ Replicator Database Configuration
 
     .. versionadded:: 1.2
 
-    .. config:option:: db
-
-        Specifies replicator database name::
-
-            [replicator]
-            db = _replicator
-
     .. config:option:: max_replication_retry_count
 
         Maximum replication retry count can be a non-negative integer or
