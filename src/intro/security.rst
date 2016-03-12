@@ -476,7 +476,7 @@ Now let's share the field ``name``. First, set up the ``public_fields``
 configuration option. Remember, that this action requires administrator
 privileges. The next command will prompt you for user `admin`'s password:
 
-    curl -X PUT http://localhost:5984/_config/couch_http_auth/public_fields \
+    curl -X PUT http://localhost:5984/_config/couch_httpd_auth/public_fields \
        -H "Content-Type: application/json" \
        -d '"name"' \
        -u admin
