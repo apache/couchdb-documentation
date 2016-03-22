@@ -52,9 +52,10 @@
         CouchDB The Definitive Guide`_ for more information.
     :query number heartbeat: Period in *milliseconds* after which an empty
         line is sent in the results. Only applicable for :ref:`longpoll
-        <changes/longpoll>` or :ref:`continuous <changes/continuous>` feeds.
-        Overrides any timeout to keep the feed alive indefinitely.
-        Default is ``60000``. May be ``true`` to use default value.
+        <changes/longpoll>`, :ref:`continuous <changes/continuous>`, and
+        :ref:`eventsource <changes/eventsource>` feeds. Overrides any timeout
+        to keep the feed alive indefinitely. Default is ``60000``. May be
+        ``true`` to use default value.
     :query boolean include_docs: Include the associated document with each
         result. If there are conflicts, only the winning revision is returned.
         Default is ``false``.
