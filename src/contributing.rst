@@ -24,54 +24,36 @@ If you don't have a GitHub account yet, it is a good time to get one, they are
 free. If you don't want to use GitHub, there are alternate ways to
 contributing back, that we'll cover next time.
 
-Go to https://github.com/apache/couchdb and click the "fork" button in the top
+Go to https://github.com/apache/couchdb-documentation and click the "fork" button in the top
 right. This will create a fork of CouchDB in your GitHub account. Mine is
 `janl`, so my fork lives at https://github.com/janl/couchdb. In the header, it
 tells me me my "GitHub Clone URL". We need to copy that and start a terminal:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/janl/couchdb.git
-    $ cd couchdb
+    $ git clone https://github.com/janl/couchdb-documentation.git
+    $ cd couchdb-documentation
     $ subl .
 
-I'm opening the whole CouchDB source tree in my favourite editor. It gives
-me the usual directory listing:
+I'm opening the whole CouchDB documentation source tree in my favourite editor.
+It gives me the directory listing:
 
 .. code-block:: bash
 
-    .git/
-    .gitignore
-    .mailmap
-    .travis.yml
-    AUTHORS
-    BUGS
-    CHANGES
-    DEVELOPERS
-    INSTALL
-    INSTALL.Unix
-    INSTALL.Windows
-    LICENSE
-    Makefile.am
-    NEWS
-    NOTICE
-    README
-    THANKS.in
-    acinclude.m4.in
-    bin/
-    bootstrap
-    build-aux/
-    configure.ac
-    etc/
-    license.skip
-    share/
-    src/
-    test/
-    utils/
-    var/
-
-The documentation sources live in `share/doc/src`, you can safely ignore all
-the other files and directories.
+.git
+.gitignore
+.travis.yml
+LICENSE
+Makefile
+NOTICE
+ext
+images
+make.bat
+rebar.config
+src
+static
+templates
+themes
 
 First we should determine where we want to document this inside the
 documentation. We can look through http://docs.couchdb.org/en/latest/
@@ -89,7 +71,7 @@ but we'll leave this for later.
 
 Let's try and find the source file that builds the file
 http://docs.couchdb.org/en/latest/json-structure.html -- we are in luck, under
-`share/doc/src` we find the file `json-structure.rst`. That looks promising.
+`src` we find the file `json-structure.rst`. That looks promising.
 `.rst` stands for ReStructured Text (see
 http://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html
 for a markup reference), which is an ascii format for writing
@@ -161,9 +143,10 @@ Then we push the commit to our CouchDB fork::
 
     $ git push origin master
 
-Next, we go back to our GitHub page https://github.com/janl/couchdb and click
-the "Pull Request" button. Fill in the description with something useful and
-hit the "Send Pull Request" button.
+Next, we go back to our GitHub page
+https://github.com/janl/couchdb-documentation and click the "Pull Request"
+button. Fill in the description with something useful and hit the
+"Send Pull Request" button.
 
 And we're done!
 
