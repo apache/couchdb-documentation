@@ -24,13 +24,13 @@ should be the database name that you wish to perform the operation on.
 For example, to obtain the meta information for the database
 ``recipes``, you would use the HTTP request:
 
-.. code-block:: http
+.. code-block:: none
 
     GET /recipes
 
 For clarity, the form below is used in the URL paths:
 
-.. code-block:: http
+.. code-block:: none
 
     GET /db
 

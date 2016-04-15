@@ -45,7 +45,9 @@ resolution during replication. The number of stored revisions
 
 Compaction is manually triggered operation per database and runs as a background
 task. To start it for specific database there is need to send HTTP
-:post:`/{db}/_compact` sub-resource of the target database::
+:post:`/{db}/_compact` sub-resource of the target database:
+
+.. code-block:: none
 
     curl -H "Content-Type: application/json" -X POST http://localhost:5984/my_db/_compact
 
@@ -81,7 +83,9 @@ for the request. If you don't, you will be aware about with HTTP status
     {"error":"bad_content_type","reason":"Content-Type must be application/json"}
 
 When the compaction is successful started and running it is possible to get
-information about it via :ref:`database information resource <api/db>`::
+information about it via :ref:`database information resource <api/db>`:
+
+.. code-block:: none
 
     curl http://localhost:5984/my_db
 
@@ -110,7 +114,9 @@ information about it via :ref:`database information resource <api/db>`::
 
 Note that ``compaction_running`` field is ``true`` indicating that compaction
 is actually running. To track the compaction progress you may query the
-:get:`_active_tasks </_active_tasks>` resource::
+:get:`_active_tasks </_active_tasks>` resource:
+
+.. code-block:: none
 
     curl http://localhost:5984/my_db
 
@@ -143,7 +149,9 @@ Views Compaction
 
 `Views` are also need compaction like databases, unlike databases views
 are compacted by groups per `design document`. To start their compaction there
-is need to send HTTP :post:`/{db}/_compact/{ddoc}` request::
+is need to send HTTP :post:`/{db}/_compact/{ddoc}` request:
+
+.. code-block:: none
 
     curl -H "Content-Type: application/json" -X POST http://localhost:5984/dbname/_compact/designname
 
@@ -164,7 +172,9 @@ Views cleanup
 View indexes on disk are named after their `MD5` hash of the view definition.
 When you change a view, old indexes remain on disk. To clean up all outdated
 view indexes (files named after the MD5 representation of views, that does not
-exist anymore) you can trigger a :ref:`view cleanup <api/db/view_cleanup>`::
+exist anymore) you can trigger a :ref:`view cleanup <api/db/view_cleanup>`:
+
+.. code-block:: none
 
     curl -H "Content-Type: application/json" -X POST http://localhost:5984/dbname/_view_cleanup
 

@@ -141,7 +141,7 @@ Request Headers
 
   The returned headers are:
 
-  .. code-block:: http
+  .. code-block:: none
 
       Server: CouchDB (Erlang/OTP)
       Date: Thu, 13 Jan 2011 13:39:34 GMT
@@ -163,7 +163,7 @@ Request Headers
 
   The headers returned include the ``application/json`` content type:
 
-  .. code-block:: http
+  .. code-block:: none
 
       Server: CouchDB (Erlang/OTP)
       Date: Thu, 13 Jan 2013 13:40:11 GMT
@@ -364,7 +364,9 @@ actually "losing" data if you don't accept that numbers are stored in doubles).
 Here's a log for a couple of the more common JSON libraries that happen to be
 on the author's machine:
 
-Ejson (CouchDB's current parser) at CouchDB sha 168a663b::
+Ejson (CouchDB's current parser) at CouchDB sha 168a663b:
+
+.. code-block:: none
 
     $ ./utils/run -i
     Erlang R14B04 (erts-5.8.5) [source] [64-bit] [smp:2:2] [rq:2]
@@ -378,7 +380,9 @@ Ejson (CouchDB's current parser) at CouchDB sha 168a663b::
     3> ejson:encode(ejson:decode(F)).
     <<"1.0123456789012346135">>
 
-Node::
+Node:
+
+.. code-block:: none
 
     $ node -v
     v0.6.15
@@ -390,7 +394,9 @@ Node::
     JSON.stringify(JSON.parse(f))
     '1.0123456789012346'
 
-Python::
+Python:
+
+.. code-block:: none
 
     $ python
     Python 2.7.2 (default, Jun 20 2012, 16:23:33)
@@ -403,7 +409,9 @@ Python::
     json.dumps(json.loads(f))
     '1.0123456789012346'
 
-Ruby::
+Ruby:
+
+.. code-block:: none
 
     $ irb --version
     irb 0.9.5(05/04/13)
@@ -421,7 +429,9 @@ Ruby::
     wrapped the value. Should be obvious it doesn't affect the result of
     parsing the number though.
 
-Spidermonkey::
+Spidermonkey:
+
+.. code-block:: none
 
     $ js -h 2>&1 | head -n 1
     JavaScript-C 1.8.5 2011-03-31
@@ -448,7 +458,9 @@ different, the bytes in a JSON serialized number are chosen such that they
 refer to a single specific value that a double can represent.
 
 The important point to understand is that we're mapping from one infinite set
-onto a finite set. An easy way to see this is by reflecting on this::
+onto a finite set. An easy way to see this is by reflecting on this:
+
+.. code-block:: none
 
     1.0 == 1.00 == 1.000 = 1.(infinite zeroes)
 

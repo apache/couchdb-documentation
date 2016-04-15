@@ -85,25 +85,33 @@ We see ascii tables with some additional formatting, all looking like the
 final HTML. So far so easy. For now, let's just add to the bottom of this. We
 can worry about organising this better later.
 
-We start by adding a new headline::
+We start by adding a new headline:
+
+.. code-block:: none
 
     Number Handling
     ===============
 
 Now we paste in the rest of the main email of the thread. It is mostly text,
-but it includes some code listings. Let's mark them up. We'll turn::
+but it includes some code listings. Let's mark them up. We'll turn:
+
+.. code-block:: none
 
     ejson:encode(ejson:decode(<<"1.1">>)).
     <<"1.1000000000000000888">>
 
-Into::
+Into:
+
+.. code-block:: none
 
     .. code-block:: erlang
 
         ejson:encode(ejson:decode(<<"1.1">>)).
         <<"1.1000000000000000888">>
 
-And we follow along with the other code samples. We turn::
+And we follow along with the other code samples. We turn:
+
+.. code-block:: none
 
     Spidermonkey
 
@@ -116,9 +124,13 @@ And we follow along with the other code samples. We turn::
     js> JSON.stringify(JSON.parse(f))
     "1.0123456789012346"
 
-into::
+into:
 
-    Spidermonkey::
+.. code-block:: none
+
+    Spidermonkey:
+
+    .. code-block:: none
 
         $ js -h 2>&1 | head -n 1
         JavaScript-C 1.8.5 2011-03-31
@@ -137,13 +149,17 @@ entry as opposed to a post on a mailing list.
 The next step would be to validate that we got all the markup right. I'll
 leave this for later. For now we'll contribute our change back to CouchDB.
 
-First, we commit our changes::
+First, we commit our changes:
+
+.. code-block:: none
 
     $ > git commit -am 'document number encoding'
     [master a84b2cf] document number encoding
     1 file changed, 199 insertions(+)
 
-Then we push the commit to our CouchDB fork::
+Then we push the commit to our CouchDB fork:
+
+.. code-block:: none
 
     $ git push origin master
 
@@ -159,7 +175,9 @@ Style Guidelines for this Documentation
 When you make a change to the documentation, you should make sure that you
 follow the style. Look through some files and you will see that the style is
 quite straightforward. If you do not know if your formating is in compliance
-with the style, ask yourself the following question::
+with the style, ask yourself the following question:
+
+.. code-block:: none
 
     Is it needed for correct syntax?
 
@@ -204,7 +222,9 @@ The guidelines are in descending priority.
 
    * The highest level titles in a file is over and underlined with ``=``.
    * Lower level titles are underlined with the following characters in
-     descending order::
+     descending order:
+
+     .. code-block:: none
 
         = - ^ *  + # ` : . " ~ _
 

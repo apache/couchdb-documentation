@@ -43,19 +43,27 @@ OS Daemons
 
     This will make CouchDB bring up the command and attempt to keep it alive.
     To request a configuration parameter, an `os_daemon` can write a simple
-    JSON message to stdout like such::
+    JSON message to stdout like such:
+
+    .. code-block:: none
 
         ["get", "os_daemons"]\n
 
-    which would return::
+    which would return:
+
+    .. code-block:: none
 
         {"daemon_name": "/path/to/command -with args"}\n
 
-    Or::
+    Or:
+
+    .. code-block:: none
 
         ["get", "os_daemons", "daemon_name"]\n
 
-    which would return::
+    which would return:
+
+    .. code-block:: none
 
         "/path/to/command -with args"\n
 
@@ -63,26 +71,34 @@ OS Daemons
     also no method for altering the configuration.
 
     If you would like your OS daemon to be restarted in the event that the
-    configuration changes, you can send the following messages::
+    configuration changes, you can send the following messages:
+
+    .. code-block:: none
 
         ["register", $(SECTION)]\n
 
     When anything in that section changes, your OS process will be rebooted so
     it can pick up the new configuration settings. If you want to listen for
-    changes on a specific key, you can send something like::
+    changes on a specific key, you can send something like:
+
+    .. code-block:: none
 
         ["register", $(SECTION), $(KEY)]\n
 
     In this case, CouchDB will only restart your daemon if that exact
     section/key pair changes, instead of anything in that entire section.
 
-    Logging commands look like::
+    Logging commands look like:
+
+    .. code-block:: none
 
         ["log", $(JSON_MESSAGE)]\n
 
     Where ``$(JSON_MESSAGE)`` is arbitrary JSON data. These messages are logged
     at the 'info' level. If you want to log at a different level you can pass
-    messages like such::
+    messages like such:
+
+    .. code-block:: none
 
         ["log", $(JSON_MESSAGE), {"level": $(LEVEL)}]\n
 

@@ -30,13 +30,17 @@ Start script
 ------------
 
 The following options for ``/etc/rc.conf`` or ``/etc/rc.conf.local`` are
-supported by the start script (defaults shown)::
+supported by the start script (defaults shown):
+
+.. code-block:: text
 
     couchdb_enable="NO"
     couchdb_enablelogs="YES"
     couchdb_user="couchdb"
 
-After enabling the couchdb rc service use the following command to start CouchDB::
+After enabling the couchdb rc service use the following command to start CouchDB:
+
+.. code-block:: text
 
     /usr/local/etc/rc.d/couchdb start
 

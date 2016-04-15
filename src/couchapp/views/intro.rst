@@ -232,7 +232,9 @@ Find Many
 ---------
 
 We talked about “getting all posts for last month.” If it’s February now,
-this is as easy as::
+this is as easy as:
+
+.. code-block:: none
 
     /blog/_design/docs/_view/by_date?startkey="2010/01/01 00:00:00"&endkey="2010/02/00 00:00:00"
 
@@ -269,7 +271,9 @@ Table 2. New view results:
 | [2009, 1, 30, 18, 4, 11]  | "Bought a Cat"   |
 +---------------------------+------------------+
 
-And our queries change to::
+And our queries change to:
+
+.. code-block:: none
 
     /blog/_design/docs/_view/by_date?startkey=[2010, 1, 1, 0, 0, 0]&endkey=[2010, 2, 1, 0, 0, 0]
 

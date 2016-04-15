@@ -81,7 +81,9 @@ Creating New Admin User
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's do another walk through the API using `curl` to see how CouchDB behaves
-when you add admin users. ::
+when you add admin users.
+
+.. code-block:: none
 
     > HOST="http://127.0.0.1:5984"
     > curl -X PUT $HOST/database
@@ -90,7 +92,9 @@ when you add admin users. ::
 When starting out fresh, we can add a database. Nothing unexpected. Now let's
 create an admin user. We'll call her ``anna``, and her password is ``secret``.
 Note the double quotes in the following code; they are needed to denote a string
-value for the :ref:`configuration API <api/config>`::
+value for the :ref:`configuration API <api/config>`
+
+.. code-block:: none
 
     > curl -X PUT $HOST/_config/admins/anna -d '"secret"'
     ""
@@ -152,12 +156,16 @@ Basic Authentication
 --------------------
 
 Now that we have defined an admin, CouchDB will not allow us to create new
-databases unless we give the correct admin user credentials. Let's verify::
+databases unless we give the correct admin user credentials. Let's verify:
+
+.. code-block:: none
 
     > curl -X PUT $HOST/somedatabase
     {"error":"unauthorized","reason":"You are not a server admin."}
 
-That looks about right. Now we try again with the correct credentials::
+That looks about right. Now we try again with the correct credentials:
+
+.. code-block:: none
 
     > HOST="http://anna:secret@127.0.0.1:5984"
     > curl -X PUT $HOST/somedatabase
@@ -208,14 +216,18 @@ API. The API is smart enough to decode HTML form submissions, so you don't have
 to resort to any smarts in your application.
 
 If you are not using HTML forms to log in, you need to send an HTTP request
-that looks as if an HTML form generated it. Luckily, this is super simple::
+that looks as if an HTML form generated it. Luckily, this is super simple:
+
+.. code-block:: none
 
     > HOST="http://127.0.0.1:5984"
     > curl -vX POST $HOST/_session \
            -H 'Content-Type:application/x-www-form-urlencoded' \
            -d 'name=anna&password=secret'
 
-CouchDB replies, and we'll give you some more detail::
+CouchDB replies, and we'll give you some more detail:
+
+.. code-block:: none
 
     < HTTP/1.1 200 OK
     < Set-Cookie: AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw;
@@ -229,7 +241,9 @@ header includes the token we can use for the next request, and the standard JSON
 response tells us again that the request was successful.
 
 Now we can use this token to make another request as the same user without
-sending the username and password again::
+sending the username and password again:
+
+.. code-block:: none
 
     > curl -vX PUT $HOST/mydatabase \
            --cookie AuthSession=YW5uYTo0QUIzOTdFQjrC4ipN-D-53hw1sJepVzcVxnriEw \
@@ -322,7 +336,9 @@ Creating a New User
 
 Creating a new user is a very trivial operation. You just need to do a
 :method:`PUT` request with the user's data to CouchDB. Let's create a user with
-login `jan` and password `apple`::
+login `jan` and password `apple`:
+
+.. code-block:: none
 
     curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
          -H "Accept: application/json" \
@@ -356,7 +372,9 @@ And CouchDB responds with:
     {"ok":true,"id":"org.couchdb.user:jan","rev":"1-e0ebfb84005b920488fc7a8cc5470cc0"}
 
 The document was successfully created! The user `jan` should now exist in our
-database. Let's check if this is true::
+database. Let's check if this is true:
+
+.. code-block:: none
 
     curl -X POST http://localhost:5984/_session -d 'name=jan&password=apple'
 
@@ -386,7 +404,9 @@ replaces it with the *secured hash* depending on the chosen ``password_scheme``.
 
 Summarizing the above process - we need to get the document's content, add
 the ``password`` field with the new password in plain text and then store the
-JSON result to the authentication database. ::
+JSON result to the authentication database.
+
+.. code-block:: none
 
     curl -X GET http://localhost:5984/_users/org.couchdb.user:jan
 
@@ -405,7 +425,9 @@ JSON result to the authentication database. ::
     }
 
 Here is our user's document. We may strip hashes from the stored document to
-reduce the amount of posted data::
+reduce the amount of posted data:
+
+.. code-block:: none
 
     curl -X PUT http://localhost:5984/_users/org.couchdb.user:jan \
          -H "Accept: application/json" \
@@ -417,7 +439,9 @@ reduce the amount of posted data::
 
     {"ok":true,"id":"org.couchdb.user:jan","rev":"2-ed293d3a0ae09f0c624f10538ef33c6f"}
 
-Updated! Now let's check that the password was really changed::
+Updated! Now let's check that the password was really changed:
+
+.. code-block:: none
 
     curl -X POST http://localhost:5984/_session -d 'name=jan&password=apple'
 
@@ -427,7 +451,9 @@ CouchDB should respond with:
 
     {"error":"unauthorized","reason":"Name or password is incorrect."}
 
-Looks like the password ``apple`` is wrong, what about ``orange``? ::
+Looks like the password ``apple`` is wrong, what about ``orange``?
+
+.. code-block:: none
 
     curl -X POST http://localhost:5984/_session -d 'name=jan&password=orange'
 
@@ -461,7 +487,9 @@ a special :ref:`configuration <config>` option :config:option:`public_fields
 a comma-separated list of users document fields that will be publicly available.
 
 Normally, if you request a user document and you're not an administrator or the
-document's owner, CouchDB will respond with :statuscode:`404`::
+document's owner, CouchDB will respond with :statuscode:`404`:
+
+.. code-block:: none
 
     curl http://localhost:5984/_users/org.couchdb.user:robert
 
@@ -481,7 +509,9 @@ privileges. The next command will prompt you for user `admin`'s password:
        -d '"name"' \
        -u admin
 
-What has changed? Let's check Robert's document once again::
+What has changed? Let's check Robert's document once again:
+
+.. code-block:: none
 
     curl http://localhost:5984/_users/org.couchdb.user:robert
 
@@ -518,7 +548,9 @@ When a database is first created, there are no members or admins.  HTTP
 requests that have no authentication credentials or have credentials for a
 normal user are treated as members, and those with server admin credentials
 are treated as database admins.  To change the default permissions, you must
-create a :ref:`_security <api/db/security>` document in the database::
+create a :ref:`_security <api/db/security>` document in the database:
+
+.. code-block:: none
 
     > curl -X PUT http://localhost:5984/mydatabase/_security \
          -u anna:secret \
@@ -532,7 +564,9 @@ credentials of a server admin.  CouchDB will respond with:
 
     {"ok":true}
 
-The database is now secured against anonymous reads and writes::
+The database is now secured against anonymous reads and writes:
+
+.. code-block:: none
 
     > curl http://localhost:5984/mydatabase/
 
@@ -541,7 +575,9 @@ The database is now secured against anonymous reads and writes::
     {"error":"unauthorized","reason":"You are not authorized to access this db."}
 
 You declared user "jan" as a member in this database, so he is able to read and
-write normal documents::
+write normal documents:
+
+.. code-block:: none
 
     > curl -u jan:apple http://localhost:5984/mydatabase/
 
@@ -559,7 +595,9 @@ Jan to an admin, you can update the security document to add `"jan"` to
 the `names` array under `admin`.  Keeping track of individual database
 admin usernames is tedious, though, so you would likely prefer to create a
 database admin role and assign that role to the `org.couchdb.user:jan` user
-document::
+document:
+
+.. code-block:: none
 
     > curl -X PUT http://localhost:5984/mydatabase/_security \
          -u anna:secret \

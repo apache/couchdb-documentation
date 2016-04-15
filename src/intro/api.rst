@@ -46,7 +46,9 @@ Server
 This one is basic and simple. It can serve as a sanity check to see if
 CouchDB is running at all. It can also act as a safety guard for libraries
 that require a certain version of CouchDB. We're using the `curl`_ utility
-again::
+again:
+
+.. code-block:: none
 
   curl http://127.0.0.1:5984/
 
@@ -89,7 +91,9 @@ talking about the whole of CouchDB or a single database within CouchDB.
 Now let's make one! We want to store our favorite music albums,
 and we creatively give our database the name albums. Note that we're now
 using the ``-X`` option again to tell curl to send a :method:`PUT` request
-instead of the default :method:`GET` request::
+instead of the default :method:`GET` request:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/albums
 
@@ -101,7 +105,9 @@ CouchDB replies:
 
 That's it. You created a database and CouchDB told you that all went well.
 What happens if you try to create a database that already exists? Let's try
-to create that database again::
+to create that database again:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/albums
 
@@ -117,11 +123,15 @@ Very simple.
 
 Let's create another database, this time with curl's ``-v`` (for "verbose")
 option. The verbose option tells curl to show us not only the essentials --
-the HTTP response body -- but all the underlying request and response details::
+the HTTP response body -- but all the underlying request and response details:
+
+.. code-block:: none
 
     curl -vX PUT http://127.0.0.1:5984/albums-backup
 
-curl elaborates::
+curl elaborates:
+
+.. code-block:: none
 
     * About to connect() to 127.0.0.1 port 5984 (#0)
     *   Trying 127.0.0.1... connected
@@ -144,13 +154,17 @@ curl elaborates::
 
 What a mouthful. Let's step through this line by line to understand what's
 going on and find out what's important. Once you've seen this output a few
-times, you'll be able to spot the important bits more easily. ::
+times, you'll be able to spot the important bits more easily.
+
+.. code-block:: none
 
     * About to connect() to 127.0.0.1 port 5984 (#0)
 
 This is curl telling us that it is going to establish a TCP connection to the
 CouchDB server we specified in our request URI. Not at all important,
-except when debugging networking issues. ::
+except when debugging networking issues.
+
+.. code-block:: none
 
     *   Trying 127.0.0.1... connected
     * Connected to 127.0.0.1 (127.0.0.1) port 5984 (#0)
@@ -160,7 +174,9 @@ not important if you aren't trying to find problems with your network.
 
 The following lines are prefixed with ``>`` and ``<`` characters.
 The ``>`` means the line was sent to CouchDB verbatim (without the actual
-``>``). The ``<`` means the line was sent back to curl by CouchDB. ::
+``>``). The ``<`` means the line was sent back to curl by CouchDB.
+
+.. code-block:: none
 
     > PUT /albums-backup HTTP/1.1
 
@@ -170,7 +186,9 @@ This initiates an HTTP request. Its *method* is :method:`PUT`, the *URI* is
 you should be using ``HTTP/1.1``.
 
 Next, we see a number of *request headers*. These are used to provide
-additional details about the request to CouchDB. ::
+additional details about the request to CouchDB.
+
+.. code-block:: none
 
     > User-Agent: curl/7.16.3 (powerpc-apple-darwin9.0) libcurl/7.16.3 OpenSSL/0.9.7l zlib/1.2.3
 
@@ -180,24 +198,32 @@ often useful in web development when there are known errors in client
 implementations that a server might want to prepare the response for.
 It also helps to determine which platform a user is on. This information
 can be used for technical and statistical reasons. For CouchDB, the
-:header:`User-Agent` header is irrelevant. ::
+:header:`User-Agent` header is irrelevant.
+
+.. code-block:: none
 
     > Host: 127.0.0.1:5984
 
 The :header:`Host` header is required by ``HTTP 1.1``. It tells the server
-the hostname that came with the request. ::
+the hostname that came with the request.
+
+.. code-block:: none
 
     > Accept: */*
 
 The :header:`Accept` header tells CouchDB that curl accepts any media type.
-We'll look into why this is useful a little later. ::
+We'll look into why this is useful a little later.
+
+.. code-block:: none
 
     >
 
 An empty line denotes that the request headers are now finished and the rest
 of the request contains data we're sending to the server. In this case,
 we're not sending any data, so the rest of the curl output is dedicated to
-the HTTP response. ::
+the HTTP response.
+
+.. code-block:: none
 
     < HTTP/1.1 201 Created
 
@@ -218,21 +244,27 @@ response code. Acting upon responses based on response codes is a common
 practice. For example, all response codes of :statuscode:`400` or larger
 tell you that some error occurred. If you want to shortcut your logic and
 immediately deal with the error, you could just check a >= ``400`` response
-code. ::
+code.
+
+.. code-block:: none
 
     < Server: CouchDB (Erlang/OTP)
 
 The :header:`Server` header is good for diagnostics. It tells us which
 CouchDB version and which underlying Erlang version we are talking to.
 In general, you can ignore this header, but it is good to know it's there if
-you need it. ::
+you need it.
+
+.. code-block:: none
 
     < Date: Sun, 05 Jul 2009 22:48:28 GMT
 
 The :header:`Date` header tells you the time of the server. Since client
 and server time are not necessarily synchronized, this header is purely
 informational. You shouldn't build any critical application logic on top
-of this! ::
+of this!
+
+.. code-block:: none
 
     < Content-Type: text/plain;charset=utf-8
 
@@ -258,17 +290,23 @@ Do you remember the :header:`Accept` request header and how it is set to
 ``*/*`` to express interest in any MIME type? If you send ``Accept:
 application/json`` in your request, CouchDB knows that you can deal with a pure
 JSON response with the proper :header:`Content-Type` header and will
-use it instead of :mimetype:`text/plain`. ::
+use it instead of :mimetype:`text/plain`.
+
+.. code-block:: none
 
     < Content-Length: 12
 
 The :header:`Content-Length` header simply tells us how many bytes
-the response body has. ::
+the response body has.
+
+.. code-block:: none
 
     < Cache-Control: must-revalidate
 
 This :header:`Cache-Control` header tells you, or any proxy server between
-CouchDB and you, not to cache this response. ::
+CouchDB and you, not to cache this response.
+
+.. code-block:: none
 
     <
 
@@ -279,7 +317,9 @@ follows now is the response body.
 
     {"ok":true}
 
-We've seen this before. ::
+We've seen this before.
+
+.. code-block:: none
 
     * Connection #0 to host 127.0.0.1 left intact
     * Closing connection #0
@@ -293,7 +333,9 @@ but we'll omit some of the headers we've seen here and include only those
 that are important for the particular request.
 
 Creating databases is all fine, but how do we get rid of one? Easy -- just
-change the HTTP method::
+change the HTTP method:
+
+.. code-block:: none
 
     > curl -vX DELETE http://127.0.0.1:5984/albums-backup
 
@@ -328,7 +370,9 @@ cannot create two different documents with the same ID. Why should you care
 what somebody else is doing? For one, that somebody else could be you at a
 later time or on a different computer; secondly, CouchDB replication lets you
 share documents with others and using UUIDs ensures that it all works.
-But more on that later; let's make some documents::
+But more on that later; let's make some documents:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af -d '{"title":"There is Nothing Left to Lose","artist":"Foo Fighters"}'
 
@@ -352,7 +396,9 @@ values.
 .. note::
     If you don't have a UUID handy, you can ask CouchDB to give you one (in
     fact, that is what we did just now without showing you). Simply send a
-    :get:`/_uuids` request::
+    :get:`/_uuids` request:
+
+    .. code-block:: none
 
         curl -X GET http://127.0.0.1:5984/_uuids
 
@@ -366,7 +412,9 @@ values.
     HTTP parameter to request 10 UUIDs, or really, any number you need.
 
 To double-check that CouchDB isn't lying about having saved your document (it
-usually doesn't), try to retrieve it by sending a GET request::
+usually doesn't), try to retrieve it by sending a GET request:
+
+.. code-block:: none
 
     curl -X GET http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
 
@@ -404,7 +452,9 @@ in case somebody else made a change without you knowing before you got to
 request the document update, CouchDB will not accept your update because you
 are likely to overwrite data you didn't know existed. Or simplified: whoever
 saves a change to a document first, wins. Let's see what happens if we don't
-provide a ``_rev`` field (which is equivalent to providing a outdated value)::
+provide a ``_rev`` field (which is equivalent to providing a outdated value):
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
          -d '{"title":"There is Nothing Left to Lose","artist":"Foo Fighters","year":"1997"}'
@@ -416,7 +466,9 @@ CouchDB replies:
     {"error":"conflict","reason":"Document update conflict."}
 
 If you see this, add the latest revision number of your document to the JSON
-structure::
+structure:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
          -d '{"_rev":"1-2902191555","title":"There is Nothing Left to Lose","artist":"Foo Fighters","year":"1997"}'
@@ -480,7 +532,9 @@ later examples.
 
 We'll add some more of our favorite music albums. Get a fresh UUID from the
 ``/_uuids`` resource. If you don't remember how that works, you can look it up
-a few pages back. ::
+a few pages back.
+
+.. code-block:: none
 
     curl -vX PUT http://127.0.0.1:5984/albums/70b50bfa0a4b3aed1f8aff9e92dc16a0 \
          -d '{"title":"Blackened Sky","artist":"Biffy Clyro","year":2002}'
@@ -493,7 +547,9 @@ a few pages back. ::
     worry about data.
 
 Now with the ``-v`` option, CouchDB's reply (with only the important bits shown)
-looks like this::
+looks like this:
+
+.. code-block:: none
 
     > PUT /albums/70b50bfa0a4b3aed1f8aff9e92dc16a0 HTTP/1.1
     >
@@ -526,7 +582,9 @@ documents, music, or movie files. Let's make one.
 Attachments get their own URL where you can upload data. Say we want to add
 the album artwork to the ``6e1295ed6c29495e54cc05947f18c8af`` document
 (*"There is Nothing Left to Lose"*), and let's also say the artwork is in a file
-`artwork.jpg` in the current directory::
+`artwork.jpg` in the current directory:
+
+.. code-block:: none
 
     curl -vX PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg?rev=2-2739352689 \
          --data-binary @artwork.jpg -H "Content-Type:image/jpg"
@@ -545,7 +603,9 @@ the album artwork to the ``6e1295ed6c29495e54cc05947f18c8af`` document
 You should now see your artwork image if you point your browser to
 http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg
 
-If you request the document again, you'll see a new member::
+If you request the document again, you'll see a new member:
+
+.. code-block:: none
 
     curl http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
 
@@ -599,11 +659,15 @@ We'll take an in-depth look at replication in the document
 First, we'll create a target database. Note that CouchDB won't automatically
 create a target database for you, and will return a replication failure if
 the target doesn't exist (likewise for the source, but that mistake isn't as
-easy to make)::
+easy to make):
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/albums-replica
 
-Now we can use the database `albums-replica` as a replication target::
+Now we can use the database `albums-replica` as a replication target:
+
+.. code-block:: none
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
          -d '{"source":"albums","target":"albums-replica"}' \
@@ -662,7 +726,9 @@ a stable version of your code and data.
 There are more types of replication useful in other situations. The source
 and target members of our replication request are actually links (like in
 HTML) and so far we've seen links relative to the server we're working on
-(hence local). You can also specify a remote database as the target::
+(hence local). You can also specify a remote database as the target:
+
+.. code-block:: none
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
          -d '{"source":"albums","target":"http://example.org:5984/albums-replica"}' \
@@ -681,14 +747,18 @@ door.
 
 You can also use a *remote source* and a *local target* to do a *pull
 replication*. This is great for getting the latest changes from a server that
-is used by others::
+is used by others:
+
+.. code-block:: none
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
          -d '{"source":"http://example.org:5984/albums-replica","target":"albums"}' \
          -H "Content-Type:application/json"
 
 Finally, you can run remote replication, which is mostly useful for management
-operations::
+operations:
+
+.. code-block:: none
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
          -d '{"source":"http://example.org:5984/albums","target":"http://example.org:5984/albums-replica"}' \

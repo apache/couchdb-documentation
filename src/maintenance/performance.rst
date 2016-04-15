@@ -52,7 +52,9 @@ installation responsive even during periods of heavy disk utilization. The
 easiest way to set this option is through the ``ERL_FLAGS`` environment
 variable. For example, to give Erlang four threads with which to perform I/O
 operations add the following to ``(prefix)/etc/defaults/couchdb``
-(or equivalent)::
+(or equivalent):
+
+.. code-block:: none
 
     export ERL_FLAGS="+A 4"
 
@@ -102,7 +104,9 @@ Erlang
 Even if you've increased the maximum connections CouchDB will allow,
 the Erlang runtime system will not allow more than 1024 connections by
 default. Adding the following directive to ``(prefix)/etc/default/couchdb`` (or
-equivalent) will increase this limit (in this case to 4096)::
+equivalent) will increase this limit (in this case to 4096):
+
+.. code-block:: none
 
     export ERL_MAX_PORTS=4096
 
@@ -128,7 +132,9 @@ process. If your system is set up to use the Pluggable Authentication Modules
 (`PAM`_) system, increasing this limit is straightforward. For example,
 creating a file named ``/etc/security/limits.d/100-couchdb.conf`` with the
 following contents will ensure that CouchDB can open enough file descriptors
-to service your increased maximum open databases and Erlang ports::
+to service your increased maximum open databases and Erlang ports:
+
+.. code-block:: none
 
     #<domain>    <type>    <item>    <value>
     couchdb      hard      nofile    4096

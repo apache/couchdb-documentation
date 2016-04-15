@@ -56,7 +56,9 @@ associated orders. The values 0 and 1 for the sorting token are arbitrary.
 
 To list a specific customer with ``_id`` XYZ, and all of that customer's orders,
 limit the startkey and endkey ranges to cover only documents for that customer's
-``_id``::
+``_id``:
+
+.. code-block:: none
 
     startkey=["XYZ"]&endkey=["XYZ", {}]
 
@@ -95,11 +97,15 @@ If you need start and end keys that encompass every string with a given prefix,
 it is better to use a high value unicode character, than to use a ``'ZZZZ'``
 suffix.
 
-That is, rather than::
+That is, rather than:
+
+.. code-block:: none
 
     startkey="abc"&endkey="abcZZZZZZZZZ"
 
-You should use::
+You should use:
+
+.. code-block:: none
 
     startkey="abc"&endkey="abc\ufff0"
 
@@ -200,7 +206,9 @@ You can demonstrate the collation sequence for 7-bit ASCII characters like this:
 
     puts RestClient.get("#{DB}/_design/test/_view/one")
 
-This shows the collation sequence to be::
+This shows the collation sequence to be:
+
+.. code-block:: none
 
     ` ^ _ - , ; : ! ? . ' " ( ) [ ] { } @ * / \ & # % + < = > | ~ $ 0 1 2 3 4 5 6 7 8 9
     a A b B c C d D e E f F g G h H i I j J k K l L m M n N o O p P q Q r R s S t T u U v V w W x X y Y z Z
@@ -208,15 +216,21 @@ This shows the collation sequence to be::
 Key ranges
 ----------
 
-Take special care when querying key ranges. For example: the query::
+Take special care when querying key ranges. For example: the query:
+
+.. code-block:: none
 
     startkey="Abc"&endkey="AbcZZZZ"
 
-will match "ABC" and "abc1", but not "abc". This is because UCA sorts as::
+will match "ABC" and "abc1", but not "abc". This is because UCA sorts as:
+
+.. code-block:: none
 
     abc < Abc < ABC < abc1 < AbcZZZZZ
 
-For most applications, to avoid problems you should lowercase the `startkey`::
+For most applications, to avoid problems you should lowercase the `startkey`:
+
+.. code-block:: none
 
     startkey="abc"&endkey="abcZZZZZZZZ"
 
@@ -233,12 +247,16 @@ _all_docs
 =========
 
 The :ref:`_all_docs <api/db/all_docs>`  view is a special case because it uses
-ASCII collation for doc ids, not UCA::
+ASCII collation for doc ids, not UCA:
+
+.. code-block:: none
 
     startkey="_design/"&endkey="_design/ZZZZZZZZ"
 
 will not find ``_design/abc`` because `'Z'` comes before `'a'` in the ASCII
-sequence. A better solution is::
+sequence. A better solution is:
+
+.. code-block:: none
 
     startkey="_design/"&endkey="_design0"
 

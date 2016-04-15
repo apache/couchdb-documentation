@@ -579,7 +579,7 @@ Sorting order and startkey/endkey
 The sorting direction is applied before the filtering applied using the
 ``startkey`` and ``endkey`` query arguments. For example the following query:
 
-.. code-block:: http
+.. code-block:: none
 
     GET http://couchdb:5984/recipes/_design/recipes/_view/by_ingredient?startkey=%22carrots%22&endkey=%22egg%22
     Accept: application/json

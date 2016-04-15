@@ -59,11 +59,15 @@ Moved View URLs
 ---------------
 
 The view URLs have been moved to design document resources. This means that
-paths that used to be like::
+paths that used to be like:
+
+.. code-block:: none
 
     http://hostname:5984/mydb/_view/designname/viewname?limit=10
 
-will now look like::
+will now look like:
+
+.. code-block:: none
 
     http://hostname:5984/mydb/_design/designname/_view/viewname?limit=10.
 

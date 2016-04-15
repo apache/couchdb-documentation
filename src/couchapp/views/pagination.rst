@@ -127,7 +127,9 @@ Paging
 ======
 
 To get the first five rows from the view result, you use the ``?limit=5``
-query parameter::
+query parameter:
+
+.. code-block:: none
 
     curl -X GET http://127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5
 
@@ -154,7 +156,9 @@ we can determine if there are more pages to display. We also know by the
     var page = (offset / rows_per_page) + 1; // == 1
     var skip = page * rows_per_page; // == 5 for the first page, 10 for the second ...
 
-So we query CouchDB with::
+So we query CouchDB with:
+
+.. code-block:: none
 
     curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?limit=5&skip=5'
 

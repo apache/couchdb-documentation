@@ -48,7 +48,9 @@ Work-Around
 ===========
 
 Disable the :ref:`api/server/uuids` handler completely, by adapting
-`local.ini` and restarting CouchDB::
+`local.ini` and restarting CouchDB:
+
+.. code-block:: ini
 
     [httpd_global_handlers]
     _uuids =
