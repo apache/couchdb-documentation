@@ -74,7 +74,7 @@ Removing a node
 Before you remove a node, make sure that you have moved all
 :ref:`shards <cluster/sharding/move>` away from that node.
 
-To remode ``node2`` from server ``yyy.yyy.yyy.yyy``:
+To remove ``node2`` from server ``yyy.yyy.yyy.yyy``:
 
 .. code-block:: text
 
