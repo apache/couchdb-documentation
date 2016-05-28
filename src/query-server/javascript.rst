@@ -180,7 +180,7 @@ modules and functions:
             send('Hello,');
             send(' ');
             send('Couch');
-            return !
+            return ;
         }
 
 .. function:: start(init_resp)
