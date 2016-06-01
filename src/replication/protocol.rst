@@ -1275,9 +1275,9 @@ Target one by one.
 
 .. note::
     Alternative Replicator implementations MAY use alternative ways to retrieve
-    Documents from Source. For instance, `PouchDB`_ doesn't uses Multipart API
-    and fetches only latest Document Revision with inline attachments as single
-    JSON object. While this is still valid CouchDB HTTP API usage, such
+    Documents from Source. For instance, `PouchDB`_ doesn't use the Multipart
+    API and fetches only the latest Document Revision with inline attachments as
+    a single JSON object. While this is still valid CouchDB HTTP API usage, such
     solutions MAY require a different API implementation for non-CouchDB
     Peers.
 
