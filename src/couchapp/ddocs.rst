@@ -15,13 +15,13 @@
 .. _ddocs:
 
 ================
-Design Functions
+Design Documents
 ================
 
 In this section we'll show how to write design documents, using the built-in
 :ref:`JavaScript Query Server <query-server/js>`.
 
-But before we start to write our first function, let's take a look at the list
+But before we start to write our first document, let's take a look at the list
 of common objects that will be used during our code journey - we'll be using
 them extensively within each function:
 
@@ -34,19 +34,19 @@ them extensively within each function:
 
 .. _viewfun:
 
-View functions
+View Functions
 ==============
 
 Views are the primary tool used for querying and reporting on CouchDB databases.
 
 .. _mapfun:
 
-Map functions
+Map Functions
 -------------
 
 .. function:: mapfun(doc)
 
-   :param doc: Processed document object.
+   :param doc: The document that is being processed
 
 Map functions accept a single document as the argument and (optionally)
 :func:`emit` key/value pairs that are stored in a view.
@@ -69,17 +69,17 @@ different keys.
 Also keep in mind that each document is *sealed* to prevent the situation where
 one map function changes document state and another receives a modified version.
 
-For efficiency reasons, documents are passed to a group of map functions -
-each document is processed by group of map functions from all views of
-related design document. This means that if you trigger index update for one
-view in ddoc, all others will get updated too.
+For efficiency reasons, documents are passed to a group of map functions - each
+document is processed by a group of map functions from all views of the related
+design document. This means that if you trigger an index update for one view in
+the design document, all others will get updated too.
 
 Since version `1.1.0`, `map` supports :ref:`CommonJS <commonjs>` modules and
 the :func:`require` function.
 
 .. _reducefun:
 
-Reduce and rereduce functions
+Reduce and Rereduce Functions
 -----------------------------
 
 .. function:: redfun(keys, values[, rereduce])
@@ -87,11 +87,11 @@ Reduce and rereduce functions
     :param keys: Array of pairs of docid-key for related map function results.
                  Always ``null`` if rereduce is running (has ``true`` value).
     :param values: Array of map function result values.
-    :param rereduce: Boolean sign of rereduce run.
+    :param rereduce: Boolean flag to indicate a rereduce run.
 
     :return: Reduces `values`
 
-Reduce functions takes two required arguments of keys and values lists - the
+Reduce functions take two required arguments of keys and values lists - the
 result of the related map function - and an optional third value which indicates
 if `rereduce` mode is active or not. `Rereduce` is used for additional reduce
 values list, so when it is ``true`` there is no information about related `keys`
@@ -113,7 +113,7 @@ single value - which could be an array or similar object.
 
 .. _reducefun/builtin:
 
-Builtin reduce functions
+Builtin Reduce Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Additionally, CouchDB has three built-in reduce functions. These are implemented
@@ -175,41 +175,39 @@ JavaScript:
     functions are processed by the Query Server. Let's take a look at `map`
     functions first:
 
-    #. CouchDB sends all `map` functions for a processed design document to
+    #. CouchDB sends all `map` functions in a processed design document to the
        Query Server.
-    #. Query Server handles them one by one, compiles and puts them onto an
+    #. the Query Server handles them one by one, compiles and puts them onto an
        internal stack.
-    #. After all `map` functions have been processed, CouchDB will send the
-       remaining documents to index, one by one.
-    #. Query Server receives the document object and applies it to every
+    #. after all `map` functions have been processed, CouchDB will send the
+       remaining documents for indexing, one by one.
+    #. the Query Server receives the document object and applies it to every
        function from the stack. The emitted results are then joined into a
        single array and sent back to CouchDB.
 
     Now let's see how `reduce` functions are handled:
 
-    #. CouchDB sends *as single command* list of available `reduce` functions
-       with result list of key-value pairs that was previously received as the
-       result of `map` functions' work.
-    #. Query Server compiles reduce functions and applies them to key-value
-       lists. Reduced result is sent back to CouchDB.
+    #. CouchDB sends *as a single command* the list of available `reduce`
+       functions with the result list of key-value pairs that were previously
+       returned from the `map` functions.
+    #. the Query Server compiles the reduce functions and applies them to the
+       key-value lists. The reduced result is sent back to CouchDB.
 
     As you may note, `reduce` functions are applied in a single shot to the map
-    results while the `map` functions are applied in an iterative way to one
-    document at a time. This means that it's possible for `map` functions to
-    precompile CommonJS libraries and use them during the entire view
-    processing, but for `reduce` functions they would be compiled again and
-    again for each view result reduction, which would lead to performance
-    degradation (`reduce` function are already working hard to make large
-    results smaller).
+    results while `map` functions are applied to documents one by one. This
+    means that it's possible for `map` functions to precompile CommonJS
+    libraries and use them during the entire view processing, but for `reduce`
+    functions they would be compiled again and again for each view result
+    reduction, which would lead to performance degradation.
 
 .. _showfun:
 
-Show functions
+Show Functions
 ==============
 
 .. function:: showfun(doc, req)
 
-    :param doc: Processed document, may be omitted.
+    :param doc: The document that is being processed; may be omitted.
     :param req: :ref:`Request object <request_object>`.
 
     :return: :ref:`Response object <response_object>`
@@ -330,7 +328,7 @@ correctly, and keys with invalid characters, but you've got the idea!
 
 .. _listfun:
 
-List functions
+List Functions
 ==============
 
 .. function:: listfun(head, req)
@@ -342,10 +340,10 @@ List functions
     :rtype: string
 
 While :ref:`showfun` are used to customize document presentation, :ref:`listfun`
-are used for same purpose, but against :ref:`viewfun` results.
+are used for the same purpose, but on :ref:`viewfun` results.
 
-The next list function formats view and represents it as a very simple HTML
-page:
+The following list function formats the view and represents it as a very simple
+HTML page:
 
 .. code-block:: javascript
 
@@ -385,12 +383,12 @@ but this is an excellent starting point. Note that you may also use
 
 .. _updatefun:
 
-Update functions
+Update Functions
 ================
 
 .. function:: updatefun(doc, req)
 
-    :param doc: Update function target document.
+    :param doc: The document that is being processed.
     :param req: :ref:`request_object`
 
     :returns: Two-element array: the first element is the (updated or new)
@@ -412,7 +410,7 @@ server will provide the function with the most recent version of that document.
 You can provide any other values needed by the update handler function via the
 ``POST``/``PUT`` entity body or query string parameters of the request.
 
-The basic example that demonstrates all use-cases of update handlers below:
+A basic example that demonstrates all use-cases of update handlers:
 
 .. code-block:: javascript
 
@@ -437,12 +435,12 @@ The basic example that demonstrates all use-cases of update handlers below:
 
 .. _filterfun:
 
-Filter functions
+Filter Functions
 ================
 
 .. function:: filterfun(doc, req)
 
-    :param doc: Processed document object.
+    :param doc: The document that is being processed
     :param req: :ref:`request_object`
     :return: Boolean value: ``true`` means that `doc` passes the filter rules,
       ``false`` means that it does not.
@@ -450,7 +448,7 @@ Filter functions
 Filter functions mostly act like :ref:`showfun` and :ref:`listfun`: they
 format, or *filter* the :ref:`changes feed<changes>`.
 
-Classic filters
+Classic Filters
 ---------------
 
 By default the changes feed emits all database documents changes. But if you're
@@ -460,7 +458,8 @@ Filters are special design document functions that allow the changes feed to
 emit only specific documents that pass filter rules.
 
 Let's assume that our database is a mailbox and we need to handle only new mail
-events (documents with status `new`). Our filter function will look like this:
+events (documents with the status `new`). Our filter function would look like
+this:
 
 .. code-block:: javascript
 
@@ -476,9 +475,9 @@ events (documents with status `new`). Our filter function will look like this:
         return true; // passed!
     }
 
-Filter functions must return ``true`` if a document passed all defined rules.
-Now, if you apply this function to the changes feed it will emit only changes
-about "new mails"::
+Filter functions must return ``true`` if a document passed all the rules.  Now,
+if you apply this function to the changes feed it will emit only changes about
+"new mails"::
 
     GET /somedatabase/_changes?filter=mailbox/new_mail HTTP/1.1
 
@@ -519,8 +518,8 @@ The dynamic version of our filter looks like this:
         return true; // passed!
     }
 
-and now we have passed the `status` query parameter in request to let our filter
-match only required documents::
+and now we have passed the `status` query parameter in the request to let our
+filter match only the required documents::
 
     GET /somedatabase/_changes?filter=mailbox/by_status&status=new HTTP/1.1
 
@@ -548,21 +547,22 @@ systems.
 
 .. _viewfilter:
 
-View filters
+View Filters
 ------------
 
-View filters are the same as above, with one small difference: they use
-views `map` function instead to `filter` one to process the changes feed. Each
-time a key-value pair could be emitted, a change is returned. This allows us
-to avoid creating filter functions that mostly do the same works as views.
+View filters are the same as classic filters above, with one small difference:
+they use the `map` instead of the `filter` function of a view, to filter the
+changes feed. Each time a key-value pair is emitted from the `map` function, a
+change is returned. This allows avoiding filter functions that mostly do the
+same work as views.
 
-To use them just specify `_view` value for ``filter`` parameter and
-`designdoc/viewname` for ``view`` one::
+To use them just pass `filter=_view` and `view=designdoc/viewname` as request
+parameters to the :ref:`changes feed<changes>`::
 
     GET /somedatabase/_changes?filter=_view&view=dname/viewname  HTTP/1.1
 
 .. note::
-    Since view filters uses `map` functions as filters, they can't show any
+    Since view filters use `map` functions as filters, they can't show any
     dynamic behavior since :ref:`request object<request_object>` is not
     available.
 
@@ -577,7 +577,7 @@ To use them just specify `_view` value for ``filter`` parameter and
 
 .. _vdufun:
 
-Validate document update functions
+Validate Document Update Functions
 ==================================
 
 .. function:: validatefun(newDoc, oldDoc, userCtx, secObj)
