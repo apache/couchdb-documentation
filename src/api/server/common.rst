@@ -365,7 +365,7 @@ If you want to pick out specific parts of the log information you can use the
 and ``offset``, which specifies where the reading of the log should start,
 counted back from the end. For example, if you use the following request:
 
-.. code-block:: http
+.. code-block:: none
 
     GET /_log?bytes=500&offset=2000
 
@@ -549,7 +549,7 @@ For example, to request replication between a database local to the CouchDB
 instance to which you send the request, and a remote database you might use the
 following request:
 
-.. code-block:: http
+.. code-block:: none
 
     POST http://couchdb:5984/_replicate
     Content-Type: application/json
@@ -574,7 +574,7 @@ JSON object:
 You can create the target database (providing your user credentials allow it)
 by adding the ``create_target`` field to the request object:
 
-.. code-block:: http
+.. code-block:: none
 
     POST http://couchdb:5984/_replicate
     Content-Type: application/json
@@ -598,7 +598,7 @@ synchronizes the two databases together. For example, you can request a single
 synchronization between two databases by supplying the ``source`` and
 ``target`` fields within the request JSON content.
 
-.. code-block:: http
+.. code-block:: none
 
     POST http://couchdb:5984/_replicate
     Accept: application/json
@@ -649,7 +649,7 @@ With continuous replication changes in the source database are replicated to
 the target database in perpetuity until you specifically request that
 replication ceases.
 
-.. code-block:: http
+.. code-block:: none
 
     POST http://couchdb:5984/_replicate
     Accept: application/json
@@ -680,7 +680,7 @@ cancellation request must also contain the ``continuous`` field.
 
 For example, the replication request:
 
-.. code-block:: http
+.. code-block:: none
 
     POST http://couchdb:5984/_replicate
     Content-Type: application/json
@@ -695,7 +695,7 @@ For example, the replication request:
 
 Must be canceled using the request:
 
-.. code-block:: http
+.. code-block:: none
 
     POST http://couchdb:5984/_replicate
     Accept: application/json
@@ -919,7 +919,7 @@ You can also access individual statistics by quoting the statistics sections
 and statistic ID as part of the URL path. For example, to get the
 ``request_time`` statistics, you can use:
 
-.. code-block:: http
+.. code-block:: none
 
     GET /_stats/couchdb/request_time
 
@@ -1031,7 +1031,7 @@ The UUID type may be changed at any time through the
 :ref:`Configuration API <api/config/section/key>`. For example, the UUID type
 could be changed to ``random`` by sending this HTTP request:
 
-.. code-block:: http
+.. code-block:: none
 
     PUT http://couchdb:5984/_config/uuids/algorithm
     Content-Type: application/json

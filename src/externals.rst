@@ -70,7 +70,9 @@ How does it work? - HTTP Proxying
 =================================
 
 To configure a :ref:`proxy handler <config/proxy>`, edit your `local.ini` and
-add a section like such::
+add a section like such:
+
+.. code-block:: ini
 
     [httpd_global_handlers]
     _fti = {couch_httpd_proxy, handle_proxy_req, <<"http://127.0.0.1:5985">>}
@@ -103,7 +105,9 @@ processes, you need to either tell CouchDB about each one, or have a main
 process that forks off the required sub-processes.
 
 To configure an :config:section:`OS daemon <os_daemons>`, add this to your
-`local.ini`::
+`local.ini`:
+
+.. code-block:: ini
 
     [os_daemons]
     my_daemon = /path/to/command -with args
@@ -118,19 +122,27 @@ if you desire. Or they can peek at things like the
 :config:option:`httpd/bind_address` and :config:option:`httpd/port` that CouchDB
 is using.
 
-A request for a config section looks like this::
+A request for a config section looks like this:
+
+.. code-block:: none
 
     ["get", "os_daemons"]\n
 
-And the response::
+And the response:
+
+.. code-block:: none
 
     {"my_daemon": "/path/to/command -with args"}\n
 
-Or to get a specific key::
+Or to get a specific key:
+
+.. code-block:: none
 
     ["get", "os_daemons", "my_daemon"]\n
 
-And the response::
+And the response:
+
+.. code-block:: none
 
     "/path/to/command -with args"\n
 
@@ -139,7 +151,9 @@ All requests and responses are terminated with a newline (indicated by ``\n``).
 Logging API
 -----------
 
-There's also an API for adding messages to CouchDB's logs. Its simply::
+There's also an API for adding messages to CouchDB's logs. Its simply:
+
+.. code-block:: none
 
     ["log", $MESG]\n
 
@@ -243,7 +257,9 @@ And then start CouchDB and try:
     * Connection #0 to host 127.0.0.1 left intact
     * Closing connection #0
 
-The corresponding CouchDB logs look like::
+The corresponding CouchDB logs look like:
+
+.. code-block:: none
 
     Apache CouchDB 1.5.0 (LogLevel=info) is starting.
     Apache CouchDB has started. Time to relax.

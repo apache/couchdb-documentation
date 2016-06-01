@@ -17,7 +17,9 @@ Writing Addons
 ===============
 
 Addons allow you to extend Fauxton for a specific use case. Usually, they
-have the following structure::
+have the following structure:
+
+.. code-block:: none
 
     + my_addon/
     | ---+ assets [optional]
@@ -34,7 +36,9 @@ Generating an Addon
 
 We have a `grunt-init` template that lets you create a skeleton addon,
 including all the boiler plate code. Run ``grunt-init tasks/addon`` and answer
-the questions it asks to create an addon::
+the questions it asks to create an addon:
+
+.. code-block:: none
 
     ± grunt-init tasks/addon
     path.existsSync is now called `fs.existsSync`.
@@ -91,7 +95,9 @@ adds the `searchSidebar` callback to `#sidebar-content` for three routes.
 Hello world Addon
 =================
 
-First create the addon skeleton::
+First create the addon skeleton:
+
+.. code-block:: none
 
     ± bbb addon
     path.existsSync is now called `fs.existsSync`.

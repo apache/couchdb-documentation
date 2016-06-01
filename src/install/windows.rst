@@ -129,11 +129,15 @@ General Notes
 Setting Up Cygwin
 -----------------
 
-Before starting any Cygwin terminals, run::
+Before starting any Cygwin terminals, run:
+
+.. code-block:: none
 
     set CYGWIN=nontsec
 
-To set up your environment, run::
+To set up your environment, run:
+
+.. code-block:: none
 
     [VS_BIN]/vcvars32.bat
 
@@ -160,7 +164,9 @@ Building Erlang
 You must include Win32 OpenSSL, built statically from source. Use
 exactly the same version as required by the Erlang/OTP build process.
 
-However, you can skip the GUI tools by running::
+However, you can skip the GUI tools by running:
+
+.. code-block:: none
 
     echo "skipping gs" > lib/gs/SKIP
 
@@ -170,11 +176,15 @@ However, you can skip the GUI tools by running::
 
 Follow the rest of the Erlang instructions as described.
 
-After running::
+After running:
+
+.. code-block:: none
 
     ./otp_build release -a
 
-You should run::
+You should run:
+
+.. code-block:: none
 
     ./release/win32/Install.exe -s
 
@@ -182,11 +192,15 @@ This will set up the release/win32/bin directory correctly. The CouchDB
 installation scripts currently write their data directly into this
 location.
 
-To set up your environment for building CouchDB, run::
+To set up your environment for building CouchDB, run:
+
+.. code-block:: none
 
     eval `./otp_build env_win32`
 
-To set up the `ERL_TOP` environment variable, run::
+To set up the `ERL_TOP` environment variable, run:
+
+.. code-block:: none
 
     export ERL_TOP=[ERL_TOP]
 
@@ -194,7 +208,9 @@ Replace ``[ERL_TOP]`` with the Erlang source directory name.
 
 Remember to use `/cygdrive/c/` instead of `c:/` as the directory prefix.
 
-To set up your path, run::
+To set up your path, run:
+
+.. code-block:: none
 
     export PATH=$ERL_TOP/release/win32/erts-5.8.5/bin:$PATH
 
@@ -210,7 +226,9 @@ tests.
 
 The documentation step may be skipped using ``--disable-docs`` if you wish.
 
-Once you have satisfied the dependencies you should run::
+Once you have satisfied the dependencies you should run:
+
+.. code-block:: none
 
     ./configure \
         --with-js-include=/cygdrive/c/path_to_spidermonkey_include \
@@ -226,23 +244,31 @@ Once you have satisfied the dependencies you should run::
 
 This command could take a while to complete.
 
-If everything was successful you should see the following message::
+If everything was successful you should see the following message:
+
+.. code-block:: none
 
     You have configured Apache CouchDB, time to relax.
 
 Relax.
 
-To install CouchDB you should run::
+To install CouchDB you should run:
+
+.. code-block:: none
 
     make install
 
-If everything was successful you should see the following message::
+If everything was successful you should see the following message:
+
+.. code-block:: none
 
     You have installed Apache CouchDB, time to relax.
 
 Relax.
 
-To build the .exe installer package, you should run::
+To build the .exe installer package, you should run:
+
+.. code-block:: none
 
     make dist
 
@@ -252,17 +278,23 @@ to avoid any contamination do not run `make dist` after this.
 First Run
 ---------
 
-You can start the CouchDB server by running::
+You can start the CouchDB server by running:
+
+.. code-block:: none
 
     $ERL_TOP/release/win32/bin/couchdb.bat
 
-When CouchDB starts it should eventually display the following message::
+When CouchDB starts it should eventually display the following message:
+
+.. code-block:: none
 
     Apache CouchDB has started, time to relax.
 
 Relax.
 
-To check that everything has worked, point your web browser to::
+To check that everything has worked, point your web browser to:
+
+.. code-block:: none
 
     http://127.0.0.1:5984/_utils/index.html
 

@@ -432,14 +432,18 @@ Executes :ref:`list function <listfun>`.
 The communication protocol for `list` functions is a bit complex so let's use
 an example for illustration.
 
-Let's assume that we have view a function that emits `id-rev` pairs::
+Let's assume that we have view a function that emits `id-rev` pairs:
+
+.. code-block:: javascript
 
     function(doc) {
         emit(doc._id, doc._rev);
     }
 
 And we'd like to emulate ``_all_docs`` JSON response with list function. Our
-*first* version of the list functions looks like this::
+*first* version of the list functions looks like this:
+
+.. code-block:: javascript
 
     function(head, req){
         start({'headers': {'Content-Type': 'application/json'}});
@@ -457,7 +461,9 @@ on three parts:
 
 #. Initialization
 
-   The first returned object from list function is an array of next structure::
+   The first returned object from list function is an array of next structure:
+
+   .. code-block:: none
 
        ["start", <chunks>, <headers>]
 
@@ -531,7 +537,9 @@ message from the Query Server. That's ok when there are only a few rows in the
 view result, but it's not acceptable for millions documents and millions view
 rows
 
-Let's fix our list function and see the changes in communication::
+Let's fix our list function and see the changes in communication:
+
+.. code-block:: javascript
 
     function(head, req){
         start({'headers': {'Content-Type': 'application/json'}});
@@ -550,7 +558,9 @@ Let's fix our list function and see the changes in communication::
     }
 
 "Wait, what?" - you'd like to ask. Yes, we'd build JSON response manually by
-string chunks, but let's take a look on logs::
+string chunks, but let's take a look on logs:
+
+.. code-block:: none
 
     [Wed, 24 Jul 2013 05:45:30 GMT] [debug] [<0.19191.1>] OS Process #Port<0.4444> Output :: ["start",["{","\"total_rows\":2,","\"offset\":0,","\"rows\":["],{"headers":{"Content-Type":"application/json"}}]
     [Wed, 24 Jul 2013 05:45:30 GMT] [info] [<0.18963.1>] 127.0.0.1 - - GET /blog/_design/post/_list/index/all_docs 200
@@ -1039,7 +1049,9 @@ field, log, on a separate line::
 
     ["log", "some message"]
 
-CouchDB responds nothing, but writes received message into log file::
+CouchDB responds nothing, but writes received message into log file:
+
+.. code-block:: none
 
     [Sun, 13 Feb 2009 23:31:30 GMT] [info] [<0.72.0>] Query Server Log Message: some message
 

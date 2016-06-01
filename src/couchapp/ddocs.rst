@@ -478,7 +478,9 @@ events (documents with status `new`). Our filter function will look like this:
 
 Filter functions must return ``true`` if a document passed all defined rules.
 Now, if you apply this function to the changes feed it will emit only changes
-about "new mails"::
+about "new mails":
+
+.. code-block:: none
 
     GET /somedatabase/_changes?filter=mailbox/new_mail HTTP/1.1
 
@@ -520,7 +522,9 @@ The dynamic version of our filter looks like this:
     }
 
 and now we have passed the `status` query parameter in request to let our filter
-match only required documents::
+match only required documents:
+
+.. code-block:: none
 
     GET /somedatabase/_changes?filter=mailbox/by_status&status=new HTTP/1.1
 
@@ -532,7 +536,9 @@ match only required documents::
     ],
     "last_seq":27}
 
-and we can easily change filter behavior with::
+and we can easily change filter behavior with:
+
+.. code-block:: none
 
     GET /somedatabase/_changes?filter=mailbox/by_status&status=spam HTTP/1.1
 
@@ -557,7 +563,9 @@ time a key-value pair could be emitted, a change is returned. This allows us
 to avoid creating filter functions that mostly do the same works as views.
 
 To use them just specify `_view` value for ``filter`` parameter and
-`designdoc/viewname` for ``view`` one::
+`designdoc/viewname` for ``view`` one:
+
+.. code-block:: none
 
     GET /somedatabase/_changes?filter=_view&view=dname/viewname  HTTP/1.1
 

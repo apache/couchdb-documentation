@@ -31,7 +31,9 @@ Relax
 =====
 
 If there's one word to describe CouchDB, it is *relax*. It is the byline
-to CouchDB's official logo and when you start CouchDB, you see::
+to CouchDB's official logo and when you start CouchDB, you see:
+
+.. code-block:: none
 
     Apache CouchDB has started. Time to relax.
 

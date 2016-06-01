@@ -68,7 +68,9 @@ Python and Sphinx are only required for building the online documentation.
 Debian-based Systems
 --------------------
 
-You can install the dependencies by running::
+You can install the dependencies by running:
+
+.. code-block:: none
 
     sudo apt-get install build-essential
     sudo apt-get install erlang-base-hipe
@@ -95,7 +97,9 @@ Unfortunately, it seems that installing dependencies on Ubuntu is troublesome.
 RedHat-based (Fedora, Centos, RHEL) Systems
 -------------------------------------------
 
-You can install the dependencies by running::
+You can install the dependencies by running:
+
+.. code-block:: none
 
     sudo yum install autoconf
     sudo yum install autoconf-archive
@@ -123,7 +127,9 @@ Follow :ref:`install/mac/homebrew` reference till `brew install couchdb` step.
 Installing
 ==========
 
-Once you have satisfied the dependencies you should run::
+Once you have satisfied the dependencies you should run:
+
+.. code-block:: none
 
     ./configure
 
@@ -131,13 +137,17 @@ This script will configure CouchDB to be installed into `/usr/local` by default.
 
 If you wish to customise the installation, pass `--help` to this script.
 
-If everything was successful you should see the following message::
+If everything was successful you should see the following message:
+
+.. code-block:: none
 
     You have configured Apache CouchDB, time to relax.
 
 Relax.
 
-To install CouchDB you should run::
+To install CouchDB you should run:
+
+.. code-block:: none
 
     make && sudo make install
 
@@ -145,7 +155,9 @@ You only need to use `sudo` if you're installing into a system directory.
 
 Try `gmake` if `make` is giving you any problems.
 
-If everything was successful you should see the following message::
+If everything was successful you should see the following message:
+
+.. code-block:: none
 
     You have installed Apache CouchDB, time to relax.
 
@@ -154,23 +166,31 @@ Relax.
 First Run
 =========
 
-You can start the CouchDB server by running::
+You can start the CouchDB server by running:
+
+.. code-block:: none
 
     sudo -i -u couchdb couchdb
 
 This uses the `sudo` command to run the `couchdb` command as the `couchdb` user.
 
-When CouchDB starts it should eventually display the following message::
+When CouchDB starts it should eventually display the following message:
+
+.. code-block:: none
 
     Apache CouchDB has started, time to relax.
 
 Relax.
 
-To check that everything has worked, point your web browser to::
+To check that everything has worked, point your web browser to:
+
+.. code-block:: none
 
     http://127.0.0.1:5984/_utils/index.html
 
-From here you should verify your installation by pointing your web browser to::
+From here you should verify your installation by pointing your web browser to:
+
+.. code-block:: none
 
     http://localhost:5984/_utils/verify_install.html
 
@@ -179,7 +199,9 @@ Security Considerations
 
 You should create a special `couchdb` user for CouchDB.
 
-On many Unix-like systems you can run::
+On many Unix-like systems you can run:
+
+.. code-block:: none
 
     adduser --system \
             --home /usr/local/var/lib/couchdb \
@@ -200,14 +222,18 @@ You can test this by:
 * Trying to log in as the `couchdb` user
 * Running `pwd` and checking the present working directory
 
-Change the ownership of the CouchDB directories by running::
+Change the ownership of the CouchDB directories by running:
+
+.. code-block:: none
 
     chown -R couchdb:couchdb /usr/local/etc/couchdb
     chown -R couchdb:couchdb /usr/local/var/lib/couchdb
     chown -R couchdb:couchdb /usr/local/var/log/couchdb
     chown -R couchdb:couchdb /usr/local/var/run/couchdb
 
-Change the permission of the CouchDB directories by running::
+Change the permission of the CouchDB directories by running:
+
+.. code-block:: none
 
     chmod 0770 /usr/local/etc/couchdb
     chmod 0770 /usr/local/var/lib/couchdb
@@ -224,39 +250,53 @@ SysV/BSD-style Systems
 
 You can use the `couchdb` init script to control the CouchDB daemon.
 
-On SysV-style systems, the init script will be installed into::
+On SysV-style systems, the init script will be installed into:
+
+.. code-block:: none
 
     /usr/local/etc/init.d
 
-On BSD-style systems, the init script will be installed into::
+On BSD-style systems, the init script will be installed into:
+
+.. code-block:: none
 
     /usr/local/etc/rc.d
 
 We use the `[init.d|rc.d]` notation to refer to both of these directories.
 
-You can control the CouchDB daemon by running::
+You can control the CouchDB daemon by running:
+
+.. code-block:: none
 
     /usr/local/etc/[init.d|rc.d]/couchdb [start|stop|restart|status]
 
-If you wish to configure how the init script works, you can edit::
+If you wish to configure how the init script works, you can edit:
+
+.. code-block:: none
 
     /usr/local/etc/default/couchdb
 
 Comment out the `COUCHDB_USER` setting if you're running as a non-superuser.
 
-To start the daemon on boot, copy the init script to::
+To start the daemon on boot, copy the init script to:
+
+.. code-block:: none
 
     /etc/[init.d|rc.d]
 
 You should then configure your system to run the init script automatically.
 
-You may be able to run::
+You may be able to run:
+
+.. code-block:: none
 
     sudo update-rc.d couchdb defaults
 
 If this fails, consult your system documentation for more information.
 
-A `logrotate` configuration is installed into::
+A `logrotate` configuration is installed into:
+
+.. code-block:: none
 
     /usr/local/etc/logrotate.d/couchdb
 

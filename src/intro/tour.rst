@@ -30,7 +30,9 @@ throughout the rest of the documents. What's interesting about curl is that it
 gives you control over raw HTTP requests, and you can see exactly what is
 going on "underneath the hood" of your database.
 
-Make sure CouchDB is still running, and then do::
+Make sure CouchDB is still running, and then do:
+
+.. code-block:: none
 
     curl http://127.0.0.1:5984/
 
@@ -53,7 +55,9 @@ The reply should look something like:
 Not all that spectacular. CouchDB is saying "hello" with the running version
 number.
 
-Next, we can get a list of databases::
+Next, we can get a list of databases:
+
+.. code-block:: none
 
     curl -X GET http://127.0.0.1:5984/_all_dbs
 
@@ -78,7 +82,9 @@ list.
     the server curl tries to connect to, the request headers it sends,
     and response headers it receives back. Great for debugging!
 
-Let's create a database::
+Let's create a database:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/baseball
 
@@ -86,7 +92,9 @@ CouchDB will reply with::
 
     {"ok":true}
 
-Retrieving the list of databases again shows some useful results this time::
+Retrieving the list of databases again shows some useful results this time:
+
+.. code-block:: none
 
     curl -X GET http://127.0.0.1:5984/_all_dbs
 
@@ -106,7 +114,9 @@ Retrieving the list of databases again shows some useful results this time::
     dictionaries. For a more detailed description of JSON, see Appendix E, JSON
     Primer.
 
-Let's create another database::
+Let's create another database:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/baseball
 
@@ -116,7 +126,9 @@ CouchDB will reply with::
     the file already exists."}
 
 We already have a database with that name, so CouchDB will respond with an
-error. Let's try again with a different database name::
+error. Let's try again with a different database name:
+
+.. code-block:: none
 
     curl -X PUT http://127.0.0.1:5984/plankton
 
@@ -124,7 +136,9 @@ CouchDB will reply with::
 
     {"ok":true}
 
-Retrieving the list of databases yet again shows some useful results::
+Retrieving the list of databases yet again shows some useful results:
+
+.. code-block:: none
 
     curl -X GET http://127.0.0.1:5984/_all_dbs
 
@@ -132,7 +146,9 @@ CouchDB will respond with::
 
     ["baseball", "plankton"]
 
-To round things off, let's delete the second database::
+To round things off, let's delete the second database:
+
+.. code-block:: none
 
     curl -X DELETE http://127.0.0.1:5984/plankton
 
@@ -140,7 +156,9 @@ CouchDB will reply with::
 
     {"ok":true}
 
-The list of databases is now the same as it was before::
+The list of databases is now the same as it was before:
+
+.. code-block:: none
 
     curl -X GET http://127.0.0.1:5984/_all_dbs
 
@@ -165,7 +183,9 @@ complex ideas involved. With Futon we can create and destroy databases; view
 and edit documents; compose and run MapReduce views; and trigger replication
 between databases.
 
-To load Futon in your browser, visit::
+To load Futon in your browser, visit:
+
+.. code-block:: none
 
     http://127.0.0.1:5984/_utils/
 

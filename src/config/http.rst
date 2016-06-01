@@ -244,7 +244,7 @@ Secure Socket Level Options
     You will need the `OpenSSL`_ command line tool installed. It probably
     already is.
 
-    .. code-block:: bash
+    .. code-block:: none
 
         shell> mkdir /etc/couchdb/cert
         shell> cd /etc/couchdb/cert
@@ -274,7 +274,7 @@ Secure Socket Level Options
     Now start (or restart) CouchDB. You should be able to connect to it
     using HTTPS on port 6984:
 
-    .. code-block:: bash
+    .. code-block:: none
 
         shell> curl https://127.0.0.1:6984/
         curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
@@ -297,7 +297,7 @@ Secure Socket Level Options
     notifies you. Luckily you trust yourself (don't you?) and you can specify
     the ``-k`` option as the message reads:
 
-    .. code-block:: bash
+    .. code-block:: none
 
         shell> curl -k https://127.0.0.1:6984/
         {"couchdb":"Welcome","version":"1.5.0"}
@@ -549,7 +549,7 @@ Virtual Hosts
 
     Test that this is working:
 
-    .. code-block:: bash
+    .. code-block:: none
 
         $ ping -n 2 couchdb.local
         PING couchdb.local (127.0.0.1) 56(84) bytes of data.

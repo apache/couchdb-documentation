@@ -406,7 +406,9 @@ the following:
     corresponding documents
 
 Now, to get a specific blog post and all associated comments, we'd invoke that
-view with the query string::
+view with the query string:
+
+.. code-block:: none
 
     ?startkey=["myslug"]&endkey;=["myslug", 2]
 

@@ -43,12 +43,16 @@ target operation system and may be changed during building from the source
 code. For binary distributions, it mostly points to the installation path
 (e.g. ``C:\Program Files\CouchDB\etc\couchdb`` for Windows).
 
-To see the actual configuration files chain run in shell::
+To see the actual configuration files chain run in shell:
+
+.. code-block:: none
 
     couchdb -c
 
 This will print out all *actual* configuration files that will form the result
-CouchDB configuration::
+CouchDB configuration:
+
+.. code-block:: none
 
     /etc/couchdb/default.ini
     /etc/couchdb/default.d/geocouch.ini
@@ -71,7 +75,9 @@ by using next command line options:
 - ``-a``: adds configuration file to the chain
 - ``-A``: adds configuration directory to the chain
 
-Let's add these options and see how the configuration chain changes::
+Let's add these options and see how the configuration chain changes:
+
+.. code-block:: none
 
     shell> couchdb -c -a /home/couchdb/custom.ini
     /etc/couchdb/default.ini
@@ -104,7 +110,9 @@ The common way to set some parameters is to edit the `local.ini` file which is
 mostly located in the `etc/couchdb` directory relative your installation path
 root.
 
-For example::
+For example:
+
+.. code-block:: none
 
     ; This is a comment
     [section]
@@ -145,17 +153,23 @@ Setting parameters via the HTTP API
 
 Alternatively, configuration parameters could be set via the
 :ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration
-on-the-fly without requiring a server restart::
+on-the-fly without requiring a server restart:
+
+.. code-block:: none
 
     curl -X PUT http://localhost:5984/_config/uuids/algorithm -d '"random"'
 
-In the response the old parameter's value returns::
+In the response the old parameter's value returns:
+
+.. code-block:: none
 
     "sequential"
 
 You should be careful with changing configuration via the HTTP API since it's
 easy to make CouchDB unavailable. For instance, if you'd like to change the
-:option:`httpd/bind_address` for a new one::
+:option:`httpd/bind_address` for a new one:
+
+.. code-block:: none
 
     curl -X PUT http://localhost:5984/_config/httpd/bind_address -d '"10.10.0.128"'
 

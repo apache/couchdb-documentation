@@ -241,7 +241,9 @@ Changes Feeds
 Polling
 -------
 
-By default all changes are immediately returned within the JSON body::
+By default all changes are immediately returned within the JSON body:
+
+.. code-block:: none
 
     GET /somedatabase/_changes HTTP/1.1
 
@@ -265,7 +267,9 @@ individually to make sure.)
 will always be the same as the seq of the last item in results.)
 
 Sending a ``since`` param in the query string skips all changes up to and
-including the given sequence number::
+including the given sequence number:
+
+.. code-block:: none
 
     GET /somedatabase/_changes?since=3 HTTP/1.1
 
@@ -431,7 +435,7 @@ as for replication filters. You specify the name of the filter function
 to the ``filter`` parameter, specifying the design document name and
 :ref:`filter name <filterfun>`. For example:
 
-.. code-block:: http
+.. code-block:: none
 
     GET /db/_changes?filter=design_doc/filtername
 

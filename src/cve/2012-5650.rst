@@ -48,7 +48,9 @@ Work-Around
 ===========
 
 Disable the Futon user interface completely, by adapting `local.ini` and
-restarting CouchDB::
+restarting CouchDB:
+
+.. code-block:: ini
 
   [httpd_global_handlers]
   _utils = {couch_httpd_misc_handlers, handle_welcome_req, <<"Forbidden">>}

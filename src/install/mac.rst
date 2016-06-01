@@ -45,12 +45,16 @@ That's all, now CouchDB is installed on your Mac:
 Installation with HomeBrew
 ==========================
 
-You can install the build tools by running::
+You can install the build tools by running:
+
+.. code-block:: none
 
     open /Applications/Installers/Xcode\ Tools/XcodeTools.mpkg
 
 You will need `Homebrew`_ installed to use the `brew` command. To install the
-other :ref:`dependencies <install/unix/dependencies>` run next commands::
+other :ref:`dependencies <install/unix/dependencies>` run next commands:
+
+.. code-block:: none
 
     brew install autoconf
     brew install autoconf-archive
@@ -62,21 +66,29 @@ other :ref:`dependencies <install/unix/dependencies>` run next commands::
     brew install curl
 
 You may want to link ICU so that CouchDB can find the header files
-automatically::
+automatically:
+
+.. code-block:: none
 
     brew link icu4c
 
-The same is true for recent versions of Erlang::
+The same is true for recent versions of Erlang:
+
+.. code-block:: none
 
     brew link erlang
 
-Now it's time to brew CouchDB::
+Now it's time to brew CouchDB:
+
+.. code-block:: none
 
     brew install couchdb
 
 The above Erlang install will use the bottled (pre-compiled) version if you are:
 using `/usr/local` for `homebrew`, and on 10.6 or 10.7. If you're not on one of
-these, `homebrew` will build from source, so consider doing::
+these, `homebrew` will build from source, so consider doing:
+
+.. code-block:: none
 
     brew install erlang --no-docs
 
@@ -88,7 +100,9 @@ git-based master (head) branch, or the next development release using this
 This will allow quick installation of the future release branch when it becomes
 active. If you're not sure if you need this, then you probably don't.
 In both cases we assume you are comfortable identifying bugs, and handling any
-potential upgrades between commits to the codebase. ::
+potential upgrades between commits to the codebase.
+
+.. code-block:: none
 
     brew install [--devel|--head] couchdb
 
@@ -120,29 +134,41 @@ Running as a Daemon
 
 You can use the `launchctl` command to control the CouchDB daemon.
 
-You can load the configuration by running::
+You can load the configuration by running:
+
+.. code-block:: none
 
     sudo launchctl load \
          /usr/local/Library/LaunchDaemons/org.apache.couchdb.plist
 
-You can stop the CouchDB daemon by running::
+You can stop the CouchDB daemon by running:
+
+.. code-block:: none
 
     sudo launchctl unload \
          /usr/local/Library/LaunchDaemons/org.apache.couchdb.plist
 
-You can start CouchDB by running::
+You can start CouchDB by running:
+
+.. code-block:: none
 
     sudo launchctl start org.apache.couchdb
 
-You can restart CouchDB by running::
+You can restart CouchDB by running:
+
+.. code-block:: none
 
     sudo launchctl stop org.apache.couchdb
 
-You can edit the launchd configuration by running::
+You can edit the launchd configuration by running:
+
+.. code-block:: none
 
     open /usr/local/Library/LaunchDaemons/org.apache.couchdb.plist
 
-To start the daemon on boot, copy the configuration file to::
+To start the daemon on boot, copy the configuration file to:
+
+.. code-block:: none
 
     /Library/LaunchDaemons
 
@@ -159,20 +185,24 @@ To install CouchDB using MacPorts you have 2 package choices:
 - ``couchdb-devel`` - updated every few weeks with the latest from the master
   branch
 
-::
+.. code-block:: none
 
     $ sudo port install couchdb
 
 should be enough. MacPorts takes care of installing all necessary dependencies.
 If you have already installed some of the CouchDB dependencies via MacPorts,
 run this command to check and upgrade any outdated ones, after installing
-CouchDB::
+CouchDB:
+
+.. code-block:: none
 
     $ sudo port upgrade couchdb
 
 This will upgrade dependencies recursively, if there are more recent versions
 available. If you want to run CouchDB as a service controlled by the OS, load
-the launchd configuration which comes with the project, with this command::
+the launchd configuration which comes with the project, with this command:
+
+.. code-block:: none
 
     $ sudo port load couchdb
 
@@ -180,7 +210,9 @@ and it should be up and accessible via Futon at http://127.0.0.1:5984/_utils.
 It should also be restarted automatically after reboot.
 
 Updating the ports collection. The collection of port files has to be updated
-to reflect the latest versions of available packages. In order to do that run::
+to reflect the latest versions of available packages. In order to do that run:
+
+.. code-block:: none
 
     $ sudo port selfupdate
 

@@ -304,7 +304,7 @@
 
     **Request**:
 
-    .. code-block:: http
+    .. code-block:: none
 
         POST /recipes/_design/recipe/_update/ingredients HTTP/1.1
         Accept: application/json
@@ -369,7 +369,7 @@
 
     **Request**:
 
-    .. code-block:: http
+    .. code-block:: none
 
         POST /recipes/_design/recipe/_update/ingredients/SpaghettiWithMeatballs HTTP/1.1
         Accept: application/json

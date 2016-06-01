@@ -24,7 +24,9 @@ Recent versions of `node.js`_ and `npm`_ are required.
 Get the source
 ==============
 
-Clone the CouchDB repo::
+Clone the CouchDB repo:
+
+.. code-block:: bash
 
     $ git clone http://git-wip-us.apache.org/repos/asf/couchdb.git
     $ cd couchdb
@@ -32,23 +34,31 @@ Clone the CouchDB repo::
 Fauxton Setup
 =============
 
-Install all dependencies::
+Install all dependencies:
+
+.. code-block:: none
 
     couchdb/ $ cd src/fauxton
     couchdb/src/fauxton/ $ npm install
 
 .. note::
-    To avoid a npm global install add ``node_modules/.bin`` to your path::
+    To avoid a npm global install add ``node_modules/.bin`` to your path:
+
+    .. code-block:: none
 
         export PATH=./node_modules/.bin:$PATH
 
     Or just use the wrappers in ``./bin/``.
 
-    Development mode, non minified files::
+    Development mode, non minified files:
+
+    .. code-block:: none
 
         ./bin/grunt couchdebug
 
-    Or fully compiled install::
+    Or fully compiled install:
+
+    .. code-block:: none
 
         ./bin/grunt couchdb
 
@@ -56,7 +66,9 @@ Dev Server
 ==========
 
 Using the dev server is the easiest way to use Fauxton, specially when
-developing for it::
+developing for it:
+
+.. code-block:: none
 
     grunt dev
 
@@ -64,6 +76,8 @@ Deploy Fauxton
 ==============
 
 Deploy Fauxton to your local CouchDB instance:
+
+.. code-block:: none
 
     ./bin/grunt couchapp_deploy
 

@@ -174,7 +174,7 @@ write any code for the possibility of getting a 409 response, because you will
 never get one. Rather, you have to deal with conflicts appearing later in the
 database, which is what you'd have to do in a multi-master application anyway.
 
-.. code-block:: http
+.. code-block:: none
 
     POST /db/_bulk_docs
 
@@ -525,7 +525,9 @@ of the previous revision ids which ended up with revision v2b. Doing the same
 for v2a you can find their common ancestor revision. However if the database
 has been compacted, the content of that document revision will have been lost.
 ``revs_info`` will still show that v1 was an ancestor, but report it as
-"missing"::
+"missing":
+
+.. code-block:: none
 
     BEFORE COMPACTION           AFTER COMPACTION
 
@@ -597,7 +599,9 @@ actually an SHA1 hash of the tip commit.
 .. _Git: http://git-scm.com/
 
 If you are replicating with one or more peers, a separate branch is made for
-each of the peers. For example, you might have::
+each of the peers. For example, you might have:
+
+.. code-block:: none
 
     master               -- my local branch
     remotes/foo/master   -- branch on peer 'foo'
@@ -610,7 +614,9 @@ attempt to "merge" those changes into the local branch.
 
 Now let's consider the business card. Alice has created a git repo containing
 ``bob.vcf``, and cloned it across to the other machine. The branches look like
-this, where ``AAAAAAAA`` is the SHA1 of the commit::
+this, where ``AAAAAAAA`` is the SHA1 of the commit:
+
+.. code-block:: none
 
     ---------- desktop ----------           ---------- laptop ----------
     master: AAAAAAAA                        master: AAAAAAAA
@@ -618,7 +624,9 @@ this, where ``AAAAAAAA`` is the SHA1 of the commit::
 
 Now she makes a change on the desktop, and commits it into the desktop repo;
 then she makes a different change on the laptop, and commits it into the laptop
-repo::
+repo:
+
+.. code-block:: none
 
     ---------- desktop ----------           ---------- laptop ----------
     master: BBBBBBBB                        master: CCCCCCCC
@@ -626,7 +634,9 @@ repo::
 
 Now on the desktop she does ``git pull laptop``. Firstly, the remote objects
 are copied across into the local repo and the remote tracking branch is
-updated::
+updated:
+
+.. code-block:: none
 
     ---------- desktop ----------           ---------- laptop ----------
     master: BBBBBBBB                        master: CCCCCCCC
@@ -640,14 +650,18 @@ Then git will attempt to merge the changes in. It can do this because it knows
 the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, so it takes a diff between
 ``AAAAAAAA`` and ``CCCCCCCC`` and tries to apply it to ``BBBBBBBB``.
 
-If this is successful, then you'll get a new version with a merge commit::
+If this is successful, then you'll get a new version with a merge commit:
+
+.. code-block:: none
 
     ---------- desktop ----------           ---------- laptop ----------
     master: DDDDDDDD                        master: CCCCCCCC
     remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
 
 Then Alice has to logon to the laptop and run ``git pull desktop``. A similar
-process occurs. The remote tracking branch is updated::
+process occurs. The remote tracking branch is updated:
+
+.. code-block:: none
 
     ---------- desktop ----------           ---------- laptop ----------
     master: DDDDDDDD                        master: CCCCCCCC
@@ -656,7 +670,9 @@ process occurs. The remote tracking branch is updated::
 Then a merge takes place. This is a special-case: ``CCCCCCCC`` one of the parent
 commits of ``DDDDDDDD``, so the laptop can `fast forward` update from
 ``CCCCCCCC`` to ``DDDDDDDD`` directly without having to do any complex merging.
-This leaves the final state as::
+This leaves the final state as:
+
+.. code-block:: none
 
     ---------- desktop ----------           ---------- laptop ----------
     master: DDDDDDDD                        master: DDDDDDDD
@@ -680,7 +696,9 @@ work well for XML or JSON if it's presented without any line breaks.
 The other interesting consideration is multiple peers. In this case you have
 multiple remote tracking branches, some of which may match your local branch,
 some of which may be behind you, and some of which may be ahead of you
-(i.e. contain changes that you haven't yet merged)::
+(i.e. contain changes that you haven't yet merged):
+
+.. code-block:: none
 
     master: AAAAAAAA
     remotes/foo/master: BBBBBBBB

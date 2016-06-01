@@ -26,11 +26,15 @@ documents.
 Using Views
 ===========
 
-How you would do this in SQL::
+How you would do this in SQL:
+
+.. code-block:: sql
 
     CREATE TABLE
 
-or::
+or:
+
+.. code-block:: sql
 
     ALTER TABLE
 
@@ -94,7 +98,9 @@ Querying a View
 
 The name of the design document and the name of the view are significant for
 querying the view. To query the view `viewname`, you perform an HTTP ``GET``
-request to the following URI::
+request to the following URI:
+
+.. code-block:: none
 
     /database/_design/application/_view/viewname
 
@@ -158,7 +164,9 @@ and value.
 Look Up by Key
 ==============
 
-How you would do this in SQL::
+How you would do this in SQL:
+
+.. code-block:: sql
 
     SELECT field FROM table WHERE value="searchterm"
 
@@ -184,7 +192,9 @@ view. All we need is a simple map function:
 
 This creates a list of documents that have a value field sorted by the data in
 the value field. To find all the records that match "searchterm", we query the
-view and specify the search term as a query parameter::
+view and specify the search term as a query parameter:
+
+.. code-block:: none
 
     /database/_design/application/_view/viewname?key="searchterm"
 
@@ -199,7 +209,9 @@ age field of the documents to find all the five-year-olds:
         }
     }
 
-Query::
+Query:
+
+.. code-block:: none
 
     /ladies/_design/ladies/_view/age?key=5
 
@@ -221,7 +233,9 @@ fetch the individual documents for us.
 Look Up by Prefix
 =================
 
-How you would do this in SQL::
+How you would do this in SQL:
+
+.. code-block:: sql
 
     SELECT field FROM table WHERE value LIKE "searchterm%"
 
@@ -263,14 +277,18 @@ match our prefix:
     }
 
 We can now query this view with our desired MIME type prefix and not only find
-all images, but also text, video, and all other formats::
+all images, but also text, video, and all other formats:
+
+.. code-block:: none
 
     /files/_design/finder/_view/by-mime-type?key="image/"
 
 Aggregate Functions
 ===================
 
-How you would do this in SQL::
+How you would do this in SQL:
+
+.. code-block:: sql
 
     SELECT COUNT(field) FROM table
 
@@ -373,7 +391,9 @@ if you try to use reduce “the wrong way”:
 Get Unique Values
 =================
 
-How you would do this in SQL::
+How you would do this in SQL:
+
+.. code-block:: sql
 
     SELECT DISTINCT field FROM table
 
@@ -447,7 +467,9 @@ uniqueness, we need a reduce:
     }
 
 This reduce doesn’t do anything, but it allows us to specify a special query
-parameter when querying the view::
+parameter when querying the view:
+
+.. code-block:: none
 
     /dudes/_design/dude-data/_view/tags?group=true
 
@@ -509,7 +531,9 @@ count for each tag:
 Enforcing Uniqueness
 ====================
 
-How you would do this in SQL::
+How you would do this in SQL:
+
+.. code-block:: sql
 
     UNIQUE KEY(column)
 
