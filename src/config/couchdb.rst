@@ -168,3 +168,21 @@ Base CouchDB Options
 
             [couchdb]
             view_index_dir = /var/lib/couchdb
+
+    .. config:option:: maintenance_mode :: Maintenance mode
+
+        A CouchDB node may be put into two distinct maintenance modes by setting
+        this configuration parameter.
+
+        * ``true``: The node will not respond to clustered requests from other
+          nodes and the /_up endpoint will return a 404 response.
+        * ``nolb``: The /_up endpoint will return a 404 response.
+        * ``false``: The node responds normally, /_up returns a 200 response.
+
+        It is expected that the administrator has configured a load balancer
+        in front of the CouchDB nodes in the cluster. This load balancer should
+        use the /_up endpoint to determine whether or not to send HTTP requests
+        to any particular node. For HAProxy, the following config is appropriate ::
+
+          http-check disable-on-404
+          option httpchk GET /_up
