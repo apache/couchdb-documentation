@@ -5,9 +5,13 @@ REM Command file for Sphinx documentation
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )
-set BUILDDIR=_build
-set ALLSPHINXOPTS=-d %BUILDDIR%/doctrees %SPHINXOPTS% .
-set I18NSPHINXOPTS=%SPHINXOPTS% .
+set BUILDDIR=build
+set SOURCE=src/
+set PAPERSIZE=-D latex_paper_size=a4
+set SPHINXFLAGS=-a -n -A local=1 %PAPERSIZE%
+set SPHINXOPTS=%SPHINXFLAGS% %SOURCE%
+set ALLSPHINXOPTS=-d %BUILDDIR%/doctrees %SPHINXOPTS%
+set I18NSPHINXOPTS=%SPHINXOPTS%
 if NOT "%PAPER%" == "" (
 	set ALLSPHINXOPTS=-D latex_paper_size=%PAPER% %ALLSPHINXOPTS%
 	set I18NSPHINXOPTS=-D latex_paper_size=%PAPER% %I18NSPHINXOPTS%
@@ -47,7 +51,7 @@ if "%1" == "clean" (
 )
 
 
-%SPHINXBUILD% 2> nul
+%SPHINXBUILD% 1> nul 2> nul
 if errorlevel 9009 (
 	echo.
 	echo.The 'sphinx-build' command was not found. Make sure you have Sphinx
