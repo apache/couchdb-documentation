@@ -24,3 +24,4 @@ configuration information.
     common
     authn
     configuration
+    node
