@@ -176,7 +176,7 @@ database, which is what you'd have to do in a multi-master application anyway.
 
 .. code-block:: http
 
-    POST /db/_bulk_docs
+    POST /db/_bulk_docs HTTP/1.1
 
 .. code-block:: javascript
 

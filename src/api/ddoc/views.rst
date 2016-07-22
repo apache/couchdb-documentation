@@ -581,7 +581,7 @@ The sorting direction is applied before the filtering applied using the
 
 .. code-block:: http
 
-    GET http://couchdb:5984/recipes/_design/recipes/_view/by_ingredient?startkey=%22carrots%22&endkey=%22egg%22
+    GET http://couchdb:5984/recipes/_design/recipes/_view/by_ingredient?startkey=%22carrots%22&endkey=%22egg%22 HTTP/1.1
     Accept: application/json
 
 will operate correctly when listing all the matching entries between

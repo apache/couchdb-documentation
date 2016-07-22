@@ -312,7 +312,7 @@
         Content-Type: application/json
         Host: localhost:5984
 
-        something
+        "something"
 
     **Response**:
 
@@ -377,7 +377,7 @@
         Content-Type: application/json
         Host: localhost:5984
 
-        love
+        "love"
 
     **Response**:
 

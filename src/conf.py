@@ -36,8 +36,6 @@ copyright = '%d, %s' % (
     'Apache Software Foundation'
 )
 
-highlight_language = "json"
-
 primary_domain = "http"
 
 pygments_style = "sphinx"

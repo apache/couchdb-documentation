@@ -359,7 +359,7 @@
 
     **Request**:
 
-    .. code-block:: http
+    .. code-block:: none
 
         COPY /recipes/SpaghettiWithMeatballs HTTP/1.1
         Accept: application/json
@@ -1131,7 +1131,7 @@ or :header:`If-Match`:
 
 **Request**:
 
-.. code-block:: http
+.. code-block:: none
 
     COPY /recipes/SpaghettiWithMeatballs HTTP/1.1
     Accept: application/json
@@ -1167,7 +1167,7 @@ for the target document by appending the ``rev`` parameter to the
 
 **Request**:
 
-.. code-block:: http
+.. code-block:: none
 
     COPY /recipes/SpaghettiWithMeatballs?rev=8-6f5ad8db0f34af24a6e0984cd1a6cfb9 HTTP/1.1
     Accept: application/json

@@ -11,7 +11,6 @@
 .. the License.
 
 .. default-domain:: config
-.. highlight:: ini
 .. _config/intro:
 
 =============================
@@ -42,6 +41,8 @@ The ``LOCALCONFDIR`` points to the directory that contains configuration files
 target operation system and may be changed during building from the source
 code. For binary distributions, it mostly points to the installation path
 (e.g. ``C:\Program Files\CouchDB\etc\couchdb`` for Windows).
+
+.. highlight:: shell
 
 To see the actual configuration files chain run in shell::
 
@@ -104,6 +105,8 @@ The common way to set some parameters is to edit the `local.ini` file which is
 mostly located in the `etc/couchdb` directory relative your installation path
 root.
 
+.. highlight:: ini
+
 For example::
 
     ; This is a comment
@@ -142,6 +145,8 @@ to apply these changes.
 
 Setting parameters via the HTTP API
 ===================================
+
+.. highlight:: shell
 
 Alternatively, configuration parameters could be set via the
 :ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration

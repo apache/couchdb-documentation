@@ -143,6 +143,7 @@ Request Headers
 
   .. code-block:: http
 
+      HTTP/1.1 200 OK
       Server: CouchDB (Erlang/OTP)
       Date: Thu, 13 Jan 2011 13:39:34 GMT
       Content-Type: text/plain;charset=utf-8
@@ -165,6 +166,7 @@ Request Headers
 
   .. code-block:: http
 
+      HTTP/1.1 200 OK
       Server: CouchDB (Erlang/OTP)
       Date: Thu, 13 Jan 2013 13:40:11 GMT
       Content-Type: application/json

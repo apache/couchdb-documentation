@@ -367,7 +367,7 @@ counted back from the end. For example, if you use the following request:
 
 .. code-block:: http
 
-    GET /_log?bytes=500&offset=2000
+    GET /_log?bytes=500&offset=2000 HTTP/1.1
 
 Reading of the log will start at 2000 bytes from the end of the log, and 500
 bytes will be shown.
@@ -551,7 +551,7 @@ following request:
 
 .. code-block:: http
 
-    POST http://couchdb:5984/_replicate
+    POST http://couchdb:5984/_replicate HTTP/1.1
     Content-Type: application/json
     Accept: application/json
 
@@ -576,7 +576,7 @@ by adding the ``create_target`` field to the request object:
 
 .. code-block:: http
 
-    POST http://couchdb:5984/_replicate
+    POST http://couchdb:5984/_replicate HTTP/1.1
     Content-Type: application/json
     Accept: application/json
 
@@ -600,7 +600,7 @@ synchronization between two databases by supplying the ``source`` and
 
 .. code-block:: http
 
-    POST http://couchdb:5984/_replicate
+    POST http://couchdb:5984/_replicate HTTP/1.1
     Accept: application/json
     Content-Type: application/json
 
@@ -651,7 +651,7 @@ replication ceases.
 
 .. code-block:: http
 
-    POST http://couchdb:5984/_replicate
+    POST http://couchdb:5984/_replicate HTTP/1.1
     Accept: application/json
     Content-Type: application/json
 
@@ -682,7 +682,7 @@ For example, the replication request:
 
 .. code-block:: http
 
-    POST http://couchdb:5984/_replicate
+    POST http://couchdb:5984/_replicate HTTP/1.1
     Content-Type: application/json
     Accept: application/json
 
@@ -697,7 +697,7 @@ Must be canceled using the request:
 
 .. code-block:: http
 
-    POST http://couchdb:5984/_replicate
+    POST http://couchdb:5984/_replicate HTTP/1.1
     Accept: application/json
     Content-Type: application/json
 
@@ -921,7 +921,7 @@ and statistic ID as part of the URL path. For example, to get the
 
 .. code-block:: http
 
-    GET /_stats/couchdb/request_time
+    GET /_stats/couchdb/request_time HTTP/1.1
 
 This returns an entire statistics object, as with the full request, but
 containing only the request individual statistic. Hence, the returned structure
@@ -1033,7 +1033,7 @@ could be changed to ``random`` by sending this HTTP request:
 
 .. code-block:: http
 
-    PUT http://couchdb:5984/_config/uuids/algorithm
+    PUT http://couchdb:5984/_config/uuids/algorithm HTTP/1.1
     Content-Type: application/json
     Accept: */*
 

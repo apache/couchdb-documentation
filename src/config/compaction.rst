@@ -63,9 +63,11 @@ Compaction Daemon Rules
     - ``db_fragmentation``: If the ratio of legacy data, including metadata, to
       current data in the database file size is equal to or greater than this
       value, this condition is satisfied. The percentage is expressed as an
-      integer percentage. This value is computed as::
+      integer percentage. This value is computed as:
 
-        (file_size - data_size) / file_size * 100
+      .. code-block:: none
+
+          (file_size - data_size) / file_size * 100
 
       The data_size and file_size values can be obtained when
       querying :http:get:`/{db}`.
@@ -74,7 +76,9 @@ Compaction Daemon Rules
       to current data in a view index file size is equal to or greater then
       this value, this database compaction condition is satisfied. The
       percentage is expressed as an integer percentage. This value is computed
-      as::
+      as:
+
+      .. code-block:: none
 
           (file_size - data_size) / file_size * 100
 
@@ -83,7 +87,9 @@ Compaction Daemon Rules
 
     - ``from`` and ``to``: The period for which a database (and its view group)
       compaction is allowed. The value for these parameters must obey the
-      format::
+      format:
+
+      .. code-block:: none
 
           HH:MM - HH:MM  (HH in [0..23], MM in [0..59])
 

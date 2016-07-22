@@ -434,7 +434,7 @@ to the ``filter`` parameter, specifying the design document name and
 
 .. code-block:: http
 
-    GET /db/_changes?filter=design_doc/filtername
+    GET /db/_changes?filter=design_doc/filtername HTTP/1.1
 
 Additionally, there are couple of builtin filters are available and described
 below.

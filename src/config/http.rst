@@ -274,7 +274,7 @@ Secure Socket Level Options
     Now start (or restart) CouchDB. You should be able to connect to it
     using HTTPS on port 6984:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         shell> curl https://127.0.0.1:6984/
         curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
@@ -297,7 +297,7 @@ Secure Socket Level Options
     notifies you. Luckily you trust yourself (don't you?) and you can specify
     the ``-k`` option as the message reads:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         shell> curl -k https://127.0.0.1:6984/
         {"couchdb":"Welcome","version":"1.5.0"}

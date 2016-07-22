@@ -182,7 +182,10 @@ Base CouchDB Options
         It is expected that the administrator has configured a load balancer
         in front of the CouchDB nodes in the cluster. This load balancer should
         use the /_up endpoint to determine whether or not to send HTTP requests
-        to any particular node. For HAProxy, the following config is appropriate ::
+        to any particular node. For HAProxy, the following config is
+        appropriate:
+
+        .. code-block:: none
 
           http-check disable-on-404
           option httpchk GET /_up
