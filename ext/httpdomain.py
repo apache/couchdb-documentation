@@ -650,7 +650,4 @@ class HTTPLexer(RegexLexer):
 
 def setup(app):
     app.add_domain(HTTPDomain)
-    try:
-        get_lexer_by_name('http')
-    except ClassNotFound:
-        app.add_lexer('http', HTTPLexer())
+    app.add_lexer('http', HTTPLexer())
