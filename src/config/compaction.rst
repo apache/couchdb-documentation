@@ -111,26 +111,38 @@ Compaction Daemon Rules
 
     Examples:
 
-    #. ``[{db_fragmentation, "70%"}, {view_fragmentation, "60%"}]``
+    #.
+        ::
+
+            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}]
 
        The `foo` database is compacted if its fragmentation is 70% or more. Any
        view index of this database is compacted only if its fragmentation is
        60% or more.
 
-    #. ``[{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}]``
+    #.
+        ::
+
+            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}]
 
        Similar to the preceding example but a compaction (database or view
        index) is only triggered if the current time is between midnight and 4
        AM.
 
-    #. ``[{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}, {strict_window, true}]``
+    #.
+        ::
+
+            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}, {strict_window, true}]
 
        Similar to the preceding example - a compaction (database or view index)
        is only triggered if the current time is between midnight and 4 AM. If
        at 4 AM the database or one of its views is still compacting, the
        compaction process will be canceled.
 
-    #. ``[{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}, {strict_window, true}, {parallel_view_compaction, true}]``
+    #.
+        ::
+
+            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}, {strict_window, true}, {parallel_view_compaction, true}]
 
        Similar to the preceding example, but a database and its views can be
        compacted in parallel.
