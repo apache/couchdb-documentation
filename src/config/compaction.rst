@@ -17,7 +17,7 @@
 Compaction Configuration
 ========================
 
-.. _conifg/database_compaction:
+.. _config/database_compaction:
 
 Database Compaction Options
 ===========================
