@@ -69,21 +69,6 @@ Installation from sources
 
 If you're Windows geek, this section is for you!
 
-Troubleshooting
----------------
-
-* There is a `troubleshooting guide`_.
-* There is a `wiki`_ for general documentation.
-* And some `Windows-specific tips`_.
-* There are collection of `friendly mailing lists`_.
-
-Please work through these in order if you experience any problems.
-
-.. _troubleshooting guide: http://wiki.apache.org/couchdb/Troubleshooting
-.. _wiki: http://wiki.apache.org/couchdb
-.. _friendly mailing lists: http://couchdb.apache.org/community/lists.html
-.. _Windows-specific tips: http://wiki.apache.org/couchdb/Quirks_on_Windows
-
 Dependencies
 ------------
 

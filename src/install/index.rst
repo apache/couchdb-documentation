@@ -23,3 +23,4 @@ Installation
     windows
     mac
     freebsd
+    troubleshooting
