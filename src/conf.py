@@ -26,7 +26,7 @@ source_suffix = ".rst"
 nitpicky = True
 
 # should be over-written using rebar-inherited settings
-version = '1.6.1'
+version = '1.6'
 release = '1.6.1'
 
 project = 'Apache CouchDB'
