@@ -39,6 +39,7 @@ Where ``db`` is the name of any database.
 .. toctree::
     common
     bulk-api
+    find
     changes
     compact
     security
