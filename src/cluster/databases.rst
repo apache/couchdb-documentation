@@ -75,4 +75,3 @@ be hosted on a new wiht the zone attribute set to ``metro-dc-b``.
 Note that you can also use this system to ensure certain nodes in the cluster
 do not host *any* replicas for newly created databases, by giving them a zone
 attribute that does not appear in the ``[cluster]`` placement string.
-

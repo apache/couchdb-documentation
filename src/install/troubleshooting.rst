@@ -16,7 +16,6 @@
 Troubleshooting an Installation
 ===============================
 
-
 First Install
 =============
 
@@ -24,7 +23,7 @@ If your CouchDB doesn't start after you've just installed, check the following
 things:
 
 - On UNIX-like systems, this is usually this is a permissions issue. Ensure
-  that you've followed the :ref:`install/unix/security` 
+  that you've followed the :ref:`install/unix/security`
   ``chown``/``chmod`` commands. This problem is indicated by the presence of
   the keyword ``eacces`` somewhere in the error output from CouchDB itself.
 - Some Linux distributions split up Erlang into multiple packages. For your
@@ -87,7 +86,7 @@ things:
 - At this point the only remaining dependency is your systems' unicode support
   library, ICU, and the Spidermonkey Javascript VM from Mozilla. Make sure that
   your ``LD_LIBRARY_PATH`` or similar for non-Linux systems
-  (``DYLD_LIBRARY_PATH`` on macOS) makes these available to CouchDB. 
+  (``DYLD_LIBRARY_PATH`` on macOS) makes these available to CouchDB.
   Linux example running as normal user:
 
 .. code-block:: text
@@ -100,7 +99,7 @@ things:
 
     echo LD_LIBRARY_PATH=/usr/local/lib:/usr/local/spidermonkey/lib couchdb | sudo -u couchdb sh
 
-- If you receive an error message including the key word ``eaddrinuse``, 
+- If you receive an error message including the key word ``eaddrinuse``,
   such as this:
 
 .. code-block:: text
@@ -181,7 +180,6 @@ run in IRC or the mailing list directly.
 
 8. Report back to the mailing list (or IRC) with the output of each step.
 
-
 Upgrading
 =========
 
@@ -194,18 +192,18 @@ Runtime Errors
 
 Lots of memory being used on startup
 ------------------------------------
-Is your CouchDB using a lot of memory (several hundred MB) on startup? This one 
+Is your CouchDB using a lot of memory (several hundred MB) on startup? This one
 seems to especially affect Dreamhost installs. It's really an issue with the
 Erlang VM pre-allocating data structures when ulimit is very large or
 unlimited. A detailed dicussion can be found on the erlang-questions list,
 but the short answer is that you should decrease ``ulimit -n`` or define
-``ERL_MAX_PORTS`` to something reasonable like 1024. 
+``ERL_MAX_PORTS`` to something reasonable like 1024.
 
 erlang stack trace contains ``system_limit``, ``open_port``
 -----------------------------------------------------------
 Erlang has a default limit of 1024 ports, where each FD, tcp connection, and
 linked-in driver uses one port. You seem to have exceeded this. You can
-change it at runtime using the ``ERL_MAX_PORTS`` env variable. 
+change it at runtime using the ``ERL_MAX_PORTS`` env variable.
 
 function raised exception (Cannot encode 'undefined' value as JSON)
 -------------------------------------------------------------------
@@ -268,12 +266,12 @@ The function needs to return a value:
 erlang stack trace contains ``bad_utf8_character_code``
 -------------------------------------------------------
 
-CouchDB 1.1.1 and later contains stricter handling of UTF8 encoding. If you are 
-replicating from older versions to newer versions, then this error may occur 
+CouchDB 1.1.1 and later contains stricter handling of UTF8 encoding. If you are
+replicating from older versions to newer versions, then this error may occur
 during replication.
 
-A number of work-arounds exist; the simplest is to do an in-place upgrade of 
+A number of work-arounds exist; the simplest is to do an in-place upgrade of
 the relevant CouchDB and then compact prior to replicating.
 
-Alternatively, if the number of documents impacted is small, use filtered 
-replication to exclude only those documents. 
+Alternatively, if the number of documents impacted is small, use filtered
+replication to exclude only those documents.

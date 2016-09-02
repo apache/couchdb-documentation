@@ -20,7 +20,7 @@ A high-level guide to Unix-like systems, inc. Mac OS X and Ubuntu.
 
 This document is the canonical source of installation information. However, many
 systems have gotchas that you need to be aware of. In addition, dependencies
-frequently change as distributions update their archives. 
+frequently change as distributions update their archives.
 
 .. _install/unix/dependencies:
 
