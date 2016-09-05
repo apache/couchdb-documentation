@@ -543,6 +543,51 @@ request object.
         ]
     }
 
+.. _changes/filter/selector/missing:
+
+Missing selector
+################
+
+If the selector object is missing from the request body,
+the error message is similar to the following example:
+
+.. code-block:: json
+
+   {
+      "error": "bad request",
+      "reason": "Selector must be specified in POST payload"
+   }
+
+.. _changes/filter/selector/invalidjson:
+
+Not a valid JSON object
+#######################
+
+If the selector object is not a well-formed JSON object,
+the error message is similar to the following example:
+
+.. code-block:: json
+
+   {
+      "error": "bad request",
+      "reason": "Selector error: expected a JSON object"
+   }
+
+.. _changes/filter/selector/invalidselector:
+
+Not a valid selector
+####################
+
+If the selector object does not contain a valid selection expression,
+the error message is similar to the following example:
+
+.. code-block:: json
+
+   {
+      "error": "bad request",
+      "reason": "Selector error: expected a JSON object"
+   }
+
 .. _changes/filter/design:
 
 _design
