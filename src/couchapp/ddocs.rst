@@ -484,12 +484,12 @@ if you apply this function to the changes feed it will emit only changes about
 .. code-block:: javascript
 
     {"results":[
-    {"seq":1,"id":"df8eca9da37dade42ee4d7aa3401f1dd","changes":[{"rev":"1-c2e0085a21d34fa1cecb6dc26a4ae657"}]},
-    {"seq":7,"id":"df8eca9da37dade42ee4d7aa34024714","changes":[{"rev":"1-29d748a6e87b43db967fe338bcb08d74"}]},
+    {"seq":"1-g1AAAAF9eJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBMZc4EC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HqQ_kQG3qgSQqnoCqvJYgCRDA5ACKpxPWOUCiMr9hFUegKi8T1jlA4hKkDuzAC2yZRo","id":"df8eca9da37dade42ee4d7aa3401f1dd","changes":[{"rev":"1-c2e0085a21d34fa1cecb6dc26a4ae657"}]},
+    {"seq":"9-g1AAAAIreJyVkEsKwjAURUMrqCOXoCuQ5MU0OrI70XyppcaRY92J7kR3ojupaSPUUgqWwAu85By4t0AITbJYo5k7aUNSAnyJ_SGFf4gEkvOyLPMsFtHRL8ZKaC1M0v3eq5ALP-X2a0G1xYKhgnONpmenjT04o_v5tOJ3LV5itTES_uP3FX9ppcAACaVsQAo38hNd_eVFt8ZklVljPqSPYLoH06PJhG0Cxq7-yhQcz-B4_fQCjFuqBjjewVF3E9cORoExSrpU_gHBTo5m","id":"df8eca9da37dade42ee4d7aa34024714","changes":[{"rev":"1-29d748a6e87b43db967fe338bcb08d74"}]},
     ],
-    "last_seq":27}
+    "last_seq":"10-g1AAAAIreJyVkEsKwjAURR9tQR25BF2B5GMaHdmdaNIk1FLjyLHuRHeiO9Gd1LQRaimFlsALvOQcuLcAgGkWKpjbs9I4wYSvkDu4cA-BALkoyzLPQhGc3GKSCqWEjrvfexVy6abc_SxQWwzRVHCuYHaxSpuj1aqfTyp-3-IlSrdakmH8oeKvrRSIkJhSNiKFjdyEm7uc6N6YTKo3iI_pw5se3vRsMiETE23WgzJ5x8s73n-9EMYNTUc4Pt5RdxPVDkYJYxR3qfwLwW6OZw"}
 
-Note that the value of ``last_seq`` is 27, but we received only two records.
+Note that the value of ``last_seq`` is `10-..`, but we received only two records.
 Seems like any other changes were for documents that haven't passed our filter.
 
 We probably need to filter the changes feed of our mailbox by more than a single
@@ -526,10 +526,10 @@ filter match only the required documents::
 .. code-block:: javascript
 
     {"results":[
-    {"seq":1,"id":"df8eca9da37dade42ee4d7aa3401f1dd","changes":[{"rev":"1-c2e0085a21d34fa1cecb6dc26a4ae657"}]},
-    {"seq":7,"id":"df8eca9da37dade42ee4d7aa34024714","changes":[{"rev":"1-29d748a6e87b43db967fe338bcb08d74"}]},
+    {"seq":"1-g1AAAAF9eJzLYWBg4MhgTmHgz8tPSTV0MDQy1zMAQsMcoARTIkOS_P___7MymBMZc4EC7MmJKSmJqWaYynEakaQAJJPsoaYwgE1JM0o1TjQ3T2HgLM1LSU3LzEtNwa3fAaQ_HqQ_kQG3qgSQqnoCqvJYgCRDA5ACKpxPWOUCiMr9hFUegKi8T1jlA4hKkDuzAC2yZRo","id":"df8eca9da37dade42ee4d7aa3401f1dd","changes":[{"rev":"1-c2e0085a21d34fa1cecb6dc26a4ae657"}]},
+    {"seq":"9-g1AAAAIreJyVkEsKwjAURUMrqCOXoCuQ5MU0OrI70XyppcaRY92J7kR3ojupaSPUUgqWwAu85By4t0AITbJYo5k7aUNSAnyJ_SGFf4gEkvOyLPMsFtHRL8ZKaC1M0v3eq5ALP-X2a0G1xYKhgnONpmenjT04o_v5tOJ3LV5itTES_uP3FX9ppcAACaVsQAo38hNd_eVFt8ZklVljPqSPYLoH06PJhG0Cxq7-yhQcz-B4_fQCjFuqBjjewVF3E9cORoExSrpU_gHBTo5m","id":"df8eca9da37dade42ee4d7aa34024714","changes":[{"rev":"1-29d748a6e87b43db967fe338bcb08d74"}]},
     ],
-    "last_seq":27}
+    "last_seq":"10-g1AAAAIreJyVkEsKwjAURR9tQR25BF2B5GMaHdmdaNIk1FLjyLHuRHeiO9Gd1LQRaimFlsALvOQcuLcAgGkWKpjbs9I4wYSvkDu4cA-BALkoyzLPQhGc3GKSCqWEjrvfexVy6abc_SxQWwzRVHCuYHaxSpuj1aqfTyp-3-IlSrdakmH8oeKvrRSIkJhSNiKFjdyEm7uc6N6YTKo3iI_pw5se3vRsMiETE23WgzJ5x8s73n-9EMYNTUc4Pt5RdxPVDkYJYxR3qfwLwW6OZw"}
 
 and we can easily change filter behavior with::
 
@@ -538,9 +538,9 @@ and we can easily change filter behavior with::
 .. code-block:: javascript
 
     {"results":[
-    {"seq":11,"id":"8960e91220798fc9f9d29d24ed612e0d","changes":[{"rev":"3-cc6ff71af716ddc2ba114967025c0ee0"}]},
+    {"seq":"6-g1AAAAIreJyVkM0JwjAYQD9bQT05gk4gaWIaPdlNNL_UUuPJs26im-gmuklMjVClFFoCXyDJe_BSAsA4jxVM7VHpJEswWyC_ktJfRBzEzDlX5DGPDv5gJLlSXKfN560KMfdTbL4W-FgM1oQzpmByskqbvdWqnc8qfvvHCyTXWuBu_K7iz38VCOOUENqjwg79hIvfvOhamQahROoVYn3-I5huwXSvm5BJsTbLTk3B8QiO58-_YMoMkT0cr-BwdRElmFKSNKniDcAcjmM","id":"8960e91220798fc9f9d29d24ed612e0d","changes":[{"rev":"3-cc6ff71af716ddc2ba114967025c0ee0"}]},
     ],
-    "last_seq":27}
+    "last_seq":"10-g1AAAAIreJyVkEsKwjAURR9tQR25BF2B5GMaHdmdaNIk1FLjyLHuRHeiO9Gd1LQRaimFlsALvOQcuLcAgGkWKpjbs9I4wYSvkDu4cA-BALkoyzLPQhGc3GKSCqWEjrvfexVy6abc_SxQWwzRVHCuYHaxSpuj1aqfTyp-3-IlSrdakmH8oeKvrRSIkJhSNiKFjdyEm7uc6N6YTKo3iI_pw5se3vRsMiETE23WgzJ5x8s73n-9EMYNTUc4Pt5RdxPVDkYJYxR3qfwLwW6OZw"}
 
 Combining filters with a `continuous` feed allows creating powerful event-driven
 systems.
