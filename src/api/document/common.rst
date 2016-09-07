@@ -90,7 +90,7 @@
       conflicted revisions. Default is ``false``
     :query boolean latest: Forces retrieving latest "leaf" revision, no matter
       what `rev` was requested. Default is ``false``
-    :query boolean local_seq: Includes last update sequence number for the
+    :query boolean local_seq: Includes last update sequence for the
       document. Default is ``false``
     :query boolean meta: Acts same as specifying all `conflicts`,
       `deleted_conflicts` and `open_revs` query parameters. Default is
@@ -121,7 +121,7 @@
       requested with ``conflicts=true`` query parameter
     :>json array _deleted_conflicts: List of deleted conflicted revisions.
       Available if requested with ``deleted_conflicts=true`` query parameter
-    :>json number _local_seq: Document's sequence number in current database.
+    :>json string _local_seq: Document's update sequence in current database.
       Available if requested with ``local_seq=true`` query parameter
     :>json array _revs_info: List of objects with information about local
       revisions and their status. Available if requested with ``open_revs``
@@ -185,7 +185,13 @@
       :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
       are: ``false`` and ``true``. *Optional*
     :query string batch: Stores document in :ref:`batch mode
-      <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
+      <api/doc/batch-writes>`. Possible values: ``ok``. *Optional*
+    :query boolean new_edits: Prevents insertion of a :ref:`conflicting
+      document <replication/conflicts>`. Possible values: ``true`` (default)
+      and ``false``. If ``false``, a well-formed ``_rev`` must be included in
+      the document. ``new_edits=false`` is used by the replicator to insert
+      documents into the target database even if that leads to the creation
+      of conflicts. *Optional*
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Quoted document's new revision
