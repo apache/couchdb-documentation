@@ -30,9 +30,9 @@
 
     - ``admins``: they have all the privileges of ``members`` plus the
       privileges: write (and edit) design documents, add/remove database admins
-      and members, set the :ref:`database revisions limit <api/db/revs_limit>`
-      and execute :ref:`temporary views <api/db/temp_view>` against the
-      database. They can not create a database nor delete a database.
+      and members and set the :ref:`database revisions limit
+      <api/db/revs_limit>`. They can not create a database nor delete a
+      database.
 
     Both ``members`` and ``admins`` objects are contains two array-typed
     fields:

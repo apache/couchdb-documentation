@@ -26,8 +26,7 @@ The default query server is written in
 You can use other languages by setting a Query server key in the ``language``
 property of a design document or the `Content-Type` header of a
 `temporary view`. Design documents that do not specify a ``language`` property
-are assumed to be of type `javascript`, as are ad hoc queries that are POSTed to
-:ref:`_temp_view <api/db/temp_view>` without a `Content-Type` header.
+are assumed to be of type `javascript`.
 
 .. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
 

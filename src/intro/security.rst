@@ -68,8 +68,6 @@ identification for certain requests:
   </{db}/_design/{ddoc}>`)
 - Deleting a design document (:delete:`DELETE /database/_design/app?rev=2-6A7
   </{db}/_design/{ddoc}>`)
-- Execute a temporary view (:post:`POST /database/_temp_view
-  </{db}/_temp_view>`)
 - Triggering compaction (:post:`POST /database/_compact </{db}/_compact>`)
 - Reading the task status list (:get:`GET /_active_tasks </_active_tasks>`)
 - Restarting the server (:post:`POST /_restart </_restart>`)

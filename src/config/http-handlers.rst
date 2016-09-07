@@ -187,13 +187,6 @@ Database HTTP Handlers
             [httpd_db_handlers]
             _design = {couch_httpd_db, handle_design_req}
 
-    .. config:option:: _temp_view
-
-        ::
-
-            [httpd_db_handlers]
-            _temp_view = {couch_mrview_http, handle_temp_view_req}
-
     .. config:option:: _view_cleanup
 
         ::
