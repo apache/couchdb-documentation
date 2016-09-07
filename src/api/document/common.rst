@@ -185,7 +185,13 @@
       :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
       are: ``false`` and ``true``. *Optional*
     :query string batch: Stores document in :ref:`batch mode
-      <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
+      <api/doc/batch-writes>`. Possible values: ``ok``. *Optional*
+    :query boolean new_edits: Prevents insertion of a :ref:`conflicting
+      document <replication/conflicts>`. Possible values: ``true`` (default)
+      and ``false``. If ``false``, a well-formed ``_rev`` must be included in
+      the document. ``new_edits=false`` is used by the replicator to insert
+      documents into the target database even if that leads to the creation
+      of conflicts. *Optional*
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Quoted document's new revision
