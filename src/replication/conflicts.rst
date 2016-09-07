@@ -144,51 +144,6 @@ So when working in this mode, your application still has to be able to handle
 these conflicts and have a suitable retry strategy, but these conflicts never
 end up inside the database itself.
 
-Conflicts in batches
-====================
-
-There are two different ways that conflicts can end up in the database:
-
-- Conflicting changes made on different databases, which are replicated to each
-  other, as shown earlier.
-- Changes are written to the database using ``_bulk_docs`` and all_or_nothing,
-  which bypasses the 409 mechanism.
-
-The :ref:`_bulk_docs API <api/db/bulk_docs>` lets you submit multiple updates
-(and/or deletes) in a single HTTP POST. Normally, these are treated as
-independent updates; some in the batch may fail because the `_rev` is stale
-(just like a 409 from a PUT) whilst others are written successfully.
-The response from ``_bulk_docs`` lists the success/fail separately for each
-document in the batch.
-
-However there is another mode of working, whereby you specify
-``{"all_or_nothing":true}`` as part of the request. This is CouchDB's nearest
-equivalent of a "transaction", but it's not the same as a database transaction
-which can fail and roll back. Rather, it means that all of the changes in the
-request will be forcibly applied to the database, even if that introduces
-conflicts.
-
-So this gives you a way to introduce conflicts within a single database
-instance. If you choose to do this instead of PUT, it means you don't have to
-write any code for the possibility of getting a 409 response, because you will
-never get one. Rather, you have to deal with conflicts appearing later in the
-database, which is what you'd have to do in a multi-master application anyway.
-
-.. code-block:: http
-
-    POST /db/_bulk_docs HTTP/1.1
-
-.. code-block:: javascript
-
-    {
-        "all_or_nothing": true,
-        "docs": [
-            {"_id":"x", "_rev":"1-xxx", ...},
-            {"_id":"y", "_rev":"1-yyy", ...},
-            ...
-        ]
-    }
-
 Revision tree
 =============
 

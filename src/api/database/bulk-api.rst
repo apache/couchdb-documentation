@@ -217,9 +217,6 @@
     :<header X-Couch-Full-Commit: Overrides server's
       :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
       are: ``false`` and ``true``. *Optional*
-    :<json boolean all_or_nothing: Sets the database commit mode to use
-      :ref:`all-or-nothing <api/db/bulk_docs/semantics>` semantics.
-      Default is ``false``. *Optional*
     :<json array docs: List of documents objects
     :<json boolean new_edits: If ``false``, prevents the database from
       assigning them new revision IDs. Default is ``true``. *Optional*
@@ -232,8 +229,8 @@
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
-    :code 417: Occurs when ``all_or_nothing`` option set as ``true`` and
-      at least one document was rejected by :ref:`validation function <vdufun>`
+    :code 417: Occurs when at least one document was rejected by a
+     :ref:`validation function <vdufun>`
     :code 500: Malformed data provided, while it's still valid JSON
 
     **Request**:
@@ -504,54 +501,6 @@ of conflict checking performed on each document. The two modes are:
    In this case no new revision has been created and you will need to
    submit the document update, with the correct revision tag, to update
    the document.
-
--  **all-or-nothing**
-
-   In `all-or-nothing` mode, either all documents are written to the
-   database, or no documents are written to the database, in the event
-   of a system failure during commit.
-
-   In addition, the per-document conflict checking is not performed.
-   Instead a new revision of the document is created, even if the new
-   revision is in conflict with the current revision in the database.
-   The returned structure contains the list of documents with new
-   revisions:
-
-   .. code-block:: http
-
-       HTTP/1.1 201 Created
-       Cache-Control: must-revalidate
-       Content-Length: 215
-       Content-Type: application/json
-       Date: Sat, 26 Oct 2013 00:13:33 GMT
-       Server: CouchDB (Erlang OTP)
-
-       [
-           {
-               "id": "FishStew",
-               "ok": true,
-               "rev": "1-6a466d5dfda05e613ba97bd737829d67"
-           },
-           {
-               "id": "LambStew",
-               "ok": true,
-               "rev": "1-648f1b989d52b8e43f05aa877092cc7c"
-           },
-           {
-               "id": "BeefStew",
-               "ok": true,
-               "rev": "1-e4602845fc4c99674f50b1d5a804fdfa"
-           }
-       ]
-
-   When updating documents using this mode the revision of a document
-   included in views will be arbitrary. You can check the conflict
-   status for a document by using the ``conflicts=true`` query argument
-   when accessing the view. Conflicts should be handled individually to
-   ensure the consistency of your database.
-
-   To use this mode, you must include the ``all_or_nothing`` field (set
-   to true) within the main body of the JSON of the request.
 
 The effects of different database operations on the different modes are
 summarized below:

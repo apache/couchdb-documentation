@@ -34,6 +34,8 @@ Upgrade Notes
 * Note that the semantics of some API calls have changed due to the introduction
   of the clustering feature. Specifically, make note of the difference between
   receiving a `201` and a `202` when storing a document.
+* `all_or_nothing` is no longer supported by the :ref:`bulk_docs
+  <api/db/bulk_docs>` API
 
 .. _release/2.0.0:
 
