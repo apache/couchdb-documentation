@@ -41,7 +41,7 @@
         be returned. If it is omitted, the entire object is returned.
         More information provided in the section on :ref:`filtering fields
         <find/filter>`. *Optional*
-    :query string use_index: Instruct a query to use a specific index. Specified
+    :query json use_index: Instruct a query to use a specific index. Specified
         either as ``"<design_document>"`` or
         ``["<design_document>", "<index_name>"]``. *Optional*
 
