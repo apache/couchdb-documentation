@@ -63,6 +63,10 @@
     :query boolean reduce: Use the reduction function. Default is ``true``
     :query number skip: Skip this number of records before starting to return
       the results. Default is ``0``
+    :query boolean sorted: Sort returned rows (see :ref:`Sorting Returned Rows
+     <api/ddoc/view/sorting>`). Setting this to ``false`` offers a performance
+     boost. The `total_rows` and `offset` fields are not available when this
+     is set to ``false``. Default is ``true``
     :query string stale: Allow the results from a stale view to be used.
       Supported values: ``ok`` and ``update_after``. *Optional*
     :query json startkey: Return records starting with the specified key.
@@ -137,6 +141,7 @@
 
 .. versionchanged:: 1.6.0 added ``attachments`` and ``att_encoding_info``
     parameters
+.. versionchanged:: 2.0.0 added ``sorted`` parameter
 
 .. warning::
     Using the ``attachments`` parameter to include attachments in view results
