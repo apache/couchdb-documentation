@@ -36,74 +36,20 @@ That's all, now CouchDB is installed on your Mac:
 
 #. Run Apache CouchDB application
 #. `Open up Fauxton`_, the CouchDB admin interface
+#. Verify the install by clicking on `Verify`, then `Verify Installation`.
 #. Time to Relax!
 
 .. _Open up Fauxton: http://localhost:5984/_utils
 
 .. _install/mac/homebrew:
 
-Installation with HomeBrew
+Installation with Homebrew
 ==========================
 
-You can install the build tools by running::
+The `Homebrew`_ build of CouchDB 2.0 is still in development. Check back often
+for updates.
 
-    open /Applications/Installers/Xcode\ Tools/XcodeTools.mpkg
-
-To build CouchDB from source on Mac OS X, you will need to install
-the Command Line Tools::
-
-    xcode-select --install
-
-You will need `Homebrew`_ installed to use the `brew` command. To install the
-other :ref:`dependencies <install/unix/dependencies>` run next commands::
-
-    brew install autoconf autoconf-archive automake libtool \
-        erlang icu4c spidermonkey curl pkg-config
-
-Now it's time to brew CouchDB::
-
-    brew install couchdb
-
-The above Erlang install will use the bottled (pre-compiled) version if you are:
-using `/usr/local` for `homebrew`, and on 10.6 or 10.7. If you're not on one of
-these, `homebrew` will build from source, so consider doing::
-
-    brew install erlang --no-docs
-
-to trim down compilation time.
-
-If you're hacking on CouchDB, and we hope you will, you may try the current
-git-based master (head) branch, or the next development release using this
-``couchdb`` recipe, using either ``--head`` or ``--devel`` options respectively.
-This will allow quick installation of the future release branch when it becomes
-active. If you're not sure if you need this, then you probably don't.
-In both cases we assume you are comfortable identifying bugs, and handling any
-potential upgrades between commits to the codebase. ::
-
-    brew install [--devel|--head] couchdb
-
-.. note::
-    OS X Lion might hang on the final brew.
-    See the thread at https://github.com/mxcl/homebrew/issues/7024 it seems in
-    most cases to be resolved by breaking out with ``CTRL-C`` and then repeating
-    with ``brew install -v couchdb``.
-
-If you wish to have CouchDB run as a daemon then, set up the account,
-using the "User & Groups" preference pane:
-
-- Create a standard user `couchdb` with home directory as
-  `/usr/local/var/lib/couchdb`
-
-- Create a group called `couchdb` and add yourself, the `couchdb` user, and any
-  others you want to be able to edit config or db files directly to it.
-  Use the `advanced` group options to ensure the internal name is also correctly
-  called `couchdb`.
-
-Some versions of Mac OS X ship a problematic OpenSSL library. If you're
-experiencing troubles with CouchDB crashing intermittently with a segmentation
-fault or a bus error, you will need to install your own version of OpenSSL.
-
-.. _Homebrew: http://mxcl.github.com/homebrew/
+.. _Homebrew: http://brew.sh/
 
 Running as a Daemon
 -------------------
@@ -121,41 +67,3 @@ Naturally, you can configure launchd or other init daemons to
 launch CouchDB and keep it running using standard configuration files.
 
 Consult your system documentation for more information.
-
-.. _install/mac/macports:
-
-Installation from MacPorts
-==========================
-
-To install CouchDB using MacPorts you have 2 package choices:
-
-- ``couchdb`` - the latest release version
-- ``couchdb-devel`` - updated every few weeks with the latest from the master
-  branch
-
-::
-
-    $ sudo port install couchdb
-
-should be enough. MacPorts takes care of installing all necessary dependencies.
-If you have already installed some of the CouchDB dependencies via MacPorts,
-run this command to check and upgrade any outdated ones, after installing
-CouchDB::
-
-    $ sudo port upgrade couchdb
-
-This will upgrade dependencies recursively, if there are more recent versions
-available. If you want to run CouchDB as a service controlled by the OS, load
-the launchd configuration which comes with the project, with this command::
-
-    $ sudo port load couchdb
-
-and it should be up and accessible via Fauxton at http://127.0.0.1:5984/_utils.
-It should also be restarted automatically after reboot.
-
-Updating the ports collection. The collection of port files has to be updated
-to reflect the latest versions of available packages. In order to do that run::
-
-    $ sudo port selfupdate
-
-to update the port tree, and then install just as explained.

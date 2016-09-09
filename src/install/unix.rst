@@ -80,8 +80,28 @@ distributions, it's recommended to use a more recent js-devel-1.8.5.
 Mac OS X
 --------
 
-Follow :ref:`install/mac/homebrew` reference till ``brew install couchdb``
-step.
+Follow :ref:`install/mac/homebrew` reference for Mac App installation.
+
+If you are installing from source, you will need to install the Command
+Line Tools::
+
+    xcode-select --install
+
+You can then install the other dependencies by running::
+
+    brew install autoconf autoconf-archive automake libtool \
+        erlang icu4c spidermonkey curl pkg-config
+
+You will need `Homebrew` installed to use the ``brew`` command.
+
+Some versions of Mac OS X ship a problematic OpenSSL library. If
+you're experiencing troubles with CouchDB crashing intermittently with
+a segmentation fault or a bus error, you will need to install your own
+version of OpenSSL. See the wiki, mentioned above, for more information.
+
+.. seealso::
+
+    * `Homebrew <http://mxcl.github.com/homebrew/>`_
 
 FreeBSD
 -------
@@ -127,7 +147,7 @@ Relax.
 User Registration and Security
 ==============================
 
-For OS X, in the steps below, substitute ``/Users/couchdb`` for 
+For OS X, in the steps below, substitute ``/Users/couchdb`` for
 ``/home/couchdb``.
 
 You should create a special ``couchdb`` user for CouchDB.
