@@ -53,7 +53,8 @@ Version 2.0.0
 * The new Mango Query Server provides a simple JSON-based way to perform CouchDB
   queries without JavaScript or MapReduce. Further details are available in the
   :ref:`_find, _index and _explain API <api/db/_find>`.
-* Mango selectors can be used in _changes feeds.
+* Mango :ref:`selectors <changes/filter/selector>` can be used in _changes
+  feeds instead of JavaScript MapReduce filters.
 * Rewrite rules of URLs can be performed using JavaScript.
 * Multiple queries can be made of a view with a single request.
 * Views can be queried with sorting turned off for a performance boost.
