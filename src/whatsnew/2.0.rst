@@ -34,8 +34,11 @@ Version 2.0.0
 * `Futon` replaced by brand-new, completely re-engineered `Fauxton` interface.
   URL remains the same.
 * The new Mango Query Server provides a simple JSON-based way to perform CouchDB
-  queries without JavaScript or MapReduce. Further details are available in the
-  :ref:`_find, _index and _explain API <api/db/_find>`.
+  queries without JavaScript or MapReduce. Mango Queries have a similar indexing
+  speed advantage over JavaScript Quries than the Erlang Queries have (2x-10x
+  faster indexing depending on doc size and system configuration). We recommend
+  all new apps start using Mango as a default. Further details are available
+  in the :ref:`_find, _index and _explain API <api/db/_find>`.
 * Mango :ref:`selectors <changes/filter/selector>` can be used in _changes
   feeds instead of JavaScript MapReduce filters. Mango has been tested to be
   up to an order of magnitude (10x) faster than JavaScript in this application.
