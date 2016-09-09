@@ -166,7 +166,7 @@ Before you can add nodes to form a cluster, you have to have them
 listen on a public ip address and set up an admin user. Do this, once
 per node:
 
-.. code-block:: shell
+.. code-block:: bash
 
     curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/admins/admin -d '"password"'
     curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/chttpd/bind_address -d '"0.0.0.0"'
