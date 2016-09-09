@@ -142,6 +142,10 @@ If everything was successful you should see the following message::
 
 Relax.
 
+Note: a fully-fledged ``./configure`` with the usual GNU Autotools options
+for package managers and a corresponding ``make install`` are in
+development, but not part of the 2.0.0 release.
+
 .. _install/unix/security:
 
 User Registration and Security
