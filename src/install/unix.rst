@@ -45,8 +45,8 @@ It is recommended that you install Erlang OTP R16B03-1 or above where possible.
 You will only need libcurl if you plan to run the JavaScript test suite. And
 help2man is only need if you plan on installing the CouchDB man pages.
 Python and Sphinx are only required for building the online documentation.
-Documentation build can be disabled by adding the `--disable-docs` flag to
-the `configure` script.
+Documentation build can be disabled by adding the ``--disable-docs`` flag to
+the ``configure`` script.
 
 .. seealso::
 
@@ -80,13 +80,14 @@ distributions, it's recommended to use a more recent js-devel-1.8.5.
 Mac OS X
 --------
 
-Follow :ref:`install/mac/homebrew` reference till `brew install couchdb` step.
+Follow :ref:`install/mac/homebrew` reference till ``brew install couchdb``
+step.
 
 FreeBSD
 -------
 
-FreeBSD requires the use of GNU Make. Where `make` is specified in this
-documentation, substitute `gmake`.
+FreeBSD requires the use of GNU Make. Where ``make`` is specified in this
+documentation, substitute ``gmake``.
 
 You can install this by running::
 
@@ -99,7 +100,7 @@ Once you have satisfied the dependencies you should run::
 
     ./configure
 
-If you wish to customize the installation, pass `--help` to this script.
+If you wish to customize the installation, pass ``--help`` to this script.
 
 If everything was successful you should see the following message::
 
@@ -107,19 +108,11 @@ If everything was successful you should see the following message::
 
 Relax.
 
-To install CouchDB you should run::
-
-    make && sudo make install
-
-You only need to use `sudo` if you're installing into a system directory.
-
-Try `gmake` if `make` is giving you any problems.
-
 To build CouchDB you should run::
 
     make release
 
-Try `gmake` if `make` is giving you any problems.
+Try ``gmake`` if ``make`` is giving you any problems.
 
 If everything was successful you should see the following message::
 
@@ -134,9 +127,10 @@ Relax.
 User Registration and Security
 ==============================
 
-For OS X, in the steps below, substitute `/Users/couchdb` for `/home/couchdb`.
+For OS X, in the steps below, substitute ``/Users/couchdb`` for 
+``/home/couchdb``.
 
-You should create a special `couchdb` user for CouchDB.
+You should create a special ``couchdb`` user for CouchDB.
 
 On many Unix-like systems you can run::
 
@@ -156,13 +150,13 @@ You must make sure that:
 
 * The user has a working POSIX shell
 * The user's home directory is wherever you have copied the release.
-  As a recommendation, copy the `rel\couchdb` directory into
-  `/home/couchdb` or `/Users/couchdb`.
+  As a recommendation, copy the ``rel/couchdb`` directory into
+  ``/home/couchdb`` or ``/Users/couchdb``.
 
 You can test this by:
 
-* Trying to log in as the `couchdb` user
-* Running `pwd` and checking the present working directory
+* Trying to log in as the ``couchdb`` user
+* Running ``pwd`` and checking the present working directory
 
 Copy the built couchdb release to the new user's home directory::
 
@@ -170,7 +164,7 @@ Copy the built couchdb release to the new user's home directory::
 
 Change the ownership of the CouchDB directories by running::
 
-    chown -R couchdb:couchdb /home/couchdb/couchdb 
+    chown -R couchdb:couchdb /home/couchdb/couchdb
 
 Change the permission of the CouchDB directories by running::
 
@@ -187,7 +181,8 @@ You can start the CouchDB server by running::
 
     sudo -i -u couchdb couchdb/bin/couchdb
 
-This uses the `sudo` command to run the `couchdb` command as the `couchdb` user.
+This uses the ``sudo`` command to run the ``couchdb`` command as the
+``couchdb`` user.
 
 When CouchDB starts it should eventually display the following message::
 
@@ -202,7 +197,6 @@ To check that everything has worked, point your web browser to::
 From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/verify_install.html
-
 
 Running as a Daemon
 ===================
