@@ -16,9 +16,10 @@
 Installation on Unix-like systems
 =================================
 
-A high-level guide to Unix-like systems, inc. Mac OS X and Ubuntu.
+A high-level guide to Unix-like systems, including Mac OS X and Ubuntu.
 
-This document is the canonical source of installation information. However, many
+This document as well as the INSTALL.Unix document in the official
+release are the canonical sources of installation information. However, many
 systems have gotchas that you need to be aware of. In addition, dependencies
 frequently change as distributions update their archives.
 
@@ -29,7 +30,7 @@ Dependencies
 
 You should have the following installed:
 
-* `Erlang OTP (>=R14B01, =<R17) <http://erlang.org/>`_
+* `Erlang OTP (>=R61B03, =<19.x) <http://erlang.org/>`_
 * `ICU                          <http://icu-project.org/>`_
 * `OpenSSL                      <http://www.openssl.org/>`_
 * `Mozilla SpiderMonkey (1.8.5) <http://www.mozilla.org/js/spidermonkey/>`_
@@ -40,57 +41,38 @@ You should have the following installed:
 * `Python (>=2.7) for docs      <http://python.org/>`_
 * `Python Sphinx (>=1.1.3)      <http://pypi.python.org/pypi/Sphinx>`_
 
-It is recommended that you install Erlang OTP R13B-4 or above where possible.
+It is recommended that you install Erlang OTP R16B03-1 or above where possible.
 You will only need libcurl if you plan to run the JavaScript test suite. And
 help2man is only need if you plan on installing the CouchDB man pages.
 Python and Sphinx are only required for building the online documentation.
+Documentation build can be disabled by adding the `--disable-docs` flag to
+the `configure` script.
+
+.. seealso::
+
+    * `Installing CouchDB <https://cwiki.apache.org/confluence/display/COUCHDB/Installing+CouchDB>`_
 
 Debian-based Systems
 --------------------
 
 You can install the dependencies by running::
 
-    sudo apt-get install build-essential
-    sudo apt-get install erlang-base-hipe
-    sudo apt-get install erlang-dev
-    sudo apt-get install erlang-manpages
-    sudo apt-get install erlang-eunit
-    sudo apt-get install erlang-nox
-    sudo apt-get install libicu-dev
-    sudo apt-get install libmozjs-dev
-    sudo apt-get install libcurl4-openssl-dev
+    sudo apt-get --no-install-recommends -y install \
+        build-essential pkg-config erlang \
+        libicu-dev libmozjs185-dev libcurl4-openssl-dev
 
-There are lots of Erlang packages. If there is a problem with your install, try
-a different mix. There is more information on the wiki. Additionally, you might
-want to install some of the optional Erlang tools which may also be useful.
-
-Be sure to update the version numbers to match your system's available packages.
-
-Unfortunately, it seems that installing dependencies on Ubuntu is troublesome.
-
-.. seealso::
-    * `Installing on Debian <http://wiki.apache.org/couchdb/Installing_on_Debian>`_
-    * `Installing on Ubuntu <http://wiki.apache.org/couchdb/Installing_on_Ubuntu>`_
+Be sure to update the version numbers to match your system's available
+packages.
 
 RedHat-based (Fedora, Centos, RHEL) Systems
 -------------------------------------------
 
 You can install the dependencies by running::
 
-    sudo yum install autoconf
-    sudo yum install autoconf-archive
-    sudo yum install automake
-    sudo yum install curl-devel
-    sudo yum install erlang-asn1
-    sudo yum install erlang-erts
-    sudo yum install erlang-eunit
-    sudo yum install erlang-os_mon
-    sudo yum install erlang-xmerl
-    sudo yum install help2man
-    sudo yum install js-devel
-    sudo yum install libicu-devel
-    sudo yum install libtool
-    sudo yum install perl-Test-Harness
+    sudo yum install autoconf autoconf-archive automake \
+        curl-devel erlang-asn1 erlang-erts erlang-eunit \
+        erlang-os_mon erlang-xmerl help2man \
+        js-devel-1.8.5 libicu-devel libtool perl-Test-Harness
 
 While CouchDB builds against the default js-devel-1.7.0 included in some
 distributions, it's recommended to use a more recent js-devel-1.8.5.
@@ -100,6 +82,16 @@ Mac OS X
 
 Follow :ref:`install/mac/homebrew` reference till `brew install couchdb` step.
 
+FreeBSD
+-------
+
+FreeBSD requires the use of GNU Make. Where `make` is specified in this
+documentation, substitute `gmake`.
+
+You can install this by running::
+
+    pkg install gmake
+
 Installing
 ==========
 
@@ -107,9 +99,7 @@ Once you have satisfied the dependencies you should run::
 
     ./configure
 
-This script will configure CouchDB to be installed into `/usr/local` by default.
-
-If you wish to customise the installation, pass `--help` to this script.
+If you wish to customize the installation, pass `--help` to this script.
 
 If everything was successful you should see the following message::
 
@@ -125,18 +115,77 @@ You only need to use `sudo` if you're installing into a system directory.
 
 Try `gmake` if `make` is giving you any problems.
 
+To build CouchDB you should run::
+
+    make release
+
+Try `gmake` if `make` is giving you any problems.
+
 If everything was successful you should see the following message::
 
-    You have installed Apache CouchDB, time to relax.
+    ... done
+    You can now copy the rel/couchdb directory anywhere on your system.
+    Start CouchDB with ./bin/couchdb from within that directory.
 
 Relax.
+
+.. _install/unix/security:
+
+User Registration and Security
+==============================
+
+For OS X, in the steps below, substitute `/Users/couchdb` for `/home/couchdb`.
+
+You should create a special `couchdb` user for CouchDB.
+
+On many Unix-like systems you can run::
+
+    adduser --system \
+            --no-create-home \
+            --shell /bin/bash \
+            --group --gecos \
+            "CouchDB Administrator" couchdb
+
+On Mac OS X you can use the Workgroup Manager to create users up to version
+10.9, and dscl or sysadminctl after version 10.9. Search Apple's support
+site to find the documentation appropriate for your system. As of recent
+versions of OS X, this functionality is also included in Server.app,
+available through the App Store only as part of OS X Server.
+
+You must make sure that:
+
+* The user has a working POSIX shell
+* The user's home directory is wherever you have copied the release.
+  As a recommendation, copy the `rel\couchdb` directory into
+  `/home/couchdb` or `/Users/couchdb`.
+
+You can test this by:
+
+* Trying to log in as the `couchdb` user
+* Running `pwd` and checking the present working directory
+
+Copy the built couchdb release to the new user's home directory::
+
+    cp -R /path/to/couchdb/rel/couchdb /home/couchdb
+
+Change the ownership of the CouchDB directories by running::
+
+    chown -R couchdb:couchdb /home/couchdb/couchdb 
+
+Change the permission of the CouchDB directories by running::
+
+    find /home/couchdb/couchdb -type d -exec chmod 0770 {} \;
+
+Update the permissions for your ini files::
+
+    chmod 0644 /home/couchdb/couchdb/etc/*
 
 First Run
 =========
 
 You can start the CouchDB server by running::
 
-    sudo -i -u couchdb couchdb
+    sudo -i -u couchdb couchdb/bin/couchdb
 
 This uses the `sudo` command to run the `couchdb` command as the `couchdb` user.
 
@@ -154,94 +203,18 @@ From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/verify_install.html
 
-.. _install/unix/security:
-
-Security Considerations
-=======================
-
-You should create a special `couchdb` user for CouchDB.
-
-On many Unix-like systems you can run::
-
-    adduser --system \
-            --home /usr/local/var/lib/couchdb \
-            --no-create-home \
-            --shell /bin/bash \
-            --group --gecos \
-            "CouchDB Administrator" couchdb
-
-On Mac OS X you can use the `Workgroup Manager`_ to create users.
-
-You must make sure that:
-
-* The user has a working POSIX shell
-* The user's home directory is `/usr/local/var/lib/couchdb`
-
-You can test this by:
-
-* Trying to log in as the `couchdb` user
-* Running `pwd` and checking the present working directory
-
-Change the ownership of the CouchDB directories by running::
-
-    chown -R couchdb:couchdb /usr/local/etc/couchdb
-    chown -R couchdb:couchdb /usr/local/var/lib/couchdb
-    chown -R couchdb:couchdb /usr/local/var/log/couchdb
-    chown -R couchdb:couchdb /usr/local/var/run/couchdb
-
-Change the permission of the CouchDB directories by running::
-
-    chmod 0770 /usr/local/etc/couchdb
-    chmod 0770 /usr/local/var/lib/couchdb
-    chmod 0770 /usr/local/var/log/couchdb
-    chmod 0770 /usr/local/var/run/couchdb
-
-.. _Workgroup Manager: http://www.apple.com/support/downloads/serveradmintools1047.html
 
 Running as a Daemon
 ===================
 
-SysV/BSD-style Systems
-----------------------
+CouchDB no longer ships with any daemonization scripts.
 
-You can use the `couchdb` init script to control the CouchDB daemon.
+The couchdb team recommends `runit <http://smarden.org/runit/>`_ to
+run CouchDB persistently and reliably. Configuration of runit is
+straightforward; if you have questions, reach out to the CouchDB
+user mailing list.
 
-On SysV-style systems, the init script will be installed into::
+Naturally, you can configure systemd, launchd or SysV-init daemons to
+launch CouchDB and keep it running using standard configuration files.
 
-    /usr/local/etc/init.d
-
-On BSD-style systems, the init script will be installed into::
-
-    /usr/local/etc/rc.d
-
-We use the `[init.d|rc.d]` notation to refer to both of these directories.
-
-You can control the CouchDB daemon by running::
-
-    /usr/local/etc/[init.d|rc.d]/couchdb [start|stop|restart|status]
-
-If you wish to configure how the init script works, you can edit::
-
-    /usr/local/etc/default/couchdb
-
-Comment out the `COUCHDB_USER` setting if you're running as a non-superuser.
-
-To start the daemon on boot, copy the init script to::
-
-    /etc/[init.d|rc.d]
-
-You should then configure your system to run the init script automatically.
-
-You may be able to run::
-
-    sudo update-rc.d couchdb defaults
-
-If this fails, consult your system documentation for more information.
-
-A `logrotate` configuration is installed into::
-
-    /usr/local/etc/logrotate.d/couchdb
-
-Consult your `logrotate` documentation for more information.
-
-It is critical that the CouchDB logs are rotated so as not to fill your disk.
+Consult your system documentation for more information.

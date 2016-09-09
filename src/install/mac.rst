@@ -35,10 +35,10 @@ application. Just follow the below instructions:
 That's all, now CouchDB is installed on your Mac:
 
 #. Run Apache CouchDB application
-#. `Open up Futon`_, the CouchDB admin interface
+#. `Open up Fauxton`_, the CouchDB admin interface
 #. Time to Relax!
 
-.. _Open up Futon: http://localhost:5984/_utils
+.. _Open up Fauxton: http://localhost:5984/_utils
 
 .. _install/mac/homebrew:
 
@@ -49,26 +49,16 @@ You can install the build tools by running::
 
     open /Applications/Installers/Xcode\ Tools/XcodeTools.mpkg
 
+To build CouchDB from source on Mac OS X, you will need to install
+the Command Line Tools::
+
+    xcode-select --install
+
 You will need `Homebrew`_ installed to use the `brew` command. To install the
 other :ref:`dependencies <install/unix/dependencies>` run next commands::
 
-    brew install autoconf
-    brew install autoconf-archive
-    brew install automake
-    brew install libtool
-    brew install erlang
-    brew install icu4c
-    brew install spidermonkey
-    brew install curl
-
-You may want to link ICU so that CouchDB can find the header files
-automatically::
-
-    brew link icu4c
-
-The same is true for recent versions of Erlang::
-
-    brew link erlang
+    brew install autoconf autoconf-archive automake libtool \
+        erlang icu4c spidermonkey curl pkg-config
 
 Now it's time to brew CouchDB::
 
@@ -118,33 +108,17 @@ fault or a bus error, you will need to install your own version of OpenSSL.
 Running as a Daemon
 -------------------
 
+CouchDB no longer ships with any daemonization scripts.
+
 You can use the `launchctl` command to control the CouchDB daemon.
 
-You can load the configuration by running::
+The couchdb team recommends `runit <http://smarden.org/runit/>`_ to
+run CouchDB persistently and reliably. Configuration of runit is
+straightforward; if you have questions, reach out to the CouchDB
+user mailing list.
 
-    sudo launchctl load \
-         /usr/local/Library/LaunchDaemons/org.apache.couchdb.plist
-
-You can stop the CouchDB daemon by running::
-
-    sudo launchctl unload \
-         /usr/local/Library/LaunchDaemons/org.apache.couchdb.plist
-
-You can start CouchDB by running::
-
-    sudo launchctl start org.apache.couchdb
-
-You can restart CouchDB by running::
-
-    sudo launchctl stop org.apache.couchdb
-
-You can edit the launchd configuration by running::
-
-    open /usr/local/Library/LaunchDaemons/org.apache.couchdb.plist
-
-To start the daemon on boot, copy the configuration file to::
-
-    /Library/LaunchDaemons
+Naturally, you can configure launchd or other init daemons to
+launch CouchDB and keep it running using standard configuration files.
 
 Consult your system documentation for more information.
 
@@ -176,7 +150,7 @@ the launchd configuration which comes with the project, with this command::
 
     $ sudo port load couchdb
 
-and it should be up and accessible via Futon at http://127.0.0.1:5984/_utils.
+and it should be up and accessible via Fauxton at http://127.0.0.1:5984/_utils.
 It should also be restarted automatically after reboot.
 
 Updating the ports collection. The collection of port files has to be updated
