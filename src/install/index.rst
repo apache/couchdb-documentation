@@ -24,3 +24,10 @@ Installation
     mac
     freebsd
     troubleshooting
+
+.. _install/cluster:
+
+Cluster Setup
+=============
+
+See the :ref:`Cluster Reference <cluster>` for details.
