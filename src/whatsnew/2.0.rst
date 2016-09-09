@@ -49,20 +49,22 @@ Version 2.0.0
 * Views can be queried with sorting turned off ( ``sorted=false``) for a
   performance boost.
 * The global changes feed has been enhanced. It is now resumable and persistent.
-* New endpoints added (documentation forthcoming for some):
+* New endpoints added (documentation forthcoming):
 
-  * :ref:`api/server/membership`
-  * ``/_bulk_get``
-  * ``/_node/``
-  * ``/_cluster_setup``
-  * ``/_up``
+  * :ref:`api/server/membership` shows all nodes in a cluster
+  * ``/_bulk_get`` speeds up the replication protocol over low-latency
+    connections
+  * ``/_node/`` api to access individual nodes’ configuration and compaction
+    features
+  * ``/_cluster_setup`` api to set up a cluster from scratch.
+  * ``/_up`` api to signal health of a node to a load-balancer
   * ``/db/_local_docs`` and ``/db/_design_docs`` (similar to ``/db/_all_docs``)
 
 * "Backend" interface on port 5986 used for specific cluster admin tasks. Of
   interest are the ``_nodes`` and ``_dbs`` databases visible only through this
   interface.
 * Support added for Erlang/OTP 17.x, 18.x and 19
-* New streamlined build system written for Microsoft Windows
+* New streamlined build system written for Unix-like systems and Microsoft Windows
 
 .. _release/2.0.x/upgrade:
 
