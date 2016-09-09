@@ -48,8 +48,6 @@ Version 2.0.0
   view with a single HTTP request.
 * Views can be queried with sorting turned off ( ``sorted=false``) for a
   performance boost.
-* The update sequences returned by the :ref:`api/db/changes` feed are no longer
-  just integers. They can be any JSON value.
 * The global changes feed has been enhanced. It is now resumable and persistent.
 * New endpoints added (documentation forthcoming for some):
 
@@ -71,6 +69,9 @@ Version 2.0.0
 Upgrade Notes
 =============
 
+* The update sequences returned by the :ref:`api/db/changes` feed are no longer
+  integers. They can be any JSON value. Applications should treat them as opaque
+  values and return them to CouchDB as-is.
 * Temporary views are no longer supported.
 * It is possible to have multiple replicator databases.
   ``replicator/db`` config option has been removed.
