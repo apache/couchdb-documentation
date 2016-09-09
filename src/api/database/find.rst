@@ -488,24 +488,24 @@ Other condition operators require the argument to be in a specific JSON format.
 +===============+=============+============+===================================+
 | (In)equality  | ``$lt``     | Any JSON   | The field is less than the        |
 |               |             |            | argument                          |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$lte``    | Any JSON   | The field is less than or equal to|
 |               |             |            | the argument.                     |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$eq``     | Any JSON   | The field is equal to the argument|
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$ne``     | Any JSON   | The field is not equal to the     |
 |               |             |            | argument.                         |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$gte``    | Any JSON   | The field is greater than or equal|
 |               |             |            | to the argument.                  |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$gt``     | Any JSON   | The field is greater than the     |
 |               |             |            | to the argument.                  |
 +---------------+-------------+------------+-----------------------------------+
 | Object        | ``$exists`` | Boolean    | Check whether the field exists or |
 |               |             |            | not, regardless of its value.     |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$type``   | String     | Check the document field's type.  |
 |               |             |            | Valid values are ``"null"``,      |
 |               |             |            | ``"boolean"``, ``"number"``,      |
@@ -514,10 +514,10 @@ Other condition operators require the argument to be in a specific JSON format.
 +---------------+-------------+------------+-----------------------------------+
 | Array         | ``$in``     | Array of   | The document field must exist in  |
 |               |             | JSON values| the list provided.                |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$nin``    | Array of   | The document field not must exist |
 |               |             | JSON values| in the list provided.             |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$size``   | Integer    | Special condition to match the    |
 |               |             |            | length of an array field in a     |
 |               |             |            | document. Non-array fields cannot |
@@ -530,7 +530,7 @@ Other condition operators require the argument to be in a specific JSON format.
 |               |             |            | ``field % Divisor == Remainder``  |
 |               |             |            | is true, and only when the        |
 |               |             |            | document field is an integer.     |
-|               +-------------+------------+-----------------------------------+
++---------------+-------------+------------+-----------------------------------+
 |               | ``$regex``  | String     | A regular expression pattern to   |
 |               |             |            | match against the document field. |
 |               |             |            | Only matches when the field is a  |
