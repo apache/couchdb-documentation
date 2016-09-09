@@ -25,19 +25,48 @@
 Upgrade Notes
 =============
 
-.. note:: TBD
-
+* Temporary views are no longer supported.
 * It is possible to have multiple replicator databases.
   `replicator/db` config option has been removed.
   Instead `_replicator` and any database names ending
   with `/_replicator` suffix will be recognized as
   replicator databases by the system.
+* Note that the semantics of some API calls have changed due to the introduction
+  of the clustering feature. Specifically, make note of the difference between
+  receiving a `201` and a `202` when storing a document.
 
 .. _release/2.0.0:
 
 Version 2.0.0
 =============
 
-.. note:: TBD
+* Native clustering is now supported. Rather than use CouchDB replication between
+  multiple, distinct CouchDB servers, configure a cluster of CouchDB nodes. These
+  nodes will use an optimized Erlang-driven 'internal replication' to ensure
+  data durability and accessibility. Combine a clustered CouchDB with a load
+  balancer (such as ``haproxy``) to scale CouchDB out horizontally. More details
+  of the clustering feature are available in the :ref:`cluster/index`.
+* `Futon` replaced by brand-new, completely re-engineered `Fauxton` interface.
+  URL remains the same.
+* The new Mango Query Server provides a simple JSON-based way to perform CouchDB
+  queries without JavaScript or MapReduce. Further details are available in the
+  :ref:`_find, _index and _explain API <api/database/find>`.
+* Rewrites rules of URLs can be performed using JavaScript.
+* Multiple queries can be made of a view with a single request.
+* Views can be queried with sorting turned off for a performance boost.
+* Database changes feed now takes any valid JSON object for update sequences.
+* Enhanced global changes feed (now resumable/persistent)
+* New endpoints added (for some, documentation forthcoming):
 
-* temporary views are no longer supported
+  * :ref:`api/server/membership`
+  * ``/_bulk_get``
+  * ``/_node/``
+  * ``/_cluster_setup``
+  * ``/_up``
+  * ``/db/_local_docs`` and ``/db/_design_docs`` (similar to ``/db/_all_docs``)
+
+* "Backend" interface on port 5986 used for specific cluster admin tasks. Of
+  interest are the ``_nodes`` and ``_dbs`` databases visible only through this
+  interface.
+* Support Erlang/OTP 17.x, 18.x and 19
+* New build system for Microsoft Windows
