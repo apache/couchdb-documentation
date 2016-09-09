@@ -431,8 +431,8 @@ on the ``rereduce`` parameter:
 This is the reduce view used by the example app to count comments, while
 utilizing the map to output the comments, which are more useful than just
 ``1`` over and over. It pays to spend some time playing around with map and
-reduce functions. Futon is OK for this, but it doesn’t give full access to all
-the query parameters. Writing your own test code for views in your language
+reduce functions. Fauxton is OK for this, but it doesn’t give full access to
+all the query parameters. Writing your own test code for views in your language
 of choice is a great way to explore the nuances and capabilities of CouchDB’s
 incremental MapReduce system.
 

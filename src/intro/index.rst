@@ -29,7 +29,7 @@ or your apps, efficiently using CouchDB’s :ref:`incremental replication
 CouchDB comes with a suite of features, such as on-the-fly document
 transformation and real-time :ref:`change notifications <changes>`, that makes
 :ref:`web app <couchapp>` development a breeze. It even comes with an easy
-to use :ref:`web administration console <intro/futon>`. You guessed it,
+to use web administration console. You guessed it,
 served up directly out of CouchDB! We care a lot about `distributed scaling`_.
 CouchDB is highly available and partition tolerant, but is also :ref:`eventually
 consistent <intro/consistency>`. And we care *a lot* about your data.
@@ -51,5 +51,4 @@ teach how to use CouchDB.
     tour
     api
     security
-    futon
     curl

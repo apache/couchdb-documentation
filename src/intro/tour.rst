@@ -16,8 +16,7 @@
 Getting Started
 ===============
 
-In this document, we'll take a quick tour of CouchDB's features,
-familiarizing ourselves with Futon, the built-in administration interface.
+In this document, we'll take a quick tour of CouchDB's features.
 We'll create our first document and experiment with CouchDB views.
 
 All Systems Are Go!
@@ -155,22 +154,23 @@ keep in mind that "under the hood" everything is being done by the
 application exactly as you have been doing here manually.
 Everything is done using GET, PUT, POST, and DELETE with a URI.
 
-Welcome to Futon
-================
+.. _intro/tour/fauxton:
+
+Welcome to Fauxton
+==================
 
 After having seen CouchDB's raw API, let's get our feet wet by playing with
-Futon, the built-in administration interface. Futon provides full access to
-all of CouchDB's features and makes it easy to work with some of the more
-complex ideas involved. With Futon we can create and destroy databases; view
+Fauxuton, the built-in administration interface. Fauxuton provides full access
+to all of CouchDB's features and makes it easy to work with some of the more
+complex ideas involved. With Fauxton we can create and destroy databases; view
 and edit documents; compose and run MapReduce views; and trigger replication
 between databases.
 
-To load Futon in your browser, visit::
+To load Fauxuton in your browser, visit::
 
     http://127.0.0.1:5984/_utils/
 
-If you're running version 0.9 or later, you should see something similar to
-:ref:`intro/tour-01`. In later documents, we'll focus on using CouchDB from
+In later documents, we'll focus on using CouchDB from
 server-side languages such as Ruby and Python. As such, this document is a great
 opportunity to showcase an example of natively serving up a dynamic web
 application using nothing more than CouchDB's integrated web server, something
@@ -179,35 +179,26 @@ you may wish to do with your own applications.
 The first thing we should do with a fresh installation of CouchDB is run the
 test suite to verify that everything is working properly. This assures us
 that any problems we may run into aren't due to bothersome issues with our
-setup. By the same token, failures in the Futon test suite are a red flag,
+setup. By the same token, failures in the Fauxton test suite are a red flag,
 telling us to double-check our installation before attempting to use a
 potentially broken database server, saving us the confusion when nothing
 seems to be working quite like we expect!
 
-.. _intro/tour-01:
-
-.. figure:: ../../images/intro-tour-01.png
-    :align: center
-    :alt: The Futon welcome screen
-
-    Figure 1. The Futon welcome screen
-
-Some common network configurations cause the replication test to fail when
-accessed via the localhost address. You can fix this by accessing CouchDB via
-127.0.0.1, e.g. http://127.0.0.1:5984/_utils/.
+To validate your installation, click on the `Verify` link on the left-hand
+side, then press the green `Verify Installation` button. All tests should
+pass with a check mark. If any fail, re-check your installation steps.
 
 Your First Database and Document
 ================================
 
-Creating a database in Futon is simple. From the overview page,
+Creating a database in Fauxton is simple. From the overview page,
 click "Create Database." When asked for a name, enter hello-world and click
 the Create button.
 
-After your database has been created, Futon will display a list of all its
-documents. This list will start out empty (:ref:`intro/tour-03`), so let's
-create our first document. Click the "New Document" link and then the Create
-button in the pop up. Make sure to leave the document ID blank,
-and CouchDB will generate a UUID for you.
+After your database has been created, Fauxton will display a list of all its
+documents. This list will start out empty, so let's
+create our first document. Click the plus sign next to "All Documents" and
+select the "New Doc" link. CouchDB will generate a UUID for you.
 
 For demoing purposes, having CouchDB assign a UUID is fine. When you write
 your first programs, we recommend assigning your own UUIDs. If you rely on
@@ -217,51 +208,29 @@ never find out about the first one because only the second one will be
 reported back. Generating your own UUIDs makes sure that you'll never end up
 with duplicate documents.
 
-Futon will display the newly created document, with its _id and _rev as the
-only fields. To create a new field, click the "Add Field" button. We'll call
-the new field hello. Click the green check icon (or hit the Enter key) to
-finalize creating the hello field. Double-click the hello field's value
-(default null) to edit it.
+Fauxton will display the newly created document, with its _id field. To create
+a new field, simply use the editor to write valid JSON. Add a new field by
+appending a comma to the ``_id`` value, then adding the text::
+
+    "hello": "my new value"
+
+Click the green Create Document button to finalize creating the
+document.
 
 You can experiment with other JSON values; e.g., ``[1, 2, "c"]`` or
-``{"foo": "bar"}``. Once you've entered your values into the document,
-make a note of its ``_rev`` attribute and click "Save Document." The result
-should look like :ref:`intro/tour-04`.
+``{"foo": "bar"}``. 
 
-.. _intro/tour-03:
-
-.. figure:: ../../images/intro-tour-03.png
-    :align: center
-    :alt: An empty database in Futon
-
-    Figure 3. An empty database in Futon
-
-.. _intro/tour-04:
-
-.. figure:: ../../images/intro-tour-04.png
-    :align: center
-    :alt: A "hello world" document in Futon
-
-    Figure 4. A "hello world" document in Futon
-
-You'll notice that the document's _rev has changed. We'll go into more detail
+You'll notice that the document's _rev has been added. We'll go into more detail
 about this in later documents, but for now, the important thing to note is
 that _rev acts like a safety feature when saving a document. As long as you
 and CouchDB agree on the most recent _rev of a document, you can successfully
 save your changes.
 
-Futon also provides a way to display the underlying JSON data,
-which can be more compact and easier to read, depending on what sort of data
-you are dealing with. To see the JSON version of our "hello world" document,
-click the Source tab. The result should look like :ref:`intro/tour-05`.
-
-.. _intro/tour-05:
-
-.. figure:: ../../images/intro-tour-05.png
-    :align: center
-    :alt: The JSON source of a "hello world" document in Futon
-
-    Figure 5. The JSON source of a "hello world" document in Futon
+For clarity, you may want to display the contents of the document in the all
+document view. To enable this, from the upper-right corner of the window,
+select Options, then check the Include Docs option. Finally, press the Run
+Query button. The full document should be displayed along with the ``_id``
+and ``_rev`` values.
 
 Running a Query Using MapReduce
 ===============================
@@ -295,7 +264,7 @@ keys.
 Before we can run an example MapReduce view, we'll need some data to run it
 on. We'll create documents carrying the price of various supermarket items as
 found at different shops. Let's create documents for apples, oranges,
-and bananas. (Allow CouchDB to generate the _id and _rev fields.) Use Futon
+and bananas. (Allow CouchDB to generate the _id and _rev fields.) Use Fauxton
 to create documents that have a final JSON structure that looks like this:
 
 .. code-block:: javascript
@@ -310,16 +279,6 @@ to create documents that have a final JSON structure that looks like this:
             "Apples Express": 0.79
         }
     }
-
-This document should look like :ref:`intro/tour-06` when entered into Futon.
-
-.. _intro/tour-06:
-
-.. figure:: ../../images/intro-tour-06.png
-    :align: center
-    :alt: An example document with apple prices in Futon
-
-    Figure 6. An example document with apple prices in Futon
 
 OK, now that that's done, let's create the document for oranges:
 
@@ -353,17 +312,14 @@ And finally, the document for bananas:
 
 Imagine we're catering a big luncheon, but the client is very price-sensitive.
 To find the lowest prices, we're going to create our first view,
-which shows each fruit sorted by price. Click "hello-world" to return to the
-hello-world overview, and then from the "View" select field choose "Temporary
-view…" to create a new view.
+which shows each fruit sorted by price. Click "All Documents" to return to the
+hello-world overview, and then from the "All Documents" plus sign, click "New
+View" to create a new view.
 
-.. figure:: ../../images/intro-tour-07.png
-    :align: center
-    :alt: A temporary view in Futon
+Name the design document ``_design/myDesignDoc``, and set the Index name
+to ``prices``.
 
-    Figure 7. A temporary view in Futon
-
-Edit the map function, on the left, so that it looks like the following:
+Edit the map function, on the right, so that it looks like the following:
 
 .. code-block:: javascript
 
@@ -381,22 +337,16 @@ Edit the map function, on the left, so that it looks like the following:
 This is a JavaScript function that CouchDB runs for each of our documents as
 it computes the view. We'll leave the reduce function blank for the time being.
 
-Click "Run" and you should see result rows like in :ref:`intro/tour-08`,
+Click "Run" and you should see result rows,
 with the various items sorted by price. This map function could be even more
 useful if it grouped the items by type so that all the prices for bananas were
 next to each other in the result set. CouchDB's key sorting system allows any
 valid JSON object as a key. In this case, we'll emit an array of [item, price]
 so that CouchDB groups by item type and price.
 
-.. _intro/tour-08:
-
-.. figure:: ../../images/intro-tour-08.png
-    :align: center
-    :alt: The results of running a view in Futon
-
-    Figure 8. The results of running a view in Futon
-
-Let's modify the view function so that it looks like this:
+Let's modify the view function (click the wrench icon next to the Views >
+prices Design Document on the left, then select Edit) so that it looks like
+this:
 
 .. code-block:: javascript
 
@@ -419,16 +369,7 @@ further resource usage. For this reason, it's important to check for the
 existence of any fields before you use them. In this case,
 our map function will skip the first "hello world" document we created
 without emitting any rows or encountering any errors. The result of this
-query should look like :ref:`intro/tour-09`.
-
-.. _intro/tour-09:
-
-.. figure:: ../../images/intro-tour-09.png
-    :align: center
-    :alt: The results of running a view after grouping by item type and price
-
-    Figure 9. The results of running a view after grouping by item type and
-    price
+query should now be displayed.
 
 Once we know we've got a document with an item type and some prices,
 we iterate over the item's prices and emit key/values pairs. The key is an
@@ -449,25 +390,22 @@ efficient access to data within a range of keys.
 Triggering Replication
 ======================
 
-Futon can trigger replication between two local databases,
+Fauxton can trigger replication between two local databases,
 between a local and remote database, or even between two remote databases.
 We'll show you how to replicate data from one local database to another,
 which is a simple way of making backups of your databases as we're working
 through the examples.
 
 First we'll need to create an empty database to be the target of replication.
-Return to the overview and create a database called hello-replication.
-Now click "Replicator" in the sidebar and choose hello-world as the source
-and hello-replication as the target. Click "Replicate" to replicate your
-database. The result should look something like :ref:`intro/tour-10`.
+Return to the Databases overview and create a database called
+``hello-replication``.  Now click "Replication" in the sidebar and choose
+hello-world as the source and hello-replication as the target. Click
+"Replicate" to replicate your database. 
 
-.. _intro/tour-10:
-
-.. figure:: ../../images/intro-tour-10.png
-    :align: center
-    :alt: Running database replication in Futon
-
-    Figure 10. Running database replication in Futon
+To view the result of your replication, click on the Databases tab again.
+You should see the hello-replication database has the same number of documents
+as the hello-world database, and it should take up roughly the same size as
+well.
 
 .. note::
     For larger databases, replication can take much longer. It is important to
@@ -481,11 +419,11 @@ database. The result should look something like :ref:`intro/tour-10`.
 Wrapping Up
 ===========
 
-Now that you've seen most of Futon's features, you'll be prepared to dive in
+Now that you've seen most of Fauxton's features, you'll be prepared to dive in
 and inspect your data as we build our example application in the next few
-documents. Futon's pure JavaScript approach to managing CouchDB shows how it's
-possible to build a fully featured web application using only CouchDB's HTTP
-API and integrated web server.
+documents. Fauxton's pure JavaScript approach to managing CouchDB shows how
+it's possible to build a fully featured web application using only CouchDB's
+HTTP API and integrated web server.
 
 But before we get there, we'll have another look at CouchDB's HTTP API -- now
 with a magnifying glass. Let's curl up on the couch and relax.

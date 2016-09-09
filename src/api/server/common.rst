@@ -952,13 +952,13 @@ is as follows:
 .. http:get:: /_utils
     :synopsis: Redirects to /_utils/
 
-    Accesses the built-in Futon administration interface for CouchDB.
+    Accesses the built-in Fauxton administration interface for CouchDB.
 
     :>header Location: New URI location
     :code 301: Redirects to :get:`/_utils/`
 
 .. http:get:: /_utils/
-    :synopsis: CouchDB administration interface (Futon)
+    :synopsis: CouchDB administration interface (Fauxton)
 
     :>header Content-Type: :mimetype:`text/html`
     :>header Last-Modified: Static files modification timestamp

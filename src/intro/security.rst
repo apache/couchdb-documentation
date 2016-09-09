@@ -436,15 +436,11 @@ CouchDB should respond with:
     {"ok":true,"name":"jan","roles":[]}
 
 Hooray! You may wonder why this was so complex - we need to retrieve user's
-document, add a special field to it, and post it back. Where is that one big
-button that changes the password without worrying about the document's content?
-Actually, :ref:`Futon <intro/futon>` has one such thing at the bottom right
-corner if you are logged in. Using that will hide all the implementation details
-described above and keep it really simple for you.
+document, add a special field to it, and post it back.
 
 .. note::
     There is no password confirmation for API request: you should implement it
-    on your application layer like Futon does.
+    in your application layer.
 
 Users Public Information
 ------------------------

@@ -131,15 +131,12 @@ Native Erlang Query Server
         [native_query_servers]
         erlang = {couch_native_process, start_link, []}
 
-    To see these changes you will also need to restart the server. To test out
-    using :ref:`Erlang views <query-server/erlang>`, visit the `Futon` admin
-    interface, create a new database and open a temporary view. You should now
-    be able to select ``erlang`` from the language drop-down.
+    To see these changes you will also need to restart the server.
 
     Let's try an example of map/reduce functions which count the total
     documents at each number of revisions (there are x many documents at
     version "1", and y documents at "2"... etc). Add a few documents to the
-    database, then enter the following functions as a temporary view:
+    database, then enter the following functions as a view:
 
     .. code-block:: erlang
 

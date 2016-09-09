@@ -117,7 +117,7 @@ Global HTTP Handlers
 
     .. config:option:: _utils
 
-        The :ref:`_utils <api/server/utils>` handler serves `Futon`'s web
+        The :ref:`_utils <api/server/utils>` handler serves `Fauxton`'s web
         administration page::
 
             [httpd_global_handlers]

@@ -253,10 +253,8 @@ Secure Socket Level Options
         shell> chmod 600 privkey.pem couchdb.pem
         shell> chown couchdb privkey.pem couchdb.pem
 
-    Now, you need to edit CouchDB's configuration, either by editing your
-    ``local.ini`` file or using the ``/_config`` API calls or the
-    configuration screen in Futon. Here is what you need to do in
-    ``local.ini``, you can infer what needs doing in the other places.
+    Now, you need to edit CouchDB's configuration, by editing your
+    ``local.ini`` file. Here is what you need to do.
 
     At first, :option:`enable the HTTPS daemon <daemons/httpsd>`::
 
