@@ -40,12 +40,12 @@ Upgrade Notes
 Version 2.0.0
 =============
 
-* Native clustering is now supported. Rather than use CouchDB replication between
-  multiple, distinct CouchDB servers, configure a cluster of CouchDB nodes. These
-  nodes will use an optimized Erlang-driven 'internal replication' to ensure
-  data durability and accessibility. Combine a clustered CouchDB with a load
-  balancer (such as ``haproxy``) to scale CouchDB out horizontally. More details
-  of the clustering feature are available in the :ref:`cluster`.
+* Native clustering is now supported. Rather than use CouchDB replication
+  between multiple, distinct CouchDB servers, configure a cluster of CouchDB
+  nodes. These nodes will use an optimized Erlang-driven 'internal replication'
+  to ensure data durability and accessibility. Combine a clustered CouchDB with
+  a load balancer (such as ``haproxy``) to scale CouchDB out horizontally. More
+  details of the clustering feature are available in the :ref:`cluster`.
 * `Futon` replaced by brand-new, completely re-engineered `Fauxton` interface.
   URL remains the same.
 * The new Mango Query Server provides a simple JSON-based way to perform CouchDB
@@ -55,8 +55,8 @@ Version 2.0.0
 * Rewrite rules of URLs can be performed using JavaScript.
 * Multiple queries can be made of a view with a single request.
 * Views can be queried with sorting turned off for a performance boost.
-* The update sequences returned by the :ref:`api/db/changes` feed are no longer just
-  integers. They can be any JSON value.
+* The update sequences returned by the :ref:`api/db/changes` feed are no longer
+  just integers. They can be any JSON value.
 * Enhanced global changes feed (now resumable/persistent)
 * New endpoints added (for some, documentation forthcoming):
 
