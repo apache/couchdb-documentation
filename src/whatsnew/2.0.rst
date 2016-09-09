@@ -54,7 +54,7 @@ Version 2.0.0
   * :ref:`api/server/membership` shows all nodes in a cluster
   * ``/_bulk_get`` speeds up the replication protocol over low-latency
     connections
-  * ``/_node/`` api to access individual nodes’ configuration and compaction
+  * ``/_node/`` api to access individual nodes' configuration and compaction
     features
   * ``/_cluster_setup`` api to set up a cluster from scratch.
   * ``/_up`` api to signal health of a node to a load-balancer
