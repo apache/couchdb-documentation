@@ -25,7 +25,7 @@ Firewall
 If you do not have a firewall between your servers, then you can skip this.
 
 CouchDB in cluster mode uses the port ``5984`` just as standalone, but is also
-uses ``5986`` for the admin interface.
+uses ``5986`` for node-local APIs.
 
 Erlang uses TCP port ``4369`` (EPMD) to find other nodes, so all servers must be
 able to speak to each other on this port. In an Erlang Cluster, all nodes are
@@ -34,7 +34,9 @@ connected to all other nodes. A mesh.
 .. warning::
     If you expose the port ``4369`` to the Internet or any other untrusted
     network, then the only thing protecting you is the
-    :ref:`cookie <cluster/setup/cookie>`.
+    `cookie`_.
+
+.. _cookie: http://erlang.org/doc/reference_manual/distributed.html
 
 Every Erlang application then uses other ports for talking to each other. Yes,
 this means random ports. This will obviously not work with a firewall, but it is
@@ -143,21 +145,41 @@ Open ``sys.config``, on all nodes, and add ``inet_dist_listen_min, 9100`` and
         ]}
     ].
 
-Configuration files
-===================
+.. _cluster/setup/wizard:
 
-.. _cluster/setup/cookie:
+The Cluster Setup Wizard
+========================
 
-Erlang Cookie
--------------
+Setting up a cluster of Erlang applications correctly can be a daunting
+task. Luckily, CouchDB 2.0 comes with a convenient Cluster Setup Wizard
+as part of the Fauxton web administration interface.
 
-Open up ``vm.args`` and set the ``-setcookie`` to something secret. This must be
-identical on all nodes.
+After installation and initial startup, visit Fauxton at 
+``http://127.0.0.01:5984/_utils#setup``. You will be asked to set up
+CouchDB as a single-node instance or set up a cluster.
 
-Set ``-name`` to the name the node will have. All nodes must have a unique name.
+When you click “setup cluster” on the other hand, you are asked for
+admin credentials again and then to add nodes by IP address. To get
+more nodes, go through the same install procedure on other machines.
 
-Admin
------
+Before you can add nodes to form a cluster, you have to have them
+listen on a public ip address and set up an admin user. Do this, once
+per node:
 
-All nodes authenticates users locally, so you must add an admin user to
-local.ini on all nodes. Otherwise you will not be able to login on the cluster.
+.. code-block:: shell
+
+    curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/admins/admin -d '"password"'
+    curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/chttpd/bind_address -d '"0.0.0.0"'
+
+Now you can enter their IP addresses in the setup screen on your first node. And make sure to put in the admin username and password. And use the same admin username and password on all nodes.
+
+Once you added all nodes, click “Setup” and Fauxton will finish the cluster configuration for you.
+
+See http://127.0.0.1:5984/_membership to get a list of all the nodes in your cluster.
+
+Now your cluster is ready and available. You can send requests to any one of the nodes and get to all the data.
+
+For a proper production setup, you’d now set up a HTTP proxy in front of the nodes, that does load balancing. We recommend `HAProxy`_. See our `example configuration for HAProxy`_. All you need is to adjust the ip addresses and ports.
+
+.. _HAProxy: http://haproxy.org/
+.. _example configuration for HAProxy: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg
