@@ -20,23 +20,6 @@
     :depth: 1
     :local:
 
-.. _release/2.0.x/upgrade:
-
-Upgrade Notes
-=============
-
-* Temporary views are no longer supported.
-* It is possible to have multiple replicator databases.
-  ``replicator/db`` config option has been removed.
-  Instead ``_replicator`` and any database names ending
-  with the ``/_replicator`` suffix will be recognized as
-  replicator databases by the system.
-* Note that the semantics of some API calls have changed due to the introduction
-  of the clustering feature. Specifically, make note of the difference between
-  receiving a ``201`` and a ``202`` when storing a document.
-* ``all_or_nothing`` is no longer supported by the :ref:`bulk_docs
-  <api/db/bulk_docs>` API
-
 .. _release/2.0.0:
 
 Version 2.0.0
@@ -79,6 +62,23 @@ Version 2.0.0
   interface.
 * Support added for Erlang/OTP 17.x, 18.x and 19
 * New streamlined build system written for Microsoft Windows
+
+.. _release/2.0.x/upgrade:
+
+Upgrade Notes
+=============
+
+* Temporary views are no longer supported.
+* It is possible to have multiple replicator databases.
+  ``replicator/db`` config option has been removed.
+  Instead ``_replicator`` and any database names ending
+  with the ``/_replicator`` suffix will be recognized as
+  replicator databases by the system.
+* Note that the semantics of some API calls have changed due to the introduction
+  of the clustering feature. Specifically, make note of the difference between
+  receiving a ``201`` and a ``202`` when storing a document.
+* ``all_or_nothing`` is no longer supported by the :ref:`bulk_docs
+  <api/db/bulk_docs>` API
 
 .. _release/2.0.x/knownissues:
 
