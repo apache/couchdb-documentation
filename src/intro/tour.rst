@@ -218,7 +218,7 @@ Click the green Create Document button to finalize creating the
 document.
 
 You can experiment with other JSON values; e.g., ``[1, 2, "c"]`` or
-``{"foo": "bar"}``. 
+``{"foo": "bar"}``.
 
 You'll notice that the document's _rev has been added. We'll go into more detail
 about this in later documents, but for now, the important thing to note is
@@ -400,7 +400,7 @@ First we'll need to create an empty database to be the target of replication.
 Return to the Databases overview and create a database called
 ``hello-replication``.  Now click "Replication" in the sidebar and choose
 hello-world as the source and hello-replication as the target. Click
-"Replicate" to replicate your database. 
+"Replicate" to replicate your database.
 
 To view the result of your replication, click on the Databases tab again.
 You should see the hello-replication database has the same number of documents
