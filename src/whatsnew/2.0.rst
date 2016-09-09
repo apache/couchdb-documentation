@@ -64,7 +64,8 @@ Version 2.0.0
   interest are the ``_nodes`` and ``_dbs`` databases visible only through this
   interface.
 * Support added for Erlang/OTP 17.x, 18.x and 19
-* New streamlined build system written for Unix-like systems and Microsoft Windows
+* New streamlined build system written for Unix-like systems and Microsoft
+  Windows
 
 .. _release/2.0.x/upgrade:
 
