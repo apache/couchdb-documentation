@@ -19,4 +19,3 @@ Fauxton
 .. toctree::
 
     install
-    addons

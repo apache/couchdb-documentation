@@ -12,66 +12,44 @@
 
 .. _fauxton/install:
 
-============
-Installation
-============
+=============
+Fauxton Setup
+=============
+
+Fauxton is included with CouchDB 2.0, so make sure CouchDB is running, then go to::
+
+    http://127.0.0.1:5984/_utils/
+
+You can also upgrade to the latest version of Fauxton by using npm::
+
+    $ npm install -g fauxton
+    $ fauxton
+
+(Recent versions of `node.js`_ and `npm`_ are required.)
+
+.. _node.js: http://nodejs.org/
+.. _npm: https://npmjs.org/doc/README.html
+
+Fauxton Visual Guide
+====================
+You can find the Visual Guide here:
+    http://couchdb.apache.org/fauxton-visual-guide
+
+Development Server
+==================
 
 Recent versions of `node.js`_ and `npm`_ are required.
 
 .. _node.js: http://nodejs.org/
 .. _npm: https://npmjs.org/doc/README.html
 
-Get the source
-==============
+Using the dev server is the easiest way to use Fauxton, specially when developing for it::
 
-Clone the CouchDB repo::
-
-    $ git clone http://git-wip-us.apache.org/repos/asf/couchdb.git
-    $ cd couchdb
-
-Fauxton Setup
-=============
-
-Install all dependencies::
-
-    couchdb/ $ cd src/fauxton
-    couchdb/src/fauxton/ $ npm install
-
-.. note::
-    To avoid a npm global install add ``node_modules/.bin`` to your path::
-
-        export PATH=./node_modules/.bin:$PATH
-
-    Or just use the wrappers in ``./bin/``.
-
-    Development mode, non minified files::
-
-        ./bin/grunt couchdebug
-
-    Or fully compiled install::
-
-        ./bin/grunt couchdb
-
-Dev Server
-==========
-
-Using the dev server is the easiest way to use Fauxton, specially when
-developing for it::
-
-    grunt dev
-
-Deploy Fauxton
-==============
-
-Deploy Fauxton to your local CouchDB instance:
-
-    ./bin/grunt couchapp_deploy
-
-The Fauxton be available by `/fauxton/_design/fauxton/index.html
-<http://localhost:5984/fauxton/_design/fauxton/index.html>`_
+    $ git clone https://github.com/apache/couchdb-fauxton.git
+    $ npm install && npm run dev
 
 Understanding Fauxton Code layout
----------------------------------
+=================================
 
 Each bit of functionality is its own separate module or addon.
 
