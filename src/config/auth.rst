@@ -123,18 +123,6 @@ Authentication Configuration
             [couch_httpd_auth]
             auth_cache_size = 50
 
-    .. config:option:: authentication_db :: Users database
-
-        Specifies the name of the system database for storing CouchDB users. ::
-
-            [couch_httpd_auth]
-            authentication_db = _users
-
-        .. warning::
-            If you change the database name, do not forget to remove or clean
-            up the old database, since it will no longer be protected by
-            CouchDB.
-
     .. config:option:: authentication_redirect :: Default redirect for authentication requests
 
         Specifies the location for redirection on successful authentication if

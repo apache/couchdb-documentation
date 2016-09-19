@@ -142,6 +142,19 @@ Base CouchDB Options
 
         .. _URI: http://en.wikipedia.org/wiki/URI
 
+   .. config:option:: users_db_suffix :: Users database suffix
+
+        Specifies the suffix (last component of a name) of the system database
+        for storing CouchDB users. ::
+
+            [couchdb]
+            users_db_suffix = _users
+
+        .. warning::
+            If you change the database name, do not forget to remove or clean
+            up the old database, since it will no longer be protected by
+            CouchDB.
+
     .. config:option:: util_driver_dir :: CouchDB binary utility drivers
 
         Specifies location of binary drivers (`icu`, `ejson`, etc.). This
