@@ -123,18 +123,6 @@ Authentication Configuration
             [couch_httpd_auth]
             auth_cache_size = 50
 
-    .. config:option:: authentication_db :: Users database
-
-        Specifies the name of the system database for storing CouchDB users. ::
-
-            [couch_httpd_auth]
-            authentication_db = _users
-
-        .. warning::
-            If you change the database name, do not forget to remove or clean
-            up the old database, since it will no longer be protected by
-            CouchDB.
-
     .. config:option:: authentication_redirect :: Default redirect for authentication requests
 
         Specifies the location for redirection on successful authentication if
@@ -189,7 +177,7 @@ Authentication Configuration
         .. versionadded:: 1.4
 
         A comma-separated list of field names in user documents (in
-        :option:`couch_httpd_auth/authentication_db`) that can be read by any
+        :option:`couchdb/users_db_suffix`) that can be read by any
         user. If unset or not specified, authenticated users can only retrieve
         their own document. ::
 
@@ -286,7 +274,7 @@ HTTP OAuth Configuration
         use_users_db = true
 
     If set to ``true``, OAuth token and consumer secrets will be looked up in
-    the :option:`authentication database <couch_httpd_auth/authentication_db>`.
+    the :option:`authentication database <couchdb/users_db_suffix>`.
     These secrets are stored in a top level field named ``"oauth"`` in user
     documents, as below.
 

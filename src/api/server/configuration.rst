@@ -62,12 +62,12 @@ the various configuration values within a running CouchDB instance.
             },
             "couch_httpd_auth": {
                 "auth_cache_size": "50",
-                "authentication_db": "_users",
                 "authentication_redirect": "/_utils/session.html",
                 "require_valid_user": "false",
                 "timeout": "600"
             },
             "couchdb": {
+                "users_db_suffix": "_users",
                 "database_dir": "/var/lib/couchdb",
                 "delayed_commits": "true",
                 "max_attachment_chunk_size": "4294967296",
