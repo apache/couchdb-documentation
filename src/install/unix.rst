@@ -188,31 +188,31 @@ Copy the built couchdb release to the new user's home directory::
 
 Change the ownership of the CouchDB directories by running::
 
-    chown -R couchdb:couchdb /home/couchdb/couchdb
+    chown -R couchdb:couchdb /home/couchdb
 
 Change the permission of the CouchDB directories by running::
 
-    find /home/couchdb/couchdb -type d -exec chmod 0770 {} \;
+    find /home/couchdb -type d -exec chmod 0770 {} \;
 
 Update the permissions for your ini files::
 
-    chmod 0644 /home/couchdb/couchdb/etc/*
+    chmod 0644 /home/couchdb/etc/*
 
 First Run
 =========
 
 You can start the CouchDB server by running::
 
-    sudo -i -u couchdb couchdb/bin/couchdb
+    sudo -i -u couchdb /home/couchdb/bin/couchdb
 
 This uses the ``sudo`` command to run the ``couchdb`` command as the
 ``couchdb`` user.
 
-When CouchDB starts it should eventually display the following message::
+When CouchDB starts it should eventually display following messages::
 
-    Apache CouchDB has started, time to relax.
+    {database_does_not_exist,[{mem3_shards,load_shards_from_db,"_users" ...
 
-Relax.
+Don't be afraid, we will fix this in a moment.
 
 To check that everything has worked, point your web browser to::
 
@@ -221,6 +221,8 @@ To check that everything has worked, point your web browser to::
 From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/verify_install.html
+
+Finally, to configure your cluster see :ref: `_cluster/setup/wizard`. 
 
 Running as a Daemon
 ===================
