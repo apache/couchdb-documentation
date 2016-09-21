@@ -222,7 +222,7 @@ From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/verify_install.html
 
-Finally, to configure your cluster see :ref: `_cluster/setup/wizard`.
+Finally, to configure your cluster see :ref:`cluster/setup/wizard`.
 
 Running as a Daemon
 ===================
