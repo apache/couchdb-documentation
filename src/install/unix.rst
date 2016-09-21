@@ -222,7 +222,7 @@ From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/verify_install.html
 
-Finally, open "Configure" page and configure a cluster. After this all warning messages in a log will go away.
+Finally, `configure a cluster <http://docs.couchdb.org/en/latest/cluster/setup.html>`_ using API or web UI. After this all warning messages in a log will go away.
 
 Running as a Daemon
 ===================
