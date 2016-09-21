@@ -189,5 +189,37 @@ of the nodes, that does load balancing. We recommend `HAProxy`_. See
 our `example configuration for HAProxy`_. All you need is to adjust the
 ip addresses and ports.
 
+.. _cluster/setup/api:
+
+The Cluster Setup Api
+========================
+
+If you would prefer to manually configure your CouchDB cluster, CouchDB exposes the ``_cluster_setup`` endpoint for that.
+After installation and initial setup. We can setup the cluster. On each node we need to run the following command to setup the node:
+
+.. code-block:: bash
+
+     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password"}'
+
+After that we can join all the nodes together. Choose one node as the "setup coordination node" to run all these commands on.
+This is a "setup coordination node" that manages the setup and requires all other nodes to be able to see it and vice versa.
+Setup won’t work with unavailable nodes. The notion of "setup coordination node" will be gone once the setup is finished.
+From then onwards the cluster will no longer have a "setup coordination node". To add a node run these two commands:
+
+.. code-block:: bash
+
+    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password", "port": 15984, "remote_node": "<remote-node-ip>", "remote_current_user": "<remote-node-username>", "remote_current_password": "<remote-node-password>" }'
+    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"<remote-node-ip>", "port": "<remote-node-port>", "username": "garren", "password":"password"}' -H "Content-Type: application/json"
+
+This will join the two nodes together. Keep running the above commands for each node you want to add to the cluster.
+Once this is done run the following command to complete the setup and add the missing databases:
+
+.. code-block:: bash
+
+    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'
+
+You CouchDB cluster is now setup.
+
+
 .. _HAProxy: http://haproxy.org/
 .. _example configuration for HAProxy: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg
