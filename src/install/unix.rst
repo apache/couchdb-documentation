@@ -234,9 +234,55 @@ CouchDB no longer ships with any daemonization scripts.
 The couchdb team recommends `runit <http://smarden.org/runit/>`_ to
 run CouchDB persistently and reliably. Configuration of runit is
 straightforward; if you have questions, reach out to the CouchDB
-user mailing list.
+user mailing list or IRC-channel #couchdb in FreeNode network.
 
-Naturally, you can configure systemd, launchd or SysV-init daemons to
-launch CouchDB and keep it running using standard configuration files.
+Let's consider configuring of runit on Ubuntu 16.04. The following
+steps should be considered only as an example. Some details can vary
+on different systems and versions of Ubuntu Linux.
 
-Consult your system documentation for more information.
+Install ruinit::
+
+    sudo apt-get install runit
+   
+Create a directory where logs will be written::
+
+    sudo mkdir /var/log/couchdb
+    sudo chown couchdb:couchdb /var/log/couchdb
+   
+Create directories that will contain runit counfiguration for CouchDB::
+
+    sudo mkdir /etc/sv/couchdb
+    sudo mkdir /etc/sv/couchdb/log
+   
+Create /etc/sv/couchdb/log/run script::
+
+    #!/bin/sh
+    exec svlogd -tt /var/log/couchdb
+
+Create /etc/sv/couchdb/run::
+
+    #!/bin/sh
+    export HOME=/home/couchdb
+    exec 2>&1
+    exec chpst -u couchdb /home/couchdb/bin/couchdb
+
+Make scripts executable::
+
+    sudo chmod u+x /etc/sv/couchdb/log/run
+    sudo chmod u+x /etc/sv/couchdb/run
+   
+Then run::
+
+    sudo ln -s /etc/sv/couchdb/ /etc/service/couchdb
+   
+In a few seconds runit will discover a new symlink and start CouchDB. You can control CouchDB service like this::
+
+    sudo sv status couchdb
+    sudo sv stop couchdb
+    sudo sv start couchdb
+
+Naturally now CouchDB will start autamatically shortly after system starts.
+
+You can also configure systemd, launchd or SysV-init daemons to launch
+CouchDB and keep it running using standard configuration files. Consult
+your system documentation for more information.
