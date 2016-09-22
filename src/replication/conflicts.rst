@@ -468,7 +468,7 @@ contains a list which is only ever appended to, then you can perform a union of
 the two list versions.
 
 Some merge strategies look at the changes made to an object, compared to its
-previous version. This is how git's merge function works.
+previous version. This is how Git's merge function works.
 
 For example, to merge Bob's business card versions v2a and v2b, you could look
 at the differences between v1 and v2b, and then apply these changes to v2a as
@@ -540,8 +540,8 @@ mobile number. Alice has to remember which one she entered last.
 Git
 ---
 
-`Git`_ is a well-known distributed source control system. Like Unison, git deals
-with files. However, git considers the state of a whole set of files as a single
+`Git`_ is a well-known distributed source control system. Like Unison, Git deals
+with files. However, Git considers the state of a whole set of files as a single
 object, the "tree". Whenever you save an update, you create a "commit" which
 points to both the updated tree and the previous commit(s), which in turn point
 to the previous tree(s). You therefore have a full history of all the states of
@@ -563,7 +563,7 @@ a remote peer into the local repository. A "pull" does two things: first "fetch"
 the state of the peer into the remote tracking branch for that peer; and then
 attempt to "merge" those changes into the local branch.
 
-Now let's consider the business card. Alice has created a git repo containing
+Now let's consider the business card. Alice has created a Git repo containing
 ``bob.vcf``, and cloned it across to the other machine. The branches look like
 this, where ``AAAAAAAA`` is the SHA1 of the commit::
 
@@ -591,8 +591,8 @@ updated::
     The repo still contains AAAAAAAA because commits BBBBBBBB and CCCCCCCC
     point to it.
 
-Then git will attempt to merge the changes in. Knowing that
-the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, so it takes a diff between
+Then Git will attempt to merge the changes in. Knowing that
+the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, it takes a diff between
 ``AAAAAAAA`` and ``CCCCCCCC`` and tries to apply it to ``BBBBBBBB``.
 
 If this is successful, then you'll get a new version with a merge commit::
@@ -648,12 +648,12 @@ remove it from your configuration and delete the remote tracking branch.
 This is different from CouchDB, which doesn't keep any peer state in the
 database.
 
-Another difference between CouchDB and git is that it maintains all history
+Another difference between CouchDB and Git is that it maintains all history
 back to time
-zero - git compaction keeps diffs between all those versions in order to reduce
+zero - Git compaction keeps diffs between all those versions in order to reduce
 size, but CouchDB discards them. If you are constantly updating a document,
-the size of a git repo would grow forever. It is possible (with some effort)
-to use "history rewriting" to make git forget commits earlier than a particular
+the size of a Git repo would grow forever. It is possible (with some effort)
+to use "history rewriting" to make Git forget commits earlier than a particular
 one.
 
 .. _replication/conflicts/git:
