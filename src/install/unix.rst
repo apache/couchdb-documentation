@@ -23,9 +23,9 @@ release are the canonical sources of installation information. However, many
 systems have gotchas that you need to be aware of. In addition, dependencies
 frequently change as distributions update their archives.
 
-**Hint**: It worth considering to use LXC-, Docker-conteiners, AMI images or
-similar solution to configure CouchDB once and use this configuration on all
-nodes in a cluster.
+**Hint**: It is worth considering using packaging tools such as LXC, Docker
+containers, AMI images, or similar solutions to configure CouchDB once, and
+to use this configuration consistently across all nodes in a cluster.
 
 .. _install/unix/dependencies:
 
@@ -233,12 +233,15 @@ CouchDB no longer ships with any daemonization scripts.
 
 The couchdb team recommends `runit <http://smarden.org/runit/>`_ to
 run CouchDB persistently and reliably. Configuration of runit is
-straightforward; if you have questions, reach out to the CouchDB
-user mailing list or IRC-channel #couchdb in FreeNode network.
+straightforward; if you have questions, contact the CouchDB
+`user mailing list <http://mail-archives.apache.org/mod_mbox/couchdb-user/>`_
+or `IRC-channel #couchdb <http://webchat.freenode.net/?channels=#couchdb>`_
+in FreeNode network.
 
-Let's consider configuring of runit on Ubuntu 16.04. The following
-steps should be considered only as an example. Some details can vary
-on different systems and versions of Ubuntu Linux.
+Let's consider configuring runit on Ubuntu 16.04. The following
+steps should be considered only as an example. Details will vary
+by operating system and distribution. Check your system's package
+management tools for specifics.
 
 Install ruinit::
 
@@ -249,7 +252,7 @@ Create a directory where logs will be written::
     sudo mkdir /var/log/couchdb
     sudo chown couchdb:couchdb /var/log/couchdb
    
-Create directories that will contain runit counfiguration for CouchDB::
+Create directories that will contain runit configuration for CouchDB::
 
     sudo mkdir /etc/sv/couchdb
     sudo mkdir /etc/sv/couchdb/log
@@ -259,12 +262,19 @@ Create /etc/sv/couchdb/log/run script::
     #!/bin/sh
     exec svlogd -tt /var/log/couchdb
 
+Basically it determines where and how exactly logs will be written.
+See ``man svlogd`` for more details.
+
 Create /etc/sv/couchdb/run::
 
     #!/bin/sh
     export HOME=/home/couchdb
     exec 2>&1
     exec chpst -u couchdb /home/couchdb/bin/couchdb
+
+This script determines how exactly CouchDB will be launched.
+Feel free to add any additional arguments and environment
+variables here if necessary.
 
 Make scripts executable::
 
