@@ -23,10 +23,6 @@ release are the canonical sources of installation information. However, many
 systems have gotchas that you need to be aware of. In addition, dependencies
 frequently change as distributions update their archives.
 
-**Hint**: It is worth considering using packaging tools such as LXC, Docker
-containers, AMI images, or similar solutions to configure CouchDB once, and
-to use this configuration consistently across all nodes in a cluster.
-
 .. _install/unix/dependencies:
 
 Dependencies
@@ -231,10 +227,16 @@ Running as a Daemon
 
 CouchDB no longer ships with any daemonization scripts.
 
-The couchdb team recommends `runit <http://smarden.org/runit/>`_ to
-run CouchDB persistently and reliably. Configuration of runit is
-straightforward; if you have questions, contact the CouchDB
-`user mailing list <http://mail-archives.apache.org/mod_mbox/couchdb-user/>`_
+The CouchDB team recommends `runit <http://smarden.org/runit/>`_ to
+run CouchDB persistently and reliably. According to official site:
+
+    *runit* is a cross-platform Unix init scheme with service supervision,
+    a replacement for sysvinit, and other init schemes. It runs on
+    GNU/Linux, *BSD, MacOSX, Solaris, and can easily be adapted to 
+    other Unix operating systems.
+
+Configuration of runit is straightforward; if you have questions, contact
+the CouchDB `user mailing list <http://mail-archives.apache.org/mod_mbox/couchdb-user/>`_
 or `IRC-channel #couchdb <http://webchat.freenode.net/?channels=#couchdb>`_
 in FreeNode network.
 
@@ -243,7 +245,7 @@ steps should be considered only as an example. Details will vary
 by operating system and distribution. Check your system's package
 management tools for specifics.
 
-Install ruinit::
+Install runit::
 
     sudo apt-get install runit
    
@@ -285,13 +287,14 @@ Then run::
 
     sudo ln -s /etc/sv/couchdb/ /etc/service/couchdb
    
-In a few seconds runit will discover a new symlink and start CouchDB. You can control CouchDB service like this::
+In a few seconds runit will discover a new symlink and start CouchDB.
+You can control CouchDB service like this::
 
     sudo sv status couchdb
     sudo sv stop couchdb
     sudo sv start couchdb
 
-Naturally now CouchDB will start autamatically shortly after system starts.
+Naturally now CouchDB will start automatically shortly after system starts.
 
 You can also configure systemd, launchd or SysV-init daemons to launch
 CouchDB and keep it running using standard configuration files. Consult
