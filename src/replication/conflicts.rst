@@ -363,7 +363,7 @@ but this currently isn't possible.
 
 Suggested algorithm to fetch a document with conflict resolution:
 
-#. Get document via ``GET docid?conflicts=true`` request;
+#. Get document via ``GET docid?conflicts=true`` request
 #. For each member in the ``_conflicts`` array call ``GET docid?rev=xxx``.
    If any errors occur at this stage, restart from step 1.
    (There could be a race where someone else has already resolved this conflict
@@ -456,8 +456,8 @@ automatically multi-master capable.
 You can see that it's straightforward enough when you know what you're doing.
 It's just that CouchDB doesn't currently provide a convenient HTTP API for
 "fetch all conflicting revisions", nor "PUT to supersede these N revisions", so
-you need to wrap these yourself. I also don't know of any client-side libraries
-which provide support for this.
+you need to wrap these yourself. At the time of writing, there are no known
+client-side libraries which provide support for this.
 
 Merging and revision history
 ============================
@@ -532,10 +532,10 @@ It's up to her to copy across one of the versions manually (under a different
 filename), merge the two, and then finally push the merged version to the other
 side.
 
-Note also that the original file (version v1) has been lost by this point.
-So it's not going to be known from inspection alone which of v2a and v2b has the
-most up-to-date E-mail address for Bob, and which has the most up-to-date mobile
-number. Alice has to remember which she entered last.
+Note also that the original file (version v1) has been lost at this point.
+So it's not going to be known from inspection alone whether v2a or v2b has the
+most up-to-date E-mail address for Bob, or which version has the most up-to-date
+mobile number. Alice has to remember which one she entered last.
 
 Git
 ---
@@ -545,20 +545,20 @@ with files. However, git considers the state of a whole set of files as a single
 object, the "tree". Whenever you save an update, you create a "commit" which
 points to both the updated tree and the previous commit(s), which in turn point
 to the previous tree(s). You therefore have a full history of all the states of
-the files. This forms a branch, and a pointer is kept to the tip of the branch,
-from which you can work backwards to any previous state. The "pointer" is
-actually an SHA1 hash of the tip commit.
+the files. This history forms a branch, and a pointer is kept to the tip of the
+branch, from which you can work backwards to any previous state. The "pointer"
+is an SHA1 hash of the tip commit.
 
 .. _Git: http://git-scm.com/
 
 If you are replicating with one or more peers, a separate branch is made for
-each of the peers. For example, you might have::
+each of those peers. For example, you might have::
 
     master               -- my local branch
     remotes/foo/master   -- branch on peer 'foo'
     remotes/bar/master   -- branch on peer 'bar'
 
-In the normal way of working, replication is a "pull", importing changes from
+In the regular workflow, replication is a "pull", importing changes from
 a remote peer into the local repository. A "pull" does two things: first "fetch"
 the state of the peer into the remote tracking branch for that peer; and then
 attempt to "merge" those changes into the local branch.
@@ -579,7 +579,7 @@ repo::
     master: BBBBBBBB                        master: CCCCCCCC
     remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
 
-Now on the desktop she does ``git pull laptop``. Firstly, the remote objects
+Now on the desktop she does ``git pull laptop``. First, the remote objects
 are copied across into the local repo and the remote tracking branch is
 updated::
 
@@ -588,10 +588,10 @@ updated::
     remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
 
 .. note::
-    repo still contains AAAAAAAA because commits BBBBBBBB and CCCCCCCC point to
-    it
+    The repo still contains AAAAAAAA because commits BBBBBBBB and CCCCCCCC
+    point to it.
 
-Then git will attempt to merge the changes in. It can do this because it knows
+Then git will attempt to merge the changes in. Knowing that
 the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, so it takes a diff between
 ``AAAAAAAA`` and ``CCCCCCCC`` and tries to apply it to ``BBBBBBBB``.
 
@@ -608,8 +608,8 @@ process occurs. The remote tracking branch is updated::
     master: DDDDDDDD                        master: CCCCCCCC
     remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
 
-Then a merge takes place. This is a special-case: ``CCCCCCCC`` one of the parent
-commits of ``DDDDDDDD``, so the laptop can `fast forward` update from
+Then a merge takes place. This is a special case: ``CCCCCCCC`` is one of the
+parent commits of ``DDDDDDDD``, so the laptop can `fast forward` update from
 ``CCCCCCCC`` to ``DDDDDDDD`` directly without having to do any complex merging.
 This leaves the final state as::
 
@@ -620,15 +620,15 @@ This leaves the final state as::
 Now this is all and good, but you may wonder how this is relevant when thinking
 about CouchDB.
 
-Firstly, note what happens in the case when the merge algorithm fails.
+First, note what happens in the case when the merge algorithm fails.
 The changes are still propagated from the remote repo into the local one, and
-are available in the remote tracking branch; so unlike Unison, you know the data
-is protected. It's just that the local working copy may fail to update, or may
-diverge from the remote version. It's up to you to create and commit the
+are available in the remote tracking branch. So, unlike Unison, you know the
+data is protected. It's just that the local working copy may fail to update, or
+may diverge from the remote version. It's up to you to create and commit the
 combined version yourself, but you are guaranteed to have all the history you
 might need to do this.
 
-Note that whilst it's possible to build new merge algorithms into Git,
+Note that while it is possible to build new merge algorithms into Git,
 the standard ones are focused on line-based changes to source code. They don't
 work well for XML or JSON if it's presented without any line breaks.
 
@@ -645,9 +645,11 @@ some of which may be behind you, and some of which may be ahead of you
 Note that each peer is explicitly tracked, and therefore has to be explicitly
 created. If a peer becomes stale or is no longer needed, it's up to you to
 remove it from your configuration and delete the remote tracking branch.
-This is different to CouchDB, which doesn't keep any peer state in the database.
+This is different from CouchDB, which doesn't keep any peer state in the
+database.
 
-Another difference with git is that it maintains all history back to time
+Another difference between CouchDB and git is that it maintains all history
+back to time
 zero - git compaction keeps diffs between all those versions in order to reduce
 size, but CouchDB discards them. If you are constantly updating a document,
 the size of a git repo would grow forever. It is possible (with some effort)

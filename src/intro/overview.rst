@@ -177,7 +177,7 @@ When a user opens a view and its index is automatically updated, all the views
 in the same design document are indexed as a single group.
 
 The view builder uses the database sequence ID to determine if the view group
-is fully up-to-date with the database. If not, the view engine examines the
+is fully up-to-date with the database. If not, the view engine examines
 all database documents (in packed sequential order) changed since the last
 refresh. Documents are read in the order they occur in the disk file,
 reducing the frequency and cost of disk head seeks.
