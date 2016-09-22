@@ -23,6 +23,10 @@ release are the canonical sources of installation information. However, many
 systems have gotchas that you need to be aware of. In addition, dependencies
 frequently change as distributions update their archives.
 
+**Hint**: It worth considering to use LXC-, Docker-conteiners, AMI images or
+similar solution to configure CouchDB once and use this configuration on all
+nodes in a cluster.
+
 .. _install/unix/dependencies:
 
 Dependencies
