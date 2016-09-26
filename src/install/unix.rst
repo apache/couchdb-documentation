@@ -134,6 +134,10 @@ To build CouchDB you should run::
 
 Try ``gmake`` if ``make`` is giving you any problems.
 
+If include paths or other compiler options must be specified, they can be passed to rebar, which compiles Couch, with the ERL_CFLAGS environment variable. Likewise, options may be passed to the linker with the ERL_LDFLAGS environment variable.::
+
+    make release ERL_CFLAGS="-I/usr/local/include/js -I/usr/local/lib/erlang/usr/include"
+
 If everything was successful you should see the following message::
 
     ... done
@@ -299,3 +303,4 @@ Naturally now CouchDB will start automatically shortly after system starts.
 You can also configure systemd, launchd or SysV-init daemons to launch
 CouchDB and keep it running using standard configuration files. Consult
 your system documentation for more information.
+
