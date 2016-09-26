@@ -234,7 +234,7 @@ run CouchDB persistently and reliably. According to official site:
 
     *runit* is a cross-platform Unix init scheme with service supervision,
     a replacement for sysvinit, and other init schemes. It runs on
-    GNU/Linux, *BSD, MacOSX, Solaris, and can easily be adapted to
+    GNU/Linux, \*BSD, MacOSX, Solaris, and can easily be adapted to
     other Unix operating systems.
 
 Configuration of runit is straightforward; if you have questions, contact
