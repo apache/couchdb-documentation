@@ -1283,7 +1283,7 @@ Target one by one.
     solutions MAY require a different API implementation for non-CouchDB
     Peers.
 
-.. _PouchDB: https://github.com/daleharvey/pouchdb/blob/master/src/pouch.replicate.js
+.. _PouchDB: https://github.com/pouchdb/pouchdb/blob/master/packages/node_modules/pouchdb-replication/src/replicate.js
 
 Upload Batch of Changed Documents
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
