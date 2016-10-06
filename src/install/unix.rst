@@ -159,7 +159,6 @@ You should create a special ``couchdb`` user for CouchDB.
 On many Unix-like systems you can run::
 
     adduser --system \
-            --no-create-home \
             --shell /bin/bash \
             --group --gecos \
             "CouchDB Administrator" couchdb
@@ -170,19 +169,18 @@ site to find the documentation appropriate for your system. As of recent
 versions of OS X, this functionality is also included in Server.app,
 available through the App Store only as part of OS X Server.
 
-You must make sure that:
-
-* The user has a working POSIX shell
-* The user's home directory is wherever you have copied the release.
-  As a recommendation, copy the ``rel/couchdb`` directory into
-  ``/home/couchdb`` or ``/Users/couchdb``.
+You must make sure that the user has a working POSIX shell and a writable
+home directory.
 
 You can test this by:
 
 * Trying to log in as the ``couchdb`` user
 * Running ``pwd`` and checking the present working directory
 
-Copy the built couchdb release to the new user's home directory::
+As a recommendation, copy the ``rel/couchdb`` directory into
+``/home/couchdb`` or ``/Users/couchdb``.
+
+Ex: copy the built couchdb release to the new user's home directory::
 
     cp -R /path/to/couchdb/rel/couchdb /home/couchdb
 
