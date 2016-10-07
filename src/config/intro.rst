@@ -40,7 +40,10 @@ The ``LOCALCONFDIR`` points to the directory that contains configuration files
 (``/usr/local/etc/couchdb`` by default). This variable may vary from the
 target operation system and may be changed during building from the source
 code. For binary distributions, it mostly points to the installation path
-(e.g. ``C:\Program Files\CouchDB\etc\couchdb`` for Windows).
+(e.g. ``C:\Program Files\CouchDB\etc\couchdb`` for Windows). If you are using
+the macOS packaged version, the ``default.ini`` is located in ``Applications/
+Apache\ CouchDB.app/Contents/Resources/couchdbx-core/etc`` and ``local.ini``
+is in ``/Users/youruser/Library/Application\ Support/CouchDB2/etc/couchdb``.
 
 .. highlight:: shell
 
