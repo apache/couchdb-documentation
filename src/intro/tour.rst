@@ -40,13 +40,12 @@ The reply should look something like:
 .. code-block:: javascript
 
     {
+    
         "couchdb": "Welcome",
-        "uuid": "85fb71bf700c17267fef77535820e371",
-        "version": "1.4.0",
         "vendor": {
-            "version": "1.4.0",
             "name": "The Apache Software Foundation"
-        }
+        },
+        "version": "2.0.0"
     }
 
 Not all that spectacular. CouchDB is saying "hello" with the running version
