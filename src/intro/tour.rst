@@ -40,7 +40,6 @@ The reply should look something like:
 .. code-block:: javascript
 
     {
-    
         "couchdb": "Welcome",
         "vendor": {
             "name": "The Apache Software Foundation"
