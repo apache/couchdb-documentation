@@ -67,8 +67,14 @@
      <api/ddoc/view/sorting>`). Setting this to ``false`` offers a performance
      boost. The `total_rows` and `offset` fields are not available when this
      is set to ``false``. Default is ``true``
+    :query boolean stable: Whether or not the view results should be returned
+     from a stable set of shards. Default is ``false``. *Optional*
     :query string stale: Allow the results from a stale view to be used.
-      Supported values: ``ok`` and ``update_after``. *Optional*
+      Supported values: ``ok``, ``update_after`` and ``false``.
+      ``ok`` is equivalent to ``stable=true&update=false``.
+      ``update_after`` is equivalent to ``stable=true&update=lazy``.
+      ``false`` is equivalent to ``stable=false&update=true``.
+      *Optional*
     :query json startkey: Return records starting with the specified key.
       *Optional*
     :query json start_key: Alias for `startkey` param
@@ -76,9 +82,13 @@
       document ID. Requires ``startkey`` to be specified for this to have any
       effect. *Optional*
     :query string start_key_doc_id: Alias for `startkey_docid` param
+    :query string update: Whether or not the view in question should be updated
+     prior to responding to the user.
+     Supported values: ``true``, ``false``, ``lazy``.
+     Default is ``true``. *Optional*
     :query boolean update_seq: Response includes an ``update_seq`` value
       indicating which sequence id of the database the view reflects.
-      Default is ``false``
+      Default is ``false``.
 
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
@@ -142,6 +152,7 @@
 .. versionchanged:: 1.6.0 added ``attachments`` and ``att_encoding_info``
     parameters
 .. versionchanged:: 2.0.0 added ``sorted`` parameter
+.. versionchanged:: 2.1.0 added ``stable`` and ``update`` parameters
 
 .. warning::
     Using the ``attachments`` parameter to include attachments in view results
