@@ -303,4 +303,3 @@ Naturally now CouchDB will start automatically shortly after system starts.
 You can also configure systemd, launchd or SysV-init daemons to launch
 CouchDB and keep it running using standard configuration files. Consult
 your system documentation for more information.
-
