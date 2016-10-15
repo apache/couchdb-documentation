@@ -56,12 +56,10 @@ CouchDB replies, all excited to get going:
 
     {
         "couchdb": "Welcome",
-        "uuid": "85fb71bf700c17267fef77535820e371",
+        "version": "2.0.0",
         "vendor": {
-            "name": "The Apache Software Foundation",
-            "version": "1.5.0"
-        },
-        "version": "1.5.0"
+            "name": "The Apache Software Foundation"
+        }
     }
 
 You get back a JSON string, that, if parsed into a native object or data
