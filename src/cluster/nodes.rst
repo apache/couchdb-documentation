@@ -21,7 +21,7 @@ Node Management
 Adding a node
 =============
 
-Go to ``http://server1:45984/_membership`` to see the name of the node and all
+Go to ``http://server1:5984/_membership`` to see the name of the node and all
 the nodes it knows about and are connected too.
 
 .. code-block:: text
