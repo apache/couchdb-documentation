@@ -242,39 +242,43 @@ List of Active Tasks
 Replication Settings
 ====================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| source                         | Source database name or URL                 |
-+--------------------------------+---------------------------------------------+
-| target                         | Target database name or URL                 |
-+--------------------------------+---------------------------------------------+
-| create_target (optional)       | Creates the target database                 |
-+--------------------------------+---------------------------------------------+
-| continuous (optional)          | Configure the replication to be continuous  |
-+--------------------------------+---------------------------------------------+
-| cancel (optional)              | Cancels the replication                     |
-+--------------------------------+---------------------------------------------+
-| doc_ids (optional)             | Array of document IDs to be synchronized    |
-+--------------------------------+---------------------------------------------+
-| proxy (optional)               | Address of a proxy server through which     |
-|                                | replication should occur                    |
-+--------------------------------+---------------------------------------------+
-| since_seq (optional)           | Sequence from which the replication should  |
-|                                | start                                       |
-+--------------------------------+---------------------------------------------+
-| filter (optional)              | name of the filter function in the form of  |
-|                                | ``ddoc/myfilter``                           |
-+--------------------------------+---------------------------------------------+
-| query_params (optional)        | Query parameter that are passed to the      |
-|                                | filter function; the value should be a      |
-|                                | document containing parameters as members   |
-+--------------------------------+---------------------------------------------+
-| use_checkpoints (optional)     | Whether to use replication checkpoints      |
-|                                | or not                                      |
-+--------------------------------+---------------------------------------------+
-| checkpoint_interval (optional) | Specifies the checkpoint interval in ms.    |
-+--------------------------------+---------------------------------------------+
++--------------------------------+---------------------------------------------------+
+| Field                          | Description                                       |
++================================+===================================================+
+| source                         | Source database name or URL                       |
++--------------------------------+---------------------------------------------------+
+| target                         | Target database name or URL                       |
++--------------------------------+---------------------------------------------------+
+| cancel (optional)              | Cancels the replication                           |
++--------------------------------+---------------------------------------------------+
+| checkpoint_interval (optional) | Specifies the checkpoint interval in ms.          |
++--------------------------------+---------------------------------------------------+
+| continuous (optional)          | Configure the replication to be continuous        |
++--------------------------------+---------------------------------------------------+
+| create_target (optional)       | Creates the target database                       |
++--------------------------------+---------------------------------------------------+
+| doc_ids (optional)             | Array of document IDs to be synchronized          |
++--------------------------------+---------------------------------------------------+
+| filter (optional)              | name of the filter function in the form of        |
+|                                | ``ddoc/myfilter``                                 |
++--------------------------------+---------------------------------------------------+
+| proxy (optional)               | Address of a proxy server through which           |
+|                                | replication should occur                          |
++--------------------------------+---------------------------------------------------+
+| query_params (optional)        | Query parameter that are passed to the            |
+|                                | filter function; the value should be a            |
+|                                | document containing parameters as members         |
++--------------------------------+---------------------------------------------------+
+| selector (optional)            | Select the documents included in the replication. |
+|                                | This option provides performance benefits         |
+|                                | compared with using the ``filter`` option.        |
++--------------------------------+---------------------------------------------------+
+| since_seq (optional)           | Sequence from which the replication should        |
+|                                | start                                             |
++--------------------------------+---------------------------------------------------+
+| use_checkpoints (optional)     | Whether to use replication checkpoints            |
+|                                | or not                                            |
++--------------------------------+---------------------------------------------------+
 
 .. _replication-status:
 

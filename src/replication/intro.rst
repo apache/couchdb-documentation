@@ -73,13 +73,27 @@ B already exists in A and will wait for further changes.
 Controlling which Documents to Replicate
 ========================================
 
-There are two ways for controlling which documents are replicated, and which
-are skipped. *Local* documents are never replicated (see :ref:`api/local`).
+There are three options for controlling which documents are replicated,
+and which are skipped:
 
-Additionally, :ref:`filterfun` can be used in a replication (see
-:ref:`replication-settings`). The replication task will then evaluate
-the filter function for each document in the changes feed. The document will
-only be replicated if the filter returns `true`.
+1. Defining documents as being local.
+2. Using :ref:`selectorobj`.
+3. Using :ref:`filterfun`.
+
+Local documents are never replicated (see :ref:`api/local`).
+
+:ref:`selectorobj` can be included in a replication document (see
+:ref:`replication-settings`). A selector object contains a query expression
+that is used to test whether a document should be replicated.
+
+:ref:`filterfun` can be used in a replication (see
+:ref:`replication-settings`). The replication task evaluates
+the filter function for each document in the changes feed. The document is
+only replicated if the filter returns `true`.
+
+.. note::
+    Using a selector provides performance benefits when compared with using a
+    :ref:`filterfun`. You should use :ref:`selectorobj` where possible.
 
 Migrating Data to Clients
 =========================
