@@ -249,7 +249,7 @@ The way to accomplish this is to first delete the old version and then insert
 the new one.
 
 Additional Replicator Databases
-================================
+===============================
 
 Imagine replicator database (``_replicator``) has these two
 documents which represent pull replications from servers A and B:
@@ -432,5 +432,3 @@ The syntax for a selector is the same as the
 Using a selector is significantly more efficient than using a JavaScript
 filter function, and is the recommended option if filtering on document
 attributes only.
-
-
