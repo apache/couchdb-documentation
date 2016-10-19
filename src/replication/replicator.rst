@@ -249,7 +249,7 @@ The way to accomplish this is to first delete the old version and then insert
 the new one.
 
 Additional Replicator Databases
-================================
+===============================
 
 Imagine replicator database (``_replicator``) has these two
 documents which represent pull replications from servers A and B:
@@ -407,3 +407,28 @@ Example delegated replication document:
 As stated before, the ``user_ctx`` property is optional for admins, while
 being mandatory for regular (non-admin) users. When the roles property
 of ``user_ctx`` is missing, it defaults to the empty list ``[]``.
+
+.. _selectorobj:
+
+Selector Objects
+================
+
+Including a Selector Object in the replication document enables you to
+use a query expression to determine if a document should be included in
+the replication.
+
+The selector specifies fields in the document, and provides an expression
+to evaluate with the field content or other data. If the expression resolves
+to ``true``, the document is replicated.
+
+The selector object must:
+
+-  Be structured as valid JSON.
+-  Contain a valid query expression.
+
+The syntax for a selector is the same as the
+:ref:`selectorsyntax <find/selectors>` used for :ref:`_find <api/db/_find>`.
+
+Using a selector is significantly more efficient than using a JavaScript
+filter function, and is the recommended option if filtering on document
+attributes only.

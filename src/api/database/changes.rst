@@ -477,7 +477,7 @@ This filter accepts only changes for documents which match a specified
 selector, defined using the same :ref:`selector
 syntax <find/selectors>` used for :ref:`_find <api/db/_find>`.
 
-This is more significantly more efficient than using a JavaScript filter
+This is significantly more efficient than using a JavaScript filter
 function and is the recommended option if filtering on document attributes only.
 
 Note that, unlike JavaScript filters, selectors do not have access to the

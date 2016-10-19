@@ -20,222 +20,222 @@ that you can supply to CouchDB, or get in return to requests.
 All Database Documents
 ======================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| total_rows                     | Number of documents in the database/view    |
-+--------------------------------+---------------------------------------------+
-| offset                         | Offset where the document list started      |
-+--------------------------------+---------------------------------------------+
-| update_seq (optional)          | Current update sequence for the database    |
-+--------------------------------+---------------------------------------------+
-| rows [array]                   | Array of document object                    |
-+--------------------------------+---------------------------------------------+
++-----------------------+------------------------------------------+
+| Field                 | Description                              |
++=======================+==========================================+
+| total_rows            | Number of documents in the database/view |
++-----------------------+------------------------------------------+
+| offset                | Offset where the document list started   |
++-----------------------+------------------------------------------+
+| update_seq (optional) | Current update sequence for the database |
++-----------------------+------------------------------------------+
+| rows [array]          | Array of document object                 |
++-----------------------+------------------------------------------+
 
 Bulk Document Response
 ======================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| docs [array]                   | Bulk Docs Returned Documents                |
-+--------------------------------+---------------------------------------------+
-|         id                     | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-|         error                  | Error type                                  |
-+--------------------------------+---------------------------------------------+
-|         reason                 | Error string with extended reason           |
-+--------------------------------+---------------------------------------------+
++--------------+-----------------------------------+
+| Field        | Description                       |
++==============+===================================+
+| docs [array] | Bulk Docs Returned Documents      |
++--------------+-----------------------------------+
+| id           | Document ID                       |
++--------------+-----------------------------------+
+| error        | Error type                        |
++--------------+-----------------------------------+
+| reason       | Error string with extended reason |
++--------------+-----------------------------------+
 
 Bulk Documents
 ==============
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| docs [array]                   | Bulk Documents Document                     |
-+--------------------------------+---------------------------------------------+
-|         _id (optional)         | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-|         _rev (optional)        | Revision ID (when updating an existing      |
-|                                | document)                                   |
-+--------------------------------+---------------------------------------------+
-|         _deleted (optional)    | Whether the document should be deleted      |
-+--------------------------------+---------------------------------------------+
++---------------------+----------------------------------------+
+| Field               | Description                            |
++=====================+========================================+
+| docs [array]        | Bulk Documents Document                |
++---------------------+----------------------------------------+
+| _id (optional)      | Document ID                            |
++---------------------+----------------------------------------+
+| _rev (optional)     | Revision ID (when updating an existing |
+|                     | document)                              |
++---------------------+----------------------------------------+
+| _deleted (optional) | Whether the document should be deleted |
++---------------------+----------------------------------------+
 
 Changes information for a database
 ==================================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| last_seq                       | Last update sequence                        |
-+--------------------------------+---------------------------------------------+
-| pending                        | Count of remaining items in the feed        |
-+--------------------------------+---------------------------------------------+
-| results [array]                | Changes made to a database                  |
-+--------------------------------+---------------------------------------------+
-|         seq                    | Update sequence                             |
-+--------------------------------+---------------------------------------------+
-|         id                     | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-|         changes [array]        | List of changes, field-by-field, for this   |
-|                                | document                                    |
-+--------------------------------+---------------------------------------------+
++-----------------+-------------------------------------------+
+| Field           | Description                               |
++=================+===========================================+
+| last_seq        | Last update sequence                      |
++-----------------+-------------------------------------------+
+| pending         | Count of remaining items in the feed      |
++-----------------+-------------------------------------------+
+| results [array] | Changes made to a database                |
++-----------------+-------------------------------------------+
+| seq             | Update sequence                           |
++-----------------+-------------------------------------------+
+| id              | Document ID                               |
++-----------------+-------------------------------------------+
+| changes [array] | List of changes, field-by-field, for this |
+|                 | document                                  |
++-----------------+-------------------------------------------+
 
 CouchDB Document
 ================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| _id (optional)                 | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-| _rev (optional)                | Revision ID (when updating an existing      |
-|                                | document)                                   |
-+--------------------------------+---------------------------------------------+
++-----------------+----------------------------------------+
+| Field           | Description                            |
++=================+========================================+
+| _id (optional)  | Document ID                            |
++-----------------+----------------------------------------+
+| _rev (optional) | Revision ID (when updating an existing |
+|                 | document)                              |
++-----------------+----------------------------------------+
 
 CouchDB Error Status
 ====================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| id                             | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-| error                          | Error type                                  |
-+--------------------------------+---------------------------------------------+
-| reason                         | Error string with extended reason           |
-+--------------------------------+---------------------------------------------+
++--------+-----------------------------------+
+| Field  | Description                       |
++========+===================================+
+| id     | Document ID                       |
++--------+-----------------------------------+
+| error  | Error type                        |
++--------+-----------------------------------+
+| reason | Error string with extended reason |
++--------+-----------------------------------+
 
 .. _dbinfo_object:
 
 CouchDB database information object
 ===================================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| db_name                        | The name of the database.                   |
-+--------------------------------+---------------------------------------------+
-| committed_update_seq           | The number of committed updates.            |
-+--------------------------------+---------------------------------------------+
-| doc_count                      | The number of documents in the database.    |
-+--------------------------------+---------------------------------------------+
-| doc_del_count                  | The number of deleted documents.            |
-+--------------------------------+---------------------------------------------+
-| compact_running                | Set to true if the database compaction      |
-|                                | routine is operating on this database.      |
-+--------------------------------+---------------------------------------------+
-| disk_format_version            | The version of the physical format used for |
-|                                | the data when it is stored on hard disk.    |
-+--------------------------------+---------------------------------------------+
-| disk_size                      | Size in bytes of the data as stored on disk.|
-|                                | View indexes are not included in the        |
-|                                | calculation.                                |
-+--------------------------------+---------------------------------------------+
-| instance_start_time            | Timestamp indicating when the database was  |
-|                                | opened, expressed in microseconds since the |
-|                                | epoch.                                      |
-+--------------------------------+---------------------------------------------+
-| purge_seq                      | The number of purge operations on the       |
-|                                | database.                                   |
-+--------------------------------+---------------------------------------------+
-| update_seq                     | The current number of updates made in the   |
-|                                | database.                                   |
-+--------------------------------+---------------------------------------------+
++----------------------+----------------------------------------------+
+| Field                | Description                                  |
++======================+==============================================+
+| db_name              | The name of the database.                    |
++----------------------+----------------------------------------------+
+| committed_update_seq | The number of committed updates.             |
++----------------------+----------------------------------------------+
+| doc_count            | The number of documents in the database.     |
++----------------------+----------------------------------------------+
+| doc_del_count        | The number of deleted documents.             |
++----------------------+----------------------------------------------+
+| compact_running      | Set to true if the database compaction       |
+|                      | routine is operating on this database.       |
++----------------------+----------------------------------------------+
+| disk_format_version  | The version of the physical format used for  |
+|                      | the data when it is stored on hard disk.     |
++----------------------+----------------------------------------------+
+| disk_size            | Size in bytes of the data as stored on disk. |
+|                      | View indexes are not included in the         |
+|                      | calculation.                                 |
++----------------------+----------------------------------------------+
+| instance_start_time  | Timestamp indicating when the database was   |
+|                      | opened, expressed in microseconds since the  |
+|                      | epoch.                                       |
++----------------------+----------------------------------------------+
+| purge_seq            | The number of purge operations on the        |
+|                      | database.                                    |
++----------------------+----------------------------------------------+
+| update_seq           | The current number of updates made in the    |
+|                      | database.                                    |
++----------------------+----------------------------------------------+
 
 Design Document
 ===============
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| _id                            | Design Document ID                          |
-+--------------------------------+---------------------------------------------+
-| _rev                           | Design Document Revision                    |
-+--------------------------------+---------------------------------------------+
-| views                          | View                                        |
-+--------------------------------+---------------------------------------------+
-|     viewname                   | View Definition                             |
-+--------------------------------+---------------------------------------------+
-|         map                    | Map Function for View                       |
-+--------------------------------+---------------------------------------------+
-|         reduce (optional)      | Reduce Function for View                    |
-+--------------------------------+---------------------------------------------+
++-------------------+--------------------------+
+| Field             | Description              |
++===================+==========================+
+| _id               | Design Document ID       |
++-------------------+--------------------------+
+| _rev              | Design Document Revision |
++-------------------+--------------------------+
+| views             | View                     |
++-------------------+--------------------------+
+| viewname          | View Definition          |
++-------------------+--------------------------+
+| map               | Map Function for View    |
++-------------------+--------------------------+
+| reduce (optional) | Reduce Function for View |
++-------------------+--------------------------+
 
 Design Document Information
 ===========================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| name                           | Name/ID of Design Document                  |
-+--------------------------------+---------------------------------------------+
-| view_index                     | View Index                                  |
-+--------------------------------+---------------------------------------------+
-|     compact_running            | Indicates whether a compaction routine is   |
-|                                | currently running on the view               |
-+--------------------------------+---------------------------------------------+
-|     disk_size                  | Size in bytes of the view as stored on disk |
-+--------------------------------+---------------------------------------------+
-|     language                   | Language for the defined views              |
-+--------------------------------+---------------------------------------------+
-|     purge_seq                  | The purge sequence that has been processed  |
-+--------------------------------+---------------------------------------------+
-|     signature                  | MD5 signature of the views for the design   |
-|                                | document                                    |
-+--------------------------------+---------------------------------------------+
-|     update_seq                 | The update sequence of the corresponding    |
-|                                | database that has been indexed              |
-+--------------------------------+---------------------------------------------+
-|     updater_running            | Indicates if the view is currently being    |
-|                                | updated                                     |
-+--------------------------------+---------------------------------------------+
-|     waiting_clients            | Number of clients waiting on views from this|
-|                                | design document                             |
-+--------------------------------+---------------------------------------------+
-|     waiting_commit             | Indicates if there are outstanding commits  |
-|                                | to the underlying database that need to     |
-|                                | processed                                   |
-+--------------------------------+---------------------------------------------+
++-----------------+----------------------------------------------+
+| Field           | Description                                  |
++=================+==============================================+
+| name            | Name/ID of Design Document                   |
++-----------------+----------------------------------------------+
+| view_index      | View Index                                   |
++-----------------+----------------------------------------------+
+| compact_running | Indicates whether a compaction routine is    |
+|                 | currently running on the view                |
++-----------------+----------------------------------------------+
+| disk_size       | Size in bytes of the view as stored on disk  |
++-----------------+----------------------------------------------+
+| language        | Language for the defined views               |
++-----------------+----------------------------------------------+
+| purge_seq       | The purge sequence that has been processed   |
++-----------------+----------------------------------------------+
+| signature       | MD5 signature of the views for the design    |
+|                 | document                                     |
++-----------------+----------------------------------------------+
+| update_seq      | The update sequence of the corresponding     |
+|                 | database that has been indexed               |
++-----------------+----------------------------------------------+
+| updater_running | Indicates if the view is currently being     |
+|                 | updated                                      |
++-----------------+----------------------------------------------+
+| waiting_clients | Number of clients waiting on views from this |
+|                 | design document                              |
++-----------------+----------------------------------------------+
+| waiting_commit  | Indicates if there are outstanding commits   |
+|                 | to the underlying database that need to      |
+|                 | processed                                    |
++-----------------+----------------------------------------------+
 
 Document with Attachments
 =========================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| _id (optional)                 | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-| _rev (optional)                | Revision ID (when updating an existing      |
-|                                | document)                                   |
-+--------------------------------+---------------------------------------------+
-| _attachments (optional)        | Document Attachment                         |
-+--------------------------------+---------------------------------------------+
-|     filename                   | Attachment information                      |
-+--------------------------------+---------------------------------------------+
-|         content_type           | MIME Content type string                    |
-+--------------------------------+---------------------------------------------+
-|         data                   | File attachment content, Base64 encoded     |
-+--------------------------------+---------------------------------------------+
++-------------------------+-----------------------------------------+
+| Field                   | Description                             |
++=========================+=========================================+
+| _id (optional)          | Document ID                             |
++-------------------------+-----------------------------------------+
+| _rev (optional)         | Revision ID (when updating an existing  |
+|                         | document)                               |
++-------------------------+-----------------------------------------+
+| _attachments (optional) | Document Attachment                     |
++-------------------------+-----------------------------------------+
+| filename                | Attachment information                  |
++-------------------------+-----------------------------------------+
+| content_type            | MIME Content type string                |
++-------------------------+-----------------------------------------+
+| data                    | File attachment content, Base64 encoded |
++-------------------------+-----------------------------------------+
 
 List of Active Tasks
 ====================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| tasks [array]                  | Active Tasks                                |
-+--------------------------------+---------------------------------------------+
-|     pid                        | Process ID                                  |
-+--------------------------------+---------------------------------------------+
-|     status                     | Task status message                         |
-+--------------------------------+---------------------------------------------+
-|     task                       | Task name                                   |
-+--------------------------------+---------------------------------------------+
-|     type                       | Operation Type                              |
-+--------------------------------+---------------------------------------------+
++---------------+---------------------+
+| Field         | Description         |
++===============+=====================+
+| tasks [array] | Active Tasks        |
++---------------+---------------------+
+| pid           | Process ID          |
++---------------+---------------------+
+| status        | Task status message |
++---------------+---------------------+
+| task          | Task name           |
++---------------+---------------------+
+| type          | Operation Type      |
++---------------+---------------------+
 
 .. _replication-settings:
 
@@ -245,35 +245,40 @@ Replication Settings
 +--------------------------------+---------------------------------------------+
 | Field                          | Description                                 |
 +================================+=============================================+
-| source                         | Source database name or URL                 |
+| source                         | Source database name or URL.                |
 +--------------------------------+---------------------------------------------+
-| target                         | Target database name or URL                 |
+| target                         | Target database name or URL.                |
 +--------------------------------+---------------------------------------------+
-| create_target (optional)       | Creates the target database                 |
+| cancel (optional)              | Cancels the replication.                    |
 +--------------------------------+---------------------------------------------+
-| continuous (optional)          | Configure the replication to be continuous  |
+| checkpoint_interval (optional) | Specifies the checkpoint interval in ms.    |
 +--------------------------------+---------------------------------------------+
-| cancel (optional)              | Cancels the replication                     |
+| continuous (optional)          | Configure the replication to be continuous. |
 +--------------------------------+---------------------------------------------+
-| doc_ids (optional)             | Array of document IDs to be synchronized    |
+| create_target (optional)       | Creates the target database.                |
 +--------------------------------+---------------------------------------------+
-| proxy (optional)               | Address of a proxy server through which     |
-|                                | replication should occur                    |
-+--------------------------------+---------------------------------------------+
-| since_seq (optional)           | Sequence from which the replication should  |
-|                                | start                                       |
+| doc_ids (optional)             | Array of document IDs to be synchronized.   |
 +--------------------------------+---------------------------------------------+
 | filter (optional)              | name of the filter function in the form of  |
-|                                | ``ddoc/myfilter``                           |
+|                                | ``ddoc/myfilter``.                          |
++--------------------------------+---------------------------------------------+
+| proxy (optional)               | Address of a proxy server through which     |
+|                                | replication should occur.                   |
 +--------------------------------+---------------------------------------------+
 | query_params (optional)        | Query parameter that are passed to the      |
 |                                | filter function; the value should be a      |
-|                                | document containing parameters as members   |
+|                                | document containing parameters as members.  |
++--------------------------------+---------------------------------------------+
+| selector (optional)            | Select the documents included in the        |
+|                                | replication. This option provides           |
+|                                | performance benefits compared with using    |
+|                                | the ``filter`` option.                      |
++--------------------------------+---------------------------------------------+
+| since_seq (optional)           | Sequence from which the replication should  |
+|                                | start.                                      |
 +--------------------------------+---------------------------------------------+
 | use_checkpoints (optional)     | Whether to use replication checkpoints      |
-|                                | or not                                      |
-+--------------------------------+---------------------------------------------+
-| checkpoint_interval (optional) | Specifies the checkpoint interval in ms.    |
+|                                | or not.                                     |
 +--------------------------------+---------------------------------------------+
 
 .. _replication-status:
@@ -281,94 +286,94 @@ Replication Settings
 Replication Status
 ==================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| ok                             | Replication status                          |
-+--------------------------------+---------------------------------------------+
-| session_id                     | Unique session ID                           |
-+--------------------------------+---------------------------------------------+
-| source_last_seq                | Last sequence number read from the source   |
-|                                | database                                    |
-+--------------------------------+---------------------------------------------+
-| history [array]                | Replication History                         |
-+--------------------------------+---------------------------------------------+
-|     session_id                 | Session ID for this replication operation   |
-+--------------------------------+---------------------------------------------+
-|     recorded_seq               | Last recorded sequence number               |
-+--------------------------------+---------------------------------------------+
-|     docs_read                  | Number of documents read                    |
-+--------------------------------+---------------------------------------------+
-|     docs_written               | Number of documents written to target       |
-+--------------------------------+---------------------------------------------+
-|     doc_write_failures         | Number of document write failures           |
-+--------------------------------+---------------------------------------------+
-|     start_time                 | Date/Time replication operation started     |
-+--------------------------------+---------------------------------------------+
-|     start_last_seq             | First sequence number in changes stream     |
-+--------------------------------+---------------------------------------------+
-|     end_time                   | Date/Time replication operation completed   |
-+--------------------------------+---------------------------------------------+
-|     end_last_seq               | Last sequence number in changes stream      |
-+--------------------------------+---------------------------------------------+
-|     missing_checked            | Number of missing documents checked         |
-+--------------------------------+---------------------------------------------+
-|     missing_found              | Number of missing documents found           |
-+--------------------------------+---------------------------------------------+
++--------------------+-------------------------------------------+
+| Field              | Description                               |
++====================+===========================================+
+| ok                 | Replication status                        |
++--------------------+-------------------------------------------+
+| session_id         | Unique session ID                         |
++--------------------+-------------------------------------------+
+| source_last_seq    | Last sequence number read from the source |
+|                    | database                                  |
++--------------------+-------------------------------------------+
+| history [array]    | Replication History                       |
++--------------------+-------------------------------------------+
+| session_id         | Session ID for this replication operation |
++--------------------+-------------------------------------------+
+| recorded_seq       | Last recorded sequence number             |
++--------------------+-------------------------------------------+
+| docs_read          | Number of documents read                  |
++--------------------+-------------------------------------------+
+| docs_written       | Number of documents written to target     |
++--------------------+-------------------------------------------+
+| doc_write_failures | Number of document write failures         |
++--------------------+-------------------------------------------+
+| start_time         | Date/Time replication operation started   |
++--------------------+-------------------------------------------+
+| start_last_seq     | First sequence number in changes stream   |
++--------------------+-------------------------------------------+
+| end_time           | Date/Time replication operation completed |
++--------------------+-------------------------------------------+
+| end_last_seq       | Last sequence number in changes stream    |
++--------------------+-------------------------------------------+
+| missing_checked    | Number of missing documents checked       |
++--------------------+-------------------------------------------+
+| missing_found      | Number of missing documents found         |
++--------------------+-------------------------------------------+
 
 .. _request_object:
 
 Request object
 ==============
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| body                           | Request body data as `string`.              |
-|                                | If the request method is `GET` this field   |
-|                                | contains the value ``"undefined"``. If the  |
-|                                | method is `DELETE` or `HEAD` the value is   |
-|                                | ``""`` (empty string).                      |
-+--------------------------------+---------------------------------------------+
-| cookie                         | Cookies `object`.                           |
-+--------------------------------+---------------------------------------------+
-| form                           | Form data `object`.                         |
-|                                | Contains the decoded body as key-value      |
-|                                | pairs if the `Content-Type` header was      |
-|                                | ``application/x-www-form-urlencoded``.      |
-+--------------------------------+---------------------------------------------+
-| headers                        | Request headers `object`.                   |
-+--------------------------------+---------------------------------------------+
-| id                             | Requested document id `string` if it was    |
-|                                | specified or ``null`` otherwise.            |
-+--------------------------------+---------------------------------------------+
-| info                           | :ref:`Database information <dbinfo_object>` |
-+--------------------------------+---------------------------------------------+
-| method                         | Request method as `string` or `array`.      |
-|                                | String value is a method as one of: `HEAD`, |
-|                                | `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`,  |
-|                                | and `TRACE`. Otherwise it will be           |
-|                                | represented as an array of char codes.      |
-+--------------------------------+---------------------------------------------+
-| path                           | List of requested path sections.            |
-+--------------------------------+---------------------------------------------+
-| peer                           | Request source IP address.                  |
-+--------------------------------+---------------------------------------------+
-| query                          | URL query parameters `object`.              |
-|                                | Note that multiple keys are not supported   |
-|                                | and the last key value suppresses others.   |
-+--------------------------------+---------------------------------------------+
-| requested_path                 | List of actual requested path section.      |
-+--------------------------------+---------------------------------------------+
-| raw_path                       | Raw requested path `string`.                |
-+--------------------------------+---------------------------------------------+
-| secObj                         | :ref:`security_object`.                     |
-+--------------------------------+---------------------------------------------+
-| userCtx                        | :ref:`userctx_object`.                      |
-+--------------------------------+---------------------------------------------+
-| uuid                           | Generated UUID by a specified algorithm in  |
-|                                | the config file.                            |
-+--------------------------------+---------------------------------------------+
++----------------+---------------------------------------------+
+| Field          | Description                                 |
++================+=============================================+
+| body           | Request body data as `string`.              |
+|                | If the request method is `GET` this field   |
+|                | contains the value ``"undefined"``. If the  |
+|                | method is `DELETE` or `HEAD` the value is   |
+|                | ``""`` (empty string).                      |
++----------------+---------------------------------------------+
+| cookie         | Cookies `object`.                           |
++----------------+---------------------------------------------+
+| form           | Form data `object`.                         |
+|                | Contains the decoded body as key-value      |
+|                | pairs if the `Content-Type` header was      |
+|                | ``application/x-www-form-urlencoded``.      |
++----------------+---------------------------------------------+
+| headers        | Request headers `object`.                   |
++----------------+---------------------------------------------+
+| id             | Requested document id `string` if it was    |
+|                | specified or ``null`` otherwise.            |
++----------------+---------------------------------------------+
+| info           | :ref:`Database information <dbinfo_object>` |
++----------------+---------------------------------------------+
+| method         | Request method as `string` or `array`.      |
+|                | String value is a method as one of: `HEAD`, |
+|                | `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`,  |
+|                | and `TRACE`. Otherwise it will be           |
+|                | represented as an array of char codes.      |
++----------------+---------------------------------------------+
+| path           | List of requested path sections.            |
++----------------+---------------------------------------------+
+| peer           | Request source IP address.                  |
++----------------+---------------------------------------------+
+| query          | URL query parameters `object`.              |
+|                | Note that multiple keys are not supported   |
+|                | and the last key value suppresses others.   |
++----------------+---------------------------------------------+
+| requested_path | List of actual requested path section.      |
++----------------+---------------------------------------------+
+| raw_path       | Raw requested path `string`.                |
++----------------+---------------------------------------------+
+| secObj         | :ref:`security_object`.                     |
++----------------+---------------------------------------------+
+| userCtx        | :ref:`userctx_object`.                      |
++----------------+---------------------------------------------+
+| uuid           | Generated UUID by a specified algorithm in  |
+|                | the config file.                            |
++----------------+---------------------------------------------+
 
 .. code-block:: javascript
 
@@ -453,71 +458,71 @@ Request object
 Request2 object
 ===============
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| body                           | Request body data as `string`.              |
-|                                | If the request method is `GET` this field   |
-|                                | contains the value ``"undefined"``. If the  |
-|                                | method is `DELETE` or `HEAD` the value is   |
-|                                | ``""`` (empty string).                      |
-+--------------------------------+---------------------------------------------+
-| cookie                         | Cookies `object`.                           |
-+--------------------------------+---------------------------------------------+
-| headers                        | Request headers `object`.                   |
-+--------------------------------+---------------------------------------------+
-| method                         | Request method as `string` or `array`.      |
-|                                | String value is a method as one of: `HEAD`, |
-|                                | `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`,  |
-|                                | and `TRACE`. Otherwise it will be           |
-|                                | represented as an array of char codes.      |
-+--------------------------------+---------------------------------------------+
-| path                           | List of requested path sections.            |
-+--------------------------------+---------------------------------------------+
-| peer                           | Request source IP address.                  |
-+--------------------------------+---------------------------------------------+
-| query                          | URL query parameters `object`.              |
-|                                | Note that multiple keys are not supported   |
-|                                | and the last key value suppresses others.   |
-+--------------------------------+---------------------------------------------+
-| requested_path                 | List of actual requested path section.      |
-+--------------------------------+---------------------------------------------+
-| raw_path                       | Raw requested path `string`.                |
-+--------------------------------+---------------------------------------------+
-| secObj                         | :ref:`security_object`.                     |
-+--------------------------------+---------------------------------------------+
-| userCtx                        | :ref:`userctx_object`.                      |
-+--------------------------------+---------------------------------------------+
++----------------+---------------------------------------------+
+| Field          | Description                                 |
++================+=============================================+
+| body           | Request body data as `string`.              |
+|                | If the request method is `GET` this field   |
+|                | contains the value ``"undefined"``. If the  |
+|                | method is `DELETE` or `HEAD` the value is   |
+|                | ``""`` (empty string).                      |
++----------------+---------------------------------------------+
+| cookie         | Cookies `object`.                           |
++----------------+---------------------------------------------+
+| headers        | Request headers `object`.                   |
++----------------+---------------------------------------------+
+| method         | Request method as `string` or `array`.      |
+|                | String value is a method as one of: `HEAD`, |
+|                | `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`,  |
+|                | and `TRACE`. Otherwise it will be           |
+|                | represented as an array of char codes.      |
++----------------+---------------------------------------------+
+| path           | List of requested path sections.            |
++----------------+---------------------------------------------+
+| peer           | Request source IP address.                  |
++----------------+---------------------------------------------+
+| query          | URL query parameters `object`.              |
+|                | Note that multiple keys are not supported   |
+|                | and the last key value suppresses others.   |
++----------------+---------------------------------------------+
+| requested_path | List of actual requested path section.      |
++----------------+---------------------------------------------+
+| raw_path       | Raw requested path `string`.                |
++----------------+---------------------------------------------+
+| secObj         | :ref:`security_object`.                     |
++----------------+---------------------------------------------+
+| userCtx        | :ref:`userctx_object`.                      |
++----------------+---------------------------------------------+
 
 .. _response_object:
 
 Response object
 ===============
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| code                           | HTTP status code `number`.                  |
-+--------------------------------+---------------------------------------------+
-| json                           | JSON encodable `object`.                    |
-|                                | Implicitly sets `Content-Type` header as    |
-|                                | ``application/json``.                       |
-+--------------------------------+---------------------------------------------+
-| body                           | Raw response text `string`.                 |
-|                                | Implicitly sets `Content-Type` header as    |
-|                                | ``text/html; charset=utf-8``.               |
-+--------------------------------+---------------------------------------------+
-| base64                         | Base64 encoded `string`.                    |
-|                                | Implicitly sets `Content-Type` header as    |
-|                                | ``application/binary``.                     |
-+--------------------------------+---------------------------------------------+
-| headers                        | Response headers `object`.                  |
-|                                | `Content-Type` header from this object      |
-|                                | overrides any implicitly assigned one.      |
-+--------------------------------+---------------------------------------------+
-| stop                           | `boolean` signal to stop iteration over     |
-|                                | view result rows (for list functions only)  |
-+--------------------------------+---------------------------------------------+
++---------+--------------------------------------------+
+| Field   | Description                                |
++=========+============================================+
+| code    | HTTP status code `number`.                 |
++---------+--------------------------------------------+
+| json    | JSON encodable `object`.                   |
+|         | Implicitly sets `Content-Type` header as   |
+|         | ``application/json``.                      |
++---------+--------------------------------------------+
+| body    | Raw response text `string`.                |
+|         | Implicitly sets `Content-Type` header as   |
+|         | ``text/html; charset=utf-8``.              |
++---------+--------------------------------------------+
+| base64  | Base64 encoded `string`.                   |
+|         | Implicitly sets `Content-Type` header as   |
+|         | ``application/binary``.                    |
++---------+--------------------------------------------+
+| headers | Response headers `object`.                 |
+|         | `Content-Type` header from this object     |
+|         | overrides any implicitly assigned one.     |
++---------+--------------------------------------------+
+| stop    | `boolean` signal to stop iteration over    |
+|         | view result rows (for list functions only) |
++---------+--------------------------------------------+
 
 .. warning::
     The ``body``, ``base64`` and ``json`` object keys are overlapping each other
@@ -533,84 +538,84 @@ Response object
 Returned CouchDB Document with Detailed Revision Info
 =====================================================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| _id (optional)                 | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-| _rev (optional)                | Revision ID (when updating an existing      |
-|                                | document)                                   |
-+--------------------------------+---------------------------------------------+
-| _revs_info [array]             | CouchDB document extended revision info     |
-+--------------------------------+---------------------------------------------+
-|         rev                    | Full revision string                        |
-+--------------------------------+---------------------------------------------+
-|         status                 | Status of the revision                      |
-+--------------------------------+---------------------------------------------+
++--------------------+-----------------------------------------+
+| Field              | Description                             |
++====================+=========================================+
+| _id (optional)     | Document ID                             |
++--------------------+-----------------------------------------+
+| _rev (optional)    | Revision ID (when updating an existing  |
+|                    | document)                               |
++--------------------+-----------------------------------------+
+| _revs_info [array] | CouchDB document extended revision info |
++--------------------+-----------------------------------------+
+| rev                | Full revision string                    |
++--------------------+-----------------------------------------+
+| status             | Status of the revision                  |
++--------------------+-----------------------------------------+
 
 Returned CouchDB Document with Revision Info
 ============================================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| _id (optional)                 | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-| _rev (optional)                | Revision ID (when updating an existing      |
-|                                | document)                                   |
-+--------------------------------+---------------------------------------------+
-| _revisions                     | CouchDB document revisions                  |
-+--------------------------------+---------------------------------------------+
-|     ids [array]                | Array of valid revision IDs, in reverse     |
-|                                | order (latest first)                        |
-+--------------------------------+---------------------------------------------+
-|     start                      | Prefix number for the latest revision       |
-+--------------------------------+---------------------------------------------+
++-----------------+-----------------------------------------+
+| Field           | Description                             |
++=================+=========================================+
+| _id (optional)  | Document ID                             |
++-----------------+-----------------------------------------+
+| _rev (optional) | Revision ID (when updating an existing  |
+|                 | document)                               |
++-----------------+-----------------------------------------+
+| _revisions      | CouchDB document revisions              |
++-----------------+-----------------------------------------+
+| ids [array]     | Array of valid revision IDs, in reverse |
+|                 | order (latest first)                    |
++-----------------+-----------------------------------------+
+| start           | Prefix number for the latest revision   |
++-----------------+-----------------------------------------+
 
 Returned Document with Attachments
 ==================================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| _id (optional)                 | Document ID                                 |
-+--------------------------------+---------------------------------------------+
-| _rev (optional)                | Revision ID (when updating an existing      |
-|                                | document)                                   |
-+--------------------------------+---------------------------------------------+
-| _attachments (optional)        | Document attachment                         |
-+--------------------------------+---------------------------------------------+
-|     filename                   | Attachment                                  |
-+--------------------------------+---------------------------------------------+
-|         stub                   | Indicates whether the attachment is a stub  |
-+--------------------------------+---------------------------------------------+
-|         content_type           | MIME Content type string                    |
-+--------------------------------+---------------------------------------------+
-|         length                 | Length (bytes) of the attachment data       |
-+--------------------------------+---------------------------------------------+
-|         revpos                 | Revision where this attachment exists       |
-+--------------------------------+---------------------------------------------+
++-------------------------+--------------------------------------------+
+| Field                   | Description                                |
++=========================+============================================+
+| _id (optional)          | Document ID                                |
++-------------------------+--------------------------------------------+
+| _rev (optional)         | Revision ID (when updating an existing     |
+|                         | document)                                  |
++-------------------------+--------------------------------------------+
+| _attachments (optional) | Document attachment                        |
++-------------------------+--------------------------------------------+
+| filename                | Attachment                                 |
++-------------------------+--------------------------------------------+
+| stub                    | Indicates whether the attachment is a stub |
++-------------------------+--------------------------------------------+
+| content_type            | MIME Content type string                   |
++-------------------------+--------------------------------------------+
+| length                  | Length (bytes) of the attachment data      |
++-------------------------+--------------------------------------------+
+| revpos                  | Revision where this attachment exists      |
++-------------------------+--------------------------------------------+
 
 .. _security_object:
 
 Security Object
 ===============
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| admins                         | Roles/Users with admin privileges           |
-+--------------------------------+---------------------------------------------+
-|         roles [array]          | List of roles with parent privilege         |
-+--------------------------------+---------------------------------------------+
-|         names [array]          | List of users with parent privilege         |
-+--------------------------------+---------------------------------------------+
-| members                        | Roles/Users with non-admin privileges       |
-+--------------------------------+---------------------------------------------+
-|         roles [array]          | List of roles with parent privilege         |
-+--------------------------------+---------------------------------------------+
-|         names [array]          | List of users with parent privilege         |
-+--------------------------------+---------------------------------------------+
++---------------+---------------------------------------+
+| Field         | Description                           |
++===============+=======================================+
+| admins        | Roles/Users with admin privileges     |
++---------------+---------------------------------------+
+| roles [array] | List of roles with parent privilege   |
++---------------+---------------------------------------+
+| names [array] | List of users with parent privilege   |
++---------------+---------------------------------------+
+| members       | Roles/Users with non-admin privileges |
++---------------+---------------------------------------+
+| roles [array] | List of roles with parent privilege   |
++---------------+---------------------------------------+
+| names [array] | List of users with parent privilege   |
++---------------+---------------------------------------+
 
 .. code-block:: javascript
 
@@ -635,16 +640,16 @@ Security Object
 User Context Object
 ===================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| db                             | Database name in the context of the         |
-|                                | provided operation.                         |
-+--------------------------------+---------------------------------------------+
-| name                           | User name.                                  |
-+--------------------------------+---------------------------------------------+
-| roles                          | List of user roles.                         |
-+--------------------------------+---------------------------------------------+
++-------+-------------------------------------+
+| Field | Description                         |
++=======+=====================================+
+| db    | Database name in the context of the |
+|       | provided operation.                 |
++-------+-------------------------------------+
+| name  | User name.                          |
++-------+-------------------------------------+
+| roles | List of user roles.                 |
++-------+-------------------------------------+
 
 .. code-block:: javascript
 
@@ -661,13 +666,13 @@ User Context Object
 View Head Information
 =====================
 
-+--------------------------------+---------------------------------------------+
-| Field                          | Description                                 |
-+================================+=============================================+
-| total_rows                     | Number of documents in the view             |
-+--------------------------------+---------------------------------------------+
-| offset                         | Offset where the document list started      |
-+--------------------------------+---------------------------------------------+
++------------+----------------------------------------+
+| Field      | Description                            |
++============+========================================+
+| total_rows | Number of documents in the view        |
++------------+----------------------------------------+
+| offset     | Offset where the document list started |
++------------+----------------------------------------+
 
 .. code-block:: javascript
 
