@@ -35,7 +35,7 @@ Version 2.0.0
   URL remains the same.
 * The new Mango Query Server provides a simple JSON-based way to perform CouchDB
   queries without JavaScript or MapReduce. Mango Queries have a similar indexing
-  speed advantage over JavaScript Quries than the Erlang Queries have (2x-10x
+  speed advantage over JavaScript Queries than the Erlang Queries have (2x-10x
   faster indexing depending on doc size and system configuration). We recommend
   all new apps start using Mango as a default. Further details are available
   in the :ref:`_find, _index and _explain API <api/db/_find>`.
