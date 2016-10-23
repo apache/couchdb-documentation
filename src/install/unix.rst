@@ -30,7 +30,7 @@ Dependencies
 
 You should have the following installed:
 
-* `Erlang OTP (>=R61B03, =<19.x) <http://erlang.org/>`_
+* `Erlang OTP (>=R16B03, =<19.x) <http://erlang.org/>`_
 * `ICU                          <http://icu-project.org/>`_
 * `OpenSSL                      <http://www.openssl.org/>`_
 * `Mozilla SpiderMonkey (1.8.5) <http://www.mozilla.org/js/spidermonkey/>`_
