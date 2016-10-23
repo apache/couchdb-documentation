@@ -215,7 +215,7 @@ To add a node run these two commands:
 .. code-block:: bash
 
     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password", "port": 15984, "remote_node": "<remote-node-ip>", "remote_current_user": "<remote-node-username>", "remote_current_password": "<remote-node-password>" }'
-    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"<remote-node-ip>", "port": "<remote-node-port>", "username": "garren", "password":"password"}' -H "Content-Type: application/json"
+    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"<remote-node-ip>", "port": "<remote-node-port>", "username": "admin", "password":"password"}'
 
 This will join the two nodes together.
 Keep running the above commands for each
