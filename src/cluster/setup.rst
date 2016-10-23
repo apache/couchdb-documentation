@@ -155,7 +155,7 @@ task. Luckily, CouchDB 2.0 comes with a convenient Cluster Setup Wizard
 as part of the Fauxton web administration interface.
 
 After installation and initial startup, visit Fauxton at
-``http://127.0.0.01:5984/_utils#setup``. You will be asked to set up
+``http://127.0.0.1:5984/_utils#setup``. You will be asked to set up
 CouchDB as a single-node instance or set up a cluster.
 
 When you click "setup cluster" on the other hand, you are asked for
