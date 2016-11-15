@@ -82,16 +82,19 @@ Query Servers Configuration
             [query_server_config]
             commit_freq = 5
 
-    .. config:option:: os_process_limit :: Query Server operation timeout
+    .. config:option:: os_process_limit :: Query Server process limit
 
-        Amount of time in seconds that the Query Server may process CouchDB
-        command::
+        Hard limit on the number of OS processes usable by Query
+        Servers. The default value is ``25``::
 
             [query_server_config]
-            os_process_limit = 10
+            os_process_limit = 25
 
-        CouchDB will raise `os_process_timeout` error and kill the process in
-        case the Query Server doesn't return any result within this limit.
+        Setting `os_process_limit` too low can result in starvation of
+        Query Servers, and manifest in `os_process_timeout` errors,
+        while setting it too high can potentially use too many system
+        resources. Production settings are typically 10-100 times the
+        default value.
 
     .. config:option:: reduce_limit :: Reduce limit control
 
