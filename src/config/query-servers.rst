@@ -82,18 +82,19 @@ Query Servers Configuration
             [query_server_config]
             commit_freq = 5
 
-    .. config:option:: os_process_limit :: Query Server process limit
+    .. config:option:: os_process_limit :: Query Server process hard
+                       limit
 
         Hard limit on the number of OS processes usable by Query
-        Servers. The default value is ``25``::
+        Servers. The default value is ``100``::
 
             [query_server_config]
-            os_process_limit = 25
+            os_process_limit = 100
 
         Setting `os_process_limit` too low can result in starvation of
         Query Servers, and manifest in `os_process_timeout` errors,
         while setting it too high can potentially use too many system
-        resources. Production settings are typically 10-100 times the
+        resources. Production settings are typically 10-20 times the
         default value.
 
     .. config:option:: reduce_limit :: Reduce limit control
