@@ -97,6 +97,24 @@ Query Servers Configuration
         resources. Production settings are typically 10-20 times the
         default value.
 
+    .. config:option:: os_process_soft_limit :: Query Server process
+                       soft limit
+
+        Soft limit on the number of OS processes usable by Query
+        Servers. The default value is ``100``::
+
+            [query_server_config]
+            os_process_soft_limit = 100
+
+        Idle OS processes are closed until the total reaches the soft
+        limit.
+
+        For example, if the hard limit is 200 and the soft limit is
+        100, the total number of OS processes will never exceed 200,
+        and CouchDB will close all idle OS processes until it reaches
+        100, at which point it will leave the rest intact, even if
+        some are idle.
+
     .. config:option:: reduce_limit :: Reduce limit control
 
         Controls `Reduce overflow` error that raises when output of
