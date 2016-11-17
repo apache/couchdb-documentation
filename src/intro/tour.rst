@@ -158,13 +158,13 @@ Welcome to Fauxton
 ==================
 
 After having seen CouchDB's raw API, let's get our feet wet by playing with
-Fauxuton, the built-in administration interface. Fauxuton provides full access
+Fauxton, the built-in administration interface. Fauxton provides full access
 to all of CouchDB's features and makes it easy to work with some of the more
 complex ideas involved. With Fauxton we can create and destroy databases; view
 and edit documents; compose and run MapReduce views; and trigger replication
 between databases.
 
-To load Fauxuton in your browser, visit::
+To load Fauxton in your browser, visit::
 
     http://127.0.0.1:5984/_utils/
 
