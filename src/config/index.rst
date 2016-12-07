@@ -21,7 +21,6 @@ Configuring CouchDB
 
     intro
     couchdb
-    couch-peruser
     http
     auth
     compaction
