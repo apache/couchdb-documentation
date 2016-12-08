@@ -39,15 +39,18 @@ advantage of the new scaling and fault-tolerance features in CouchDB
 
 After installation and initial startup, visit Fauxton at
 ``http://127.0.0.01:5984/_utils#setup``. You will be asked to set up
-CouchDB as a single-node instance or set up a cluster.
-
-When you click “Single-Node-Setup”, you will get asked for an admin
-username and password. Choose them well and remember them. You can also
+CouchDB as a single-node instance or set up a cluster. When you
+click “Single-Node-Setup”, you will get asked for an admin username
+and password. Choose them well and remember them. You can also
 bind CouchDB to a public port, so it is accessible within your LAN or
-the public, if you are doing this on a public VM.
+the public, if you are doing this on a public VM. The wizard then configures
+your admin username and password and creates the three system databases
+_users, _replicator and _global_changes for you.
 
-When you run 2.0 as a single node, it doesn't create system databases
-on startup. You have to do this manually:
+Alternatively, if you don't want to use the  “Single-Node-Setup” wizard
+and run 2.0 as a single node with admin username and password already
+configured make sure to create the three three system databases
+manually on startup:
 
 .. code-block:: shell
 
