@@ -17,8 +17,8 @@ Compaction
 ==========
 
 The `compaction` operation is the way to reduce disk space usage by removing
-unused and old data from database or view index files. This operation is a very
-similar to the `vacuum` (`SQLite`_ ex.) available for other database management
+unused and old data from database or view index files. This operation is very
+similar to the `vacuum` (`SQLite`_ ex.) operation available for other database management
 systems.
 
 .. _SQLite: http://www.sqlite.org/lang_vacuum.html
@@ -112,7 +112,7 @@ Note that ``compaction_running`` field is ``true`` indicating that compaction
 is actually running. To track the compaction progress you may query the
 :get:`_active_tasks </_active_tasks>` resource::
 
-    curl http://localhost:5984/my_db
+    curl http://localhost:5984/_active_tasks
 
 .. code-block:: http
 
