@@ -17,7 +17,7 @@ MAKEINFO     := makeinfo
 
 BUILDDIR     := build
 SOURCE       := src/
-PAPERSIZE    := -D latex_paper_size=a4
+PAPERSIZE    := -D latex_elements.papersize=a4
 SPHINXFLAGS  := -a -W -n -A local=1 $(PAPERSIZE) -d $(BUILDDIR)/doctree
 SPHINXOPTS   := $(SPHINXFLAGS) $(SOURCE)
 
