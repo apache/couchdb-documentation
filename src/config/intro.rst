@@ -141,8 +141,8 @@ improve configuration readability.
     This could be read as: "remove the `_all_dbs` parameter from the
     `httpd_global_handlers` section if it was ever set before".
 
-The semicolon (``;``) signs about `commentary` start: everything after this
-character is counted as commentary and doesn't process by CouchDB.
+The semicolon (``;``) signals the end of the parameter. Everything after this
+character is regarded as a comment and ignored by CouchDB.
 
 After editing of configuration file CouchDB server instance should be restarted
 to apply these changes.
