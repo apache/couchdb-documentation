@@ -230,8 +230,11 @@
                           <http://dev.w3.org/html5/eventsource/>`_ format.
     :query number timeout: Number of seconds until CouchDB closes the
       connection. Default is ``60``.
-    :query boolean heartbeat: Whether CouchDB will send a newline character
-      (``\n``) on ``timeout``. Default is ``true``.
+    :query number heartbeat: Period in *milliseconds* after which an empty
+        line is sent in the results. Only applicable for ``longpoll``,
+        ``continuous``, and ``eventsource`` feeds. Overrides any timeout to keep
+        the feed alive indefinitely. Default is ``60000``. May be ``true`` to
+        use default value.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header Transfer-Encoding: ``chunked``
