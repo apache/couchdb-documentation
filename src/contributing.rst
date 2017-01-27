@@ -16,61 +16,48 @@
 Contributing to this Documentation
 ==================================
 
-The documentation lives in the CouchDB source tree. We'll start by forking and
-closing the CouchDB GitHub mirror. That will allow us to send the contribution
-to CouchDB with a pull request.
+The documentation lives in its own source tree. We'll start by forking and
+cloning the CouchDB documentation GitHub mirror. That will allow us to send the
+contribution to CouchDB with a pull request.
 
 If you don't have a GitHub account yet, it is a good time to get one, they are
 free. If you don't want to use GitHub, there are alternate ways to
 contributing back, that we'll cover next time.
 
-Go to https://github.com/apache/couchdb and click the "fork" button in the top
-right. This will create a fork of CouchDB in your GitHub account. Mine is
-`janl`, so my fork lives at https://github.com/janl/couchdb. In the header, it
-tells me me my "GitHub Clone URL". We need to copy that and start a terminal:
+Go to https://github.com/apache/couchdb-documentation and click the "fork"
+button in the top right. This will create a fork of CouchDB in your GitHub
+account. If your account is `username`, your fork lives at
+https://github.com/username/couchdb-documentation. In the header, it tells me my
+"GitHub Clone URL". We need to copy that and start a terminal:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/janl/couchdb.git
-    $ cd couchdb
+    $ git clone https://github.com/username/couchdb-documentation.git
+    $ cd couchdb-documentation
     $ subl .
 
-I'm opening the whole CouchDB source tree in my favourite editor. It gives
-me the usual directory listing:
+I'm opening the whole CouchDB documentation source tree in my favourite editor.
+It gives me the usual directory listing:
 
 .. code-block:: bash
 
+    ebin/
+    ext/
     .git/
     .gitignore
-    .mailmap
-    .travis.yml
-    AUTHORS
-    BUGS
-    CHANGES
-    DEVELOPERS
-    INSTALL
-    INSTALL.Unix
-    INSTALL.Windows
+    images/
     LICENSE
-    Makefile.am
-    NEWS
+    make.bat
+    Makefile
     NOTICE
-    README
-    THANKS.in
-    acinclude.m4.in
-    bin/
-    bootstrap
-    build-aux/
-    configure.ac
-    etc/
-    license.skip
-    share/
+    rebar.config
     src/
-    test/
-    utils/
-    var/
+    static/
+    templates/
+    themes/
+    .travis.yml
 
-The documentation sources live in `share/doc/src`, you can safely ignore all
+The documentation sources live in `src`, you can safely ignore all
 the other files and directories.
 
 First we should determine where we want to document this inside the
@@ -161,9 +148,10 @@ Then we push the commit to our CouchDB fork::
 
     $ git push origin master
 
-Next, we go back to our GitHub page https://github.com/janl/couchdb and click
-the "Pull Request" button. Fill in the description with something useful and
-hit the "Send Pull Request" button.
+Next, we go back to our GitHub page
+https://github.com/username/couchdb-documentation and click the "Pull Request"
+button. Fill in the description with something useful and hit the
+"Send Pull Request" button.
 
 And we're done!
 
