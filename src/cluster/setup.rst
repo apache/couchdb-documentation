@@ -163,7 +163,7 @@ admin credentials again and then to add nodes by IP address. To get
 more nodes, go through the same install procedure on other machines.
 
 Before you can add nodes to form a cluster, you have to have them
-listen on a public ip address and set up an admin user. Do this, once
+listen on a public IP address and set up an admin user. Do this, once
 per node:
 
 .. code-block:: bash
