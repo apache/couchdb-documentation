@@ -158,12 +158,12 @@ After installation and initial startup, visit Fauxton at
 ``http://127.0.0.1:5984/_utils#setup``. You will be asked to set up
 CouchDB as a single-node instance or set up a cluster.
 
-When you click "setup cluster" on the other hand, you are asked for
+When you click "setup cluster" you are asked for
 admin credentials again and then to add nodes by IP address. To get
 more nodes, go through the same install procedure on other machines.
 
 Before you can add nodes to form a cluster, you have to have them
-listen on a public ip address and set up an admin user. Do this, once
+listen on a public IP address and set up an admin user. Do this, once
 per node:
 
 .. code-block:: bash
