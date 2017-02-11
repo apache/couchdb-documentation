@@ -441,7 +441,7 @@ example used with an index on the field ``"year"``:
 **The ``$all`` operator**
 
 The ``$all`` operator matches an array value if it contains all the elements of
-the argument array. Below is an example used with used with the primary index
+the argument array. Below is an example used with the primary index
 (``_all_docs``):
 
     .. code-block:: javascript
@@ -461,7 +461,7 @@ the argument array. Below is an example used with used with the primary index
 
 The ``$elemMatch`` operator matches and returns all documents that contain an
 array field with at least one element matching the supplied query criteria.
-Below is an example used with used with the primary index (``_all_docs``):
+Below is an example used with the primary index (``_all_docs``):
 
     .. code-block:: javascript
 
