@@ -319,8 +319,9 @@ Combination Operators
 ---------------------
 
 Combination operators are used to combine selectors. In addition to the common
-boolean operators found in most programming languages, there are two combination
-operators (``$all`` and ``$elemMatch``) that help you work with JSON arrays.
+boolean operators found in most programming languages, there are three
+combination operators (``$all``, ``$elemMatch``, and ``$allMatch``) that help
+you work with JSON arrays.
 
 A combination operator takes a single argument. The argument is either another
 selector, or an array of selectors.
@@ -346,6 +347,10 @@ The list of combination operators:
 | ``$elemMatch`` | Selector | Matches and returns all documents that contain an|
 |                |          | array field with at least one element that       |
 |                |          | matches all the specified query criteria.        |
++----------------+----------+--------------------------------------------------+
+| ``$allMatch``  | Selector | Matches and returns all documents that contain an|
+|                |          | array field with all its elements matching all   |
+|                |          | the specified query criteria.                    |
 +----------------+----------+--------------------------------------------------+
 
 .. _find/and:
@@ -464,6 +469,25 @@ Below is an example used with used with the primary index (``_all_docs``):
             "_id": { "$gt": null },
             "genre": {
                 "$elemMatch": {
+                    "$eq": "Horror"
+                }
+            }
+        }
+
+.. _find/allmatch:
+
+**The ``$allMatch`` operator**
+
+The ``$allMatch`` operator matches and returns all documents that contain an
+array field with all its elements matching the supplied query criteria. Below
+is an example used with the primary index (``_all_docs``):
+
+    .. code-block:: javascript
+
+        {
+            "_id": { "$gt": null },
+            "genre": {
+                "$allMatch": {
                     "$eq": "Horror"
                 }
             }
