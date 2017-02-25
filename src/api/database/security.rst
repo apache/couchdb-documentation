@@ -34,8 +34,7 @@
       <api/db/revs_limit>`. They can not create a database nor delete a
       database.
 
-    Both ``members`` and ``admins`` objects are contains two array-typed
-    fields:
+    Both ``members`` and ``admins`` objects contain two array-typed fields:
 
     - ``names``: List of CouchDB user names
     - ``roles``: List of users roles
