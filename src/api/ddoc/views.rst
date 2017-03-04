@@ -99,7 +99,7 @@
     :>json array rows: Array of view row objects. By default the information
       returned contains only the document ID and revision
     :>json number total_rows: Number of documents in the database/view
-    :>json number update_seq: Current update sequence for the database
+    :>json object update_seq: Current update sequence for the database
 
     :code 200: Request completed successfully
     :code 400: Invalid request

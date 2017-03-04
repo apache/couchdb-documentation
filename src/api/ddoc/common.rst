@@ -206,8 +206,8 @@ The response from :get:`/{db}/_design/{ddoc}/_info` contains
 * **language** (*string*): Language for the defined views
 * **purge_seq** (*number*): The purge sequence that has been processed
 * **signature** (*string*): MD5 signature of the views for the design document
-* **update_seq** (*number*): The update sequence of the corresponding database
-  that has been indexed
+* **update_seq** (*number* / *string*): The update sequence of the corresponding
+  database that has been indexed
 * **updater_running** (*boolean*): Indicates if the view is currently
   being updated
 * **waiting_clients** (*number*): Number of clients waiting on views from
