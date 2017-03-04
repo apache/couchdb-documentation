@@ -141,8 +141,7 @@ CouchDB database information object
 | purge_seq            | The number of purge operations on the        |
 |                      | database.                                    |
 +----------------------+----------------------------------------------+
-| update_seq           | The current number of updates made in the    |
-|                      | database.                                    |
+| update_seq           | Current update sequence for the database.    |
 +----------------------+----------------------------------------------+
 
 Design Document
