@@ -47,11 +47,11 @@ Base CouchDB Options
 
     .. config:option:: delayed_commits :: Delayed commits
 
-        When this config value as ``false`` the CouchDB provides guaranty of
-        `fsync` call before return :http:statuscode:`201` response on each
-        document saving. Setting this config value as ``true`` may raise some
-        overall performance with cost of losing durability - it's strongly not
-        recommended to do such in production::
+        When this config value is ``false`` the CouchDB provides a guarantee
+        that `fsync` will be called before returning a :http:statuscode:`201`
+        response on each document save. Setting this config value to ``true``
+        may improve performance, at cost of some durability. For production use
+        disabling this is strongly recommended::
 
             [couchdb]
             delayed_commits = false
