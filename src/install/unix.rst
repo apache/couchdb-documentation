@@ -70,12 +70,24 @@ RedHat-based (Fedora, Centos, RHEL) Systems
 You can install the dependencies by running::
 
     sudo yum install autoconf autoconf-archive automake \
-        curl-devel erlang-asn1 erlang-erts erlang-eunit \
-        erlang-os_mon erlang-xmerl help2man \
+        curl-devel erlang-asn1 erlang-erts erlang-eunit gcc-c++ \
+        erlang-os_mon erlang-xmerl erlang-erl_interface help2man \
         js-devel-1.8.5 libicu-devel libtool perl-Test-Harness
 
 While CouchDB builds against the default js-devel-1.7.0 included in some
 distributions, it's recommended to use a more recent js-devel-1.8.5.
+
+Warning: To build a release for CouchDB the erlang-reltool package is required,
+yet on CentOS/RHEL this package depends on erlang-wx which pulls in wxGTK
+and several X11 libraries. If CouchDB is being built on a console only
+server it might be a good idea to install this in a separate step to the
+rest of the dependencies, so that the package and all its dependencies
+can be removed using the ``yum history`` tool after the release is built.
+(reltool is needed only during release build but not for CouchDB functioning)
+
+The package can be installed by running::
+
+    sudo yum install erlang-reltool
 
 Mac OS X
 --------
