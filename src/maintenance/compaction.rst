@@ -18,8 +18,8 @@ Compaction
 
 The `compaction` operation is the way to reduce disk space usage by removing
 unused and old data from database or view index files. This operation is very
-similar to the `vacuum` (`SQLite`_ ex.) operation available for other database management
-systems.
+similar to the `vacuum` (`SQLite`_ ex.) operation available for other database
+management systems.
 
 .. _SQLite: http://www.sqlite.org/lang_vacuum.html
 
