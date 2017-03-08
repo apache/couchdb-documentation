@@ -72,7 +72,6 @@ the various configuration values within a running CouchDB instance.
                 "delayed_commits": "true",
                 "max_attachment_chunk_size": "4294967296",
                 "max_dbs_open": "100",
-                "max_document_size": "4294967296",
                 "os_process_timeout": "5000",
                 "uri_file": "/var/lib/couchdb/couch.uri",
                 "util_driver_dir": "/usr/lib64/couchdb/erlang/lib/couch-1.5.0/priv/lib",

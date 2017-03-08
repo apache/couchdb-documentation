@@ -221,6 +221,28 @@ HTTP Server Options
             [httpd]
             WWW-Authenticate = Basic realm="Welcome to the Couch!"
 
+    .. config:option:: max_http_request_size :: Maximum HTTP request body size
+
+        .. versionchanged:: 2.1.0
+
+        Limit the maximum size of the HTTP request body. This setting applies
+        to all requests and it doesn't discriminate between single vs.
+        multi-document operations. So setting it to 1MB would block a
+        `PUT` of a document larger than 1MB, but it might also block a
+        `_bulk_docs` update of 1000 1KB documents, or a multipart/related
+        update of a small document followed by two 512KB attachments. This
+        setting is intended to be used as a protection aginst maliciously
+        large HTTP requests rather than for limiting maximum document sizes. ::
+
+            [httpd]
+            max_http_request_size = 4294967296 ; 4 GB
+
+        .. warning::
+           Before version 2.1.0 couchdb.max_document_size was implemented
+           effectively as max_http_request_size. That is, it checkeded HTTP
+           request bodies instead of document sizes. After the upgrade, it is
+           advisable to review the usage of these configuration settings.
+
 .. _config/ssl:
 
 Secure Socket Level Options
