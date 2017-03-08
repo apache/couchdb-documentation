@@ -34,13 +34,12 @@
       <api/db/revs_limit>`. They can not create a database nor delete a
       database.
 
-    Both ``members`` and ``admins`` objects are contains two array-typed
-    fields:
+    Both ``members`` and ``admins`` objects contain two array-typed fields:
 
     - ``names``: List of CouchDB user names
     - ``roles``: List of users roles
 
-    Any other additional fields in the security object are optional.
+    Any additional fields in the security object are optional.
     The entire security object is made available to validation and other
     internal functions so that the database can control and limit
     functionality.
