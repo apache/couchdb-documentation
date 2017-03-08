@@ -105,25 +105,6 @@ Base CouchDB Options
             [couchdb]
             max_dbs_open = 100
 
-    .. config:option:: max_document_size :: Maximum HTTP request body size
-
-        .. versionchanged:: 2.0.1
-
-        Even though this setting is named `max_document_size`, currently it is
-        implemented by checking HTTP request body size. For single document
-        requests the approximation is close enough, however, when multiple
-        documents are updated in a single request the discrepancy between
-        document sizes and request body size could be large. Setting this to a
-        small value might prevent replicator from writing some documents to
-        the target database or checkpointing progress. It can also prevent
-        configuring database security options. Note: up until and including
-        version 2.0 this setting was not applied to `PUT` requests with
-        multipart/related content type, which is how attachments can be
-        uploaded together with document bodies in the same request. ::
-
-            [couchdb]
-            max_document_size = 4294967296 ; 4 GB
-
     .. config:option:: os_process_timeout :: External processes time limit
 
         If an external process, such as a query server or external process,
