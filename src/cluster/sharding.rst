@@ -105,10 +105,10 @@ small there. Let us look in it. Yes, you can get it with curl too:
 
 * ``_id`` The name of the database.
 * ``_rev`` The current revision of the metadata.
-* ``shard_suffix`` The numbers after small and before .couch. The number of
-  seconds after UNIX epoch that the database was created. This is stored as an array of ASCII codes.
-* ``changelog`` Self explaining. Only for admins to read.
-* ``by_node`` Which shards each node have.
+* ``shard_suffix`` The numbers after small and before .couch. This is seconds
+  after UNIX epoch when the database was created. Stored as ASCII characters.
+* ``changelog`` Self explaining. Mostly used for debugging.
+* ``by_node`` List of shards on each node.
 * ``by_range`` On which nodes each shard is.
 
 Nothing here, nothing there, a shard in my sleeve
@@ -291,10 +291,10 @@ you need to create a new cluster and migrate over.
 
 Creating more shards than you need and then move the shards around is called
 presharding. The number of shards you need depends on how much data you are
-going to store. But, creating to many shards increases the complexity without any
-real gain. You might even get lower performance. As an example of this, we can
-take the author's (15 year) old lab server. It gets noticeably slower with more
-than one shard and high load, as the hard drive must seek more.
+going to store. But, creating to many shards increases the complexity without
+any real gain. You might even get lower performance. As an example of this, we
+can take the author's (15 year) old lab server. It gets noticeably slower with
+more than one shard and high load, as the hard drive must seek more.
 
 How many shards you should have depends, as always, on your use case and your
 hardware. If you do not know what to do, use the default of 8 shards.
