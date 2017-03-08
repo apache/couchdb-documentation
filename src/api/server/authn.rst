@@ -282,16 +282,16 @@ some external authentication service and you don't want to duplicate users and
 their roles in CouchDB.
 
 This authentication method allows creation of a :ref:`userctx_object` for
-remotely authenticated user. By default, the client just need to pass specific
-headers to CouchDB with related request:
+remotely authenticated user. By default, the client just needs to pass specific
+headers to CouchDB with related requests:
 
 - :config:option:`X-Auth-CouchDB-UserName <couch_httpd_auth/x_auth_username>`:
   username;
 - :config:option:`X-Auth-CouchDB-Roles <couch_httpd_auth/x_auth_roles>`:
-  list of user roles separated by a comma (``,``);
+  comma-separated (``,``) list of user roles;
 - :config:option:`X-Auth-CouchDB-Token <couch_httpd_auth/x_auth_token>`:
-  authentication token. Optional, but strongly recommended to
-  :config:option:`force token be required <couch_httpd_auth/proxy_use_secret>`
+  authentication token. When :config:option:`proxy_use_secret <couch_httpd_auth/proxy_use_secret>`
+  is set (which is strongly recommended!), this header provides the secret token
   to prevent requests from untrusted sources.
 
 **Request**:
