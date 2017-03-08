@@ -140,7 +140,7 @@
 
     .. code-block:: bash
 
-    shell> curl http://localhost:5984/pineapple/_security -X PUT -H 'content-type: application/json' -H 'accept: application/json' -d '{"admins":{"names":["superuser"],"roles":["admins"]},"members":{"names": ["user1","user2"],"roles": ["developers"]}}'
+        shell> curl http://localhost:5984/pineapple/_security -X PUT -H 'content-type: application/json' -H 'accept: application/json' -d '{"admins":{"names":["superuser"],"roles":["admins"]},"members":{"names": ["user1","user2"],"roles": ["developers"]}}'
 
     .. code-block:: http
 
