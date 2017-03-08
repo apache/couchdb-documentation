@@ -89,7 +89,6 @@ The package can be installed by running::
 
     sudo yum install erlang-reltool
 
-
 Mac OS X
 --------
 
