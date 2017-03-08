@@ -45,8 +45,8 @@
     functionality.
 
     If both the names and roles fields of either the admins or members
-    properties are empty arrays, it means the database has no admins or
-    members.
+    properties are empty arrays, or are not existent, it means the database
+    has no admins or members.
 
     Having no admins, only server admins (with the reserved ``_admin`` role)
     are able to update design document and make other admin level changes.
@@ -137,6 +137,10 @@
     :code 401: CouchDB Server Administrator privileges required
 
     **Request**:
+
+    .. code-block:: bash
+
+        shell> curl http://localhost:5984/pineapple/_security -X PUT -H 'content-type: application/json' -H 'accept: application/json' -d '{"admins":{"names":["superuser"],"roles":["admins"]},"members":{"names": ["user1","user2"],"roles": ["developers"]}}'
 
     .. code-block:: http
 
