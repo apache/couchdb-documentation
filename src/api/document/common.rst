@@ -174,16 +174,22 @@
     revision of the existing document. Unlike the :post:`/{db}`, you must
     specify the document ID in the request URL.
 
+    When updating an existing document, the current document revision must be
+    included in the document (i.e. the request body), as the `rev` query
+    parameter, or in the `If-Match` request header.
+
     :param db: Database name
     :param docid: Document ID
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
     :<header If-Match: Document's revision. Alternative to `rev` query
-      parameter
+      parameter or document key. *Optional*
     :<header X-Couch-Full-Commit: Overrides server's
       :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
       are: ``false`` and ``true``. *Optional*
+    :query string rev: Document's revision if updating an existing document.
+      Alternative to `If-Match` header or document key. *Optional*
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>`. Possible values: ``ok``. *Optional*
     :query boolean new_edits: Prevents insertion of a :ref:`conflicting
