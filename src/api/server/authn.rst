@@ -235,7 +235,6 @@ To obtain the first token and thus authenticate a user for the first time, the
     Closes user's session.
 
     :code 200: Successfully close session.
-    :code 401: User wasn't authenticated.
 
     **Request**:
 
