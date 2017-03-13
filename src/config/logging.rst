@@ -26,6 +26,21 @@ Logging options
 
     CouchDB logging configuration.
 
+    .. config:option:: writer :: Set the log writer to use.
+
+        Current writers include:
+
+        - ``stderr``: Logs are sent to stderr.
+        - ``file``: Logs are sent to the file set in
+          :option:`log file <log/file>`.
+        - ``syslog``: Logs are sent to the syslog daemon.
+
+        You can also specify a full module name here if implement your own
+        writer.
+
+            [log]
+            writer = stderr
+
     .. config:option:: file :: Logging file path
 
         Specifies the location of file for logging output::
@@ -38,7 +53,7 @@ Logging options
 
     .. config:option:: level :: Logging verbose level
 
-        .. versionchanged:: 1.3: Added ``warning`` level.
+        .. versionchanged:: 1.3 Added ``warning`` level.
 
         Logging level defines how verbose and detailed logging will be::
 
