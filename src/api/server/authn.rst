@@ -232,10 +232,13 @@ To obtain the first token and thus authenticate a user for the first time, the
 .. http:delete:: /_session
     :synopsis: Logout Cookie-based user
 
-    Closes user's session.
+    Closes user's session by instructing the browser to clear the cookie. This
+    does not invalidate the session from the server's perspective, as there is
+    no way to do this because CouchDB cookies are stateless. This means calling
+    this endpoint is purely optional from a client perspective, and it does not
+    protect against theft of a session cookie.
 
     :code 200: Successfully close session.
-    :code 401: User wasn't authenticated.
 
     **Request**:
 
