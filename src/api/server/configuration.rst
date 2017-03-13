@@ -19,10 +19,10 @@ Configuration
 The CouchDB Server Configuration API provide an interface to query and update
 the various configuration values within a running CouchDB instance.
 
-``/_config``
-============
+``/_node/{node-name}/_config``
+==============================
 
-.. http:get:: /_config
+.. http:get:: /_node/{node-name}/_config
     :synopsis: Obtains a list of the entire server configuration
 
     Returns the entire CouchDB server configuration as a JSON structure. The
@@ -40,7 +40,7 @@ the various configuration values within a running CouchDB instance.
 
     .. code-block:: http
 
-        GET /_config HTTP/1.1
+        GET /_node/nonode@nohost/_config HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -153,12 +153,15 @@ the various configuration values within a running CouchDB instance.
             }
         }
 
+.. versionchanged: 2.0.0 The config endpoint from ``/_config`` to
+   ``/_node/{node-name}/_config``.
+
 .. _api/config/section:
 
-``/_config/section``
-====================
+``_node/{node-name}/_config/section``
+=====================================
 
-.. http:get:: /_config/{section}
+.. http:get:: /_node/{node-name}/_config/{section}
     :synopsis: Returns all the configuration values for the specified section
 
     Gets the configuration structure for a single section.
@@ -175,7 +178,7 @@ the various configuration values within a running CouchDB instance.
 
     .. code-block:: http
 
-        GET /_config/httpd HTTP/1.1
+        GET /_node/nonode@nohost/_config/httpd HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -204,10 +207,10 @@ the various configuration values within a running CouchDB instance.
 
 .. _api/config/section/key:
 
-``/_config/section/key``
-========================
+``/_node/node/_config/section/key``
+===================================
 
-.. http:get:: /_config/{section}/{key}
+.. http:get:: /_node/{node-name}/_config/{section}/{key}
     :synopsis: Returns a specific section/configuration value
 
     Gets a single configuration value from within a specific configuration
@@ -226,7 +229,7 @@ the various configuration values within a running CouchDB instance.
 
     .. code-block:: http
 
-        GET /_config/log/level HTTP/1.1
+        GET /_node/nonode@nohost/_config/log/level HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -248,7 +251,7 @@ the various configuration values within a running CouchDB instance.
         or numeric value, or an array or object. Some client environments may
         not parse simple strings or numeric values as valid JSON.
 
-.. http:put:: /_config/{section}/{key}
+.. http:put:: /_node/{node-name}/_config/{section}/{key}
     :synopsis: Sets the specified configuration value
 
     Updates a configuration value. The new value should be supplied in the
@@ -272,7 +275,7 @@ the various configuration values within a running CouchDB instance.
 
     .. code-block:: http
 
-        PUT /_config/log/level HTTP/1.1
+        PUT /_node/nonode@nohost/_config/log/level HTTP/1.1
         Accept: application/json
         Content-Length: 7
         Content-Type: application/json
@@ -293,7 +296,7 @@ the various configuration values within a running CouchDB instance.
 
         "debug"
 
-.. http:delete:: /_config/{section}/{key}
+.. http:delete:: /_node/{node-name}/_config/{section}/{key}
     :synopsis: Removes the current setting
 
     Deletes a configuration value. The returned JSON will be the value of the
@@ -313,7 +316,7 @@ the various configuration values within a running CouchDB instance.
 
     .. code-block:: http
 
-        DELETE /_config/log/level HTTP/1.1
+        DELETE /_node/nonode@nohost/_config/log/level HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
