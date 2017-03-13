@@ -67,11 +67,15 @@ Logging options
           and more;
         - ``info``: Informative logging. Includes HTTP requests headlines,
           startup of an external processes etc.
-        - ``warning``: Warning messages are alerts about edge situations that
+        - ``notice``
+        - ``warning`` or ``warn``: Warning messages are alerts about edge situations that
           may lead to errors. For instance, compaction daemon alerts about low
           or insufficient disk space at this level.
-        - ``error``: Error level includes only things that going wrong, crush
+        - ``error`` or ``err``: Error level includes only things that going wrong, crush
           reports and HTTP error responses (5xx codes).
+        - ``critical`` or ``crit``
+        - ``alert``
+        - ``emergency`` or ``emerg``
         - ``none``: Disables logging any messages.
 
     .. config:option:: include_sasl
