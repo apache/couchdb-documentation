@@ -43,13 +43,32 @@ Logging options
 
     .. config:option:: file :: Logging file path
 
-        Specifies the location of file for logging output::
+        Specifies the location of file for logging output. Only used by the
+        ``file`` :option:`writer <log/writer>`.
 
             [log]
             file = /var/log/couchdb/couch.log
 
         This path should be readable and writable for user that runs CouchDB
         service (`couchdb` by default).
+
+    .. config:option:: write_buffer
+
+       Specifies the size of the file log write buffer in bytes, to enable
+       delayed log writes. Only used by the ``file``
+       :option:`writer <log/writer>`.
+
+            [log]
+            write_buffer = 0
+
+    .. config:option:: write_delay
+
+        Specifies the wait in milliseconds before commiting logs to disk, to
+        enable delayed log writes. Only used by the ``file``
+        :option:`writer <log/writer>`.
+
+            [log]
+            write_delay = 0
 
     .. config:option:: level :: Logging verbose level
 
@@ -86,6 +105,38 @@ Logging options
             include_sasl = true
 
         .. _SASL: http://www.erlang.org/doc/apps/sasl/
+
+    .. config:option:: syslog_host
+
+        Specifies the syslog host to send logs to. Only used by the
+        ``syslog`` :option:`writer <log/writer>`.
+
+        [log]
+        syslog_host = localhost
+
+    .. config:optoin:: syslog_port
+
+        Specifies the syslog port to connect to when sending logs. Only used by
+        the ``syslog`` :option:`writer <log/writer>`.
+
+        [log]
+        syslog_port = 514
+
+    .. config:option:: syslog_appid
+
+        Specifies application name to the ``syslog``
+        :option:`writer <log/writer>`.
+
+        [log]
+        syslog_appid = couchdb
+
+    .. config:option:: syslog_facility
+
+        Specifies the syslog facility to use with the ``syslog``
+        :option:`writer <log/writer>`.
+
+        [log]
+        syslog_facility = local2
 
 .. _config/log_level_by_module:
 
