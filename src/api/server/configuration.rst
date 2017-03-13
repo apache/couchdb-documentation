@@ -129,6 +129,7 @@ the various configuration values within a running CouchDB instance.
                 "favicon.ico": "{couch_httpd_misc_handlers, handle_favicon_req, \"/usr/share/couchdb/www\"}"
             },
             "log": {
+                "writer": "file",
                 "file": "/var/log/couchdb/couch.log",
                 "include_sasl": "true",
                 "level": "info"
