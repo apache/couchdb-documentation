@@ -192,7 +192,7 @@
     Base64-encoding that is used leads to a 33% overhead (i.e. one third) in
     transfer size for attachments.
 
-...warning::
+.. warning::
     The results returned by `_changes` are partially ordered. In other words,
     the order is not guaranteed to be preserved for multiple calls.
 
