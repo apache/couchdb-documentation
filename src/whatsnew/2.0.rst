@@ -60,6 +60,7 @@ Version 2.0.0
   * ``/_up`` api to signal health of a node to a load-balancer
   * ``/db/_local_docs`` and ``/db/_design_docs`` (similar to ``/db/_all_docs``)
 
+* The ``/_log`` endpoint was removed.
 * "Backend" interface on port 5986 used for specific cluster admin tasks. Of
   interest are the ``_nodes`` and ``_dbs`` databases visible only through this
   interface.

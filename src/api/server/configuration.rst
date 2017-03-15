@@ -118,7 +118,6 @@ the various configuration values within a running CouchDB instance.
                 "_active_tasks": "{couch_httpd_misc_handlers, handle_task_status_req}",
                 "_all_dbs": "{couch_httpd_misc_handlers, handle_all_dbs_req}",
                 "_config": "{couch_httpd_misc_handlers, handle_config_req}",
-                "_log": "{couch_httpd_misc_handlers, handle_log_req}",
                 "_oauth": "{couch_httpd_oauth, handle_oauth_req}",
                 "_replicate": "{couch_httpd_misc_handlers, handle_replicate_req}",
                 "_restart": "{couch_httpd_misc_handlers, handle_restart_req}",
@@ -195,7 +194,6 @@ the various configuration values within a running CouchDB instance.
             "bind_address": "127.0.0.1",
             "default_handler": "{couch_httpd_db, handle_request}",
             "enable_cors": "false",
-            "log_max_chunk_size": "1000000",
             "port": "5984",
             "secure_rewrites": "true",
             "vhost_global_handlers": "_utils, _uuids, _session, _oauth, _users"

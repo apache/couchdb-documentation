@@ -109,14 +109,6 @@ HTTP Server Options
             [httpd]
             enable_cors = false
 
-    .. config:option:: log_max_chunk_size :: Logs chunk size
-
-        Defines maximum chunk size in bytes for :ref:`_log <api/server/log>`
-        resource::
-
-            [httpd]
-            log_max_chunk_size = 1000000
-
     .. config:option:: port :: Listen port
 
         Defined the port number to listen::

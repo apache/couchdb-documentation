@@ -72,13 +72,6 @@ Global HTTP Handlers
             [httpd_global_handlers]
             _config = {couch_httpd_misc_handlers, handle_config_req}
 
-    .. config:option:: _log
-
-        ::
-
-            [httpd_global_handlers]
-            _log = {couch_httpd_misc_handlers, handle_log_req}
-
         .. config:option:: _oauth
 
         ::
