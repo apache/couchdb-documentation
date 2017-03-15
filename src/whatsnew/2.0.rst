@@ -66,6 +66,8 @@ Version 2.0.0
 * Support added for Erlang/OTP 17.x, 18.x and 19
 * New streamlined build system written for Unix-like systems and Microsoft
   Windows
+* :ref:`Configuration <api/config>` has moved from ``/_config`` to
+  ``/_node/{node-name}/_config``
 
 .. _release/2.0.x/upgrade:
 
