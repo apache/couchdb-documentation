@@ -1036,7 +1036,7 @@ could be changed to ``random`` by sending this HTTP request:
 
 .. code-block:: http
 
-    PUT http://couchdb:5984/_config/uuids/algorithm HTTP/1.1
+    PUT http://couchdb:5984/_node/nonode@nohost/_config/uuids/algorithm HTTP/1.1
     Content-Type: application/json
     Accept: */*
 

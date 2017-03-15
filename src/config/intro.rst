@@ -156,7 +156,7 @@ Alternatively, configuration parameters could be set via the
 :ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration
 on-the-fly without requiring a server restart::
 
-    curl -X PUT http://localhost:5984/_config/uuids/algorithm -d '"random"'
+    curl -X PUT http://localhost:5984/_node/nonode@nohost/_config/uuids/algorithm -d '"random"'
 
 In the response the old parameter's value returns::
 
@@ -166,7 +166,7 @@ You should be careful with changing configuration via the HTTP API since it's
 easy to make CouchDB unavailable. For instance, if you'd like to change the
 :option:`httpd/bind_address` for a new one::
 
-    curl -X PUT http://localhost:5984/_config/httpd/bind_address -d '"10.10.0.128"'
+    curl -X PUT http://localhost:5984/_node/nonode@nohost/_config/httpd/bind_address -d '"10.10.0.128"'
 
 However, if you make a typo, or the specified IP address is not available
 from your network, CouchDB will be unavailable for you in both cases and
