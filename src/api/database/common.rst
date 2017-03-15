@@ -55,22 +55,26 @@
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>json number committed_update_seq: The number of committed update.
     :>json boolean compact_running: Set to ``true`` if the database compaction
       routine is operating on this database.
     :>json string db_name: The name of the database.
     :>json number disk_format_version: The version of the physical format used
       for the data when it is stored on disk.
-    :>json number data_size: The number of bytes of live data inside
-      the database file.
-    :>json number disk_size: The length of the database file on disk.
-      Views indexes are not included in the calculation.
+    :>json number data_size: *Deprecated.* Use ``sizes.active`` instead.
+    :>json number disk_size: *Deprecated.* Use ``sizes.file`` instead.
     :>json number doc_count: A count of the documents in the specified
       database.
     :>json number doc_del_count: Number of deleted documents
-    :>json string instance_start_time: Timestamp of when the database was
-      opened, expressed in microseconds since the epoch.
+    :>json string instance_start_time: Always ``"0"``. (Returned for legacy
+      reasons.)
+    :>json object other: Used by Cloudant. *Deprecated.*
     :>json number purge_seq: The number of purge operations on the database.
+    :>json number sizes.active: The size of live data inside the database, in
+      bytes.
+    :>json number sizes.external: The uncompressed size of database contents
+      in bytes.
+    :>json number sizes.file: The size of the database file on disk in bytes.
+      Views indexes are not included in the calculation.
     :>json number update_seq: The current number of updates to the database.
     :code 200: Request completed successfully
     :code 404: Requested database not found
