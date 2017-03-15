@@ -71,9 +71,10 @@ identification for certain requests:
 - Triggering compaction (:post:`POST /database/_compact </{db}/_compact>`)
 - Reading the task status list (:get:`GET /_active_tasks </_active_tasks>`)
 - Restarting the server (:post:`POST /_restart </_restart>`)
-- Reading the active configuration (:get:`GET /_config </_config>`)
-- Updating the active configuration (:put:`PUT /_config/section/key
-  </_config/{section}/{key}>`)
+- Reading the active configuration
+  (:get:`GET /_node/{node-name}/_config </_config>`)
+- Updating the active configuration
+  (:put:`PUT /_node/{node-name}/_config/section/key </_config/{section}/{key}>`)
 
 Creating New Admin User
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,7 +91,7 @@ create an admin user. We'll call her ``anna``, and her password is ``secret``.
 Note the double quotes in the following code; they are needed to denote a string
 value for the :ref:`configuration API <api/config>`::
 
-    > curl -X PUT $HOST/_config/admins/anna -d '"secret"'
+    > curl -X PUT $HOST/_node/$NODENAME/_config/admins/anna -d '"secret"'
     ""
 
 As per the :ref:`_config <api/config>` API's behavior, we're getting
@@ -470,7 +471,9 @@ Now let's share the field ``name``. First, set up the ``public_fields``
 configuration option. Remember, that this action requires administrator
 privileges. The next command will prompt you for user `admin`'s password:
 
-    curl -X PUT http://localhost:5984/_config/couch_httpd_auth/public_fields \
+.. code-block:: bash
+
+    curl -X PUT http://localhost:5984/_node/nonode@nohost/_config/couch_httpd_auth/public_fields \
        -H "Content-Type: application/json" \
        -d '"name"' \
        -u admin

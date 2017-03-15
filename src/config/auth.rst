@@ -42,12 +42,13 @@ Server Administrators
     CouchDB is restarted, the passwords will be salted and encrypted. You may
     also use the HTTP interface to create administrator accounts; this way,
     you don't need to restart CouchDB, and there's no need to temporarily store
-    or transmit passwords in plaintext. The HTTP ``_config/admins`` endpoint
-    supports querying, deleting or creating new admin accounts:
+    or transmit passwords in plaintext. The HTTP
+    ``/_node/{node-name}/_config/admins`` endpoint supports querying, deleting
+    or creating new admin accounts:
 
     .. code-block:: http
 
-        GET /_config/admins HTTP/1.1
+        GET /_node/nonode@nohost/_config/admins HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -74,7 +75,7 @@ Server Administrators
 
     .. code-block:: http
 
-        PUT /_config/admins/architect?raw=true HTTP/1.1
+        PUT /_node/nonode@nohost/_config/admins/architect?raw=true HTTP/1.1
         Accept: application/json
         Content-Type: application/json
         Content-Length: 89
