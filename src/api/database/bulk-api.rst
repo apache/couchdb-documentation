@@ -143,8 +143,14 @@
     documents in a single request, in place of multiple :get:`/{db}/{docid}`
     requests.
 
-    The request body should contain a list of the keys to be returned as an
-    array to a ``keys`` object. For example:
+    :param db: Database name
+    :<header Content-Type: :mimetype:`application/json`
+    :<json array keys: Return only documents that match the specified keys.
+      *Optional*
+    :>header Content-Type: - :mimetype:`application/json`
+    :code 200: Request completed successfully
+
+    **Request**:
 
     .. code-block:: http
 
@@ -161,8 +167,7 @@
             ]
         }
 
-    The returned JSON is the all documents structure, but with only the
-    selected keys in the output:
+    **Response**:
 
     .. code-block:: javascript
 
