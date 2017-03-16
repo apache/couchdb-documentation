@@ -114,7 +114,7 @@ Logging options
         [log]
         syslog_host = localhost
 
-    .. config:optoin:: syslog_port
+    .. config:option:: syslog_port
 
         Specifies the syslog port to connect to when sending logs. Only used by
         the ``syslog`` :option:`writer <log/writer>`.
