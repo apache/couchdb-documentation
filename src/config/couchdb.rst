@@ -189,3 +189,30 @@ Base CouchDB Options
 
           http-check disable-on-404
           option httpchk GET /_up
+
+    .. config:option:: max_document_size :: Limit maximum document body size
+
+        .. versionchanged:: 2.1.0
+
+        Limit maximum document body size. Size is calculated based on the
+        serialized Erlang representation of the JSON document body, because
+        that reflects more accurately the amount of storage consumed on disk.
+
+        HTTP requests which create or update documents will fail with error
+        code 413 if one or more documents is larger than this configuration
+        value.
+
+        In case of `_update` handlers, document size is checked after the
+        transformation and right before being inserted into the database. ::
+
+            [couchdb]
+            max_document_size = 4294967296 ; 4 GB
+
+        .. warning::
+           Before version 2.1.0 this setting was implemented by simply checking
+           http request body sizes. For individual document updates via `PUT`
+           that approximation was close enough, however that is not the case
+           for `_bulk_docs` endpoint. After 2.1.0 a separate configuration
+           parameter was defined: httpd.max_http_request_size, which can be
+           used to limit maximum http request sizes. After upgrade, it is
+           advisable to review those settings and adjust them accordingly.
