@@ -36,7 +36,7 @@ Logging options
         - ``syslog``: Logs are sent to the syslog daemon.
 
         You can also specify a full module name here if implement your own
-        writer.
+        writer::
 
             [log]
             writer = stderr
@@ -44,7 +44,7 @@ Logging options
     .. config:option:: file :: Logging file path
 
         Specifies the location of file for logging output. Only used by the
-        ``file`` :option:`writer <log/writer>`.
+        ``file`` :option:`writer <log/writer>`::
 
             [log]
             file = /var/log/couchdb/couch.log
@@ -56,7 +56,7 @@ Logging options
 
        Specifies the size of the file log write buffer in bytes, to enable
        delayed log writes. Only used by the ``file``
-       :option:`writer <log/writer>`.
+       :option:`writer <log/writer>`::
 
             [log]
             write_buffer = 0
@@ -65,7 +65,7 @@ Logging options
 
         Specifies the wait in milliseconds before commiting logs to disk, to
         enable delayed log writes. Only used by the ``file``
-        :option:`writer <log/writer>`.
+        :option:`writer <log/writer>`::
 
             [log]
             write_delay = 0
@@ -109,34 +109,34 @@ Logging options
     .. config:option:: syslog_host
 
         Specifies the syslog host to send logs to. Only used by the
-        ``syslog`` :option:`writer <log/writer>`.
+        ``syslog`` :option:`writer <log/writer>`::
 
-        [log]
-        syslog_host = localhost
+            [log]
+            syslog_host = localhost
 
     .. config:option:: syslog_port
 
         Specifies the syslog port to connect to when sending logs. Only used by
-        the ``syslog`` :option:`writer <log/writer>`.
+        the ``syslog`` :option:`writer <log/writer>`::
 
-        [log]
-        syslog_port = 514
+            [log]
+            syslog_port = 514
 
     .. config:option:: syslog_appid
 
         Specifies application name to the ``syslog``
-        :option:`writer <log/writer>`.
+        :option:`writer <log/writer>`::
 
-        [log]
-        syslog_appid = couchdb
+            [log]
+            syslog_appid = couchdb
 
     .. config:option:: syslog_facility
 
         Specifies the syslog facility to use with the ``syslog``
-        :option:`writer <log/writer>`.
+        :option:`writer <log/writer>`::
 
-        [log]
-        syslog_facility = local2
+            [log]
+            syslog_facility = local2
 
 .. _config/log_level_by_module:
 
