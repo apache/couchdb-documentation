@@ -902,7 +902,7 @@ is as follows:
 ``/_uuids``
 ===========
 
-.. versionchanged:: 1.5.1
+.. versionchanged:: 2.0.0
 
 .. http:get:: /_uuids
     :synopsis: Generates a list of UUIDs from the server
@@ -917,7 +917,7 @@ is as follows:
                            - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Response hash
     :code 200: Request completed successfully
-    :code 403: Requested more UUIDs than is :config:option:`allowed
+    :code 400: Requested more UUIDs than is :config:option:`allowed
                <uuids/max_count>` to retrieve
 
     **Request**:
