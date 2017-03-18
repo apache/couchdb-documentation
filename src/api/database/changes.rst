@@ -45,7 +45,16 @@
         Ignored if `include_docs` isn't ``true``. Default is ``false``.
     :query boolean descending: Return the change results in descending sequence
         order (most recent change first). Default is ``false``.
-    :query string feed: see :ref:`changes`. Default is ``normal``.
+    :query string feed: - **normal** All past changes are returned immediately.
+                          *Default.*
+                        - **longpoll** In conjunction with ``since=now``, the
+                          request will remain open until a change is made and
+                          the event transmitted, then the connection will close.
+                        - **continuous** Sends a line of JSON per event. Keeps
+                          the socket open until ``timeout``.
+                        - **eventsource** Like, ``continuous``, but sends
+                          the events in `EventSource
+                          <http://dev.w3.org/html5/eventsource/>`_ format.
     :query string filter: Reference to a :ref:`filter function <filterfun>`
         from a design document that will filter whole stream emitting only
         filtered events. See the section `Change Notifications in the book
@@ -101,11 +110,12 @@
     :code 200: Request completed successfully
     :code 400: Bad request
 
-    The ``result`` field of database changes
+    The ``results`` field of database changes:
 
-    :json array changes: List of document`s leafs with single field ``rev``
-    :json string id: Document ID
-    :json json seq: Update sequence
+    :json array changes: List of document's leaves with single field ``rev``.
+    :json string id: Document ID.
+    :json json seq: Update sequence.
+    :json bool deleted: ``true`` if the document is deleted.
 
     **Request**:
 
