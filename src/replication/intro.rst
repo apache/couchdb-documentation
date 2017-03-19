@@ -95,6 +95,17 @@ only replicated if the filter returns `true`.
     Using a selector provides performance benefits when compared with using a
     :ref:`filterfun`. You should use :ref:`selectorobj` where possible.
 
+.. note::
+    When using replication filters that depend on the document's content,
+    deleted documents may pose a problem, since the document passed to the
+    filter will not contain any of the document's content. This can be
+    resolved by adding a ``_deleted:true`` field to the document instead
+    of using the DELETE HTTP method, paired with the use of a
+    :ref:`validate document update <vdufun>` handler to ensure the fields
+    required for replication filters are always present. Take note, though,
+    that the deleted document will still contain all of its data (including
+    attachments)!
+
 Migrating Data to Clients
 =========================
 
