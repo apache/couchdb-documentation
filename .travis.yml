@@ -3,14 +3,6 @@ python:
   - 2.7
   - 3.4
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -yqq texlive-latex-base
-  - sudo apt-get install -yqq texlive-latex-extra
-  - sudo apt-get install -yqq texlive-latex-recommended
-  - sudo apt-get install -yqq texlive-fonts-recommended
-  - sudo apt-get install -yqq texinfo
-
 install:
   - pip install sphinx
 
@@ -20,7 +12,7 @@ script:
 env:
   matrix:
     - TARGET=html
-    - TARGET=pdf
+    - TARGET=man
     - TARGET=check
 
 cache: apt
