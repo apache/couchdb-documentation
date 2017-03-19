@@ -23,7 +23,7 @@ SPHINXOPTS   := $(SPHINXFLAGS) $(SOURCE)
 
 ENSURECMD=which $(1) > /dev/null 2>&1 || (echo "*** Make sure that $(1) is installed and on your path" && exit 1)
 
-all: html pdf info man
+all: html man
 
 clean:
 	rm -rf $(BUILDDIR)
