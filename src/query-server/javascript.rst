@@ -21,7 +21,7 @@ JavaScript
 .. note::
     While every design function has access to all JavaScript objects, the table
     below describes appropriate usage cases. For example, you may use
-    :func:`emit` in :ref:`listfun`, but :func:`getRow` is not permitted
+    :func:`emit` in :ref:`mapfun`, but :func:`getRow` is not permitted
     during :ref:`mapfun`.
 
 +--------------------------------+---------------------------------------------+
