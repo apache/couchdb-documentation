@@ -221,7 +221,9 @@
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
-    :query string feed: - **longpoll**: Closes the connection after the first
+    :query string feed: - **normal**: Returns all historical DB changes, then
+                          closes the connection. *Default.*
+                        - **longpoll**: Closes the connection after the first
                           event.
                         - **continuous**: Send a line of JSON per event.
                           Keeps the socket open until ``timeout``.
@@ -232,18 +234,27 @@
       connection. Default is ``60``.
     :query number heartbeat: Period in *milliseconds* after which an empty
         line is sent in the results. Only applicable for ``longpoll``,
-        ``continuous``, and ``eventsource`` feeds. Overrides any timeout to keep
-        the feed alive indefinitely. Default is ``60000``. May be ``true`` to
-        use default value.
+        ``continuous``, and ``eventsource`` feeds. Overrides any timeout to
+        keep the feed alive indefinitely. Default is ``60000``. May be ``true``
+        to use default value.
+    :query string since: Return only updates since the specified sequence ID.
+        May be the string ``now`` to begin showing only new updates.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header Transfer-Encoding: ``chunked``
-    :>json string db_name: Database name
-    :>json boolean ok: Event operation status
-    :>json string type: A database event is one of ``created``, ``updated``,
-      ``deleted``
+    :>json array results: An array of database events. For ``longpoll`` and
+        ``continuous`` modes, the entire response is the contents of the
+        ``results`` array.
+    :>json string last_seq: The last sequence ID reported.
     :code 200: Request completed successfully
     :code 401: CouchDB Server Administrator privileges required
+
+    The ``results`` field of database updates:
+
+    :json string db_name: Database name.
+    :json string type: A database event is one of ``created``, ``updated``,
+      ``deleted``.
+    :json json seq: Update sequence of the event.
 
     **Request**:
 
@@ -260,14 +271,19 @@
         HTTP/1.1 200 OK
         Cache-Control: must-revalidate
         Content-Type: application/json
-        Date: Sat, 10 Aug 2013 07:02:41 GMT
-        Server: CouchDB (Erlang/OTP)
+        Date: Sat, 18 Mar 2017 19:01:35 GMT
+        Etag: "C1KU98Y6H0LGM7EQQYL6VSL07"
+        Server: CouchDB/2.0.0 (Erlang OTP/17)
         Transfer-Encoding: chunked
+        X-Couch-Request-ID: ad87efc7ff
+        X-CouchDB-Body-Time: 0
 
         {
-            "db_name": "mailbox",
-            "ok": true,
-            "type": "created"
+            "results":[
+                {"db_name":"mailbox","type":"created","seq":"1-g1AAAAFReJzLYWBg4MhgTmHgzcvPy09JdcjLz8gvLskBCjMlMiTJ____PyuDOZExFyjAnmJhkWaeaIquGIf2JAUgmWQPMiGRAZcaB5CaePxqEkBq6vGqyWMBkgwNQAqobD4h"},
+                {"db_name":"mailbox","type":"deleted","seq":"2-g1AAAAFReJzLYWBg4MhgTmHgzcvPy09JdcjLz8gvLskBCjMlMiTJ____PyuDOZEpFyjAnmJhkWaeaIquGIf2JAUgmWQPMiGRAZcaB5CaePxqEkBq6vGqyWMBkgwNQAqobD4hdQsg6vYTUncAou4-IXUPIOpA7ssCAIFHa60"},
+            ],
+            "last_seq": "2-g1AAAAFReJzLYWBg4MhgTmHgzcvPy09JdcjLz8gvLskBCjMlMiTJ____PyuDOZEpFyjAnmJhkWaeaIquGIf2JAUgmWQPMiGRAZcaB5CaePxqEkBq6vGqyWMBkgwNQAqobD4hdQsg6vYTUncAou4-IXUPIOpA7ssCAIFHa60"
         }
 
 .. _api/server/membership:
