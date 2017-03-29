@@ -54,10 +54,10 @@ comes crashing down.
 * ``n=3`` Any 2 nodes can be down.
 * etc
 
-Computers goes down and sysadmins pull out network cables in a furious rage from
-time to time, so using ``n<2`` is asking for downtime. Having a to high value of
-n is adding servers and complexity without any real benefit. The sweetspot is at
-``n=3``.
+Computers go down and sysadmins pull out network cables in a furious rage from
+time to time, so using ``n<2`` is asking for downtime. Having too high a value
+of ``n`` adds servers and complexity without any real benefit. The sweetspot is
+at ``n=3``.
 
 Say that we have a database with 3 replicas and 4 shards. That would give us a
 maximum of 12 nodes. 4*3=12 Every shard have 3 copies.
