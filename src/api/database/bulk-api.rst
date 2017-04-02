@@ -507,35 +507,9 @@ of conflict checking performed on each document. The two modes are:
    submit the document update, with the correct revision tag, to update
    the document.
 
-The effects of different database operations on the different modes are
-summarized below:
-
-* **Transaction Mode**: ``Non-atomic``
-
-  * **Transaction**: ``Insert``
-
-    * **Cause**: Requested document ID already exists
-    * **Resolution**: Resubmit with different document ID, or update the
-      existing document
-
-  * **Transaction**: ``Update``
-
-    * **Cause**: Revision missing or incorrect
-    * **Resolution**: Resubmit with correct revision
-
-* **Transaction Mode**: ``All-or-nothing``
-
-  * **Transaction**: ``Insert`` / ``Update``
-
-    * **Cause**: Additional revision inserted
-    * **Resolution**: Resolve conflicted revisions
-
 Replication of documents is independent of the type of insert or update.
 The documents and revisions created during a bulk insert or update are
-replicated in the same way as any other document. This can mean that if
-you make use of the `all-or-nothing` mode the exact list of documents,
-revisions (and their conflict state) may or may not be replicated to
-other databases correctly.
+replicated in the same way as any other document.
 
 .. _api/db/bulk_docs/validation:
 
@@ -555,11 +529,8 @@ following type:
 
 -  **conflict**
 
-   The document as submitted is in conflict. If you used the default
-   bulk transaction mode then the new revision will not have been
+   The document as submitted is in conflict. The new revision will not have been
    created and you will need to re-submit the document to the database.
-   If you used ``all-or-nothing`` mode then you will need to manually
-   resolve the conflicted revisions of the document.
 
    Conflict resolution of documents added using the bulk docs interface
    is identical to the resolution procedures used when resolving
