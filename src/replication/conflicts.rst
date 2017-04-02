@@ -387,10 +387,9 @@ And here is an example of this in Ruby using the low-level `RestClient`_:
     require 'json'
     DB="http://127.0.0.1:5984/conflict_test"
 
-    # Write multiple documents as all_or_nothing, can introduce conflicts
+    # Write multiple documents
     def writem(docs)
         JSON.parse(RestClient.post("#{DB}/_bulk_docs", {
-            "all_or_nothing" => true,
             "docs" => docs,
         }.to_json))
     end
