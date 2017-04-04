@@ -130,16 +130,6 @@
     :<header Content-Type: Attachment MIME type. *Required*
     :<header If-Match: Document revision. Alternative to `rev` query parameter
     :query string rev: Document revision. *Required*
-    :>header Accept-Ranges: :ref:`Range request aware
-      <api/doc/attachment/range>`. Used for attachments with
-      :mimetype:`application/octet-stream`
-    :>header Content-Encoding: Used compression codec. Available if
-      attachment's ``content_type`` is in :config:option:`list of compressiable
-      types <attachments/compressible_types>`
-    :>header Content-Length: Attachment size. If compression codec is used,
-      this value is about compressed size, not actual
-    :>header Content-MD5: Base64 encoded MD5 binary digest
-    :>header ETag: Double quoted base64 encoded MD5 binary digest
     :>json string id: Document ID
     :>json boolean ok: Operation status
     :>json string rev: Revision MVCC token
