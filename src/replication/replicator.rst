@@ -16,23 +16,28 @@
 Replicator Database
 ===================
 
-The ``_replicator`` database works like any other in CouchDB, but documents
-added to it will trigger replications. Create (``PUT`` or ``POST``) a document
-to start replication. ``DELETE`` a replication document to cancel an ongoing
-replication.
+.. versionchanged:: 2.1.0 Scheduling replicator was introduced.
+   Replication states, by default are not written back to documents
+   anymore. There are new replication job states and new API endpoints
+   ``_scheduler/jobs`` and ``_scheduler/docs``.
 
-These documents have exactly the same content as the JSON objects we used to
-``POST`` to ``_replicate`` (fields ``source``, ``target``, ``create_target``,
-``continuous``, ``doc_ids``, ``filter``, ``query_params``, ``use_checkpoints``,
-``checkpoint_interval``).
+The ``_replicator`` database works like any other in CouchDB, but
+documents added to it will trigger replications. Create (``PUT`` or
+``POST``) a document to start replication. ``DELETE`` a replication
+document to cancel an ongoing replication.
 
-Replication documents can have a user defined ``_id`` (handy for finding a
-specific replication request later). Design Documents (and ``_local`` documents)
-added to the replicator database are ignored.
+These documents have exactly the same content as the JSON objects we
+used to ``POST`` to ``_replicate`` (fields ``source``, ``target``,
+``create_target``, ``continuous``, ``doc_ids``, ``filter``,
+``query_params``, ``use_checkpoints``, ``checkpoint_interval``).
 
-The default name of this database is ``_replicator``. Additional replicator
-databases can be created. To be recognized as such by the system, their database
-names should end with ``/_replicator``.
+Replication documents can have a user defined ``_id`` (handy for finding
+a specific replication request later). Design Documents (and ``_local``
+documents) added to the replicator database are ignored.
+
+The default replicator database is ``_replicator``. Additional
+replicator databases can be created. To be recognized as such by the
+system, their database names should end with ``/_replicator``.
 
 Basics
 ======
@@ -43,107 +48,154 @@ Let's say you POST the following document into ``_replicator``:
 
     {
         "_id": "my_rep",
-        "source":  "http://myserver.com:5984/foo",
+        "source": "http://myserver.com/foo",
         "target":  "http://user:pass@localhost:5984/bar",
-        "create_target":  true
+        "create_target":  true,
+        "continuous": true
     }
 
 In the couch log you'll see 2 entries like these:
 
 .. code-block:: text
 
-    [Thu, 17 Feb 2011 19:43:59 GMT] [info] [<0.291.0>] Document `my_rep` triggered replication `c0ebe9256695ff083347cbf95f93e280+create_target`
-    [Thu, 17 Feb 2011 19:44:37 GMT] [info] [<0.124.0>] Replication `c0ebe9256695ff083347cbf95f93e280+create_target` finished (triggered by document `my_rep`)
+    [notice] 2017-04-05T17:16:19.646716Z node1@127.0.0.1 <0.29432.0> -------- Replication `"a81a78e822837e66df423d54279c15fe+continuous+create_target"` is using:
+        4 worker processes
+        a worker batch size of 500
+        20 HTTP connections
+        a connection timeout of 30000 milliseconds
+        10 retries per request
+        socket options are: [{keepalive,true},{nodelay,false}]
+    [notice] 2017-04-05T17:16:19.646759Z node1@127.0.0.1 <0.29432.0> -------- Document `my_rep` triggered replication `a81a78e822837e66df423d54279c15fe+continuous+create_target`
 
-As soon as the replication is triggered, the document will be updated by
-CouchDB with 3 new fields:
+Replication state of this document can then be queried from
+``http://adm:pass@localhost:5984/_scheduler/docs/my_rep``
+
+.. code-block:: json
+
+     {
+         "database": "_replicator",
+         "doc_id": "my_rep",
+         "error_count": 0,
+         "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
+         "info": null,
+         "last_updated": "2017-04-05T19:18:15Z",
+         "node": "node1@127.0.0.1",
+         "proxy": null,
+         "source": "http://myserver.com/foo/",
+         "start_time": "2017-04-05T19:18:15Z",
+         "state": "running",
+         "target": "http://adm:*****@localhost:5984/bar/"
+     }
+
+The state is ``running``. That means replicator has scheduled this
+replication job to run. Replication document contents stay the same.
+Previously, before version 2.1, it was updated with the ``triggered``
+state.
+
+The replication job will also appear in
+
+``http://adm:pass@localhost:5984/_scheduler/jobs``
+
+.. code-block:: json
+
+      {
+          "jobs": [
+              {
+                  "database": "_replicator",
+                  "doc_id": "my_rep",
+                  "history": [
+                      {
+                          "timestamp": "2017-04-05T19:18:15Z",
+                          "type": "started"
+                      },
+                      {
+                          "timestamp": "2017-04-05T19:18:15Z",
+                          "type": "added"
+                      }
+                  ],
+                  "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
+                  "node": "node1@127.0.0.1",
+                  "pid": "<0.1174.0>",
+                  "source": "http://myserver.com/foo/",
+                  "start_time": "2017-04-05T19:18:15Z",
+                  "target": "http://adm:*****@localhost:5984/bar/",
+                  "user": null
+              }
+          ],
+          "offset": 0,
+          "total_rows": 1
+      }
+
+``_scheduler/jobs`` shows more information such as a detailed history of
+state changes. However if replication has completed or has failed to
+start it would not appear here, only in ``_scheduler/docs``.
+
+If there is an error, for example if the source database is missing, the
+replication job will crash and retry after a wait period. Each
+sucesssive crash will result in a longer waiting period.
+
+For example, POST-ing this document
 
 .. code-block:: javascript
 
     {
-        "_id": "my_rep",
-        "source":  "http://myserver.com:5984/foo",
+        "_id": "my_rep_crashing",
+        "source": "http://myserver.com/missing",
         "target":  "http://user:pass@localhost:5984/bar",
         "create_target":  true,
-        "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
-        "_replication_state":  "triggered",
-        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
+        "continuous": true
     }
 
-Special fields set by the replicator start with the prefix
-``_replication_``.
+when source database is missing, will result in periodic starts and
+crashes with an increasingly larger interval. The ``history`` list from
+``_scheduler/jobs`` for this replication would look something like this:
 
-- ``_replication_id``
+.. code-block:: json
 
-  The ID internally assigned to the replication. This is also the ID
-  exposed by ``/_active_tasks``.
+    [
+          {
+              "reason": "db_not_found: could not open http://adm:*****@localhost:5984/missing/",
+              "timestamp": "2017-04-05T20:55:10Z",
+              "type": "crashed"
+          },
+          {
+              "timestamp": "2017-04-05T20:55:10Z",
+              "type": "started"
+          },
+          {
+              "reason": "db_not_found: could not open http://adm:*****@localhost:5984/missing/",
+              "timestamp": "2017-04-05T20:47:10Z",
+              "type": "crashed"
+          },
+          {
+              "timestamp": "2017-04-05T20:47:10Z",
+              "type": "started"
+          }
+    ]
 
-- ``_replication_state``
+``_scheduler/docs`` shows a shorter summary:
 
-  The current state of the replication.
-
-- ``_replication_state_time``
-
-  The time in RFC3339 format when the current replication state (marked in
-  ``_replication_state``) was set.
-
-- ``_replication_state_reason``
-
-  If ``replication_state`` is ``error``, this field contains the reason.
-
-.. code-block:: javascript
+.. code-block:: json
 
     {
-        "_id": "my_rep",
-        "_rev": "2-9f2c0d9372f4ee4dc75652ab8f8e7c70",
-        "source":  "http://myserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/bar",
-        "_replication_state": "error",
-        "_replication_state_time": "2013-12-13T18:48:00+01:00",
-        "_replication_state_reason": "db_not_found: could not open foodb",
-        "_replication_id": "c0ebe9256695ff083347cbf95f93e280"
+          "database": "_replicator",
+          "doc_id": "my_rep_crashing",
+          "error_count": 6,
+          "id": "cb78391640ed34e9578e638d9bb00e44+create_target",
+          "info": "db_not_found: could not open http://adm:*****@localhost:5984/missing/",
+          "last_updated": "2017-04-05T20:55:10Z",
+          "node": "node1@127.0.0.1",
+          "proxy": null,
+          "source": "http://adm:*****@localhost:5984/missing/",
+          "start_time": "2017-04-05T20:38:34Z",
+          "state": "crashing",
+          "target": "http://adm:*****@localhost:5984/bar/"
     }
 
-When the replication finishes, it will update the ``_replication_state``
-field (and ``_replication_state_time``) with the value ``completed``, so
-the document will look like:
-
-.. code-block:: javascript
-
-    {
-        "_id": "my_rep",
-        "source":  "http://myserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/bar",
-        "create_target":  true,
-        "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
-        "_replication_state":  "completed",
-        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
-    }
-
-When an error happens during replication, the ``_replication_state``
-field is set to ``error`` (and ``_replication_state_reason`` and
-``_replication_state_time`` are updated).
-
-When you PUT/POST a document to the ``_replicator`` database, CouchDB
-will attempt to start the replication up to 10 times (configurable under
-``[replicator]``, parameter ``max_replication_retry_count``). If it
-fails on the first attempt, it waits 5 seconds before doing a second
-attempt. If the second attempt fails, it waits 10 seconds before doing a
-third attempt. If the third attempt fails, it waits 20 seconds before
-doing a fourth attempt (each attempt doubles the previous wait period).
-When an attempt fails, the Couch log will show you something like:
-
-.. code-block:: text
-
-    [error] [<0.149.0>] Error starting replication `67c1bb92010e7abe35d7d629635f18b6+create_target` (document `my_rep_2`): {db_not_found,<<"could not open http://myserver:5986/foo/">>
-
-.. note::
-    The ``_replication_state`` field is only set to ``error`` when all the
-    attempts were unsuccessful.
-
-There are only 3 possible values for the ``_replication_state`` field:
-``triggered``, ``completed`` and ``error``. Continuous replications
-never get their state set to ``completed``.
+Repeated crashes are described as a ``crashing`` state. ``-ing`` suffix
+implies this is a temporary state. User at any moment could create the
+missing database and then replication job could return back to the
+normal.
 
 Documents describing the same replication
 =========================================
@@ -154,9 +206,11 @@ the following order:
 .. code-block:: javascript
 
     {
-        "_id": "doc_A",
-        "source":  "http://myserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/bar"
+        "_id": "my_rep",
+        "source": "http://myserver.com/foo",
+        "target":  "http://user:pass@localhost:5984/bar",
+        "create_target":  true,
+        "continuous": true
     }
 
 and
@@ -164,94 +218,242 @@ and
 .. code-block:: javascript
 
     {
-        "_id": "doc_B",
-        "source":  "http://myserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/bar"
-    }
-
-Both describe exactly the same replication (only their ``_ids`` differ). In this
-case document ``doc_A`` triggers the replication, getting updated by CouchDB
-with the fields ``_replication_state``, ``_replication_state_time`` and
-``_replication_id``, just like it was described before. Document ``doc_B``
-however, is only updated with one field, the ``_replication_id`` so it will
-look like this:
-
-.. code-block:: javascript
-
-    {
-        "_id": "doc_B",
-        "source":  "http://myserver.com:5984/foo",
+        "_id": "my_rep_dup",
+        "source": "http://myserver.com/foo",
         "target":  "http://user:pass@localhost:5984/bar",
-        "_replication_id":  "c0ebe9256695ff083347cbf95f93e280"
+        "create_target":  true,
+        "continuous": true
     }
 
-While document ``doc_A`` will look like this:
+Both describe exactly the same replication (only their ``_ids`` differ).
+In this case document ``my_rep`` triggers the replication, while
+``my_rep_dup``` will fail. Inspecting ``_scheduler/docs`` explains
+exactly why it failed:
 
-.. code-block:: javascript
+.. code-block:: json
 
-    {
-        "_id": "doc_A",
-        "source":  "http://myserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/bar",
-        "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
-        "_replication_state":  "triggered",
-        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
-    }
+        {
+            "database": "_replicator",
+            "doc_id": "my_rep_dup",
+            "error_count": 1,
+            "id": null,
+            "info": "Replication `a81a78e822837e66df423d54279c15fe+continuous+create_target` specified by document `my_rep_dup` already started, triggered by document `my_rep` from db `_replicator`",
+            "last_updated": "2017-04-05T21:41:51Z",
+            "source": "http://myserver.com/foo/",
+            "start_time": "2017-04-05T21:41:51Z",
+            "state": "failed",
+            "target": "http://adm:*****@localhost:5984/bar/"
+        }
 
-Note that both document get exactly the same value for the ``_replication_id``
-field. This way you can identify which documents refer to the same replication -
-you can for example define a view which maps replication IDs to document IDs.
+Notice the state for this replication is ``failed``. Unlike
+``crashing``, ``failed`` state is terminal. As long as both documents
+are present the replicator will not retry to run ``my_rep_dup``
+replication. Another reason could be malformed documents. For example if
+worker process count is specified as a string (``"worker_processes": "a
+few"``) instead of an integer, failure will occur.
+
+Replication Scheduler
+=====================
+
+Once replication jobs are created they are managed by the scheduler. The
+scheduler is the replication component which periodically stops some
+jobs and starts others. This behavior makes it posssible to have a
+larger number of jobs than the cluster could run simultaneously.
+Replication jobs which keep failing will be penalized and forced to
+wait. The wait time increases exponentially with each consecutive
+failure.
+
+When deciding which jobs to stop and which to start, the scheduler uses
+a round-robin algorithm to ensure fairness. Jobs which have been running
+the longest time will be stopped, and jobs which have been waiting the
+longest time will be started.
+
+.. note:: Non-continuous (normal) replication are treated differently
+          once they start running. See :ref:`Normal vs Continuous
+          Replications` section for more information.
+
+The behavior of the scheduler can configured via ``max_jobs``,
+``interval`` and ``max_churn`` options. See :ref:`Replicator
+configuration section <config/replicator>` for additional information.
+
+.. _replicator/states:
+
+Replication states
+==================
+
+Replication jobs during their life-cycle pass through various states.
+This is a diagram of all the states and transitions between them:
+
+.. figure:: ../../images/replication-state-diagram.svg
+     :align: center
+     :alt: Replication state diagram
+
+     Replication state diagram
+
+Blue and yellow shapes represent replication job states.
+
+Trapezoidal shapes represent external APIs, that's how users interact
+with the replicator. Writing documents to ``_replicator`` is the
+preferred way of creating replications, but posting to the
+``_replicate`` HTTP endpoint is also supported.
+
+Six-sided shapes are internal API boundaries. They are optional for this
+diagram and are only shown as additional information to help clarify how the
+replicator works. There are two processing stages: the first is where
+replication documents are parsed and become replication jobs, and the second is
+the scheduler itself. The scheduler runs replication jobs, periodically
+stopping and starting some. Jobs posted via the ``_replicate`` endpoint bypass
+the first component and go straight to the scheduler.
+
+States descriptions
+-------------------
+
+Before explaining the details of each state, it is worth noticing that
+color and shape of each state in the diagram:
+
+`Blue` vs `yellow` partitions states into "healthy" and "unhealthy",
+respectively. Unhealthy states indicate something has gone wrong and it
+might need user's attention.
+
+`Rectangle` vs `oval` separates "terminal" states from "non-terminal"
+ones. Terminal states are those which will not transition to other
+states any more. Informally, jobs in a terminal state will not be
+retried and don't consume memory or CPU resources.
+
+ * ``Initializing``: Indicates replicator has noticed the change from
+   the replication document. Jobs should transition quickly through this
+   state. Being stuck here for a while could mean there is an internal
+   error.
+
+ * ``Failed``: Replication document could not be processed and turned
+   into a valid replication job for the scheduler. This state is
+   terminal and requires user intervention to fix the problem. A typical
+   reason for ending up in this state is a malformed document. For
+   example, specifying an integer for a parameter which accepts a
+   boolean. Another reason for failure could be specifying a duplicate
+   replication. A duplicate replication is a replication with identical
+   parameters but a different document ID.
+
+ * ``Error``: Replication document update could not be turned into a
+   replication job. Unlike the ``Failed`` state, this one is temporary,
+   and replicator will keep retrying periodically. There is an
+   exponential backoff applied in case of consecutive failures. The main
+   reason this state exists is to handle filtered replications with
+   custom user functions. Filter function content is needed in order to
+   calculate the replication ID. A replication job could not be created
+   until the function code is retrieved. Because retrieval happens over
+   the network, temporary failures have to be handled.
+
+ * ``Running``: Replication job is running normally. This means, there
+   might be a change feed open, and if changes are noticed, they would
+   be processed and posted to the target. Job is still considered
+   ``Running`` even if its workers are currently not streaming changes
+   from source to target and are just waiting on the change feed.
+   Continuous replications will most likely end up in this state.
+
+ * ``Pending``: Replication job is not running and is waiting its turn.
+   This state is reached when the number of replication jobs added to
+   the scheduler exceeds ``replicator.max_jobs``. In that case scheduler
+   will periodically stop and start subsets of jobs trying to give each
+   one a fair chance at making progress.
+
+ * ``Crashing``: Replication job has been successfully added to the
+   replication scheduler. However an error was encountered during the
+   last run. Error could be a network failure, a missing source
+   database, a permissions error, etc. Repeated consecutive crashes
+   result in an exponential backoff. This state is considered temporary
+   (non-terminal) and replication jobs will be periodically retried.
+   Maximum backoff interval is around a day or so.
+
+ * ``Completed``: This is a terminal, successful state for
+   non-continuous replications. Once in this state the replication is
+   "forgotten" by the scheduler and it doesn't consume any more CPU or
+   memory resorces. Continuous replication jobs will never reach this
+   state.
+
+.. _Normal vs Continuous Replications:
+
+Normal vs Continuous Replications
+---------------------------------
+
+Normal (non-continuous) replications once started will be allowed to run
+to completion. That behavior is to preserve their semantics of
+replicating a snapshot of the source database to the target. For example
+if new documents are added to the source after the replication are
+started, those updates should not show up on the target database.
+Stopping and restring a normal replication would violate that
+constraint.
+
+.. warning:: When there is a mix of continuous and normal replications,
+    once normal replication are scheduled to run, they might temporarily
+    starve continuous replication jobs.
+
+However, normal replications will still be stopped and rescheduled if an
+operator reduces the value for the maximum number of replications. This
+is so that if an operator decides replications are overwhelming a node
+that it has the ability to recover. Any stopped replications will be
+resubmitted to the queue to be rescheduled.
+
+Compatibility Mode
+==================
+
+Previous version of CouchDB replicator wrote state updates back to
+replication documents. In cases where user code programmatically read
+those states, there is compatibility mode enabled via a configuration
+setting::
+
+  [replicator]
+  update_docs = true
+
+In this mode replicator will continue to write state updates to the
+documents.
+
+To effectively disable the scheduling behavior, which periodically stop
+and starts jobs, set ``max_jobs`` configuration setting to a large
+number. For example::
+
+  [replicator]
+  max_jobs = 9999999
+
+See :ref:`Replicator configuration section <config/replicator>` for
+other replicator configuration options.
 
 Canceling replications
 ======================
 
-To cancel a replication simply ``DELETE`` the document which triggered the
-replication. The Couch log will show you an entry like the following:
-
-.. code-block:: text
-
-    [Thu, 17 Feb 2011 20:16:29 GMT] [info] [<0.125.0>] Stopped replication `c0ebe9256695ff083347cbf95f93e280+continuous+create_target` because replication document `doc_A` was deleted
-
-.. note::
-    You need to ``DELETE`` the document that triggered the replication.
-    ``DELETE``-ing another document that describes the same replication
-    but did not trigger it, will not cancel the replication.
+To cancel a replication simply ``DELETE`` the document which triggered
+the replication. To update a replication, for example, change the number
+of worker or the source, simply update the document with new data. If
+there is extra application-specific data in the replication documents,
+that data is ignored by the replicator.
 
 Server restart
 ==============
 
-When CouchDB is restarted, it checks its ``_replicator`` database and
-restarts any replication that is described by a document that either has
-its ``_replication_state`` field set to ``triggered`` or it doesn't have
-yet the ``_replication_state`` field set.
+When CouchDB is restarted, it checks its ``_replicator`` databases and
+restarts replications described by documents if they are not already in
+in a ``completed`` or ``failed`` state. If they are, they are ignored.
 
-.. note::
-    Continuous replications always have a ``_replication_state`` field
-    with the value ``triggered``, therefore they're always restarted
-    when CouchDB is restarted.
+Clustering
+==========
 
-Updating Documents in the Replicator Database
-=============================================
+In a cluster, replication jobs are balanced evenly among all the nodes
+nodes such that a replication job runs on only one node at a time.
 
-Once the replicator has started work on a job defined in the ``_replicator``
-database, modifying the replication document is no longer allowed. Attempting
-to do this will result in the following response
-
-.. code-block:: javascript
-
-    {
-        "error": "forbidden",
-        "reason": "Only the replicator can edit replication documents that are in the triggered state."
-    }
-
-The way to accomplish this is to first delete the old version and then insert
-the new one.
+Every time there is a cluster membership change, that is when nodes are
+added or removed, as it happens in a rolling reboot, replicator
+application will notice the change, rescan all the document and running
+replication, and re-evaluate their cluster placement in light of the new
+set of live nodes. This mechanism also provides replication fail-over in
+case a node fails. Replication jobs started from replication documents
+(but not those started from ``_replicate`` HTTP endpoint) will
+automatically migrate one of the live nodes.
 
 Additional Replicator Databases
 ===============================
 
-Imagine replicator database (``_replicator``) has these two
-documents which represent pull replications from servers A and B:
+Imagine replicator database (``_replicator``) has these two documents
+which represent pull replications from servers A and B:
 
 .. code-block:: javascript
 
@@ -259,10 +461,7 @@ documents which represent pull replications from servers A and B:
         "_id": "rep_from_A",
         "source":  "http://aserver.com:5984/foo",
         "target":  "http://user:pass@localhost:5984/foo_a",
-        "continuous":  true,
-        "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
-        "_replication_state":  "triggered",
-        "_replication_state_time":  "2011-02-17T19:35:11+01:00"
+        "continuous":  true
     }
 
 .. code-block:: javascript
@@ -271,14 +470,11 @@ documents which represent pull replications from servers A and B:
         "_id": "rep_from_B",
         "source":  "http://bserver.com:5984/foo",
         "target":  "http://user:pass@localhost:5984/foo_b",
-        "continuous":  true,
-        "_replication_id":  "231bb3cf9d48314eaa8d48a9170570d1",
-        "_replication_state":  "triggered",
-        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
+        "continuous":  true
     }
 
-Now without stopping and restarting CouchDB, add another replicator database.
-For example ``another/_replicator``:
+Now without stopping and restarting CouchDB, add another replicator
+database. For example ``another/_replicator``:
 
 .. code-block:: bash
 
@@ -299,8 +495,8 @@ Then add a replication document to the new replicator database:
         "continuous":  true
     }
 
-From now on, there are three replications active in the system: two replications
-from A and B, and a new one from X.
+From now on, there are three replications active in the system: two
+replications from A and B, and a new one from X.
 
 Then remove the additional replicator database:
 
@@ -309,9 +505,9 @@ Then remove the additional replicator database:
     $ curl -X DELETE http://user:pass@localhost:5984/another%2F_replicator/
     {"ok":true}
 
-After this operation, replication pulling from server X
-will be stopped and the replications in the ``_replicator``
-database (pulling from servers A and B) will continue.
+After this operation, replication pulling from server X will be stopped
+and the replications in the ``_replicator`` database (pulling from
+servers A and B) will continue.
 
 Replicating the replicator database
 ===================================
@@ -325,10 +521,7 @@ following pull replication documents in it:
          "_id": "rep_from_A",
          "source":  "http://aserver.com:5984/foo",
          "target":  "http://user:pass@localhost:5984/foo_a",
-         "continuous":  true,
-         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
-         "_replication_state":  "triggered",
-         "_replication_state_time":  "2011-02-17T19:35:11+01:00"
+         "continuous":  true
     }
 
 .. code-block:: javascript
@@ -337,10 +530,7 @@ following pull replication documents in it:
          "_id": "rep_from_B",
          "source":  "http://bserver.com:5984/foo",
          "target":  "http://user:pass@localhost:5984/foo_b",
-         "continuous":  true,
-         "_replication_id":  "231bb3cf9d48314eaa8d48a9170570d1",
-         "_replication_state":  "triggered",
-         "_replication_state_time":  "2011-02-17T20:22:02+01:00"
+         "continuous":  true
     }
 
 Now you would like to have the same pull replications going on in server
@@ -385,8 +575,7 @@ Also, for admins the ``user_ctx`` property can be used to trigger a
 replication on behalf of another user. This is the user context that
 will be passed to local target database document validation functions.
 
-.. note::
-    The ``user_ctx`` property only has effect for local endpoints.
+.. note:: The ``user_ctx`` property only has effect for local endpoints.
 
 Example delegated replication document:
 
@@ -403,9 +592,10 @@ Example delegated replication document:
         }
     }
 
-As stated before, the ``user_ctx`` property is optional for admins, while
-being mandatory for regular (non-admin) users. When the roles property
-of ``user_ctx`` is missing, it defaults to the empty list ``[]``.
+As stated before, the ``user_ctx`` property is optional for admins,
+while being mandatory for regular (non-admin) users. When the roles
+property of ``user_ctx`` is missing, it defaults to the empty list
+``[]``.
 
 .. _selectorobj:
 

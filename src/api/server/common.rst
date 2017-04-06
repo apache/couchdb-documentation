@@ -64,6 +64,8 @@
 ``/_active_tasks``
 ==================
 
+.. versionchanged:: 2.1.0 Because of how the scheduling replicator works, continuous replication jobs could be periodically stopped and then started later. When they are not running they will not appear in the ``_active_tasks`` endpoint
+
 .. http:get:: /_active_tasks
     :synopsis: Obtains a list of the tasks running in the server
 
@@ -659,6 +661,213 @@ Must be canceled using the request:
 
 Requesting cancellation of a replication that does not exist results in a 404
 error.
+
+.. _api/server/_scheduler/jobs:
+
+====================
+``/_scheduler/jobs``
+====================
+
+.. http:get:: /_scheduler/jobs
+    :synopsis: Retrieve information about replication jobs
+
+    List of replication jobs. Includes replications created via
+    :ref:`api/server/replicate` endpoint as well as those created from
+    replication documents. Does not include replications which have completed
+    or have failed to start because replication documents were malformed. Each
+    job description will include source and target information, replication id,
+    a history of recent event, and a few other things.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :query number limit: How many results to return
+    :query number skip: How many result to skip starting at the beggining,
+                        ordered by replication ID
+    :>json number offset: How many results were skipped
+    :>json number total_rows: Total number of replication jobs
+    :>json string id: Replication ID.
+    :>json string database: Replication document database
+    :>json string doc_id: Replication document ID
+    :>json list history: Timestamped history of events as a list of objects
+    :>json string pid: Replication process ID
+    :>json string node: Cluster node where the job is running
+    :>json string source: Replication source
+    :>json string target: Replication target
+    :>json string start_time: Timestamp of when the replication was started
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_scheduler/jobs HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 1690
+        Content-Type: application/json
+        Date: Sat, 29 Apr 2017 05:05:16 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+            "jobs": [
+                {
+                    "database": "_replicator",
+                    "doc_id": "cdyno-0000001-0000003",
+                    "history": [
+                        {
+                            "timestamp": "2017-04-29T05:01:37Z",
+                            "type": "started"
+                        },
+                        {
+                            "timestamp": "2017-04-29T05:01:37Z",
+                            "type": "added"
+                        }
+                    ],
+                    "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
+                    "node": "node1@127.0.0.1",
+                    "pid": "<0.1850.0>",
+                    "source": "http://myserver.com/foo",
+                    "start_time": "2017-04-29T05:01:37Z",
+                    "target": "http://adm:*****@localhost:15984/cdyno-0000003/",
+                    "user": null
+                },
+                {
+                    "database": "_replicator",
+                    "doc_id": "cdyno-0000001-0000002",
+                    "history": [
+                        {
+                            "timestamp": "2017-04-29T05:01:37Z",
+                            "type": "started"
+                        },
+                        {
+                            "timestamp": "2017-04-29T05:01:37Z",
+                            "type": "added"
+                        }
+                    ],
+                    "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+                    "node": "node2@127.0.0.1",
+                    "pid": "<0.1757.0>",
+                    "source": "http://myserver.com/foo",
+                    "start_time": "2017-04-29T05:01:37Z",
+                    "target": "http://adm:*****@localhost:15984/cdyno-0000002/",
+                    "user": null
+                }
+            ],
+            "offset": 0,
+            "total_rows": 2
+         }
+
+.. _api/server/_scheduler/docs:
+
+====================
+``/_scheduler/docs``
+====================
+
+.. versionchanged:: 2.1.0 Use this endpoint to monitor the state of
+                    document-based replications. Previously needed to poll both
+                    documents and ``_active_tasks`` to get a complete state
+                    summary
+
+.. http:get:: /_scheduler/docs
+    :synopsis: Retrieve information about replication documents
+
+    List of replication document states. Includes information about all the
+    documents, even in ``completed`` and ``failed`` states. For each document
+    it returns the document ID, the database, the replication ID, source and
+    target, and other information.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :query number limit: How many results to return
+    :query number skip: How many result to skip starting at the beggining, if
+                        ordered by document ID
+    :>json number offset: How many results were skipped
+    :>json number total_rows: Total number of replication documents.
+    :>json string id: Replication ID, or ``null`` if state is ``completed`` or
+                      ``failed``
+    :>json string state: One of following states (see :ref:`replicator/states`
+                         for descriptions): ``initializing``, ``running``,
+                         ``completed``, ``pending``, ``crashing``, ``error``,
+                         ``failed``
+    :>json string database: Database where replication document came from
+    :>json string doc_id: Replication document ID
+    :>json string node: Cluster node where the job is running
+    :>json string source: Replication source
+    :>json string target: Replication target
+    :>json string start_time: Timestamp of when the replication was started
+    :>json string last_update: Timestamp of last state update
+    :>json string info: Additional information about the state, such as an
+                        error message for example
+    :>json number error_count: Consecutive errors count. Indicates how many
+                               times in a row this replication has crashed.
+                               Replication will be retried with an exponential
+                               backoff based on this number. As soon as the
+                               replication succeeds this count is reset to 0.
+                               To can be used to get an idea why a particular
+                               replication is not making progress.
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_scheduler/docs HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        Date: Sat, 29 Apr 2017 05:10:08 GMT
+        Server: Server: CouchDB (Erlang/OTP)
+        Transfer-Encoding: chunked
+
+        {
+            "docs": [
+                {
+                    "database": "_replicator",
+                    "doc_id": "cdyno-0000001-0000002",
+                    "error_count": 0,
+                    "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+                    "info": null,
+                    "last_updated": "2017-04-29T05:01:37Z",
+                    "node": "node2@127.0.0.1",
+                    "proxy": null,
+                    "source": "http://myserver.com/foo",
+                    "start_time": "2017-04-29T05:01:37Z",
+                    "state": "running",
+                    "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
+                },
+                {
+                    "database": "_replicator",
+                    "doc_id": "cdyno-0000001-0000003",
+                    "error_count": 0,
+                    "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
+                    "info": null,
+                    "last_updated": "2017-04-29T05:01:37Z",
+                    "node": "node1@127.0.0.1",
+                    "proxy": null,
+                    "source": "http://myserver.com/foo",
+                    "start_time": "2017-04-29T05:01:37Z",
+                    "state": "running",
+                    "target": "http://adm:*****@localhost:15984/cdyno-0000003/"
+                }
+            ],
+            "offset": 0,
+            "total_rows": 2
+        }
 
 .. _api/server/restart:
 

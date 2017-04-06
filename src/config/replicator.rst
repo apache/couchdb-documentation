@@ -23,15 +23,51 @@ Replicator Database Configuration
 
 .. config:section:: replicator :: Replicator Database Configuration
 
-    .. versionadded:: 1.2
+    .. config:option:: max_jobs
 
-    .. config:option:: max_replication_retry_count
+        .. versionadded:: 2.1
 
-        Maximum replication retry count can be a non-negative integer or
-        "infinity"::
+        Number of actively running replications. Making this too high could
+        cause performance issues. Making it too low could mean replications
+        jobs might not have enough time to make progress before getting
+        unscheduled again. This parameter can be adjusted at runtime and will
+        take effect during next rescheduling cycle::
 
-            [replicator]
-            max_replication_retry_count = 10
+             [replicator]
+             max_jobs = 500
+
+    .. config:option:: interval
+
+        .. versionadded:: 2.1
+
+        Scheduling interval in milliseconds. During each reschedule cycle
+        scheduler might start or stop up to "max_churn" number of jobs::
+
+             [replicator]
+             interval = 60000
+
+    .. config:option:: max_churn
+
+        .. versionadded:: 2.1
+
+        Maximum number of replications to start and stop during rescheduling.
+        This parameter along with ``interval`` defines the rate of job
+        replacement. During startup, however a much larger number of jobs could
+        be started (up to ``max_jobs``) in a short period of time::
+
+             [replicator]
+             max_churn = 20
+
+    .. config:option:: update_docs
+
+        .. versionadded:: 2.1
+
+        When set to ``true`` replicator will update replication document with
+        error and triggered states. This approximates pre 2.1 replicator
+        behavior::
+
+             [replicator]
+             update_docs = false
 
     .. config:option:: worker_batch_size
 
