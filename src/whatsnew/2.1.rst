@@ -1,0 +1,105 @@
+.. Licensed under the Apache License, Version 2.0 (the "License"); you may not
+.. use this file except in compliance with the License. You may obtain a copy of
+.. the License at
+..
+..   http://www.apache.org/licenses/LICENSE-2.0
+..
+.. Unless required by applicable law or agreed to in writing, software
+.. distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+.. WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+.. License for the specific language governing permissions and limitations under
+.. the License.
+
+.. _release/2.1.x:
+
+============
+2.1.x Branch
+============
+
+.. contents::
+    :depth: 1
+    :local:
+
+.. _release/2.1.0:
+
+Version 2.1.0
+=============
+
+* New scheduling replicator. The core of the new replicator is a
+  scheduler which allows running a large number of replication
+  jobs by switching between them, stopping some and starting others
+  periodically. Jobs which fail are backed off exponentially. There is
+  also an improved inspection and querying API: ``_scheduler/jobs`` and
+  ``_scheduler/docs``:
+
+  * ``_scheduler/jobs`` : This endpoint shows active replication
+    jobs. These are jobs managed by the scheduler. Some of them might
+    be running, some might be waiting to run, or backed off
+    (penalized) because they crashed too many times. Semantically this
+    is somewhat equivalent to ``_active_tasks`` but focuses only on
+    replications. Jobs which have completed or which were never
+    created because of malformed replication documents will not be
+    shown here as they are not managed by the scheduler.
+    ``_replicate`` replications, started form _replicate endpoint not
+    from a document in a ``_replicator`` db, will also show up here.
+
+  * ``_scheduler/docs`` : This endpoint is an improvement on having to go
+    back and read replication documents to query their state. It
+    represents the state of all the replications started from
+    documents in _replicator db. Unlike ``_scheduler/jobs`` it will also
+    show jobs which have failed or have completed.
+
+  By default, scheduling replicator will not update documents with
+  transient states like ``triggered`` or ``error`` anymore, instead
+  ``_scheduler/docs`` API should be used to query replication document
+  states.
+
+Other scheduling replicator improvements
+-----------------------------------------
+
+  * Network resource usage and performance was improved by
+    implementing a shared connection pool. This should help in cases
+    of a large number of connections to the same sources or
+    target. Previously connection pools were shared only withing a
+    single replication job.
+
+  * Improved request rate limit handling. Replicator requests will
+    auto-discover rate limit capacity on targets and sources based on
+    a proven Additive Increase / Multiplicative Decrease feedback
+    control algorithm.
+
+  * Improved performance by having exponential backoff for all
+    replication jobs failures.  Previously there were some scenarios
+    were failure led to continuous repeated retries, consuming CPU and
+    disk resources in the process.
+
+  * Improved recovery from long but temporary network
+    failure. Currently if replications jobs fail to start 10 times in
+    a row, they will not be retried anymore. This is sometimes
+    desirable, but in some cases, for example, after a sustained DNS
+    failure which eventually recovers, replications reach their retry
+    limit, stop retrying and never recover. Previously it required
+    user intervention to continue. Scheduling replicator will never
+    give up retrying a valid scheduled replication job and so it
+    should recover automatically.
+
+  * Better handling of filtered replications. Failing user filter code
+    fetches from the source will not block replicator manager and
+    stall other replications. Failing filter fetches will also be
+    backed off exponentially. Another improvement is when filter code
+    changes on the source, a running replication will detect that and
+    restart itself with a new replication ID automatically.
+
+.. _release/2.1.x/upgrade:
+
+Upgrade Notes
+=============
+
+* If user code reads or manipulates replicator document states,
+  consider using ``replicator.update_docs = true`` compatibility
+  parameter. In that case replicator will continue updating documents
+  with transient replication states. However, that will incure a
+  performance cost. Consider instead switching using
+  ``_scheduler/docs`` HTTP endpoint.
+
+.. _CouchDB JIRA instance: https://issues.apache.org/jira/browse/COUCHDB
