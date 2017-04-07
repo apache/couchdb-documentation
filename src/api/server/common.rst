@@ -359,6 +359,7 @@
     :<json boolean create_target: Creates the target database.
       Required administrator's privileges on target server.
     :<json array doc_ids: Array of document IDs to be synchronized
+    :<json string filter: The name of a :ref:`filter function <filterfun>`.
     :<json string proxy: Address of a proxy server through which replication
       should occur (protocol can be "http" or "socks5")
     :<json string source: Source database name or URL
