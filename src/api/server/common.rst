@@ -358,6 +358,8 @@ jumping to ``offset`` bytes towards the beginning of the file first:
   :<json boolean create_target: Creates the target database.
     Required administrator's privileges on target server.
   :<json array doc_ids: Array of document IDs to be synchronized
+  :<json string filter: The name of a filter function (more details on the
+    `wiki <https://wiki.apache.org/couchdb/Replication#Named_Document_Replication>`_)
   :<json string proxy: Address of a proxy server through which replication
     should occur (protocol can be "http" or "socks5")
   :<json string source: Source database name or URL
