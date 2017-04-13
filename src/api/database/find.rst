@@ -44,18 +44,39 @@
     :query json use_index: Instruct a query to use a specific index. Specified
         either as ``"<design_document>"`` or
         ``["<design_document>", "<index_name>"]``. *Optional*
+    :query number r: Read quorum needed for the result. This defaults to 1, in
+        which case the document found in the index is returned. If set to a
+        higher value, each document is read from at least that many replicas
+        before it is returned in the results. This is likely to take more time
+        than using only the document stored locally with the index. *Optional,
+        default: 1*
+    :query string bookmark: A string that enables you to specify which page of
+        results you require. Used for paging through result sets. Every query
+        returns an opaque string under the ``bookmark`` key that can then be
+        passed back in a query to get the next page of results. If any part of
+        the query other than ``bookmark`` changes between requests, the results
+        are undefined. *Optional, default: null  Only for indexes of type
+        ``text``.*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
 
-    :>json object docs: Documents matching the selector
+    :>json object docs: Array of documents matching the search. In each matching
+        document, the fields specified in the ``fields`` part of the request
+        body are listed, along with their values.
 
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
     :code 500: Query execution error
 
+The ``limit`` and ``skip`` values are exactly as you would expect. While
+``skip`` exists, it is not intended to be used for paging. The reason is that
+the ``bookmark`` feature is more efficient.
+
     **Request**:
+
+Example request body for finding documents using an index:
 
     .. code-block:: http
 
@@ -76,6 +97,8 @@
         }
 
     **Response**:
+
+Example response when finding documents using an index:
 
     .. code-block:: http
 
@@ -125,11 +148,42 @@ Elementary selector syntax requires you to specify one or more fields, and the
 corresponding values required for those fields. This selector matches all
 documents whose "director" field has the value "Lars von Trier".
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "director": "Lars von Trier"
-        }
+    {
+        "director": "Lars von Trier"
+    }
+
+If you created a full text index by specifying ``"type":"text"`` when
+the index was created, you can use the ``$text`` operator to select
+matching documents. In this example, the full text index is inspected to
+find any document that includes the word "Bond".
+
+    A simple selector for a full text index
+
+.. code:: json
+
+    {
+      "selector": {
+        "$text": "Bond"
+      }
+    }
+
+In this example, the full text index is inspected to find any document
+that includes the word "Bond". In the response, the fields ``title`` or
+``cast`` are returned for every matching object.
+
+    A simple selector, inspecting specific fields
+
+.. code:: json
+
+    "selector": {
+      "$text": "Bond"
+    },
+    "fields": [
+      "title",
+      "cast"
+    ]
 
 You can create more complex selector expressions by combining operators.
 However, you cannot use 'combination' or 'array logical' operators such as
@@ -147,12 +201,12 @@ Selector with 2 fields
 This selector matches any document with a name field containing ``"Paul"``,
 and that also has a location field with the value ``"Boston"``.
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "name": "Paul",
-            "location": "Boston"
-        }
+    {
+        "name": "Paul",
+        "location": "Boston"
+    }
 
 .. _find/subfields:
 
@@ -163,22 +217,24 @@ A more complex selector enables you to specify the values for field of nested
 objects, or subfields. For example, you might use a standard JSON structure for
 specifying a field and subfield.
 
-    .. code-block:: javascript
+Example of a field and subfield selector, using a standard JSON structure:
 
-        {
-            "imdb": {
-                "rating": 8
-            }
+.. code-block:: javascript
+
+    {
+        "imdb": {
+            "rating": 8
         }
+    }
 
 An abbreviated equivalent uses a dot notation to combine the field and subfield
 names into a single name.
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "imdb.rating": 8
-        }
+    {
+        "imdb.rating": 8
+    }
 
 .. _find/operators:
 
@@ -199,9 +255,9 @@ into one selector.
 
 Every explicit operator has the form:
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {"$operator": argument}
+    {"$operator": argument}
 
 A selector without an explicit operator is considered to have an implicit
 operator. The exact implicit operator is determined by the structure of the
@@ -227,38 +283,40 @@ $and operator on each field.
 In the below example, we use an operator to match any document, where the
 ``"year"`` field has a value greater than ``2010``:
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "year": {
-                "$gt": 2010
-            }
+    {
+        "year": {
+            "$gt": 2010
         }
+    }
 
 In this next example, there must be a field ``"director"`` in a matching
 document, and the field must have a value exactly equal to ``"Lars von Trier"``.
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "director": "Lars von Trier"
-        }
+    {
+        "director": "Lars von Trier"
+    }
 
 You can also make the equality operator explicit.
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "director": {
-                "$eq": "Lars von Trier"
-            }
+    {
+        "director": {
+            "$eq": "Lars von Trier"
         }
+    }
 
 In the next example using subfields, the required field ``"imdb"`` in a matching
 document must also have a subfield ``"rating"`` and the subfield must have a
 value equal to ``8``.
 
-    .. code-block:: javascript
+Example of implicit operator applied to a subfield test
+
+.. code:: json
 
         {
             "imdb": {
@@ -268,43 +326,81 @@ value equal to ``8``.
 
 Again, you can make the equality operator explicit.
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "imdb": {
-                "rating": { "$eq": 8 }
-            }
+    {
+        "imdb": {
+            "rating": { "$eq": 8 }
         }
+    }
+
+An example of the ``$eq`` operator used with full text indexing
+
+.. code:: json
+
+    {
+      "selector": {
+        "year": {
+          "$eq": 2001
+        }
+      },
+      "sort": [
+        "title:string"
+      ],
+      "fields": [
+        "title"
+      ]
+    }
+
+An example of  the ``$eq`` operator used with database indexed on the field ``"year"``
+
+.. code:: json
+
+    {
+      "selector": {
+        "year": {
+          "$eq": 2001
+        }
+      },
+      "sort": [
+        "year"
+      ],
+      "fields": [
+        "year"
+      ]
+    }
 
 In this example, the field ``"director"`` must be present and contain the value
 ``"Lars von Trier"`` and the field ``"year"`` must exist and have the value
 ``2003``.
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "director": "Lars von Trier",
-            "year": 2003
-        }
+    {
+        "director": "Lars von Trier",
+        "year": 2003
+    }
 
 You can make both the ``$and`` operator and the equality operator explicit.
 
-    .. code-block:: javascript
+    Example of using explicit ``$and`` and ``$eq`` operators
 
-        {
-            "$and": [
-                {
-                    "director": {
-                        "$eq": "Lars von Trier"
-                    }
-                },
-                {
-                    "year": {
-                        "$eq": 2003
-                    }
+.. code-block:: javascript
+
+    {
+        "$and": [
+            {
+                "director": {
+                    "$eq": "Lars von Trier"
                 }
-            ]
-        }
+            },
+            {
+                "year": {
+                    "$eq": 2003
+                }
+            }
+        ]
+    }
 
 .. _find/explicit_operators:
 
@@ -355,143 +451,166 @@ The list of combination operators:
 
 .. _find/and:
 
-**The ``$and`` operator**
+**The** ``$and`` **operator**
+    ``$and`` operator used with full text indexing
+
+.. code:: json
+
+    {
+      "selector": {
+        "$and": [
+          {
+            "$text": "Schwarzenegger"
+          },
+          {
+            "year": {
+              "$in": [1984, 1991]
+            }
+          }
+        ]
+      },
+      "fields": [
+        "year",
+        "title",
+        "cast"
+      ]
+    }
 
 The ``$and`` operator matches if all the selectors in the array match. Below is
 an example using the primary index (```_all_docs```):
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "$and": [
-                {
-                    "_id": { "$gt": null }
-                },
-                {
-                    "year": {
-                        "$in": [2014, 2015]
-                    }
+    {
+        "$and": [
+            {
+                "_id": { "$gt": null }
+            },
+            {
+                "year": {
+                    "$in": [2014, 2015]
                 }
-            ]
-        }
+            }
+        ]
+    }
 
 .. _find/or:
 
-**The ``$or`` operator**
+**The** ``$or`` **operator**
 
 The ``$or`` operator matches if any of the selectors in the array match. Below
 is an example used with an index on the field ``"year"``:
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "year": 1977,
-            "$or": [
-                { "director": "George Lucas" },
-                { "director": "Steven Spielberg" }
-            ]
-        }
+    {
+        "year": 1977,
+        "$or": [
+            { "director": "George Lucas" },
+            { "director": "Steven Spielberg" }
+        ]
+    }
 
 .. _find/not:
 
-**The ``$not`` operator**
+**The** ``$not`` **operator**
 
 The ``$not`` operator matches if the given selector does not match. Below is an
 example used with an index on the field ``"year"``:
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "year": {
-                "$gte": 1900
-            },
-            "year": {
-                "$lte": 1903
-            },
-            "$not": {
-                "year": 1901
-            }
+    {
+        "year": {
+            "$gte": 1900
+        },
+        "year": {
+            "$lte": 1903
+        },
+        "$not": {
+            "year": 1901
         }
+    }
 
 .. _find/nor:
 
-**The ``$nor`` operator**
+**The** ``$nor`` **operator**
 
 The ``$nor`` operator matches if the given selector does not match. Below is an
 example used with an index on the field ``"year"``:
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "year": {
-                "$gte": 1900
-            },
-            "year": {
-                "$lte": 1910
-            },
-            "$nor": [
-                { "year": 1901 },
-                { "year": 1905 },
-                {  "year": 1907 }
-            ]
-        }
+    {
+        "year": {
+            "$gte": 1900
+        },
+        "year": {
+            "$lte": 1910
+        },
+        "$nor": [
+            { "year": 1901 },
+            { "year": 1905 },
+            {  "year": 1907 }
+        ]
+    }
 
 .. _find/all:
 
-**The ``$all`` operator**
+**The** ``$all`` **operator**
 
 The ``$all`` operator matches an array value if it contains all the elements of
 the argument array. Below is an example used with the primary index
 (``_all_docs``):
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "_id": {
-                "$gt": null
-            },
-            "genre": {
-                "$all": ["Comedy","Short"]
-            }
+    {
+        "_id": {
+            "$gt": null
+        },
+        "genre": {
+            "$all": ["Comedy","Short"]
         }
+    }
 
 .. _find/elemmatch:
 
-**The ``$elemMatch`` operator**
+**The** ``$elemMatch`` **operator**
 
 The ``$elemMatch`` operator matches and returns all documents that contain an
 array field with at least one element matching the supplied query criteria.
 Below is an example used with the primary index (``_all_docs``):
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "_id": { "$gt": null },
-            "genre": {
-                "$elemMatch": {
-                    "$eq": "Horror"
-                }
+    {
+        "_id": { "$gt": null },
+        "genre": {
+            "$elemMatch": {
+                "$eq": "Horror"
             }
         }
+    }
 
 .. _find/allmatch:
 
-**The ``$allMatch`` operator**
+**The** ``$allMatch`` **operator**
 
 The ``$allMatch`` operator matches and returns all documents that contain an
 array field with all its elements matching the supplied query criteria. Below
 is an example used with the primary index (``_all_docs``):
 
-    .. code-block:: javascript
+.. code-block:: javascript
 
-        {
-            "_id": { "$gt": null },
-            "genre": {
-                "$allMatch": {
-                    "$eq": "Horror"
-                }
+    {
+        "_id": { "$gt": null },
+        "genre": {
+            "$allMatch": {
+                "$eq": "Horror"
             }
         }
+    }
 
 .. _find/condition-operators:
 
@@ -679,6 +798,27 @@ order is implementation specific and might change.
 Find does not support multiple fields with different sort orders, so the
 directions must be either all ascending or all descending.
 
+For field names in text search sorts, it is sometimes necessary for a
+field type to be specified, for example:
+
+``{ "<fieldname>:string": "asc"}``
+
+If possible, an attempt is made to discover the field type based on the
+selector. In ambiguous cases the field type must be provided explicitly.
+
+The sorting order is undefined when fields contain different data types.
+This is an important difference between text and view indexes. Sorting
+behavior for fields with different data types might change in future
+versions.
+
+    A simple query, using sorting:
+
+.. code:: json
+
+    {
+        "selector": {"Actor_name": "Robert De Niro"},
+        "sort": [{"Actor_name": "asc"}, {"Movie_runtime": "asc"}]
+    }
 .. _find/filter:
 
 Filtering Fields
@@ -714,8 +854,16 @@ Example of selective retrieval of fields from matching documents:
 
 .. _api/db/find/index-post:
 
+Mango is a declarative JSON querying language for CouchDB databases.
+Mango wraps several index types, starting with the Primary Index
+out-of-the-box. Mango indexes can also be built using MapReduce Views
+(where the index type is ``json``), and Search Indexes (where the index
+type is ``text``).
+
 .. http:post:: /{db}/_index
     :synopsis: Create a new index.
+
+    Create a new index on a database
 
     :param db: Database name
 
@@ -730,6 +878,8 @@ Example of selective retrieval of fields from matching documents:
         indexes in the same document (similar to views). *Optional*
     :query string name: Name of the index. If no name is provided, a name will
         be generated automatically. *Optional*
+    :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
+        Geospatial indexes will be supported in the future. *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
@@ -744,17 +894,30 @@ Example of selective retrieval of fields from matching documents:
     :code 401: Admin permission required
     :code 500: Execution error
 
-    **Index object format**
+If you know exactly what data you want to look for, or you want to keep
+storage and processing requirements to a minimum, you can specify how
+the index is created, by making it of type ``json``.
 
-    The index object is a JSON array of field names following the :ref:`sort
-    syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
+But for maximum possible flexibility when looking for data, you would
+typically create an index of type ``text``. Indexes of type ``text``
+have a simple mechanism for automatically indexing all the fields in the
+documents.
+
+While more flexible, ``text`` indexes might take longer to create and
+require more storage resources than ``json`` indexes.
+
+**Index object format for JSON type indexes**
+
+The index object is a JSON array of field names following the :ref:`sort
+syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
+
+Example of creating a new index for the field called ``foo``:
 
     **Request**:
 
     .. code-block:: http
 
         POST /db/_index HTTP/1.1
-        Accept: application/json
         Content-Type: application/json
         Content-Length: 116
         Host: localhost:5984
@@ -763,8 +926,11 @@ Example of selective retrieval of fields from matching documents:
             "index": {
                 "fields": ["foo"]
             },
-            "name" : "foo-index"
+            "name" : "foo-index",
+            "type" : "json"
         }
+
+The returned JSON confirms the index has been created:
 
     **Response**:
 
@@ -783,10 +949,94 @@ Example of selective retrieval of fields from matching documents:
             "name":"foo-index"
         }
 
+**Index object format for TEXT type indexes**
+
+    :index: contains settings specific to text indexes.  To index
+        all fields in all documents automatically, use the simple syntax:
+        ``"index": {}``.  The indexing process traverses all of the fields in
+        all the documents in the database. *Caution should be taken when
+        indexing all fields in all documents for large data sets, as it might
+        be a very resource-consuming activity.*
+    :default_field: specifies how the ``$text`` operator can be
+        used with the index. If the ``default_field`` is not specified, it
+        defaults to ``true`` and the standard analyzer is used.  The
+        ``analyzer`` key in the ``default_field`` specifies how the index
+        analyzes text. The index can subsequently be queried using the
+        ``$text`` operator. You might choose to use an alternative analyzer
+        when documents are indexed in languages other than English, or when you
+        have other special requirements for the analyser such as matching email
+        addresses.
+    :selector: used to limit the index to a specific set of
+        documents that match a query. It uses the same syntax used for
+        selectors in queries. This can be used if your application requires
+        different documents to be indexed in different ways, or if some
+        documents should not be indexed at all. If you only need to distinguish
+        documents by type, it is easier to use one index and add the type to
+        the search query.
+    :fields: contains a list of fields that should be indexed for
+        each document. If you know that an index queries only on specific
+        fields, then this field can be used to limit the size of the index.
+        Each field must also specify a type to be indexed. The acceptable types
+        are ``"boolean"``, ``"string"`` and ``"number"``.
+
+Example index creation request to index all fields in all documents
+
+.. code:: json
+
+    {
+        "type": "text",
+        "index": {}
+    }
+
+Example index creation request with specific examples
+
+.. code:: json
+
+    {
+      "type": "text",
+      "name": "my-index",
+      "ddoc": "my-index-design-doc",
+      "index": {
+        "default_field": {
+          "enabled": true,
+          "analyzer": "german"
+        },
+        "selector": {},
+        "fields": [
+          {"name": "married", "type": "boolean"},
+          {"name": "lastname", "type": "string"},
+          {"name": "year-of-birth", "type": "number"}
+        ]
+      }
+    }
+
+Example index creation using all available query parameters
+
+.. code:: json
+
+    {
+      "selector": {
+        "year": {
+          "$gt": 2010
+        }
+      },
+      "fields": ["_id", "_rev", "year", "title"],
+      "sort": [{"year": "asc"}],
+      "limit": 10,
+      "skip": 0
+    }
+
 .. _api/db/find/index-get:
 
 .. http:get:: /{db}/_index
     :synopsis: List all indexes.
+
+    When you make a ``GET`` request to ``/db/_index``, you get a list of all
+    indexes in the database. In addition to the information available through
+    this API, indexes are also stored in design documents <index-functions>.
+    Design documents are regular documents that have an ID starting with
+    ``_design/``. Design documents can be retrieved and modified in the same
+    way as any other document, although this is not necessary when using Mango.
 
     :param db: Database name.
 
@@ -800,6 +1050,17 @@ Example of selective retrieval of fields from matching documents:
     :code 400: Invalid request
     :code 401: Read permission required
     :code 500: Execution error
+
+    Format of index objects:
+        -  **ddoc**: ID of the design document the index belongs to. This ID
+            can be used to retrieve the design document containing the index,
+            by making a ``GET`` request to ``/db/ddoc``, where ``ddoc`` is the
+            value of this field.
+        -  **name**: Name of the index.
+        -  **type**: Type of the index. Currently "json" is the only
+            supported type.
+        -  **def**: Definition of the index, containing the indexed fields
+            and the sort order: ascending or descending.
 
     **Request**:
 
@@ -901,7 +1162,8 @@ Example of selective retrieval of fields from matching documents:
 .. http:post:: /{db}/_explain
     :synopsis: Identify which index is being used by a particular query.
 
-    Query parameters are the same as :ref:`_find <api/db/_find>`
+    Shows which index is being used by the query.  Parameters are the same as
+    :ref:`_find <api/db/_find>`
 
     :param db: Database name
 
