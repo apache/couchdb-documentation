@@ -1587,20 +1587,12 @@ Replicator updates Replication Log on Source:
 
         PUT /source/_local/afa899a9e59589c3d4ce5668e3218aef HTTP/1.1
         Accept: application/json
-        Content-Length: 591
         Content-Type: application/json
         Host: localhost:5984
         User-Agent: CouchDB
 
         {
             "_id": "_local/afa899a9e59589c3d4ce5668e3218aef",
-            "_rev": "0-1",
-            "_revisions": {
-                "ids": [
-                    "31f36e40158e717fbe9842e227b389df"
-                ],
-                "start": 1
-            },
             "history": [
                 {
                     "doc_write_failures": 0,
@@ -1635,7 +1627,7 @@ Replicator updates Replication Log on Source:
         {
             "id": "_local/afa899a9e59589c3d4ce5668e3218aef",
             "ok": true,
-            "rev": "0-2"
+            "rev": "0-1"
         }
 
 ...and on Target too:
@@ -1646,20 +1638,12 @@ Replicator updates Replication Log on Source:
 
         PUT /target/_local/afa899a9e59589c3d4ce5668e3218aef HTTP/1.1
         Accept: application/json
-        Content-Length: 591
         Content-Type: application/json
         Host: localhost:5984
         User-Agent: CouchDB
 
         {
             "_id": "_local/afa899a9e59589c3d4ce5668e3218aef",
-            "_rev": "1-31f36e40158e717fbe9842e227b389df",
-            "_revisions": {
-                "ids": [
-                    "31f36e40158e717fbe9842e227b389df"
-                ],
-                "start": 1
-            },
             "history": [
                 {
                     "doc_write_failures": 0,
@@ -1694,7 +1678,7 @@ Replicator updates Replication Log on Source:
         {
             "id": "_local/afa899a9e59589c3d4ce5668e3218aef",
             "ok": true,
-            "rev": "2-9b5d1e36bed6ae08611466e30af1259a"
+            "rev": "0-1"
         }
 
 Continue Reading Changes
