@@ -107,6 +107,21 @@ Server Administrators
 Authentication Configuration
 ============================
 
+.. config:section:: chttpd :: Clustered Authentication Configuration
+
+    .. config:option:: require_valid_user :: Force user authentication
+
+        When this option is set to ``true``, no requests are allowed from
+        anonymous users. Everyone must be authenticated. ::
+
+            [chttpd]
+            require_valid_user = false
+
+        .. note::
+            This setting only affects the clustered-port (5984 by default).
+            To make the same change for the node-local port (5986 by default),
+            set the ``[couch_httpd_auth]`` setting of the same name.
+
 .. config:section:: couch_httpd_auth :: Authentication Configuration
 
     .. config:option:: allow_persistent_cookies :: Persistent cookies
@@ -132,6 +147,10 @@ Authentication Configuration
 
             [couch_httpd_auth]
             authentication_redirect = /_utils/session.html
+
+        .. note::
+            This setting affects both the clustered-port (5984 by default)
+            and the node-local port (5986 by default).
 
     .. config:option:: iterations :: PBKDF2 iterations count
 
@@ -201,6 +220,11 @@ Authentication Configuration
             [couch_httpd_auth]
             require_valid_user = false
 
+        .. warning::
+            This setting only affects the node-local port (5986 by default).
+            Most administrators want the ``[chttpd]`` setting of the same name
+            for clustered-port (5984) behaviour.
+
     .. config:option:: secret :: Authentication secret token
 
         The secret token is used for :ref:`api/auth/proxy` and for :ref:`api/auth/cookie`. ::
@@ -226,6 +250,10 @@ Authentication Configuration
 
             [couch_httpd_auth]
             users_db_public = false
+
+        .. note::
+            This setting affects both the clustered-port (5984 by default)
+            and the node-local port (5986 by default).
 
     .. config:option:: x_auth_roles :: Proxy Auth roles header
 

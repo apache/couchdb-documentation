@@ -60,12 +60,6 @@ the various configuration values within a running CouchDB instance.
                 "compressible_types": "text/*, application/javascript, application/json,  application/xml",
                 "compression_level": "8"
             },
-            "couch_httpd_auth": {
-                "auth_cache_size": "50",
-                "authentication_redirect": "/_utils/session.html",
-                "require_valid_user": "false",
-                "timeout": "600"
-            },
             "couchdb": {
                 "users_db_suffix": "_users",
                 "database_dir": "/var/lib/couchdb",
@@ -76,6 +70,14 @@ the various configuration values within a running CouchDB instance.
                 "uri_file": "/var/lib/couchdb/couch.uri",
                 "util_driver_dir": "/usr/lib64/couchdb/erlang/lib/couch-1.5.0/priv/lib",
                 "view_index_dir": "/var/lib/couchdb"
+            },
+            "chttpd": {
+                "backlog": "512",
+                "bind_address": "0.0.0.0",
+                "docroot": "./share/www",
+                "port": "5984",
+                "require_valid_user": "false",
+                "socket_options": "[{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]"
             },
             "daemons": {
                 "auth_cache": "{couch_auth_cache, start_link, []}",
