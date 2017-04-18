@@ -67,7 +67,7 @@ CouchDB with 3 new fields:
         "create_target":  true,
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "triggered",
-        "_replication_state_time":  1297974122
+        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
     }
 
 Special fields set by the replicator start with the prefix
@@ -84,9 +84,8 @@ Special fields set by the replicator start with the prefix
 
 - ``_replication_state_time``
 
-  A Unix timestamp (number of seconds since 1 Jan 1970) that tells us
-  when the current replication state (marked in ``_replication_state``)
-  was set.
+  The time in RFC3339 format when the current replication state (marked in
+  ``_replication_state``) was set.
 
 - ``_replication_state_reason``
 
@@ -118,7 +117,7 @@ the document will look like:
         "create_target":  true,
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "completed",
-        "_replication_state_time":  1297974122
+        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
     }
 
 When an error happens during replication, the ``_replication_state``
@@ -196,7 +195,7 @@ While document ``doc_A`` will look like this:
         "target":  "http://user:pass@localhost:5984/bar",
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "triggered",
-        "_replication_state_time":  1297974122
+        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
     }
 
 Note that both document get exactly the same value for the ``_replication_id``
@@ -263,7 +262,7 @@ documents which represent pull replications from servers A and B:
         "continuous":  true,
         "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
         "_replication_state":  "triggered",
-        "_replication_state_time":  1297971311
+        "_replication_state_time":  "2011-02-17T19:35:11+01:00"
     }
 
 .. code-block:: javascript
@@ -275,7 +274,7 @@ documents which represent pull replications from servers A and B:
         "continuous":  true,
         "_replication_id":  "231bb3cf9d48314eaa8d48a9170570d1",
         "_replication_state":  "triggered",
-        "_replication_state_time":  1297974122
+        "_replication_state_time":  "2011-02-17T20:22:02+01:00"
     }
 
 Now without stopping and restarting CouchDB, add another replicator database.
@@ -329,7 +328,7 @@ following pull replication documents in it:
          "continuous":  true,
          "_replication_id":  "c0ebe9256695ff083347cbf95f93e280",
          "_replication_state":  "triggered",
-         "_replication_state_time":  1297971311
+         "_replication_state_time":  "2011-02-17T19:35:11+01:00"
     }
 
 .. code-block:: javascript
@@ -341,7 +340,7 @@ following pull replication documents in it:
          "continuous":  true,
          "_replication_id":  "231bb3cf9d48314eaa8d48a9170570d1",
          "_replication_state":  "triggered",
-         "_replication_state_time":  1297974122
+         "_replication_state_time":  "2011-02-17T20:22:02+01:00"
     }
 
 Now you would like to have the same pull replications going on in server
