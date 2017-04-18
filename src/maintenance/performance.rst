@@ -99,6 +99,7 @@ will be continuously replicating.
 Erlang
 ------
 
+[The documentation no longer speaks about maximum connections.  Not sure how to change this.]
 Even if you've increased the maximum connections CouchDB will allow,
 the Erlang runtime system will not allow more than 1024 connections by
 default. Adding the following directive to ``(prefix)/etc/default/couchdb`` (or
