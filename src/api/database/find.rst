@@ -612,6 +612,25 @@ is an example used with the primary index (``_all_docs``):
         }
     }
 
+.. _find/allmatch:
+
+**The ``$allMatch`` operator**
+
+The ``$allMatch`` operator matches and returns all documents that contain an
+array field with all its elements matching the supplied query criteria. Below
+is an example used with the primary index (``_all_docs``):
+
+    .. code-block:: javascript
+
+        {
+            "_id": { "$gt": null },
+            "genre": {
+                "$allMatch": {
+                    "$eq": "Horror"
+                }
+            }
+        }
+
 .. _find/condition-operators:
 
 Condition Operators
