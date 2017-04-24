@@ -75,7 +75,7 @@ the return information formatted for clarity):
         "doc_del_count" : 0,
         "disk_format_version" : 5,
         "update_seq" : 0,
-        "instance_start_time" : "1306421773496000",
+        "instance_start_time" : "0",
         "disk_size" : 79
     }
 

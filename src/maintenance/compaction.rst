@@ -103,7 +103,7 @@ information about it via :ref:`database information resource <api/db>`::
         "disk_size": 17703025,
         "doc_count": 5091,
         "doc_del_count": 0,
-        "instance_start_time": "1371660751878859",
+        "instance_start_time": "0",
         "purge_seq": 0,
         "update_seq": 76215
     }

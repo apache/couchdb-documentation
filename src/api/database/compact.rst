@@ -162,8 +162,8 @@
     :<header Content-Type: :mimetype:`application/json`
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>json string instance_start_time: Timestamp of when the database
-        was opened, expressed in microseconds since the epoch.
+    :>json string instance_start_time: Always ``"0"``. (Returned for legacy
+      reasons.)
     :>json boolean ok: Operation status
     :code 201: Commit completed successfully
     :code 400: Invalid database name
@@ -190,7 +190,7 @@
         Server: CouchDB (Erlang/OTP)
 
         {
-            "instance_start_time": "1376269047459338",
+            "instance_start_time": "0",
             "ok": true
         }
 

@@ -362,8 +362,8 @@ The Replicator retrieves basic information both from Source and Target using
 :get:`/{db}` requests. The GET response MUST contain JSON objects with
 the following mandatory fields:
 
-- **instance_start_time** (*string*): Timestamp when the Database was
-  opened, expressed in *microseconds* since the epoch.
+- **instance_start_time** (*string*): Always ``"0"``. (Returned for legacy
+  reasons.)
 - **update_seq** (*number* / *string*): The current database Sequence ID.
 
 Any other fields are optional. The information that the Replicator needs
@@ -403,7 +403,7 @@ Get Source Information
             "disk_size": 79132913799,
             "doc_count": 41961,
             "doc_del_count": 3807,
-            "instance_start_time": "1380901070238216",
+            "instance_start_time": "0",
             "purge_seq": 0,
             "update_seq": 61772
         }
@@ -1566,7 +1566,7 @@ following mandatory fields:
       Server: CouchDB (Erlang/OTP)
 
       {
-          "instance_start_time": "1381218659871282",
+          "instance_start_time": "0",
           "ok": true
       }
 
