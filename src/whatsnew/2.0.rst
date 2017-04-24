@@ -69,6 +69,7 @@ Version 2.0.0
   Windows
 * :ref:`Configuration <api/config>` has moved from ``/_config`` to
   ``/_node/{node-name}/_config``
+* ``instance_start_time`` now always reports ``"0"``.
 
 .. _release/2.0.x/upgrade:
 

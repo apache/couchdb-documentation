@@ -107,7 +107,7 @@
             "disk_size": 137433211,
             "doc_count": 6146,
             "doc_del_count": 64637,
-            "instance_start_time": "1376269325408900",
+            "instance_start_time": "0",
             "purge_seq": 0,
             "update_seq": 292786
         }

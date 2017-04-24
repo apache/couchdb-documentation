@@ -545,7 +545,7 @@ write normal documents::
 .. code-block:: javascript
 
     {"db_name":"mydatabase","doc_count":1,"doc_del_count":0,"update_seq":3,"purge_seq":0,
-    "compact_running":false,"disk_size":12376,"data_size":272,"instance_start_time":"1397672867731570",
+    "compact_running":false,"disk_size":12376,"data_size":272,"instance_start_time":"0",
     "disk_format_version":6,"committed_update_seq":3}
 
 If Jan attempted to create a design doc, however, CouchDB would return a
