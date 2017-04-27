@@ -46,7 +46,7 @@ the macOS packaged version, the ``default.ini`` is located in
 ``local.ini``  is in
 ``/Users/youruser/Library/Application Support/CouchDB2/etc/couchdb``.
 
-.. highlight:: shell
+.. highlight:: sh
 
 To see the actual configuration files chain run in shell::
 
@@ -150,7 +150,7 @@ to apply these changes.
 Setting parameters via the HTTP API
 ===================================
 
-.. highlight:: shell
+.. highlight:: sh
 
 Alternatively, configuration parameters could be set via the
 :ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration

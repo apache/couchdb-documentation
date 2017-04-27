@@ -52,7 +52,7 @@ and run 2.0 as a single node with admin username and password already
 configured make sure to create the three three system databases
 manually on startup:
 
-.. code-block:: shell
+.. code-block:: sh
 
     curl -X PUT http://127.0.0.1:5984/_users
 
