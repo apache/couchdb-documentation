@@ -777,7 +777,8 @@ error.
                     summary
 
 .. http:get:: /_scheduler/docs
-    :synopsis: Retrieve information about replication documents
+    :synopsis: Retrieve information about replication documents from the
+               ``_replicator`` database.
 
     List of replication document states. Includes information about all the
     documents, even in ``completed`` and ``failed`` states. For each document
@@ -867,6 +868,155 @@ error.
             ],
             "offset": 0,
             "total_rows": 2
+        }
+
+.. http:get:: /_scheduler/docs/{replicator_db}
+    :synopsis: Retrieve information about replication documents from a specific
+               replicator database.
+
+    Get information about replication documents from a replicator database.
+    The default replicator database is ``_replicator`` but other replicator
+    databases can exist if their name ends with the suffix ``/_replicator``.
+
+    .. note:: As a convenience slashes (``/``) in replicator db names do not
+       have to be escaped. So ``/_scheduler/docs/other/_replicator`` is valid
+       and equivalent to ``/_scheduler/docs/other%2f_replicator``
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :query number limit: How many results to return
+    :query number skip: How many result to skip starting at the beggining, if
+                        ordered by document ID
+    :>json number offset: How many results were skipped
+    :>json number total_rows: Total number of replication documents.
+    :>json string id: Replication ID, or ``null`` if state is ``completed`` or
+                      ``failed``
+    :>json string state: One of following states (see :ref:`replicator/states`
+                         for descriptions): ``initializing``, ``running``,
+                         ``completed``, ``pending``, ``crashing``, ``error``,
+                         ``failed``
+    :>json string database: Database where replication document came from
+    :>json string doc_id: Replication document ID
+    :>json string node: Cluster node where the job is running
+    :>json string source: Replication source
+    :>json string target: Replication target
+    :>json string start_time: Timestamp of when the replication was started
+    :>json string last_update: Timestamp of last state update
+    :>json string info: Additional information about the state, such as an
+                        error message for example
+    :>json number error_count: Consecutive errors count. Indicates how many
+                               times in a row this replication has crashed.
+                               Replication will be retried with an exponential
+                               backoff based on this number. As soon as the
+                               replication succeeds this count is reset to 0.
+                               To can be used to get an idea why a particular
+                               replication is not making progress.
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_scheduler/docs/other/_replicator HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        Date: Sat, 29 Apr 2017 05:10:08 GMT
+        Server: Server: CouchDB (Erlang/OTP)
+        Transfer-Encoding: chunked
+
+        {
+            "docs": [
+                {
+                    "database": "other/_replicator",
+                    "doc_id": "cdyno-0000001-0000002",
+                    "error_count": 0,
+                    "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+                    "info": null,
+                    "last_updated": "2017-04-29T05:01:37Z",
+                    "node": "node2@127.0.0.1",
+                    "proxy": null,
+                    "source": "http://myserver.com/foo",
+                    "start_time": "2017-04-29T05:01:37Z",
+                    "state": "running",
+                    "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
+                }
+            ],
+            "offset": 0,
+            "total_rows": 1
+        }
+
+.. http:get:: /_scheduler/docs/{replicator_db}/{docid}
+    :synopsis: Retrieve information about a particular replication document
+
+    .. note:: As a convenience slashes (``/``) in replicator db names do not
+       have to be escaped. So ``/_scheduler/docs/other/_replicator`` is valid
+       and equivalent to ``/_scheduler/docs/other%2f_replicator``
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :>json string id: Replication ID, or ``null`` if state is ``completed`` or
+                      ``failed``
+    :>json string state: One of following states (see :ref:`replicator/states`
+                         for descriptions): ``initializing``, ``running``,
+                         ``completed``, ``pending``, ``crashing``, ``error``,
+                         ``failed``
+    :>json string database: Database where replication document came from
+    :>json string doc_id: Replication document ID
+    :>json string node: Cluster node where the job is running
+    :>json string source: Replication source
+    :>json string target: Replication target
+    :>json string start_time: Timestamp of when the replication was started
+    :>json string last_update: Timestamp of last state update
+    :>json string info: Additional information about the state, such as an
+                        error message for example
+    :>json number error_count: Consecutive errors count. Indicates how many
+                               times in a row this replication has crashed.
+                               Replication will be retried with an exponential
+                               backoff based on this number. As soon as the
+                               replication succeeds this count is reset to 0.
+                               To can be used to get an idea why a particular
+                               replication is not making progress.
+    :code 200: Request completed successfully
+
+     **Request**:
+
+    .. code-block:: http
+
+        GET /_scheduler/docs/other/_replicator/cdyno-0000001-0000002 HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        Date: Sat, 29 Apr 2017 05:10:08 GMT
+        Server: Server: CouchDB (Erlang/OTP)
+        Transfer-Encoding: chunked
+
+        {
+            "database": "other/_replicator",
+            "doc_id": "cdyno-0000001-0000002",
+            "error_count": 0,
+            "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+            "info": null,
+            "last_updated": "2017-04-29T05:01:37Z",
+            "node": "node2@127.0.0.1",
+            "proxy": null,
+            "source": "http://myserver.com/foo",
+            "start_time": "2017-04-29T05:01:37Z",
+            "state": "running",
+            "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
         }
 
 .. _api/server/restart:
