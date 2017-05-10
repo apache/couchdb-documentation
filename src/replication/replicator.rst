@@ -68,7 +68,7 @@ In the couch log you'll see 2 entries like these:
     [notice] 2017-04-05T17:16:19.646759Z node1@127.0.0.1 <0.29432.0> -------- Document `my_rep` triggered replication `a81a78e822837e66df423d54279c15fe+continuous+create_target`
 
 Replication state of this document can then be queried from
-``http://adm:pass@localhost:5984/_scheduler/docs/my_rep``
+``http://adm:pass@localhost:5984/_scheduler/docs/_replicator/my_rep``
 
 .. code-block:: json
 
