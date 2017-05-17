@@ -66,7 +66,7 @@ repeatedly). In general our philosophy is to avoid any attacks which can
 cause the server to consume resources in a non-linear relationship to the
 size of inputs.
 
-.. _bug reporting page: https://issues.apache.org/jira/browse/COUCHDB
+.. _bug reporting page: https://github.com/apache/couchdb/issues
 .. _mailing lists page: http://couchdb.apache.org/#mailing-list
 .. _how the Apache Software Foundation handles security: http://apache.org/security/committers.html
 .. _security@couchdb.apache.org: mailto:security@couchdb.apache.org

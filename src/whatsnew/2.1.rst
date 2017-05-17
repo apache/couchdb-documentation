@@ -101,5 +101,3 @@ Upgrade Notes
   with transient replication states. However, that will incure a
   performance cost. Consider instead switching using
   ``_scheduler/docs`` HTTP endpoint.
-
-.. _CouchDB JIRA instance: https://issues.apache.org/jira/browse/COUCHDB

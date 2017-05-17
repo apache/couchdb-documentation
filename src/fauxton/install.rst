@@ -77,6 +77,7 @@ layout, data, breadcrumbs and api point is required for the view.
 ToDo items
 ----------
 
-Checkout `JIRA`_  for a list of items to do.
+Checkout `JIRA` or `GitHub Issues`_  for a list of items to do.
 
 .. _JIRA: https://issues.apache.org/jira/browse/COUCHDB/component/12320406
+.. _GitHub Issues: https://github.com/apache/couchdb-fauxton/issues
