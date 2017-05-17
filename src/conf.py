@@ -110,6 +110,7 @@ texinfo_documents = [(
 
 extlinks = {
     'issue': ('%s-%%s' % 'https://issues.apache.org/jira/browse/COUCHDB', 'COUCHDB-'),
+    'ghissue': ('https://github.com/apache/couchdb/issues/%s', '#'),
     'commit': ('https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=commit;h=%s', '#')
 }
 

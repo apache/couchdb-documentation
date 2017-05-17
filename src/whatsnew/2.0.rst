@@ -97,7 +97,7 @@ Known Issues
 ============
 
 All `known issues`_ filed against the 2.0 release are contained within the
-official `CouchDB JIRA instance`.
+official `CouchDB JIRA instance` or `CouchDB GitHub Issues`.
 
 The following are some highlights of known issues for which fixes did not land
 in time for the 2.0.0 release:
@@ -130,3 +130,4 @@ in time for the 2.0.0 release:
 
 .. _known issues: https://s.apache.org/couchdb-2.0-known-issues
 .. _CouchDB JIRA instance: https://issues.apache.org/jira/browse/COUCHDB
+.. _CouchDB GitHub Issues: https://github.com/apache/couchdb/issues
