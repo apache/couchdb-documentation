@@ -93,7 +93,7 @@
     :query boolean local_seq: Includes last update sequence for the
       document. Default is ``false``
     :query boolean meta: Acts same as specifying all `conflicts`,
-      `deleted_conflicts` and `open_revs` query parameters. Default is
+      `deleted_conflicts` and `revs_info` query parameters. Default is
       ``false``
     :query array open_revs: Retrieves documents of specified leaf revisions.
       Additionally, it accepts value as ``all`` to return all leaf revisions.
