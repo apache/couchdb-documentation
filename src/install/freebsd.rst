@@ -52,6 +52,9 @@ Administrators should use ``default.ini`` as reference and only modify the
 
 Post install
 ------------
+**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
+a single node or clustered installation.**
+
 In case the install script fails to install a noninteractive user "couchdb" to
 be used for the database, the user needs to be created manually:
 

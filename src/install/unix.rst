@@ -236,7 +236,8 @@ From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/index.html#verifyinstall
 
-Finally, to configure your cluster see :ref:`cluster/setup/wizard`.
+**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
+a single node or clustered installation.**
 
 Running as a Daemon
 ===================
