@@ -40,7 +40,8 @@ This is the simplest way to go.
 #. `Open up Fauxton`_ (if you hadn't selected autostart CouchDB after
    installation, you have to start it first manually)
 
-#. It's time to Relax!
+#. It's time to Relax! **Be sure to complete the** :ref:`First-time Setup
+   <install/setup>` **steps for a single node or clustered installation.**
 
 .. note::
     In some cases you might been asked to reboot Windows to complete
