@@ -90,6 +90,10 @@ Upgrade Notes
   receiving a ``201`` and a ``202`` when storing a document.
 * ``all_or_nothing`` is no longer supported by the :ref:`bulk_docs
   <api/db/bulk_docs>` API
+* After updating a design document containing a ``show``, an immediate GET to
+  that same ``show`` function may still return results from the previous
+  definition. This is due to design document caching, which may take a few
+  seconds to fully evict, or longer (up to ~30s) for a clustered installation.
 
 .. _release/2.0.x/knownissues:
 
