@@ -106,4 +106,4 @@ The process is similar to the automated approach:
 3. Rebuild each view by accessing it through the clustered port.
 4. Confirm that all databases and views can be accessed as desired.
 5. Remove the 1.x databases via a ``DELETE`` request on the
-   **node-local** port (default: 5984).
+   **node-local** port (default: 5986).
