@@ -154,25 +154,6 @@ documents whose "director" field has the value "Lars von Trier".
         "director": "Lars von Trier"
     }
 
-If you created a full text index by specifying ``"type":"text"`` when
-the index was created, you can use the ``$text`` operator to select
-matching documents. In this example, the full text index is inspected to
-find any document that includes the word "Bond".
-
-    A simple selector for a full text index
-
-.. code:: json
-
-    {
-      "selector": {
-        "$text": "Bond"
-      }
-    }
-
-In this example, the full text index is inspected to find any document
-that includes the word "Bond". In the response, the fields ``title`` or
-``cast`` are returned for every matching object.
-
     A simple selector, inspecting specific fields
 
 .. code:: json
@@ -186,10 +167,10 @@ that includes the word "Bond". In the response, the fields ``title`` or
     ]
 
 You can create more complex selector expressions by combining operators.
-However, you cannot use 'combination' or 'array logical' operators such as
-``$regex`` as the basis of a query. Only the equality operators such as ``$eq``,
-``$gt``, ``$gte``, ``$lt``, and ``$lte`` (but not ``$ne``) can be used as the
-basis of a more complex query. For more information about creating complex
+For best performance, it is best to combine 'combination' or
+'array logical' operators, such as ``$regex``, with an equality
+operators such as ``$eq``, ``$gt``, ``$gte``, ``$lt``, and ``$lte``
+(but not ``$ne``). For more information about creating complex
 selector expressions, see :ref:`creating selector expressions
 <find/expressions>`.
 
@@ -856,9 +837,7 @@ Example of selective retrieval of fields from matching documents:
 
 Mango is a declarative JSON querying language for CouchDB databases.
 Mango wraps several index types, starting with the Primary Index
-out-of-the-box. Mango indexes can also be built using MapReduce Views
-(where the index type is ``json``), and Search Indexes (where the index
-type is ``text``).
+out-of-the-box. Mango indexes can also be built using MapReduce Views.
 
 .. http:post:: /{db}/_index
     :synopsis: Create a new index.
@@ -880,6 +859,7 @@ type is ``text``).
         be generated automatically. *Optional*
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
         Geospatial indexes will be supported in the future. *Optional*
+        Text indexes are supported via third party library *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
@@ -893,18 +873,6 @@ type is ``text``).
     :code 400: Invalid request
     :code 401: Admin permission required
     :code 500: Execution error
-
-If you know exactly what data you want to look for, or you want to keep
-storage and processing requirements to a minimum, you can specify how
-the index is created, by making it of type ``json``.
-
-But for maximum possible flexibility when looking for data, you would
-typically create an index of type ``text``. Indexes of type ``text``
-have a simple mechanism for automatically indexing all the fields in the
-documents.
-
-While more flexible, ``text`` indexes might take longer to create and
-require more storage resources than ``json`` indexes.
 
 **Index object format for JSON type indexes**
 
@@ -948,67 +916,6 @@ The returned JSON confirms the index has been created:
             "id":"_design/a5f4711fc9448864a13c81dc71e660b524d7410c",
             "name":"foo-index"
         }
-
-**Index object format for TEXT type indexes**
-
-    :index: contains settings specific to text indexes.  To index
-        all fields in all documents automatically, use the simple syntax:
-        ``"index": {}``.  The indexing process traverses all of the fields in
-        all the documents in the database. *Caution should be taken when
-        indexing all fields in all documents for large data sets, as it might
-        be a very resource-consuming activity.*
-    :default_field: specifies how the ``$text`` operator can be
-        used with the index. If the ``default_field`` is not specified, it
-        defaults to ``true`` and the standard analyzer is used.  The
-        ``analyzer`` key in the ``default_field`` specifies how the index
-        analyzes text. The index can subsequently be queried using the
-        ``$text`` operator. You might choose to use an alternative analyzer
-        when documents are indexed in languages other than English, or when you
-        have other special requirements for the analyser such as matching email
-        addresses.
-    :selector: used to limit the index to a specific set of
-        documents that match a query. It uses the same syntax used for
-        selectors in queries. This can be used if your application requires
-        different documents to be indexed in different ways, or if some
-        documents should not be indexed at all. If you only need to distinguish
-        documents by type, it is easier to use one index and add the type to
-        the search query.
-    :fields: contains a list of fields that should be indexed for
-        each document. If you know that an index queries only on specific
-        fields, then this field can be used to limit the size of the index.
-        Each field must also specify a type to be indexed. The acceptable types
-        are ``"boolean"``, ``"string"`` and ``"number"``.
-
-Example index creation request to index all fields in all documents
-
-.. code:: json
-
-    {
-        "type": "text",
-        "index": {}
-    }
-
-Example index creation request with specific examples
-
-.. code:: json
-
-    {
-      "type": "text",
-      "name": "my-index",
-      "ddoc": "my-index-design-doc",
-      "index": {
-        "default_field": {
-          "enabled": true,
-          "analyzer": "german"
-        },
-        "selector": {},
-        "fields": [
-          {"name": "married", "type": "boolean"},
-          {"name": "lastname", "type": "string"},
-          {"name": "year-of-birth", "type": "number"}
-        ]
-      }
-    }
 
 Example index creation using all available query parameters
 
@@ -1277,9 +1184,12 @@ Index selection
 `_find` chooses which index to use for responding to a query, unless you specify
 an index at query time.
 
-If there are two or more json type indexes on the same fields, the index with
-the smallest number of fields in the index is preferred. If there are still two
-or more candidate indexes, the index with the first alphabetical name is chosen.
+The query planner looks at the selector section and finds the index with the
+closest match to operators and fields used in the query. If there are two
+or more json type indexes that match, the index with the smallest
+number of fields in the index is preferred.
+If there are still two or more candidate indexes,
+the index with the first alphabetical name is chosen.
 
 .. note::
     It's good practice to specify indexes explicitly in your queries. This
