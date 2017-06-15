@@ -837,7 +837,8 @@ Example of selective retrieval of fields from matching documents:
 
 Mango is a declarative JSON querying language for CouchDB databases.
 Mango wraps several index types, starting with the Primary Index
-out-of-the-box. Mango indexes can also be built using MapReduce Views.
+out-of-the-box. Mango indexes, with index type `json`, are
+built using MapReduce Views.
 
 .. http:post:: /{db}/_index
     :synopsis: Create a new index.
@@ -859,7 +860,7 @@ out-of-the-box. Mango indexes can also be built using MapReduce Views.
         be generated automatically. *Optional*
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
         Geospatial indexes will be supported in the future. *Optional*
-        Text indexes are supported via third party library *Optional*
+        Text indexes are supported via a third party library *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
