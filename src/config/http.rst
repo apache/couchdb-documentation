@@ -208,7 +208,7 @@ HTTP Server Options
 
     .. config:option:: enable_xframe_options :: Controls X-Frame-Options header
 
-        Controls :ref:`Enables or disabled <config/xframe_option>` feature::
+        Controls :ref:`Enables or disabled <config/xframe_options>` feature::
 
             [httpd]
             enable_xframe_options = false
