@@ -206,6 +206,13 @@ HTTP Server Options
             [httpd]
             x_forwarded_ssl = X-Forwarded-Ssl
 
+    .. config:option:: enable_xframe_options :: Controls X-Frame-Options header
+
+        Controls :ref:`Enables or disabled <config/xframe_options>` feature::
+
+            [httpd]
+            enable_xframe_options = false
+
     .. config:option:: WWW-Authenticate :: Force basic auth
 
         Set this option to trigger basic-auth popup on unauthorized requests::
@@ -602,3 +609,28 @@ but uses a variable name. And the third one allows you to use any URL with
 
 You could also change the default function to handle request by changing the
 setting :option:`httpd/redirect_vhost_handler`.
+
+.. _xframe_options:
+.. _config/xframe_options:
+
+X-Frame-Options
+=============================
+
+X-Frame-Options is a response header that controls whether a http response
+can be embedded in a <frame>, <iframe> or <object>. This is a security
+feature to help against clickjacking.
+
+    [x_frame_options]
+    ; Settings same-origin will return X-Frame-Options: SAMEORIGIN.
+    ; If same origin is set, it will ignore the hosts setting
+    ; same_origin = true
+    ; Settings hosts will
+    ; return X-Frame-Options: ALLOW-FROM https://example.com/
+    ; List of hosts separated by a comma. * means accept all
+    ; hosts =
+
+If xframe_options is enabled it will return `X-Frame-Options: DENY` by default.
+If `same_origin` is enabled it will return `X-Frame-Options: SAMEORIGIN`.
+A `X-FRAME-OPTIONS: ALLOW-FROM url` will be returned when `same_origin`
+is false, and the HOST header matches one of the urls in the `hosts` config.
+Otherwise a `X-Frame-Options: DENY` will be returned.
