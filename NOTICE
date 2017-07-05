@@ -18,11 +18,11 @@ This product also includes the following third-party components:
 
    Copyright 2008-2010, Paul Joseph Davis <paul.joseph.davis@gmail.com>
 
- * src/couchapp/views/intro.rst src/couchapp/views/nosql.rst src/couchapp/views/pagination.rst
+ * src/ddocs/views/intro.rst src/ddocs/views/nosql.rst src/ddocs/views/pagination.rst
 
    Copyright 2013, Creative Commons Attribution license
 
- * src/couchapp/views/joins.rst (Using View Collation)
+ * src/ddocs/views/joins.rst (Using View Collation)
 
    Copyright 2007, Christopher Lenz <cmlenz@gmail.com>
 

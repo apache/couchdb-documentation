@@ -23,7 +23,7 @@
     config/index
     replication/index
     maintenance/index
-    couchapp/index
+    ddocs/index
     externals
     query-server/index
     fauxton/index
