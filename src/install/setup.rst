@@ -53,6 +53,11 @@ on startup:
 
     curl -X PUT http://127.0.0.1:5984/_global_changes
 
+Note that the last of these is not necessary if you do not expect to be
+using the global changes feed. Feel free to delete this database if you
+have created it, it has grown in size, and you do not need the function
+(and do not wish to waste system resources on compacting it regularly.)
+
 See the next section for the cluster setup instructions.
 
 .. _install/setup/cluster:
