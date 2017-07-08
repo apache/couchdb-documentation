@@ -41,9 +41,8 @@ HTTP Server Options
         let users to use one of provided methods::
 
             [httpd]
-            authentication_handlers = {couch_httpd_oauth, oauth_authentication_handler}, {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
+            authentication_handlers = {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
 
-        - ``{couch_httpd_oauth, oauth_authentication_handler}``: handles OAuth;
         - ``{couch_httpd_auth, cookie_authentication_handler}``: used for Cookie auth;
         - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
         - ``{couch_httpd_auth, default_authentication_handler}``: used for Basic auth;
@@ -171,7 +170,7 @@ HTTP Server Options
         <vhosts>`::
 
             [httpd]
-            vhost_global_handlers = _utils, _uuids, _session, _oauth, _users
+            vhost_global_handlers = _utils, _uuids, _session, _users
 
     .. config:option:: x_forwarded_host :: X-Forwarder-Host
 

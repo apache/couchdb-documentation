@@ -25,6 +25,8 @@
 Version 2.1.0
 =============
 
+* The deprecated (and broken) OAuth 1.0 implementation has been removed.
+
 * New scheduling replicator. The core of the new replicator is a
   scheduler which allows running a large number of replication
   jobs by switching between them, stopping some and starting others
