@@ -92,13 +92,13 @@ the various configuration values within a running CouchDB instance.
             },
             "httpd": {
                 "allow_jsonp": "false",
-                "authentication_handlers": "{couch_httpd_oauth, oauth_authentication_handler}, {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
+                "authentication_handlers": "{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
                 "bind_address": "192.168.0.2",
                 "default_handler": "{couch_httpd_db, handle_request}",
                 "max_connections": "2048",
                 "port": "5984",
                 "secure_rewrites": "true",
-                "vhost_global_handlers": "_utils, _uuids, _session, _oauth, _users"
+                "vhost_global_handlers": "_utils, _uuids, _session, _users"
             },
             "httpd_db_handlers": {
                 "_changes": "{couch_httpd_db, handle_changes_req}",
@@ -120,7 +120,6 @@ the various configuration values within a running CouchDB instance.
                 "_active_tasks": "{couch_httpd_misc_handlers, handle_task_status_req}",
                 "_all_dbs": "{couch_httpd_misc_handlers, handle_all_dbs_req}",
                 "_config": "{couch_httpd_misc_handlers, handle_config_req}",
-                "_oauth": "{couch_httpd_oauth, handle_oauth_req}",
                 "_replicate": "{couch_httpd_misc_handlers, handle_replicate_req}",
                 "_restart": "{couch_httpd_misc_handlers, handle_restart_req}",
                 "_session": "{couch_httpd_auth, handle_session_req}",
@@ -196,13 +195,13 @@ the various configuration values within a running CouchDB instance.
 
         {
             "allow_jsonp": "false",
-            "authentication_handlers": "{couch_httpd_oauth, oauth_authentication_handler}, {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
+            "authentication_handlers": "{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
             "bind_address": "127.0.0.1",
             "default_handler": "{couch_httpd_db, handle_request}",
             "enable_cors": "false",
             "port": "5984",
             "secure_rewrites": "true",
-            "vhost_global_handlers": "_utils, _uuids, _session, _oauth, _users"
+            "vhost_global_handlers": "_utils, _uuids, _session, _users"
         }
 
 .. _api/config/section/key:

@@ -131,6 +131,8 @@ in time for the 2.0.0 release:
   that contain the design document.
 * :issue:`2804`: The fast_view optimization is not enabled on the clustered
   interface.
+* :ghissue:`656`: The OAuth 1.0 support is broken and deprecated. It will be
+  removed in a future version of CouchDB.
 
 .. _known issues: https://s.apache.org/couchdb-2.0-known-issues
 .. _CouchDB JIRA instance: https://issues.apache.org/jira/browse/COUCHDB

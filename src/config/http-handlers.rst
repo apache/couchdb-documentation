@@ -72,13 +72,6 @@ Global HTTP Handlers
             [httpd_global_handlers]
             _config = {couch_httpd_misc_handlers, handle_config_req}
 
-        .. config:option:: _oauth
-
-        ::
-
-            [httpd_global_handlers]
-            _oauth = {couch_httpd_oauth, handle_oauth_req}
-
     .. config:option:: _replicate
 
         Provides an API to run
