@@ -83,9 +83,9 @@
     The :method:`COPY` (which is non-standard HTTP) copies an existing design
     document to a new or existing one.
 
-    Given that view indexes on disk are named after their MD5 hash of the 
-    view definition, and that a `COPY` operation won't actually change 
-    that definition, the copied views won't have to be reconstructed. 
+    Given that view indexes on disk are named after their MD5 hash of the
+    view definition, and that a `COPY` operation won't actually change
+    that definition, the copied views won't have to be reconstructed.
     Both views will be served from the same index on disk.
 
     .. seealso::
