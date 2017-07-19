@@ -138,23 +138,3 @@ Logging options
             [log]
             syslog_facility = local2
 
-.. _config/log_level_by_module:
-
-Per module logging
-==================
-
-.. config:section:: log_level_by_module :: Per module logging
-
-    .. versionadded:: 1.3
-
-    In this section you can specify :option:`log level <log/level>` on a
-    per-module basis::
-
-        [log_level_by_module]
-        couch_httpd = debug
-        couch_replicator = info
-        couch_query_servers = error
-
-    See `src/*/*.erl`_ for available modules.
-
-    .. _src/*/*.erl: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=tree;f=src;hb=HEAD
