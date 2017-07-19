@@ -137,4 +137,3 @@ Logging options
 
             [log]
             syslog_facility = local2
-
