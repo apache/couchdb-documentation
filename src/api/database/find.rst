@@ -57,6 +57,12 @@
         the query other than ``bookmark`` changes between requests, the results
         are undefined. *Optional, default: null  Only for indexes of type
         ``text``.*
+    :query boolean update: Whether to update the index prior to returning the
+        result. Default is ``true``. *Optional*
+    :query boolean stable: Whether or not the view results should be returned
+        from a "stable" set of shards. *Optional*
+    :query string stale: Combination of ``update=false`` and ``stable=true``
+        options. Possible options: ``"ok"``, ``false`` (default). *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
