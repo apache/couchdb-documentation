@@ -135,3 +135,15 @@ in time for the 2.0.0 release:
 .. _known issues: https://s.apache.org/couchdb-2.0-known-issues
 .. _CouchDB JIRA instance: https://issues.apache.org/jira/browse/COUCHDB
 .. _CouchDB GitHub Issues: https://github.com/apache/couchdb/issues
+
+.. _release/2.0.x/breakingchanges:
+
+Breaking Changes
+================
+
+The following changes in 2.0 represent a significant deviation from
+CouchDB 1.x and may alter behaviour of systems designed to work with
+older versions of CouchDB:
+
+* :ghissue:`620`: ``POST /dbname`` no longer returns an ETag reponse header,
+  in compliance with RFC 7231, Section 7.2.
