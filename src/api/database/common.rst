@@ -292,7 +292,6 @@
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>header ETag: Quoted new document's revision
     :>header Location: Document's URI
     :>json string id: Document ID
     :>json boolean ok: Operation status
@@ -328,7 +327,6 @@
         Content-Length: 95
         Content-Type: application/json
         Date: Tue, 13 Aug 2013 15:19:25 GMT
-        ETag: "1-9c65296036141e575d32ba9c034dd3ee"
         Location: http://localhost:5984/db/ab39fe0993049b84cfa81acd6ebad09d
         Server: CouchDB (Erlang/OTP)
 
