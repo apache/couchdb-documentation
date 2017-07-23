@@ -28,40 +28,40 @@
 
     :<header Content-Type: - :mimetype:`application/json`
 
-    :query json selector: JSON object describing criteria used to select
+    :<json json selector: JSON object describing criteria used to select
         documents. More information provided in the section on :ref:`selector
-        syntax <find/selectors>`.
-    :query number limit: Maximum number of results returned. Default is ``25``.
+        syntax <find/selectors>`. *Required*
+    :<json number limit: Maximum number of results returned. Default is ``25``.
         *Optional*
-    :query number skip: Skip the first 'n' results, where 'n' is the value
+    :<json number skip: Skip the first 'n' results, where 'n' is the value
         specified. *Optional*
-    :query json sort: JSON array following :ref:`sort syntax <find/sort>`.
+    :<json array sort: JSON array following :ref:`sort syntax <find/sort>`.
         *Optional*
-    :query json fields: JSON array specifying which fields of each object should
-        be returned. If it is omitted, the entire object is returned.
+    :<json array fields: JSON array specifying which fields of each object
+        should be returned. If it is omitted, the entire object is returned.
         More information provided in the section on :ref:`filtering fields
         <find/filter>`. *Optional*
-    :query json use_index: Instruct a query to use a specific index. Specified
-        either as ``"<design_document>"`` or
+    :<json string|array use_index: Instruct a query to use a specific index.
+        Specified either as ``"<design_document>"`` or
         ``["<design_document>", "<index_name>"]``. *Optional*
-    :query number r: Read quorum needed for the result. This defaults to 1, in
+    :<json number r: Read quorum needed for the result. This defaults to 1, in
         which case the document found in the index is returned. If set to a
         higher value, each document is read from at least that many replicas
         before it is returned in the results. This is likely to take more time
         than using only the document stored locally with the index. *Optional,
         default: 1*
-    :query string bookmark: A string that enables you to specify which page of
+    :<json string bookmark: A string that enables you to specify which page of
         results you require. Used for paging through result sets. Every query
         returns an opaque string under the ``bookmark`` key that can then be
         passed back in a query to get the next page of results. If any part of
         the query other than ``bookmark`` changes between requests, the results
         are undefined. *Optional, default: null  Only for indexes of type
         ``text``.*
-    :query boolean update: Whether to update the index prior to returning the
+    :<json boolean update: Whether to update the index prior to returning the
         result. Default is ``true``. *Optional*
-    :query boolean stable: Whether or not the view results should be returned
+    :<json boolean stable: Whether or not the view results should be returned
         from a "stable" set of shards. *Optional*
-    :query string stale: Combination of ``update=false`` and ``stable=true``
+    :<json string stale: Combination of ``update=false`` and ``stable=true``
         options. Possible options: ``"ok"``, ``false`` (default). *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
