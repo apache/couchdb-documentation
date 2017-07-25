@@ -25,7 +25,10 @@
 Version 2.1.0
 =============
 
-* The deprecated (and broken) OAuth 1.0 implementation has been removed.
+* The Mango ``_find`` endpoint supports a new combination operator,
+  ``$allMatch``, which matches and returns all documents that contain an
+  array field with all its elements matching all the specified query
+  criteria.
 
 * New scheduling replicator. The core of the new replicator is a
   scheduler which allows running a large number of replication
@@ -92,14 +95,174 @@ Other scheduling replicator improvements
     changes on the source, a running replication will detect that and
     restart itself with a new replication ID automatically.
 
+The 2.1.0 release also includes the following minor improvements:
+
+  * :issue:`1946`: Hibernate couch_stream after each write (up to 70% reduction
+    in memory usage during replication of DBs with large attachments)
+  * :issue:`2964`: Investigate switching replicator manager change feeds to
+    using "normal" instead of "longpoll"
+  * :issue:`2988`: (mango) Allow query selector as changes and replication
+    filter
+  * :issue:`2992`: Add additional support for document size
+  * :issue:`3046`: Improve reduce function overflow protection
+  * :issue:`3061`: Use vectored reads to search for buried headers in .couch
+    files. "On a modern linux system with SSD, we see improvements up to 15x."
+  * :issue:`3063`: "stale=ok" option replaced with new "stable" and "update"
+    options.
+  * :issue:`3180`: Add features list in the welcome message
+  * :issue:`3203`: Make auth handlers configurable (in ini files)
+  * :issue:`3234`: Track open shard timeouts with a counter instead of logging
+  * :issue:`3242`: Make get view group info timeout in couch_indexer
+    configurable
+  * :issue:`3249`: Add config to disable index all fields (text indexes)
+  * :issue:`3251`: Remove hot loop usage of filename:rootname/1
+  * :issue:`3284`: 8Kb read-ahead in couch_file causes extra IO and binary
+    memory usage
+  * :issue:`3298`: Optimize writing btree nodes
+  * :issue:`3302`: (Improve) Attachment replication over low bandwidth network
+    connections
+  * :issue:`3307`: Limit calls to maybe_add_sys_db_callbacks to once per db
+    open
+  * :issue:`3318`: bypass couch_httpd_vhost if there are none
+  * :issue:`3323`: Idle dbs cause excessive overhead
+  * :issue:`3324`: Introduce couch_replicator_scheduler
+  * :issue:`3337`: End-point _local_docs doesn't conform to query params of
+    _all_docs
+  * :issue:`3358`: (mango) Use efficient set storage for field names
+  * :issue:`3425`: Make _doc_ids _changes filter fast-path limit configurable
+  * :ghissue:`457`: TeX/LaTeX/texinfo removed from default docs build chain
+  * :ghissue:`469`: (mango) Choose index based on fields match
+  * :ghissue:`483`: couchup database migration tool
+  * :ghissue:`582`: Add X-Frame-Options support to help protect against
+    clickjacking
+  * :ghissue:`624`: Enable compaction daemon by default
+  * :ghissue:`626`: Allow enable node decom using string "true"
+  * (mango) Configurable default limit, defaults to 25.
+  * (mango) _design documents ignored when querying _all_docs
+  * (mango) add $allMatch selector
+  * Add local.d/default.d directories by default and document
+  * Improved INSTALL.* text files
+
+.. _release/2.1.x/fixes:
+
+Fixed Issues
+============
+
+The 2.1.0 release includes fixes for the following issues:
+
+* :issue:`1447`: X-Couch-Update-NewRev header is missed if custom headers are
+  specified in response of _update handler (missed in 2.0 merge)
+* :issue:`2731`: Authentication DB was not considered a system DB
+* :issue:`3010`: (Superceded fix for replication exponential backoff)
+* :issue:`3090`: Error when handling empty "Access-Control-Request-Headers"
+  header
+* :issue:`3100`: Fix documentation on require_valid_user
+* :issue:`3109`: 500 when include_docs=true for linked documents
+* :issue:`3113`: fabric:open_revs can return {ok, []}
+* :issue:`3149`: Exception written to the log if db deleted while there is a
+  change feed running
+* :issue:`3150`: Update all shards with stale=update_after
+* :issue:`3158`: Fix a crash when connection closes for _update
+* :issue:`3162`: Default ssl settings cause a crash
+* :issue:`3164`: Request fails when using
+  _changes?feed=eventsource&heartbeat=30000
+* :issue:`3168`: Replicator doesn't handle well writing documents to a target
+  db which has a small max_document_size
+* :issue:`3173`: Views return corrupt data for text fields containing non-BMP
+  characters
+* :issue:`3174`: max_document_size setting can by bypassed by issuing
+  multipart/related requests
+* :issue:`3178`: Fabric does not send message when filtering lots of documents
+* :issue:`3181`: function_clause error when adding attachment to doc in _users
+  db
+* :issue:`3184`: couch_mrview_compactor:recompact/1 does not handle errors in
+  spawned process
+* :issue:`3193`: fabric:open_revs returns multiple results when one of the
+  shards has stem_interactive_updates=false
+* :issue:`3199`: Replicator VDU function doesn't acount for an already
+  malformed document in replicator db
+* :issue:`3202`: (mango) do not allow empty field names
+* :issue:`3220`: Handle timeout in _revs_diff
+* :issue:`3222`: (Fix) HTTP code 500 instead of 400 for invalid key during
+  document creation
+* :issue:`3231`: Allow fixing users' documents (type and roles)
+* :issue:`3232`: user context not passed down in fabric_view_all_docs
+* :issue:`3238`: os_process_limit documentation wrong
+* :issue:`3241`: race condition in couch_server if delete msg for a db is
+  received before open_result msg
+* :issue:`3245`: Make couchjs -S option take effect again
+* :issue:`3252`: Include main-coffee.js in release artifact (broken
+  CoffeeScript view server)
+* :issue:`3255`: Conflicts introduced by recreating docs with attachments
+* :issue:`3259`: Don't trap exits in couch_file
+* :issue:`3264`: POST to _all_docs does not respect conflicts=true
+* :issue:`3269`: view response can 'hang' with filter and limit specified
+* :issue:`3271`: Replications crash with 'kaboom' exit
+* :issue:`3274`: eof in couch_file can be incorrect after error
+* :issue:`3277`: Replication manager crashes when it finds _replicator db
+  shards which are not part of a mem3 db
+* :issue:`3286`: Validation function throwing unexpected json crashes with
+  function_clause
+* :issue:`3289`: handle error clause when calling fabric:open_revs
+* :issue:`3291`: Excessively long document IDs prevent replicator from making
+  progress
+* :issue:`3293`: Allow limiting length of document ID (for CouchDB proper)
+* :issue:`3305`: (mango) don't crash with invalid input to built in reducer
+  function
+* :issue:`3362`: DELETE attachment on non-existing document creates the
+  document, rather than returning 404
+* :issue:`3364`: Don't crash compactor when compacting process fails.
+* :issue:`3367`: Require server admin user for db/_compact and db_view_cleanup
+  endpoints
+* :issue:`3376`: Fix mem3_shards under load
+* :issue:`3378`: Fix mango full text detection
+* :issue:`3379`: Fix couch_auth_cache reinitialization logic
+* :issue:`3400`: Notify couch_index_processes on all shards when ddoc updated
+* :issue:`3402`: race condition in mem3 startup
+* :ghissue:`511`: (mango)  Return false for empty list
+* :ghissue:`595`: Return 409 to PUT attachment with non-existent rev
+* :ghissue:`623`: Ensure replicator _active_tasks entry reports recent pending
+  changes value
+* :ghissue:`627`: Pass UserCtx to fabric's all_docs from mango query
+* :ghissue:`631`: fix couchdb_os_proc_pool eunit timeouts
+* :ghissue:`644`: Make couch_event_sup:stop/1 synchronous
+* :ghissue:`645`: Pass db open options to fabric_view_map for _view and _list
+  queries on _users DB
+* :ghissue:`648`: Fix couch_replicator_changes_reader:process_change
+* :ghissue:`649`: Avoid a race when restarting an index updater
+* :ghissue:`667`: Prevent a terrible race condition
+* :ghissue:`677`: Make replication filter fetch error for _replicate return a
+  404
+* Fix CORS ``max_age`` configuration parameter via Access-Control-Max-Age
+* Chunk missing revisions before attempting to save on target (improves
+  replication for very conflicted, very deep revision tree documents)
+* Allow w parameter for attachments
+* Return "Bad Request" when count in ``/_uuids`` exceeds max
+* Fix crashes when replicator db is deleted
+* Skip internal replication if changes already replicated
+* Fix encoding issues on ``_update/../doc_id`` and PUT attachments
+
 .. _release/2.1.x/upgrade:
 
 Upgrade Notes
 =============
 
+* The deprecated (and broken) OAuth 1.0 implementation has been removed.
+
 * If user code reads or manipulates replicator document states,
-  consider using ``replicator.update_docs = true`` compatibility
+  consider using the ``[replicator] update_docs = true`` compatibility
   parameter. In that case replicator will continue updating documents
   with transient replication states. However, that will incure a
   performance cost. Consider instead switching using
   ``_scheduler/docs`` HTTP endpoint.
+
+* The ``stale`` parameter for views and _find has been deprecated in favour
+  of two new parameters: ``stable`` and ``update``. The old ``stale=ok``
+  behaviour is equivalent to ``stable=true&update=false``, and the old
+  ``stale=update_after``behaviour is equivalent to ``stable=true&update=lazy``.
+  The deprecated ``stale`` parameter will be removed in CouchDB 3.0.
+
+* The ``[couchdb] max_document_size`` configuration parameter was renamed
+  to ``[httpd] max_http_request_size`` to reflect its actual implementation.
+  It has been enhanced by a new ``[couchdb] single_max_doc_size`` setting.
+  Both are documented in the shipped ``default.ini`` file.
