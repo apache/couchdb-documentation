@@ -20,46 +20,21 @@ Introduction Into Configuring
 Configuration files
 ===================
 
-.. warning::
-    The following section covering load order of config files applies only to
-    UNIX-ish systems. For Windows, only the provided ``default.ini`` and
-    ``local.ini`` files are relevant. These can of course have content
-    appended, which achieves the same type of functionality as outlined for
-    UNIX-ish systems below.
-
 By default, CouchDB reads configuration files from the following locations,
 in the following order:
 
-#. ``LOCALCONFDIR/default.ini``
-#. ``LOCALCONFDIR/default.d/*.ini``
-#. ``PLUGINS_DIR/*/priv/default.d/*.ini``
-#. ``LOCALCONFDIR/local.ini``
-#. ``LOCALCONFDIR/local.d/*.ini``
+#. ``etc/default.ini``
+#. ``etc/default.d/*.ini``
+#. ``etc/local.ini``
+#. ``etc/local.d/*.ini``
 
-The ``LOCALCONFDIR`` points to the directory that contains configuration files
-(``/usr/local/etc/couchdb`` by default). This variable may vary from the
-target operation system and may be changed during building from the source
-code. For binary distributions, it mostly points to the installation path
-(e.g. ``C:\Program Files\CouchDB\etc\couchdb`` for Windows). If you are using
-the macOS packaged version, the ``default.ini`` is located in
-``Applications/Apache CouchDB.app/Contents/Resources/couchdbx-core/etc`` and
-``local.ini``  is in
-``/Users/youruser/Library/Application Support/CouchDB2/etc/couchdb``.
-
-.. highlight:: sh
-
-To see the actual configuration files chain run in shell::
-
-    couchdb -c
-
-This will print out all *actual* configuration files that will form the result
-CouchDB configuration::
-
-    /etc/couchdb/default.ini
-    /etc/couchdb/default.d/geocouch.ini
-    /etc/couchdb/local.ini
-    /etc/couchdb/local.d/geocouch.ini
-    /etc/couchdb/local.d/vendor.ini
+All paths are specified relative to the couchdb installation directory:
+``/opt/couchdb`` recommended on UNIX-like systems, ``C:\CouchDB`` recommended
+on Windows systems, and a combination of two directories on macOS:
+``Applications/Apache CouchDB.app/Contents/Resources/couchdbx-core/etc`` for
+the ``default.ini`` and ``default.d`` directories, and
+``/Users/youruser/Library/Application Support/CouchDB2/etc/couchdb`` for
+the ``local.ini`` and ``local.d`` directories.
 
 Settings in successive documents override the settings in earlier entries.
 For example, setting the :option:`httpd/bind_address` parameter in
@@ -70,24 +45,23 @@ For example, setting the :option:`httpd/bind_address` parameter in
     re-installation, so localised changes should be made to the ``local.ini``
     file or files within the ``local.d`` directory.
 
-The configuration files chain may be changed by specifying additional sources
-by using next command line options:
+.. highlight:: sh
 
-- ``-a``: adds configuration file to the chain
-- ``-A``: adds configuration directory to the chain
+The configuration file chain may be changed by setting the ERL_FLAGS
+environment variable::
 
-Let's add these options and see how the configuration chain changes::
+    export ERL_FLAGS="-couch_ini /path/to/my/default.ini /path/to/my/local.ini"
 
-    shell> couchdb -c -a /home/couchdb/custom.ini
-    /etc/couchdb/default.ini
-    /etc/couchdb/default.d/geocouch.ini
-    /etc/couchdb/local.ini
-    /etc/couchdb/local.d/geocouch.ini
-    /etc/couchdb/local.d/vendor.ini
-    /home/couchdb/custom.ini
+or by placing the ``-couch_ini ..`` flag directly in the ``etc/vm.args`` file.
+Passing ``-couch_ini ..`` as a command-line argument when launching ``couchdb``
+is the same as setting the ``ERL_FLAGS`` environment variable.
 
-In case when `/home/couchdb/custom.ini` exists it will be added to
-the configuration chain.
+.. warning::
+    The environment variable/command-line flag overrides any ``-couch_ini``
+    option specified in the ``etc/vm.args`` file. And, **BOTH** of these
+    options **completely** override CouchDB from searching in the default
+    locations. Use these options only when necessary, and be sure to track
+    the contents of ``etc/default.ini``, which may change in future releases.
 
 Parameter names and values
 ==========================
@@ -105,9 +79,8 @@ requirement for style and naming.
 Setting parameters via the configuration file
 =============================================
 
-The common way to set some parameters is to edit the `local.ini` file which is
-mostly located in the `etc/couchdb` directory relative your installation path
-root.
+The common way to set some parameters is to edit the ``local.ini`` file
+(location explained above).
 
 .. highlight:: ini
 
@@ -141,11 +114,11 @@ improve configuration readability.
     This could be read as: "remove the `_all_dbs` parameter from the
     `httpd_global_handlers` section if it was ever set before".
 
-The semicolon (``;``) signals the end of the parameter. Everything after this
-character is regarded as a comment and ignored by CouchDB.
+The semicolon (``;``) signals the start of a comment. Everything after this
+character is ignored by CouchDB.
 
-After editing of configuration file CouchDB server instance should be restarted
-to apply these changes.
+After editing the configuration file, CouchDB should be restarted to apply
+any changes.
 
 Setting parameters via the HTTP API
 ===================================
@@ -156,7 +129,7 @@ Alternatively, configuration parameters could be set via the
 :ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration
 on-the-fly without requiring a server restart::
 
-    curl -X PUT http://localhost:5984/_node/nonode@nohost/_config/uuids/algorithm -d '"random"'
+    curl -X PUT http://localhost:5984/_node/<name@host>/_config/uuids/algorithm -d '"random"'
 
 In the response the old parameter's value returns::
 
@@ -166,7 +139,7 @@ You should be careful with changing configuration via the HTTP API since it's
 easy to make CouchDB unavailable. For instance, if you'd like to change the
 :option:`httpd/bind_address` for a new one::
 
-    curl -X PUT http://localhost:5984/_node/nonode@nohost/_config/httpd/bind_address -d '"10.10.0.128"'
+    curl -X PUT http://localhost:5984/_node/<name@host>/_config/httpd/bind_address -d '"10.10.0.128"'
 
 However, if you make a typo, or the specified IP address is not available
 from your network, CouchDB will be unavailable for you in both cases and
