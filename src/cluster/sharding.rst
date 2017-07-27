@@ -291,7 +291,7 @@ you need to create a new cluster and migrate over.
 
 Creating more shards than you need and then move the shards around is called
 presharding. The number of shards you need depends on how much data you are
-going to store. But, creating to many shards increases the complexity without
+going to store. But, creating too many shards increases the complexity without
 any real gain. You might even get lower performance. As an example of this, we
 can take the author's (15 year) old lab server. It gets noticeably slower with
 more than one shard and high load, as the hard drive must seek more.
