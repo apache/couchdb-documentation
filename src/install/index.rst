@@ -23,6 +23,8 @@ Installation & First-Time Setup
     windows
     mac
     freebsd
+    docker
+    snap
     setup
     upgrading
     troubleshooting

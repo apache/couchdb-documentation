@@ -23,22 +23,13 @@ Installation from binaries
 
 This is the simplest way to go.
 
-#. Get `the latest Windows binaries`_ from `CouchDB web site`_.
+#. Get `the latest Windows binaries`_ from the `CouchDB web site`_.
    Old releases are available at `archive`_.
 
-#. Follow the installation wizard steps:
+#. Follow the installation wizard steps. **Be sure to install CouchDB to a
+   path with no spaces, such as** ``C:\CouchDB``.
 
-   - Next on "Welcome" screen
-   - Accept the License agreement
-   - Select the installation directory
-   - Specify "Start Menu" group name
-   - Approve that you'd like to install CouchDB as service and let it be
-     started automatically after installation (probably, you'd like so)
-   - Verify installation settings
-   - Install CouchDB
-
-#. `Open up Fauxton`_ (if you hadn't selected autostart CouchDB after
-   installation, you have to start it first manually)
+#. `Open up Fauxton`_
 
 #. It's time to Relax! **Be sure to complete the** :ref:`First-time Setup
    <install/setup>` **steps for a single node or clustered installation.**
@@ -70,4 +61,4 @@ Installation from sources
 
 .. seealso::
     `Glazier: Automate building of CouchDB from source on Windows
-    <https://git1-us-west.apache.org/repos/asf?p=couchdb-glazier.git;a=tree>`_
+    <https://github.com/apache/couchdb-glazier>`_

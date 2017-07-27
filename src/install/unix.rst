@@ -16,9 +16,88 @@
 Installation on Unix-like systems
 =================================
 
-A high-level guide to Unix-like systems, including Mac OS X and Ubuntu.
+.. _install/unix/binary:
 
-This document as well as the INSTALL.Unix document in the official
+Installation using the Apache CouchDB convenience binary packages
+=================================================================
+
+If you are running one of the following operating systems, the easiest way
+to install CouchDB is to use the convenience binary packages:
+
+* CentOS/RHEL 6
+* CentOS/RHEL 7
+* Debian 8 (jessie)
+* Ubuntu 14.04 (trusty)
+* Ubuntu 16.04 (xenial)
+
+The RedHat-style rpm packages and Debian-style deb pacakges will install
+CouchDB at ``/opt/couchdb`` and ensure CouchDB is run at system startup by the
+appropriate init subsystem (SysV-style initd, upstart, systemd).
+
+The Debian-style deb packages *also* pre-configure CouchDB as a standalone or
+clustered node, prompt for the address to which it will bind, and a password
+for the admin user. Responses to these prompts may be pre-seeded using standard
+debconf tools. Further details are in the `README.Debian`_ file.
+
+.. _README.Debian: https://github.com/apache/couchdb-pkg/blob/master/debian/README.Debian
+
+Enabling the Apache CouchDB package repository
+----------------------------------------------
+
+.. highlight:: ini
+
+**RedHat/CentOS**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
+
+    [bintray--apache-couchdb-rpm]
+    name=bintray--apache-couchdb-rpm
+    baseurl=http://apache.bintray.com/couchdb-rpm/el$releasever/$basearch/
+    gpgcheck=0
+    repo_gpgcheck=0
+    enabled=1
+
+.. highlight:: sh
+
+**Debian/Ubuntu**: Run the command::
+
+    $ echo "deb https://apache.bintray.com/couchdb-deb {distribution} main" \
+    | sudo tee -a /etc/apt/sources.list
+
+and replace ``{distribution}`` with the appropriate choice for your OS
+version:
+
+* Debian 8: ``jessie``
+* Ubuntu 14.04: ``trusty``
+* Ubuntu 16.04: ``xenial``
+
+Installing the Apache CouchDB packages
+--------------------------------------
+
+**RedHat/CentOS**: Run the command::
+
+    $ sudo yum -y install epel-release && yum install couchdb
+
+**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
+a single node or clustered installation.**
+
+**Debian/Ubuntu**: Run the command::
+
+    $ sudo apt-get update && sudo apt-get install couchdb
+
+Debian/Ubuntu installs from binaries will be pre-configured for single node or
+clustered installations. For clusters, multiple nodes will still need to be
+joined together; **follow the**
+:ref:`Cluster Setup Wizard <cluster/setup/wizard>` **steps** to complete the
+process.
+
+Relax! CouchDB is installed and running.
+
+Installation from source
+========================
+
+The remainder of this document describes the steps required to install CouchDB
+directly from source code.
+
+This guide, as well as the INSTALL.Unix document in the official tarball
 release are the canonical sources of installation information. However, many
 systems have gotchas that you need to be aware of. In addition, dependencies
 frequently change as distributions update their archives.
