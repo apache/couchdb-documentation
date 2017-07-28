@@ -14,6 +14,8 @@ import datetime
 import os
 import sys
 
+import sphinx_rtd_theme
+
 sys.path.insert(0, os.path.abspath('../ext'))
 
 needs_sphinx = "1.2"
@@ -40,9 +42,12 @@ primary_domain = "http"
 
 pygments_style = "sphinx"
 
-html_theme = "couchdb"
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
-html_theme_path = ['../themes']
+html_theme_options = {
+    'canonical_url': "http://docs.couchdb.org/en/stable/"
+}
 
 templates_path = ["../templates"]
 
@@ -54,7 +59,7 @@ html_title = ' '.join([
     'Documentation'
 ])
 
-html_style = "rtd.css"
+#html_style = "css/rtd_theme.css"
 
 html_logo = "../images/logo.png"
 
@@ -68,24 +73,22 @@ html_additional_pages = {
 }
 
 html_context = {
-    "ga_code": "UA-658988-6"
+    "ga_code": "UA-658988-6",
+    # Enable the "Edit in GitHub link within the header of each page.
+    'display_github': True,
+    # Set the following variables to generate the resulting github URL for each page. 
+    # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
+    'github_user': 'apache',
+    'github_repo': 'couchdb-documentation',
+    'github_version': 'master/src/' 
 }
 
-html_sidebars = {
-    "**": [
-        "searchbox.html",
-        "localtoc.html",
-        "relations.html",
-        "utilities.html",
-        "help.html",
-        "tracking.html",
-    ]
-}
+master_doc = 'index'
 
 text_newlines = "native"
 
 latex_documents = [(
-    "contents",
+    "index",
     "CouchDB.tex",
     project,
     "",
@@ -120,3 +123,5 @@ html_context['git_branch'] = github_branch = 'master'
 
 github_docs_path = 'src'
 
+def setup(app):
+    app.add_stylesheet('css/rtd_theme.css')

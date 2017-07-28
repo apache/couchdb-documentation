@@ -10,10 +10,16 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
+.. This file exists solely to hold the top-level Table of Contents.
+
 =============================================
 |Apache CouchDB(TM)|_ |release| Documentation
 =============================================
 
+Welcome! This is the documentation for Apache CouchDB |release|.
+
+Table of Contents
+=================
 .. toctree::
     :maxdepth: 3
     :numbered: 3
