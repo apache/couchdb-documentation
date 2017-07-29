@@ -60,7 +60,7 @@ Enabling the Apache CouchDB package repository
 **Debian/Ubuntu**: Run the command::
 
     $ echo "deb https://apache.bintray.com/couchdb-deb {distribution} main" \
-    | sudo tee -a /etc/apt/sources.list
+        | sudo tee -a /etc/apt/sources.list
 
 and replace ``{distribution}`` with the appropriate choice for your OS
 version:
@@ -72,6 +72,8 @@ version:
 Installing the Apache CouchDB packages
 --------------------------------------
 
+.. highlight:: sh
+
 **RedHat/CentOS**: Run the command::
 
     $ sudo yum -y install epel-release && yum install couchdb
@@ -79,7 +81,12 @@ Installing the Apache CouchDB packages
 **Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
 a single node or clustered installation.**
 
-**Debian/Ubuntu**: Run the command::
+**Debian/Ubuntu**: First, install the repository key::
+
+    $ curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc \
+        | sudo apt-key add -
+
+Then update the repository cache and install the package::
 
     $ sudo apt-get update && sudo apt-get install couchdb
 
