@@ -35,8 +35,9 @@ After installation and initial startup, visit Fauxton at
 CouchDB as a single-node instance or set up a cluster. When you click
 “Single-Node-Setup”, you will get asked for an admin username and
 password. Choose them well and remember them. You can also bind CouchDB
-to a public port, so it is accessible within your LAN or the public, if
-you are doing this on a public VM. The wizard then configures your admin
+to a public address, so it is accessible within your LAN or the public, if
+you are doing this on a public VM. Or, you can keep the installation private
+by binding only to 127.0.0.1 (localhost). The wizard then configures your admin
 username and password and creates the three system databases ``_users``,
 ``_replicator`` and ``_global_changes`` for you.
 
