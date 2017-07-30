@@ -256,10 +256,10 @@ Upgrade Notes
   performance cost. Consider instead switching using
   ``_scheduler/docs`` HTTP endpoint.
 
-* The ``stale`` parameter for views and _find has been deprecated in favour
+* The ``stale`` parameter for views and ``_find`` has been deprecated in favour
   of two new parameters: ``stable`` and ``update``. The old ``stale=ok``
   behaviour is equivalent to ``stable=true&update=false``, and the old
-  ``stale=update_after``behaviour is equivalent to ``stable=true&update=lazy``.
+  ``stale=update_after`` behaviour is equivalent to ``stable=true&update=lazy``.
   The deprecated ``stale`` parameter will be removed in CouchDB 3.0.
 
 * The ``[couchdb] max_document_size`` configuration parameter was renamed
