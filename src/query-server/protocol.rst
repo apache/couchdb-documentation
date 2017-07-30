@@ -95,7 +95,7 @@ The Query Server answers::
 .. _qs/add_fun:
 
 ``add_fun``
------------
+===========
 
 :Command: ``add_fun``
 :Arguments: Map function source code.
