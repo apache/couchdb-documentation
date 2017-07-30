@@ -135,6 +135,8 @@ The 2.1.0 release also includes the following minor improvements:
   * :ghissue:`483`: couchup database migration tool
   * :ghissue:`582`: Add X-Frame-Options support to help protect against
     clickjacking
+  * :ghissue:`593`: Allow bind address of 127.0.0.1 in ``_cluster_setup`` for
+    single nodes
   * :ghissue:`624`: Enable compaction daemon by default
   * :ghissue:`626`: Allow enable node decom using string "true"
   * (mango) Configurable default limit, defaults to 25.

@@ -208,6 +208,126 @@
            "locations"
         ]
 
+.. _api/server/cluster_setup:
+
+===================
+``/_cluster_setup``
+===================
+
+.. versionadded: 2.0
+.. http:get:: /_cluster_setup
+    :synopsis: Return the status of the cluster setup wizard
+
+    Returns the status of the node or cluster, per the cluster setup wizard.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :query array ensure_dbs_exist: List of system databases to ensure exist
+        on the node/cluster. Defaults to
+        ``["_users","_replicator","_global_changes"]``.
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :>json string state: Current ``state`` of the node and/or cluster (see
+        below)
+    :code 200: Request completed successfully
+
+    The ``state`` returned indicates the current node or cluster state, and
+    is one of the following:
+
+    - ``cluster_disabled``: The current node is completely unconfigured.
+    - ``single_node_disabled``: The current node is configured as a single
+      (standalone) node (``[cluster] n=1``), but either does not have a
+      server-level admin user defined, or does not have the standard system
+      databases created. If the ``ensure_dbs_exist`` query parameter is
+      specified, the list of databases provided overrides the default list
+      of standard system databases.
+    - ``single_node_enabled``: The current node is configured as a single
+      (standalone) node, has a server-level admin user defined, and has
+      the ``ensure_dbs_exist`` list (explicit or default) of databases
+      created.
+    - ``cluster_enabled``: The current node has ``[cluster] n`` > 1, is not
+      bound to ``127.0.0.1`` and has a server-level admin user defined.
+      However, the full set of standard system databases have not been
+      created yet. If the ``ensure_dbs_exist`` query parameter is
+      specified, the list of databases provided overrides the default list
+      of standard system databases.
+    - ``cluster_finished``: The current node has ``[cluster] n`` > 1, is not
+      bound to ``127.0.0.1``, has a server-level admin user defined *and*
+      has the ``ensure_dbs_exist`` list (explicit or default) of databases
+      created.
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_cluster_setup HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        X-CouchDB-Body-Time: 0
+        X-Couch-Request-ID: 5c058bdd37
+        Server: CouchDB/2.1.0-7f17678 (Erlang OTP/17)
+        Date: Sun, 30 Jul 2017 06:33:18 GMT
+        Content-Type: application/json
+        Content-Length: 29
+        Cache-Control: must-revalidate
+
+        {"state":"cluster_enabled"}
+
+.. http:post:: /_cluster_setup
+    :synopsis: Sets up a node as a single node or as part of a cluster.
+
+    Configure a node as a single (standalone) node, as part of a cluster,
+    or finalise a cluster.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :<header Content-Type: :mimetype:`application/json`
+    :<json string action: - **enable_single_node**: Configure the current node
+                            as a single, standalone CouchDB server.
+                          - **enable_cluster**: Configure the local or remote
+                            node as one node, preparing it to be joined to a
+                            new CouchDB cluster.
+                          - **add_node**: Add the specified remote node to
+                            this cluster's list of nodes, joining it to the
+                            cluster.
+                          - **finish_cluster**: Finalise the cluster by
+                            creating the standard system databases.
+    :<json string bind_address: The IP address to which to bind the current
+        node. The special value ``0.0.0.0`` may be specified to bind to all
+        interfaces on the host. (enable_cluster and enable_single_node only)
+    :<json string username: The username of the server-level administrator to
+        create. (enable_cluster and enable_single_node only), or the remote
+        server's administrator username (add_node)
+    :<json string password: The password for the server-level administrator to
+        create. (enable_cluster and enable_single_node only), or the remote
+        server's administrator username (add_node)
+    :<json number port: The TCP port to which to bind this node
+        (enable_cluster and enable_single_node only) or the TCP port to which
+        to bind a remote node (add_node only).
+    :<json number node_count: The total number of nodes to be joined into
+        the cluster, including this one. Used to determine the value of the
+        cluster's ``n``, up to a maximum of 3. (enable_cluster only)
+    :<json string remote_node: The IP address of the remote node to setup as
+        part of this cluster's list of nodes. (enable_cluster only)
+    :<json string remote_current_user: The username of the server-level
+        administrator authorized on the remote node. (enable_cluster only)
+    :<json string remote_current_password: The password of the server-level
+        administrator authorized on the remote node. (enable_cluster only)
+    :<json string host: The remote node IP of the node to add to the cluster.
+        (add_node only)
+    :<json array ensure_dbs_exist: List of system databases to ensure exist
+        on the node/cluster. Defaults to
+        ``["_users","_replicator","_global_changes"]``.
+
+    *No example request/response included here. For a worked example, please
+    see* :ref:`cluster/setup/api`.
+
 .. _api/server/db_updates:
 
 ================

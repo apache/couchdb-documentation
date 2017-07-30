@@ -161,6 +161,8 @@ CouchDB as a single-node instance or set up a cluster.
 When you click "setup cluster" you are asked for
 admin credentials again and then to add nodes by IP address. To get
 more nodes, go through the same install procedure on other machines.
+Be sure to specify the total number of nodes you expect to add to the
+cluster before adding nodes.
 
 Before you can add nodes to form a cluster, you have to have them
 listen on a public IP address and set up an admin user. Do this, once
@@ -201,7 +203,7 @@ setup the node:
 
 .. code-block:: bash
 
-     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password"}'
+     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password", "node_count":"3"}'
 
 After that we can join all the nodes together. Choose one node
 as the "setup coordination node" to run all these commands on.
@@ -214,7 +216,7 @@ To add a node run these two commands:
 
 .. code-block:: bash
 
-    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password", "port": 15984, "remote_node": "<remote-node-ip>", "remote_current_user": "<remote-node-username>", "remote_current_password": "<remote-node-password>" }'
+    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password", "port": 15984, "node_count": "3", "remote_node": "<remote-node-ip>", "remote_current_user": "<remote-node-username>", "remote_current_password": "<remote-node-password>" }'
     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"<remote-node-ip>", "port": "<remote-node-port>", "username": "admin", "password":"password"}'
 
 This will join the two nodes together.
