@@ -241,6 +241,22 @@ HTTP Server Options
            request bodies instead of document sizes. After the upgrade, it is
            advisable to review the usage of these configuration settings.
 
+.. config:section:: chttpd :: HTTP Server Options
+
+    .. config:option:: prefer_minimal :: Sends minimal set of headers
+
+        If a request has the header `"Prefer": "return=minimal"`, CouchDB
+        will only send the headers that are listed for the `prefer_minimal`
+        configuration.::
+
+            [chttpd]
+            prefer_minimal = Cache-Control, Content-Length, Content-Range, Content-Type, ETag, Server, Transfer-Encoding, Vary
+
+        .. warning::
+            Removing the Server header from the settings will mean that
+            the CouchDB server header is replaced with the
+            Mochiweb server header.
+
 .. _config/ssl:
 
 Secure Socket Level Options
