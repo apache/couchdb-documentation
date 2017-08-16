@@ -835,16 +835,18 @@ Example of selective retrieval of fields from matching documents:
 Pagination
 ==========
 
-Mango queries support pagination via the bookmark field. Each query will
-return a bookmark. A bookmark is a placeholder that CouchDB uses to
-determine where to start the query from. To get the next set of query
-results for a given query, add the bookmark that was received in the previous
-query to your next query. Remember to keep the query selector the same,
-otherwise you will receive unexpected results. This will return the next
-set of results. To paginate backwards use the previous bookmarks to return
-the previous set of results. One thing to note, the presence of a bookmark
-doesn't guarantee that there are more results.
-The only way to test for more results is to fetch the next page.
+Mango queries support pagination via the bookmark field. Every `_find`
+response contains a bookmark - a token that CouchDB uses to determine
+where to resume from when subsequent queries are made. To get the next
+set of query results, add the bookmark that was received in the previous
+response to your next request. Remember to keep the `selector` the same,
+otherwise you will receive unexpected results. To paginate backwards,
+you can use a previous bookmark to return the previous set of results.
+
+Note that the presence of a bookmark doesn't guarantee that there are
+more results. You can to test whether you have reached the end of the
+result set by comparing the number of results returned with the page
+size requested - if results returned < `limit`, there are no more.
 
 .. _api/db/find/index:
 
