@@ -54,9 +54,8 @@
         results you require. Used for paging through result sets. Every query
         returns an opaque string under the ``bookmark`` key that can then be
         passed back in a query to get the next page of results. If any part of
-        the query other than ``bookmark`` changes between requests, the results
-        are undefined. *Optional, default: null  Only for indexes of type
-        ``text``.*
+        the selector query changes between requests, the results
+        are undefined. *Optional, default: null*
     :<json boolean update: Whether to update the index prior to returning the
         result. Default is ``true``. *Optional*
     :<json boolean stable: Whether or not the view results should be returned
@@ -832,6 +831,22 @@ Example of selective retrieval of fields from matching documents:
             "selector": { "Actor_name": "Robert De Niro" },
             "fields": ["Actor_name", "Movie_year", "_id", "_rev"]
         }
+
+Pagination
+==========
+
+Mango queries support pagination via the bookmark field. Every `_find`
+response contains a bookmark - a token that CouchDB uses to determine
+where to resume from when subsequent queries are made. To get the next
+set of query results, add the bookmark that was received in the previous
+response to your next request. Remember to keep the `selector` the same,
+otherwise you will receive unexpected results. To paginate backwards,
+you can use a previous bookmark to return the previous set of results.
+
+Note that the presence of a bookmark doesn't guarantee that there are
+more results. You can to test whether you have reached the end of the
+result set by comparing the number of results returned with the page
+size requested - if results returned < `limit`, there are no more.
 
 .. _api/db/find/index:
 
