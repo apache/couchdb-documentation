@@ -54,7 +54,7 @@
         results you require. Used for paging through result sets. Every query
         returns an opaque string under the ``bookmark`` key that can then be
         passed back in a query to get the next page of results. If any part of
-        the query other than ``bookmark`` changes between requests, the results
+        the selector query changes between requests, the results
         are undefined. *Optional, default: null
     :<json boolean update: Whether to update the index prior to returning the
         result. Default is ``true``. *Optional*
@@ -842,7 +842,9 @@ results for a given query, add the bookmark that was received in the previous
 query to your next query. Remember to keep the query selector the same,
 otherwise you will receive unexpected results. This will return the next
 set of results. To paginate backwards use the previous bookmarks to return
-the previous set of results.
+the previous set of results. One thing to note, the presence of a bookmark
+doesn't guarantee that there are more results.
+The only way to test for more results is to fetch the next page.
 
 .. _api/db/find/index:
 
