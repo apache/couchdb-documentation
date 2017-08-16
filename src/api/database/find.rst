@@ -55,7 +55,7 @@
         returns an opaque string under the ``bookmark`` key that can then be
         passed back in a query to get the next page of results. If any part of
         the selector query changes between requests, the results
-        are undefined. *Optional, default: null
+        are undefined. *Optional, default: null*
     :<json boolean update: Whether to update the index prior to returning the
         result. Default is ``true``. *Optional*
     :<json boolean stable: Whether or not the view results should be returned
