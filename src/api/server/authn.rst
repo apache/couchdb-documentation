@@ -180,12 +180,15 @@ To obtain the first token and thus authenticate a user for the first time, the
 .. http:get:: /_session
     :synopsis: Returns Cookie-based login user information
 
-    Returns complete information about authenticated user.
-    This information contains :ref:`userctx_object`, authentication method and
-    available ones and authentication database.
+    Returns information about the authenticated user, including a
+    :ref:`userctx_object`, the authentication method and database that were
+    used, and a list of configured authentication handlers on the server.
 
     :query boolean basic: Accept `Basic Auth` by requesting this resource.
       *Optional*.
+    :>json boolean ok: Operation status
+    :>json object userCtx: User context for the current user
+    :>json object info: Server authentication configuration
     :code 200: Successfully authenticated.
     :code 401: Username or password wasn't recognized.
 
