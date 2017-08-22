@@ -16,19 +16,20 @@
 Query Server Protocol
 =====================
 
-The `Query Server` is an external process that communicates with CouchDB via a
-JSON protocol over stdio  and processes all design functions calls:
-`views`, `shows`, `lists`, `filters`, `updates` and `validate_doc_update`.
+A `Query Server` is an external process that communicates with CouchDB via a
+simple, custom JSON protocol over stdin/stdout. It is used to processes all
+design functions calls: `views`, `shows`, `lists`, `filters`, `updates` and
+`validate_doc_update`.
 
-CouchDB communicates with the Query Server process though stdio interface by
-JSON messages that terminated by newline character. Messages that are sent to
-the Query Server are always `array`-typed that could be matched by the pattern
+CouchDB communicates with the Query Server process through stdin/stdout with
+JSON messages that are terminated by a newline character. Messages that are
+sent to the Query Server are always `array`-typed and follow the pattern
 ``[<command>, <*arguments>]\n``.
 
 .. note::
-    To simplify examples reading we omitted trailing ``\n`` character to let
-    Sphinx highlight them well. Also, all examples contain formatted JSON values
-    while real data transfers in compact mode without formatting spaces.
+    In the documentation examples, we omit the trailing ``\n`` for greater
+    readability. Also, examples contain formatted JSON values while real data
+    is transferred in compact mode without formatting spaces.
 
 .. _qs/reset:
 
@@ -50,8 +51,7 @@ The Query Server answers::
 
     true
 
-To set up new Query Server state the second argument is used with object data.
-This argument is used
+To set up new Query Server state, the second argument is used with object data.
 
 CouchDB sends::
 
@@ -88,24 +88,24 @@ The Query Server answers::
 
 .. note::
     This library shouldn't have any side effects nor track its own state
-    or you'll have a lot of happy debugging time if something went wrong.
+    or you'll have a lot of happy debugging time if something goes wrong.
     Remember that a complete index rebuild is a heavy operation and this is
-    the only way to fix your mistakes with shared state.
+    the only way to fix mistakes with shared state.
 
 .. _qs/add_fun:
 
 ``add_fun``
------------
+===========
 
 :Command: ``add_fun``
 :Arguments: Map function source code.
 :Returns: ``true``
 
-When creating or updating a view the Query Server gets sent the view function
-for evaluation. The Query Server should parse, compile and evaluate the
-function it receives to make it callable later. If this fails, the Query Server
-returns an error. CouchDB might store several functions before sending in any
-actual documents.
+When creating or updating a view, this is how the Query Server is sent the
+view function for evaluation. The Query Server should parse, compile, and
+evaluate the function it receives to make it callable later. If this fails, the
+Query Server returns an error. CouchDB may store multiple functions before
+sending any documents.
 
 CouchDB sends::
 
@@ -127,7 +127,7 @@ The Query Server answers::
 :Arguments: Document object
 :Returns: Array of key-value pairs per applied :ref:`function <qs/add_fun>`
 
-When the view function is stored in the Query Server, CouchDB starts sending in
+When the view function is stored in the Query Server, CouchDB starts sending
 all the documents in the database, one at a time. The Query Server calls the
 previously stored functions one after another with a document and stores its
 result. When all functions have been called, the result is returned as a JSON
@@ -188,7 +188,7 @@ The Query Server answers::
 :Returns: Array with pair values: ``true`` and another array with reduced result
 
 If the view has a reduce function defined, CouchDB will enter into the reduce
-phase. The view server will receive a list of reduce functions and some map
+phase. The Query Server will receive a list of reduce functions and some map
 results on which it can apply them.
 
 CouchDB sends::
@@ -232,7 +232,7 @@ When building a view, CouchDB will apply the reduce step directly to the output
 of the map step and the rereduce step to the output of a previous reduce step.
 
 CouchDB will send a list of reduce functions and a list of values, with no keys
-or document ids, to the rereduce step.
+or document ids to the rereduce step.
 
 CouchDB sends::
 
@@ -308,7 +308,7 @@ The Query Server answers::
 
     true
 
-After than this design document is ready to serve next subcommands - that's the
+After this, the design document will be ready to serve subcommands in the
 second phase.
 
 .. note::
@@ -329,7 +329,7 @@ second phase.
 :SubCommand: ``shows``
 :Arguments:
 
-    - Document object or ``null`` if document `id` wasn't specified in request
+    - Document object or ``null`` if document `id` isn't specified in request
     - :ref:`request_object`
 
 :Returns: Array with two elements:
@@ -430,9 +430,9 @@ The Query Server sends::
 Executes :ref:`list function <listfun>`.
 
 The communication protocol for `list` functions is a bit complex so let's use
-an example for illustration.
+an example to illustrate.
 
-Let's assume that we have view a function that emits `id-rev` pairs::
+Assume we have view a function that emits `id-rev` pairs::
 
     function(doc) {
         emit(doc._id, doc._rev);
@@ -457,15 +457,16 @@ on three parts:
 
 #. Initialization
 
-   The first returned object from list function is an array of next structure::
+   The first returned object from the list function is an array with the
+   following structure::
 
        ["start", <chunks>, <headers>]
 
-   Where ``<chunks>`` is an array of text chunks that will be sent to client
+   Where ``<chunks>`` is an array of text chunks that will be sent to the client
    and ``<headers>`` is an object with response HTTP headers.
 
    This message is sent from the Query Server to CouchDB on the
-   :js:func:`start` call which initialize HTTP response to the client::
+   :js:func:`start` call which initializes the HTTP response to the client::
 
        [
            "start",
@@ -483,8 +484,8 @@ on three parts:
 
    Since view results can be extremely large, it is not wise to pass all its
    rows in a single command. Instead, CouchDB can send view rows one by one
-   to the Query Server allowing processing view and output generation in a
-   streaming way.
+   to the Query Server allowing view processing and output generation to be
+   processed as a stream.
 
    CouchDB sends a special array that carries view row data::
 
@@ -497,27 +498,27 @@ on three parts:
            }
        ]
 
-   If Query Server has something to return on this, it returns an array with a
-   ``"chunks"`` item in the head and an array of data in the tail. Now, for our
-   case it has nothing to return, so the response will be::
+   If the Query Server has something to return on this, it returns an array
+   with a ``"chunks"`` item in the head and an array of data in the tail. For
+   this example it has nothing to return, so the response will be::
 
        [
          "chunks",
          []
        ]
 
-   When there is no more view rows to process, CouchDB sends special message,
-   that signs about that there is no more data to send from its side::
+   When there are no more view rows to process, CouchDB sends a `list_end`
+   message to signify there is no more data to send::
 
        ["list_end"]
 
 #. Finalization
 
    The last stage of the communication process is the returning *list tail*:
-   the last data chunk. After this, processing list function will be completed
-   and client will receive complete response.
+   the last data chunk. After this, processing of the list function will be
+   complete and the client will receive a complete response.
 
-   For our example the last message will be the next::
+   For our example the last message is::
 
        [
            "end",
@@ -526,10 +527,10 @@ on three parts:
            ]
        ]
 
-There, we had made a big mistake: we had returned out result in a single
-message from the Query Server. That's ok when there are only a few rows in the
-view result, but it's not acceptable for millions documents and millions view
-rows
+In this example, we have returned our result in a single message from the Query
+Server. This is okay for small numbers of rows, but for large data sets,
+perhaps with millions of documents or millions of view rows, this would not be
+acceptable.
 
 Let's fix our list function and see the changes in communication::
 
@@ -855,10 +856,10 @@ The Query Server answers::
     1
 
 .. note::
-    While the only valid response for this command is ``true`` to prevent
-    document save the Query Server need to raise an error: ``forbidden`` or
-    ``unauthorized`` - these errors will be turned into correct ``HTTP 403`` and
-    ``HTTP 401`` responses respectively.
+    While the only valid response for this command is ``true``, to prevent the
+    document from being saved, the Query Server needs to raise an error:
+    ``forbidden`` or ``unauthorized``; these errors will be turned into correct
+    ``HTTP 403`` and ``HTTP 401`` responses respectively.
 
 .. _qs/ddoc/rewrites:
 
@@ -945,7 +946,7 @@ or in case of direct response::
         }
     ]
 
-or for immidiate redirect::
+or for immediate redirect::
 
     [
         "ok",
@@ -957,44 +958,40 @@ or for immidiate redirect::
 
 .. _qs/errors:
 
-Raising errors
-==============
+Returning errors
+================
 
-When something went wrong the Query Server is able to inform CouchDB about
-such a situation by sending special message in response of received command.
+When something goes wrong, the Query Server can inform CouchDB by sending a
+special message in response to the received command.
 
 Error messages prevent further command execution and return an error description
-to CouchDB. All errors are logically divided into two groups:
+to CouchDB. Errors are logically divided into two groups:
 
 - `Common errors`. These errors only break the current Query Server command and
   return the error info to the CouchDB instance *without* terminating the Query
-  Server  process.
-- `Fatal errors`. The fatal errors signal about something really bad that hurts
-  the overall Query Server process stability and productivity. For instance, if
-  you're using Python Query Server and some design function is unable to import
-  some third party module, it's better to count such error as fatal and
-  terminate whole process or you still have to do the same after import fixing,
-  but manually.
+  Server process.
+- `Fatal errors`. Fatal errors signal a condition that cannot be recovered.
+  For instance, if your a design function is unable to import a third party
+  module, it's better to count such error as fatal and terminate whole process.
 
 .. _qs/error:
 
 ``error``
 ---------
 
-To raise an error, the Query Server have to answer::
+To raise an error, the Query Server should respond with::
 
     ["error", "error_name", "reason why"]
 
 The ``"error_name"`` helps to classify problems by their type e.g. if it's
-``"value_error"`` so probably user have entered wrong data, ``"not_found"``
-notifies about missed resource and ``"type_error"`` definitely says about
-invalid and non expected input from user.
+``"value_error"`` to indicate improper data, ``"not_found"`` to indicate a
+missing resource and ``"type_error"`` to indicate an improper data type.
 
-The ``"reason why"`` is the error message that explains why it raised and, if
-possible, what is needed to do to fix it.
+The ``"reason why"`` explains in human-readable terms what went wrong, and
+possibly how to resolve it.
 
-For example, calling :ref:`updatefun` against non existent document could
-produce next error message::
+For example, calling :ref:`updatefun` against a non-existent document could
+produce the error message::
 
     ["error", "not_found", "Update function requires existent document"]
 
@@ -1004,12 +1001,12 @@ produce next error message::
 -------------
 
 The `forbidden` error is widely used by :ref:`vdufun` to stop further function
-processing and prevent on disk store of the new document version. Since this
-error actually is not an error, but an assertion against user actions, CouchDB
-doesn't log it at `"error"` level, but returns `HTTP 403 Forbidden` response
-with error information object.
+processing and prevent storage of the new document revision. Since this is not
+actually an error, but an assertion against user actions, CouchDB doesn't log
+it at `"error"` level, but returns `HTTP 403 Forbidden` response with error
+information object.
 
-To raise this error, the Query Server have to answer::
+To raise this error, the Query Server should respond with::
 
     {"forbidden": "reason why"}
 
@@ -1020,11 +1017,11 @@ To raise this error, the Query Server have to answer::
 
 The `unauthorized` error mostly acts like `forbidden` one, but with
 the meaning of *please authorize first*. This small difference helps end users
-to understand what they can do to solve the problem. CouchDB doesn't log it at
-`"error"` level, but returns `HTTP 401 Unauthorized` response with error
-information object.
+to understand what they can do to solve the problem. Similar to `forbidden`,
+CouchDB doesn't log it at `"error"` level, but returns a `HTTP 401 Unauthorized`
+response with an error information object.
 
-To raise this error, the Query Server have to answer::
+To raise this error, the Query Server should respond with::
 
     {"unauthorized": "reason why"}
 
@@ -1034,12 +1031,12 @@ Logging
 =======
 
 At any time, the Query Server may send some information that will be saved in
-CouchDB's log file. This is done by sending a special object with just one
-field, log, on a separate line::
+CouchDB's log file. This is done by sending a special `log` object with a single
+argument, on a separate line::
 
     ["log", "some message"]
 
-CouchDB responds nothing, but writes received message into log file::
+CouchDB does not respond, but writes the received message to the log file::
 
     [Sun, 13 Feb 2009 23:31:30 GMT] [info] [<0.72.0>] Query Server Log Message: some message
 
