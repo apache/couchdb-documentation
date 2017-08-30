@@ -35,7 +35,7 @@
         *Optional*
     :<json number skip: Skip the first 'n' results, where 'n' is the value
         specified. *Optional*
-    :<json array sort: JSON array following :ref:`sort syntax <find/sort>`.
+    :<json json sort: JSON array following :ref:`sort syntax <find/sort>`.
         *Optional*
     :<json array fields: JSON array specifying which fields of each object
         should be returned. If it is omitted, the entire object is returned.
@@ -62,6 +62,9 @@
         from a "stable" set of shards. *Optional*
     :<json string stale: Combination of ``update=false`` and ``stable=true``
         options. Possible options: ``"ok"``, ``false`` (default). *Optional*
+    :<json boolean execution_stats: Include
+        :ref:`execution statistics <find/statistics>` in the query response.
+        *Optional, default: ``false``*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
@@ -69,6 +72,8 @@
     :>json object docs: Array of documents matching the search. In each matching
         document, the fields specified in the ``fields`` part of the request
         body are listed, along with their values.
+    :>json string warning: Execution warnings
+    :>json object execution_stats: Execution statistics
 
     :code 200: Request completed successfully
     :code 400: Invalid request
@@ -98,7 +103,8 @@ Example request body for finding documents using an index:
             "fields": ["_id", "_rev", "year", "title"],
             "sort": [{"year": "asc"}],
             "limit": 2,
-            "skip": 0
+            "skip": 0,
+            "execution_stats": true
         }
 
     **Response**:
@@ -128,7 +134,14 @@ Example response when finding documents using an index:
                     "year": 2011,
                     "title": "Drive"
                 }
-            ]
+            ],
+            "execution_stats": {
+                "total_keys_examined": 0,
+                "total_docs_examined": 200,
+                "total_quorum_docs_examined": 0,
+                "results_returned": 2,
+                "execution_time_ms": 5.52
+            }
         }
 
 .. _find/selectors:
@@ -847,6 +860,45 @@ Note that the presence of a bookmark doesn't guarantee that there are
 more results. You can to test whether you have reached the end of the
 result set by comparing the number of results returned with the page
 size requested - if results returned < `limit`, there are no more.
+
+.. _find/statistics:
+
+Execution Statistics
+====================
+
+Find can return basic execution statistics for a specific request. Combined with
+the :ref:`_explain <api/db/find/explain>` endpoint, this should provide some
+insight as to whether indexes are being used effectively.
+
+The execution statistics currently include:
+
++--------------------------------+--------------------------------------------+
+| Field                          | Description                                |
++================================+============================================+
+| ``total_keys_examined``        | Number of index keys examined.             |
+|                                | Currently always 0.                        |
++--------------------------------+--------------------------------------------+
+| ``total_docs_examined``        | Number of documents fetched from the       |
+|                                | database / index, equivalent to using      |
+|                                | ``include_docs=true`` in a view.           |
+|                                | These may then be filtered in-memory to    |
+|                                | further narrow down the result set based   |
+|                                | on the selector.                           |
++--------------------------------+--------------------------------------------+
+| ``total_quorum_docs_examined`` | Number of documents fetched from the       |
+|                                | database using an out-of-band document     |
+|                                | fetch. This is only non-zero when read     |
+|                                | quorum > 1 is specified in the query       |
+|                                | parameters.                                |
++--------------------------------+--------------------------------------------+
+| ``results_returned``           | Number of results returned from the query. |
+|                                | Ideally this should not be significantly   |
+|                                | lower than the total documents / keys      |
+|                                | examined.                                  |
++--------------------------------+--------------------------------------------+
+| ``execution_time_ms``          | Total execution time in milliseconds as    |
+|                                | measured by the database.                  |
++--------------------------------+--------------------------------------------+
 
 .. _api/db/find/index:
 
