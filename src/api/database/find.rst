@@ -690,7 +690,8 @@ Other condition operators require the argument to be in a specific JSON format.
 
 .. warning::
     Regular expressions do not work with indexes, so they should not be used to
-    filter large data sets.
+    filter large data sets. They can, however, be used to restrict a
+    :ref:`partial index <find/partial_indexes>`.
 
 .. _find/expressions:
 
@@ -934,6 +935,9 @@ built using MapReduce Views.
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
         Geospatial indexes will be supported in the future. *Optional*
         Text indexes are supported via a third party library *Optional*
+    :query json partial_filter_selector: A :ref:`selector <find/selectors>`
+        to apply to documents at indexing time, creating a
+        :ref:`partial index <find/partial_indexes>`. *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
@@ -1006,6 +1010,81 @@ Example index creation using all available query parameters
       "limit": 10,
       "skip": 0
     }
+
+By default, a JSON index will include all documents that have the indexed fields
+present, including those which have null values.
+
+.. _find/partial_indexes:
+
+Partial Indexes
+===============
+
+Partial indexes allow documents to be filtered at indexing time, potentially
+offering significant performance improvements for query selectors that don't
+map cleanly to a range query on an index.
+
+Let's look at an example query:
+
+.. code:: json
+
+    {
+      "selector": {
+        "status": {
+          "$ne": "archived"
+        },
+        "type": "user"
+      }
+    }
+
+Without a partial index, this requires a full index scan to find all the
+documents of ``"type":"user"`` that do not have a status of ``"archived"``.
+This is because a normal index can only be used to match contiguous rows,
+and the ``"$ne"`` operator cannot guarantee that.
+
+To improve response times, we can create an index which excludes documents
+where  ``"status": { "$ne": "archived" }`` at index time using the
+``"partial_filter_selector"`` field:
+
+.. code-block:: http
+
+        POST /db/_index HTTP/1.1
+        Content-Type: application/json
+        Content-Length: 144
+        Host: localhost:5984
+
+        {
+          "index": {
+            "partial_filter_selector": {
+              "status": {
+                "$ne": "archived"
+              }
+            },
+            "fields": ["type"]
+          },
+          "ddoc" : "type-not-archived",
+          "type" : "json"
+        }
+
+Partial indexes are not currently used by the query planner unless specified
+by a ``"use_index"`` field, so we need to modify the original query:
+
+.. code:: json
+
+    {
+      "selector": {
+        "status": {
+          "$ne": "archived"
+        },
+        "type": "user"
+      },
+      "use_index": "type-not-archived"
+    }
+
+Technically, we don't need to include the filter on the ``"status"`` field
+in the query selector - the partial index ensures this is always true -
+but including it makes the intent of the selector clearer and will make
+it easier to take advantage of future improvements to query planning
+(e.g. automatic selection of partial indexes).
 
 .. _api/db/find/index-get:
 
