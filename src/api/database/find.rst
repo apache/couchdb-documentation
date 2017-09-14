@@ -934,6 +934,8 @@ built using MapReduce Views.
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
         Geospatial indexes will be supported in the future. *Optional*
         Text indexes are supported via a third party library *Optional*
+    :query json selector: A selector to filter the documents added to
+        the index *Optional*
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
@@ -1005,6 +1007,50 @@ Example index creation using all available query parameters
       "sort": [{"year": "asc"}],
       "limit": 10,
       "skip": 0
+    }
+
+Creating an index with a Selector
+=================================
+
+Adding a selector to the index will add more fine grained filtering
+of what documents will be added to an index. At query time,
+the index must be specified via the use_index field for the
+query planner to use it.
+
+Example index with a selector, only documents that contain
+the `age` and `sport` fields and that match the selector will be
+added to the index.
+
+.. code:: json
+
+    {
+        "index": {
+            "fields": ["age", "sport"],
+            "selector": {
+                "age": {
+                    "$gte": 10
+                },
+                "sport": "rugby"
+            }
+        },
+        "ddoc" : "selector-index",
+        "type" : "json"
+    }
+
+To use the above index in a `_find` query, `use_index` must
+contain the index name or design doc. The selector must also
+contain the fields specified in the index.
+
+.. code:: json
+
+    {
+      "selector": {
+        "age": {
+          "$gt": 20
+        },
+        "sport": "rugby"
+      },
+      "use_index": ["selector-index"]
     }
 
 .. _api/db/find/index-get:
