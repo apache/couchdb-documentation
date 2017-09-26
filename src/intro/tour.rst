@@ -241,7 +241,7 @@ to variations in document structure, and indexes for each document can be
 computed independently and in parallel. The combination of a map and a reduce
 function is called a view in CouchDB terminology.
 
-For experienced relational database programmers, MapReduce can take some
+For experienced relational database programmers, MapReduce can take some time 
 getting used to. Rather than declaring which rows from which tables to
 include in a result set and depending on the database to determine the most
 efficient way to run the query, reduce queries are based on simple range
