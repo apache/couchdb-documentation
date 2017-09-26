@@ -24,21 +24,20 @@ As you see in ``etc/default.ini`` there is a section called [cluster]
 
     [cluster]
     q=8
-    r=2
-    w=2
     n=3
 
 * ``q`` - The number of shards.
-* ``r`` - The number of copies of a document with the same revision that have to
-  be read before CouchDB returns with a ``200`` and the document. If there is
-  only one copy of the document accessible, then that is returned with ``200``.
-* ``w`` - The number of nodes that need to save a document before a write is
-  returned with ``201``. If the nodes saving the document is ``<w`` but ``>0``,
-  ``202`` is returned.
 * ``n`` - The number of copies there is of every document. Replicas.
 
-When creating a database or doing a read or write you can send your own values
-with request and thereby overriding the defaults in ``default.ini``.
+When creating a database you can send your own values with request and
+thereby overriding the defaults in ``default.ini``.
+
+The number of copies of a document with the same revision that have to be read
+before CouchDB returns with a ``200`` is equal to a half of total copies of
+the document plus one. It is the same for the number of nodes that need to
+save a document before a write is returned with ``201``. If there are less
+nodes than that number, then ``202`` is returned. Both read and write numbers
+can be specified with a request as ``r`` and ``w`` parameters accordingly.
 
 We will focus on the shards and replicas for now.
 
