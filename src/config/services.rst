@@ -48,7 +48,7 @@ CouchDB Daemonized Mini Apps
 
     .. config:option:: httpd
 
-        HTTP server daemon::
+        Node-local HTTP server daemon (default port: `5986`)::
 
             [daemons]
             httpd={couch_httpd, start_link, []}
@@ -59,7 +59,7 @@ CouchDB Daemonized Mini Apps
         listens on is `6984`::
 
             [daemons]
-            httpsd = {couch_httpd, start_link, [https]}
+            httpsd = {chttpd, start_link, [https]}
 
     .. config:option:: index_server
 

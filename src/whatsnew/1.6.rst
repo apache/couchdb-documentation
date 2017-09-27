@@ -29,7 +29,7 @@ The :ref:`Proxy Authentication <api/auth/proxy>` handler was renamed to
 ``proxy_authentication_handler`` to follow the ``*_authentication_handler`` form
 of all other handlers. The old ``proxy_authentification_handler`` name is marked
 as deprecated and will be removed in future releases. It's strongly recommended
-to update :config:option:`httpd/authentication_handlers` option with new value
+to update ``httpd/authentication_handlers`` option with new value
 in case if you had used such handler.
 
 .. _release/1.6.0:
