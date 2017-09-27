@@ -34,21 +34,6 @@ HTTP Server Options
 
         .. _JSONP: http://www.json-p.org/
 
-    .. config:option:: authentication_handlers :: Authentication handlers
-
-        List of used authentication handlers that used by CouchDB. You may
-        extend them via third-party plugins or remove some of them if you won't
-        let users to use one of provided methods::
-
-            [httpd]
-            authentication_handlers = {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
-
-        - ``{couch_httpd_auth, cookie_authentication_handler}``: used for Cookie auth;
-        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
-        - ``{couch_httpd_auth, default_authentication_handler}``: used for Basic auth;
-        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
-          Everlasting `Admin Party`!
-
     .. config:option:: bind_address :: Listen IP address
 
         Defines the IP address by which CouchDB will be accessible::
@@ -241,7 +226,7 @@ HTTP Server Options
            request bodies instead of document sizes. After the upgrade, it is
            advisable to review the usage of these configuration settings.
 
-.. config:section:: chttpd :: HTTP Server Options
+.. config:section:: chttpd :: Clustered HTTP Server Options
 
     .. config:option:: prefer_minimal :: Sends minimal set of headers
 
@@ -256,6 +241,21 @@ HTTP Server Options
             Removing the Server header from the settings will mean that
             the CouchDB server header is replaced with the
             Mochiweb server header.
+
+    .. config:option:: authentication_handlers :: Authentication handlers
+
+        List of authentication handlers used by CouchDB. You may
+        extend them via third-party plugins or remove some of them if you won't
+        let users to use one of provided methods::
+
+            [chttpd]
+            authentication_handlers = {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
+
+        - ``{couch_httpd_auth, cookie_authentication_handler}``: used for Cookie auth;
+        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
+        - ``{couch_httpd_auth, default_authentication_handler}``: used for Basic auth;
+        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
+          Everlasting `Admin Party`!
 
 .. _config/ssl:
 
@@ -295,7 +295,7 @@ Secure Socket Level Options
     At first, :option:`enable the HTTPS daemon <daemons/httpsd>`::
 
         [daemons]
-        httpsd = {couch_httpd, start_link, [https]}
+        httpsd = {chttpd, start_link, [https]}
 
     Next, under the ``[ssl]`` section set up the newly generated certificates::
 

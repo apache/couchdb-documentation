@@ -275,11 +275,11 @@ Proxy Authentication
 .. note::
     To use this authentication method make sure that the
     ``{couch_httpd_auth, proxy_authentication_handler}`` value in added to the
-    list of the active :config:option:`httpd/authentication_handlers`:
+    list of the active :config:option:`chttpd/authentication_handlers`:
 
     .. code-block:: ini
 
-        [httpd]
+        [chttpd]
         authentication_handlers = {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, proxy_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
 
 `Proxy authentication` is very useful in case your application already uses
