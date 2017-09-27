@@ -107,7 +107,7 @@ Replicator Database Configuration
 
         If a request fails, the replicator will retry it up to N times. The
         default value for N is 5 (before version 2.1.1 it was 10). The requests
-        are retried with an doubling exponenital backoff starting at 0.25
+        are retried with a doubling exponenital backoff starting at 0.25
         seconds. So by default requests would be retried in 0.25, 0.5, 1, 2, 4
         second intervals. When number of retires is exhausted, the whole
         replication job is stopped and will retry again later::
