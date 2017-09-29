@@ -58,9 +58,9 @@
     :>json number cluster.n: Replicas. The number of copies of every document.
     :>json number cluster.q: Shards. The number of range partitions.
     :>json number cluster.r: Read quorum. The number of consistent copies
-      of a document that need to be read before successful reply.
+      of a document that need to be read before a successful reply.
     :>json number cluster.w: Write quorum. The number of copies of a document
-      that need to be written before successful reply.
+      that need to be written before a successful reply.
     :>json boolean compact_running: Set to ``true`` if the database compaction
       routine is operating on this database.
     :>json string db_name: The name of the database.
