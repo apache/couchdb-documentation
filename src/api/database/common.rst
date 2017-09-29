@@ -55,6 +55,12 @@
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
+    :>json number cluster.n: Replicas. The number of copies of every document.
+    :>json number cluster.q: Shards. The number of range partitions.
+    :>json number cluster.r: Read quorum. The number of consistent copies
+      of a document that need to be read before successfull reply.
+    :>json number cluster.w: Write quorum. The number of copies of a document
+      need to be written before successfull reply.
     :>json boolean compact_running: Set to ``true`` if the database compaction
       routine is operating on this database.
     :>json string db_name: The name of the database.
@@ -75,7 +81,9 @@
       in bytes.
     :>json number sizes.file: The size of the database file on disk in bytes.
       Views indexes are not included in the calculation.
-    :>json number update_seq: The current number of updates to the database.
+    :>json string update_seq: An opaque string that describes the state
+      of the database. Do not rely on this string for counting the number
+      of updates.
     :code 200: Request completed successfully
     :code 404: Requested database not found
 
@@ -99,7 +107,12 @@
         Server: CouchDB (Erlang/OTP)
 
         {
-            "committed_update_seq": 292786,
+            "cluster": {
+                "n": 3,
+                "q": 8,
+                "r": 2,
+                "w": 2
+            },
             "compact_running": false,
             "data_size": 65031503,
             "db_name": "receipts",
@@ -108,8 +121,16 @@
             "doc_count": 6146,
             "doc_del_count": 64637,
             "instance_start_time": "0",
+            "other": {
+                "data_size": 66982448
+            },
             "purge_seq": 0,
-            "update_seq": 292786
+            "sizes": {
+                "active": 65031503,
+                "external": 66982448,
+                "file": 137433211
+            },
+            "update_seq": "292786-g1AAAAF..."
         }
 
 .. http:put:: /{db}
