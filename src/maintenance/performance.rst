@@ -120,19 +120,43 @@ explanation`_.
 .. _this tip for a possible workaround: http://erlang.org/pipermail/erlang-questions/2011-December/063119.html
 .. _this thread for a deeper explanation: http://erlang.org/pipermail/erlang-questions/2011-October/061971.html
 
-PAM and ulimit
---------------
+Maximum open file descriptors (ulimit)
+--------------------------------------
 
-Finally, most \*nix operating systems impose various resource limits on every
-process. If your system is set up to use the Pluggable Authentication Modules
-(`PAM`_) system, increasing this limit is straightforward. For example,
-creating a file named ``/etc/security/limits.d/100-couchdb.conf`` with the
-following contents will ensure that CouchDB can open enough file descriptors
-to service your increased maximum open databases and Erlang ports::
+Most \*nix operating systems impose various resource limits on every process.
+The method of increasing these limits varies, depending on your init system and
+particular OS release. The default value for many OSes is 1024 or 4096. On a
+system with many databases or many views, CouchDB can very rapidly hit this
+limit.
+
+If your system is set up to use the Pluggable Authentication Modules (`PAM`_)
+system (as is the case with nearly all modern Linuxes), increasing this limit
+is straightforward. For example, creating a file named
+``/etc/security/limits.d/100-couchdb.conf`` with the following contents will
+ensure that CouchDB can open up to 4096 file descriptors at once::
 
     #<domain>    <type>    <item>    <value>
     couchdb      hard      nofile    4096
     couchdb      soft      nofile    4096
+
+You may also have to edit the ``/etc/pam.d/common-session`` and
+``/etc/pam.d/common-session-noninteractive`` files to add the line::
+
+    session required pam_limits.so
+
+if it is not already present.
+
+For systemd-based Linuxes (such as CentOS/RHEL 7, Ubuntu 16.04+, Debian 8
+or newer), assuming you are launching CouchDB from systemd, you must also
+override the upper limit by creating the file
+``/etc/systemd/system/<servicename>.d/override.conf`` with the following
+content::
+
+    [Service]
+    LimitNOFILE=#######
+
+and replacing the ``#######`` with the upper limit of file descriptors CouchDB
+is allowed to hold open at once.
 
 If your system does not use PAM, a `ulimit` command is usually available for
 use in a custom script to launch CouchDB with increased resource limits.
