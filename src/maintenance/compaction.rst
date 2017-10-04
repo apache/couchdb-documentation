@@ -184,6 +184,6 @@ triggered based on various criteria. Automatic compaction is configured in
 CouchDB's :ref:`configuration files <config/intro>`.
 
 The :config:option:`daemons/compaction_daemon` is responsible for triggering
-the compaction. It is automatically started, but disabled by default.
+the compaction. It is enabled by default and automatically started.
 The criteria for triggering the compactions is configured in the
 :config:section:`compactions` section.
