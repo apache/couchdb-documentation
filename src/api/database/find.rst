@@ -1233,7 +1233,7 @@ it easier to take advantage of future improvements to query planning
     :>header Transfer-Encoding: ``chunked``
 
     :>json string dbname: Name of database
-    :>json object index: Index used to fullfil the query
+    :>json object index: Index used to fulfill the query
     :>json object selector: Query selector used
     :>json object opts: Query options used
     :>json number limit: Limit parameter used
