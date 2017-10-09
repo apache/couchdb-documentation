@@ -1233,12 +1233,12 @@ it easier to take advantage of future improvements to query planning
     :>header Transfer-Encoding: ``chunked``
 
     :>json string dbname: Name of database
-    :>json object index: Index used to fullfil the query
+    :>json object index: Index used to fulfill the query
     :>json object selector: Query selector used
     :>json object opts: Query options used
     :>json number limit: Limit parameter used
     :>json number skip: Skip parameter used
-    :>json object fields: Fields to be returned by the query
+    :>json array fields: Fields to be returned by the query
     :>json object range: Range parameters passed to the underlying view
 
     :code 200: Request completed successfully
