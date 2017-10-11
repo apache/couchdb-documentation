@@ -152,6 +152,8 @@
     written as ``^[a-z][a-z0-9_$()+/-]*$``.
 
     :param db: Database name
+    :query integer q: Shards, aka the number of range partitions. Default is
+      8, unless overridden in the :config:option:`cluster config <cluster/q>`.
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
