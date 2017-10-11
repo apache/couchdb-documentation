@@ -21,6 +21,7 @@ Configuring CouchDB
 
     intro
     couchdb
+    cluster
     couch-peruser
     http
     auth

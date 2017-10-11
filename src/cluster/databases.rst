@@ -42,6 +42,8 @@ Deleteing a database
 
     curl -X DELETE "http://xxx.xxx.xxx.xxx:5984/database-name --user admin-user
 
+.. _cluster/databases/placement:
+
 Placing a database on specific nodes
 ====================================
 
