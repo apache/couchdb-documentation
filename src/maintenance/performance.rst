@@ -133,11 +133,18 @@ If your system is set up to use the Pluggable Authentication Modules (`PAM`_)
 system (as is the case with nearly all modern Linuxes), increasing this limit
 is straightforward. For example, creating a file named
 ``/etc/security/limits.d/100-couchdb.conf`` with the following contents will
-ensure that CouchDB can open up to 4096 file descriptors at once::
+ensure that CouchDB can open up to 10000 file descriptors at once::
 
     #<domain>    <type>    <item>    <value>
-    couchdb      hard      nofile    4096
-    couchdb      soft      nofile    4096
+    couchdb      hard      nofile    10000
+    couchdb      soft      nofile    10000
+
+If you are using our Debian/Ubuntu sysvinit script (``/etc/init.d/couchdb``),
+you also need to raise the limits for the root user::
+
+    #<domain>    <type>    <item>    <value>
+    root         hard      nofile    10000
+    root         soft      nofile    10000
 
 You may also have to edit the ``/etc/pam.d/common-session`` and
 ``/etc/pam.d/common-session-noninteractive`` files to add the line::
@@ -160,8 +167,11 @@ is allowed to hold open at once.
 
 If your system does not use PAM, a `ulimit` command is usually available for
 use in a custom script to launch CouchDB with increased resource limits.
-If necessary, feel free to increase this limits as long as your hardware can
-handle the load.
+Typical syntax would be something like `ulimit -n 10000`.
+
+In general, modern UNIX-like systems can handle very large numbers of file
+handles per process (e.g. 100000) without problem. Don't be afraid to increase
+this limit on your system.
 
 .. _PAM: http://www.linux-pam.org/
 
