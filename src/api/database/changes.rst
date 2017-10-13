@@ -685,7 +685,7 @@ amount of duplicated code.
     While :ref:`map functions <mapfun>` doesn't process the design documents,
     using ``_view`` filter forces them to do this. You need to be sure, that
     they are ready to handle documents with *alien* structure without panic
-    crush.
+    crash.
 
 .. note::
     Using ``_view`` filter doesn't queries the view index files, so you cannot
