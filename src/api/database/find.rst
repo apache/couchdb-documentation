@@ -929,7 +929,7 @@ built using MapReduce Views.
         document.
         Indexes can be grouped into design documents for efficiency. However, a
         change to one index in a design document will invalidate all other
-        indexes in the same document (similar to views). *Optional*
+        indexes in the same database (similar to views). *Optional*
     :query string name: Name of the index. If no name is provided, a name will
         be generated automatically. *Optional*
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
