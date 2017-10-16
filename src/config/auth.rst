@@ -275,7 +275,7 @@ Authentication Configuration
         not ``true``. Used for :ref:`api/auth/proxy`. ::
 
             [couch_httpd_auth]
-            x_auth_roles = X-Auth-CouchDB-Token
+            x_auth_token = X-Auth-CouchDB-Token
 
     .. config:option:: x_auth_username :: Proxy Auth username header
 
