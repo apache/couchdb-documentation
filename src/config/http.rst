@@ -32,7 +32,7 @@ HTTP Server Options
             [httpd]
             allow_jsonp = false
 
-        .. _JSONP: http://www.json-p.org/
+        .. _JSONP: https://en.wikipedia.org/wiki/JSONP
 
     .. config:option:: bind_address :: Listen IP address
 
