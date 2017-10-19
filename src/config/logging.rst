@@ -90,7 +90,7 @@ Logging options
         - ``warning`` or ``warn``: Warning messages are alerts about edge situations that
           may lead to errors. For instance, compaction daemon alerts about low
           or insufficient disk space at this level.
-        - ``error`` or ``err``: Error level includes only things that going wrong, crush
+        - ``error`` or ``err``: Error level includes only things that going wrong, crash
           reports and HTTP error responses (5xx codes).
         - ``critical`` or ``crit``
         - ``alert``

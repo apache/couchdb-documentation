@@ -24,7 +24,7 @@ Firewall
 
 If you do not have a firewall between your servers, then you can skip this.
 
-CouchDB in cluster mode uses the port ``5984`` just as standalone, but is also
+CouchDB in cluster mode uses the port ``5984`` just as standalone, but it also
 uses ``5986`` for node-local APIs.
 
 Erlang uses TCP port ``4369`` (EPMD) to find other nodes, so all servers must be
