@@ -213,6 +213,6 @@ Base CouchDB Options
            http request body sizes. For individual document updates via `PUT`
            that approximation was close enough, however that is not the case
            for `_bulk_docs` endpoint. After 2.1.0 a separate configuration
-           parameter was defined: httpd.max_http_request_size, which can be
-           used to limit maximum http request sizes. After upgrade, it is
-           advisable to review those settings and adjust them accordingly.
+           parameter was defined: :config:option:`httpd/max_http_request_size`,
+           which can be used to limit maximum http request sizes. After upgrade,
+           it is advisable to review those settings and adjust them accordingly.
