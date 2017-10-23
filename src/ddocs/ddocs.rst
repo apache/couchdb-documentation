@@ -113,8 +113,8 @@ single value - which could be an array or similar object.
 
 .. _reducefun/builtin:
 
-Builtin Reduce Functions
-^^^^^^^^^^^^^^^^^^^^^^^^
+Built-in Reduce Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Additionally, CouchDB has three built-in reduce functions. These are implemented
 in Erlang and run inside CouchDB, so they are much faster than the equivalent

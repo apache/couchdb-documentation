@@ -18,7 +18,7 @@
 
 .. http:any:: /{db}/_design/{ddoc}/_rewrite/{path}
     :synopsis: Rewrites HTTP request for the specified path by using stored
-               array of routing rules or javascript function
+               array of routing rules or JavaScript function
 
     Rewrites the specified path by rules defined in the specified design
     document. The rewrite rules are defined in *array* or *string* field
@@ -44,7 +44,7 @@ Rewrite section a is stringified function
     - **method** (*string*): Method of rewritten request. If omitted,
       original request method is used
     - **code** (*number*): Returned code. If provided, request is not rewritten
-      and user immidiately receives response with the code
+      and user immediately receives response with the code
     - **body** (*string*): Body for POST/PUT requests, or for returning to user
       if *code* field provided. If POST/PUT request is being rewritten and no
       body returned by rewrite function, original request body is used
@@ -101,11 +101,11 @@ Rewrite section is an array
 
     Each rule is an *object* with next structure:
 
-    - **from** (*string*): The path rule used to bind current uri to the rule.
-      It use pattern matching for that
-    - **to** (*string*): Rule to rewrite an url. It can contain variables
+    - **from** (*string*): The path rule used to bind current URI to the rule.
+      It uses pattern matching for that.
+    - **to** (*string*): Rule to rewrite a URL. It can contain variables
       depending on  binding variables discovered during pattern matching and
-      query args (url args and from the query member)
+      query args (URL args and from the query member)
     - **method** (*string*): HTTP request method to bind the request method to
       the rule. Default is ``"*"``
     - **query** (*object*): Query args you want to define they can contain
@@ -119,7 +119,7 @@ Rewrite section is an array
     - This path is converted in Erlang list by splitting ``/``
     - Each ``var`` are converted in atom
     - ``""`` are converted to ``''`` atom
-    - The pattern matching is done by splitting ``/`` in request url in a list
+    - The pattern matching is done by splitting ``/`` in request URL in a list
       of token
     - A string pattern will match equal token
     - The star atom (``'*'`` in single quotes) will match any number of tokens,
@@ -132,7 +132,7 @@ Rewrite section is an array
     method. It will then try to match the path to one rule. If no rule matches,
     then a :statuscode:`404` response returned.
 
-    Once a rule is found we rewrite the request url using the ``to`` and
+    Once a rule is found we rewrite the request URL using the ``to`` and
     ``query`` fields. The identified token are matched to the rule and will
     replace var. If ``'*'`` is found in the rule it will contain the remaining
     part if it exists.
@@ -140,7 +140,7 @@ Rewrite section is an array
     Examples:
 
     +-----------------------------------+----------+------------------+-------+
-    |               Rule                |    Url   |  Rewrite to      | Tokens|
+    |               Rule                |    URL   |  Rewrite to      | Tokens|
     +===================================+==========+==================+=======+
     | {"from": "/a",                    | /a       | /some            |       |
     |  "to": "/some"}                   |          |                  |       |
@@ -166,7 +166,7 @@ Rewrite section is an array
     +-----------------------------------+----------+------------------+-------+
 
     Request method, header, query parameters, request payload and response body
-    are depended on endpoint to which url will be rewritten.
+    are depended on endpoint to which URL will be rewritten.
 
     :param db: Database name
     :param ddoc: Design document name

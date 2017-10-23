@@ -267,7 +267,7 @@ time you move a shard. As this can take quite some time, it is not recommended.
 Reshard? No, Preshard!
 ======================
 
-Reshard? Nope. It can not be done. So do not create databases with too few
+Reshard? Nope. It cannot be done. So do not create databases with too few
 shards.
 
 If you can not scale out more because you set the number of shards too low, then

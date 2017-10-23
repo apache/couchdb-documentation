@@ -193,7 +193,7 @@ involved in assembling JSON, doing the networking and decoding JSON.
 
 As of CouchDB 1.1.0, users often report lower write performance of documents
 compared to older releases. The main reason is that this release ships with
-the more recent version of the HTTP server library Mochiweb, which by default
+the more recent version of the HTTP server library MochiWeb, which by default
 sets the TCP socket option `SO_NODELAY`_ to false. This means that small data
 sent to the TCP socket, like the reply to a document write request (or reading
 a very small document), will not be sent immediately to the network - TCP will
@@ -226,7 +226,7 @@ non-deleted documents, can affect view build times, :method:`PUT` and
 :method:`DELETE` requests time and size of database on disk, since they
 increase the size of the B+Tree's. You can see the number of deleted documents
 in :get:`database information </{db}>`. If your use case creates lots of
-deleted documents (for example, if you are storing short-term data like logfile
+deleted documents (for example, if you are storing short-term data like log
 entries, message queues, etc), you might want to periodically switch to a new
 database and delete the old one (once the entries in it have all expired).
 
@@ -275,8 +275,8 @@ use any available replica by specifying ``stable=false&update=false`` instead of
 View information isn't replicated - it is rebuilt on each database so you
 can't do the view generation on a separate sever.
 
-Builtin Reduce Functions
-------------------------
+Built-In Reduce Functions
+-------------------------
 
 If you’re using a very simple view function that only performs a sum or count
 reduction, you can call native Erlang implementations of them by simply

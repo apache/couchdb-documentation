@@ -512,7 +512,7 @@ Retrieving Attachments Content
 ------------------------------
 
 It's possible to retrieve document with all attached files content by using
-``attachements=true`` query parameter:
+``attachments=true`` query parameter:
 
 **Request**:
 
@@ -613,8 +613,8 @@ query parameter:
 Efficient Multiple Attachments Retrieving
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As you had noted above, retrieving document with ``attachements=true`` returns
-large JSON object where all attachments are included.  While you document and
+As noted above, retrieving document with ``attachments=true`` returns a
+large JSON object with all attachments included.  When your document and
 files are smaller it's ok, but if you have attached something bigger like media
 files (audio/video), parsing such response might be very expensive.
 
@@ -1007,8 +1007,8 @@ requested.
 Retrieving Deleted Documents
 ----------------------------
 
-CouchDB doesn't actually deletes documents via :delete:`/{db}/{docid}`.
-Instead of this, it leaves tombstone with very basic information about
+CouchDB doesn't actually delete documents via :delete:`/{db}/{docid}`.
+Instead, it leaves tombstone with very basic information about the
 document. If you just :get:`/{db}/{docid}` CouchDB returns :statuscode:`404`
 response:
 

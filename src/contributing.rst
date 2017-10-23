@@ -79,10 +79,10 @@ http://docs.couchdb.org/en/latest/json-structure.html -- we are in luck, under
 `share/doc/src` we find the file `json-structure.rst`. That looks promising.
 `.rst` stands for ReStructured Text (see
 http://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html
-for a markup reference), which is an ascii format for writing
+for a markup reference), which is an ASCII format for writing
 documents, documentation in this case. Let's have a look and open it.
 
-We see ascii tables with some additional formatting, all looking like the
+We see ASCII tables with some additional formatting, all looking like the
 final HTML. So far so easy. For now, let's just add to the bottom of this. We
 can worry about organising this better later.
 
@@ -188,7 +188,7 @@ The guidelines are in descending priority.
 #. Line ending
 
    * All lines end with ``\n``.
-   * No trailing whitespaces.
+   * No trailing whitespace.
 
 #. Line length
 

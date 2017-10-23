@@ -314,7 +314,7 @@ Here’s an alternate, more idiomatic JavaScript version:
     }
 
 .. note::
-    Don't miss effective builtin :ref:`reduce functions <reducefun>` like
+    Don't miss effective built-in :ref:`reduce functions <reducefun>` like
     ``_sum`` and ``_count``
 
 This reduce function takes two arguments: a list of keys and a list of values.

@@ -35,8 +35,8 @@ If you do not specify ``n`` and ``q`` the default will be used. The default is
 
 .. _cluster/databases/delete:
 
-Deleteing a database
-====================
+Deleting a database
+===================
 
 .. code-block:: bash
 
@@ -51,7 +51,7 @@ In BigCouch, the predecessor to CouchDB 2.0's clustering functionality, there
 was the concept of zones. CouchDB 2.0 carries this forward with cluster
 placement rules.
 
-First, each node must be labelled with a zone attribute. This defines which
+First, each node must be labeled with a zone attribute. This defines which
 zone each node is in. You do this by editing the node's document in the
 ``/nodes`` database, which is accessed through the "back-door" (5986) port.
 Add a key value pair of the form:
@@ -62,7 +62,7 @@ Add a key value pair of the form:
 
 Do this for all of the nodes in your cluster.
 
-In your config file (local.ini or default.ini) on each node, define a
+In your config file (``local.ini`` or ``default.ini``) on each node, define a
 consistent cluster-wide setting like:
 
 .. code-block:: text
@@ -72,7 +72,7 @@ consistent cluster-wide setting like:
 
 In this example, it will ensure that two replicas for a shard will be hosted
 on nodes with the zone attribute set to ``metro-dc-a`` and one replica will
-be hosted on a new wiht the zone attribute set to ``metro-dc-b``.
+be hosted on a new with the zone attribute set to ``metro-dc-b``.
 
 Note that you can also use this system to ensure certain nodes in the cluster
 do not host *any* replicas for newly created databases, by giving them a zone

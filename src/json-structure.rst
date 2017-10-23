@@ -527,7 +527,7 @@ Response object
     The ``body``, ``base64`` and ``json`` object keys are overlapping each other
     where the last one wins. Since most realizations of key-value objects do
     not preserve the key order or if they are mixed, confusing situations can
-    occure. Try to use only one of them.
+    occur. Try to use only one of them.
 
 .. note::
     Any custom property makes CouchDB raise an internal exception. Furthermore,

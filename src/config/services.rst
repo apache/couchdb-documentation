@@ -55,7 +55,7 @@ CouchDB Daemonized Mini Apps
 
     .. config:option:: httpsd
 
-        Provides :ref:`SSL support <config/ssl>`. The default ssl port CouchDB
+        Provides :ref:`SSL support <config/ssl>`. The default SSL port CouchDB
         listens on is `6984`::
 
             [daemons]

@@ -418,7 +418,7 @@ on the ``rereduce`` parameter:
     }
 
 .. note::
-    The JavaScript function above could be effectively replaced by the builtin
+    The JavaScript function above could be effectively replaced by the built-in
     ``_count``.
 
 .. figure:: ../../../images/views-intro-01.png

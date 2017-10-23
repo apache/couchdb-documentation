@@ -28,7 +28,7 @@ in the following order:
 #. ``etc/local.ini``
 #. ``etc/local.d/*.ini``
 
-All paths are specified relative to the couchdb installation directory:
+All paths are specified relative to the CouchDB installation directory:
 ``/opt/couchdb`` recommended on UNIX-like systems, ``C:\CouchDB`` recommended
 on Windows systems, and a combination of two directories on macOS:
 ``Applications/Apache CouchDB.app/Contents/Resources/couchdbx-core/etc`` for

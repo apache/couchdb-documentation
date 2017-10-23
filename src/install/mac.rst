@@ -66,7 +66,7 @@ Running as a Daemon
 
 CouchDB itself no longer ships with any daemonization scripts.
 
-The couchdb team recommends `runit <http://smarden.org/runit/>`_ to
+The CouchDB team recommends `runit <http://smarden.org/runit/>`_ to
 run CouchDB persistently and reliably. Configuration of runit is
 straightforward; if you have questions, reach out to the CouchDB
 user mailing list.

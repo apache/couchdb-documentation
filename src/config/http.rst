@@ -115,7 +115,7 @@ HTTP Server Options
             [httpd]
             redirect_vhost_handler = {Module, Fun}
 
-        The specified function take 2 arguments: the Mochiweb request object
+        The specified function take 2 arguments: the MochiWeb request object
         and the target path.
 
     .. config:option:: server_options :: MochiWeb Server Options
@@ -199,7 +199,7 @@ HTTP Server Options
 
     .. config:option:: WWW-Authenticate :: Force basic auth
 
-        Set this option to trigger basic-auth popup on unauthorized requests::
+        Set this option to trigger basic-auth pop-up on unauthorized requests::
 
             [httpd]
             WWW-Authenticate = Basic realm="Welcome to the Couch!"
@@ -241,7 +241,7 @@ HTTP Server Options
         .. warning::
             Removing the Server header from the settings will mean that
             the CouchDB server header is replaced with the
-            Mochiweb server header.
+            MochiWeb server header.
 
     .. config:option:: authentication_handlers :: Authentication handlers
 
@@ -370,7 +370,7 @@ Secure Socket Level Options
 
     .. config:option:: password :: Certificate key password
 
-        String containing the user's password. Only used if the private keyfile
+        String containing the user's password. Only used if the private key file
         is password protected::
 
             [ssl]

@@ -183,7 +183,7 @@ Authentication Configuration
             [couch_httpd_auth]
             max_iterations = 100000
 
-    .. config:option:: proxy_use_secret :: Force proxy auth use secret token
+    .. config:option:: proxy_use_secret :: Force proxy auth to use secret token
 
         When this option is set to ``true``, the
         :option:`couch_httpd_auth/secret` option is required for

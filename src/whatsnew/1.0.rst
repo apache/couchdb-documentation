@@ -177,7 +177,7 @@ Storage System
 * Fix leaking file handles after compacting databases and views.
 * Fix databases forgetting their validation function after compaction.
 * Fix occasional timeout errors after successfully compacting large databases.
-* Fix ocassional error when writing to a database that has just been compacted.
+* Fix occasional error when writing to a database that has just been compacted.
 * Fix occasional timeout errors on systems with slow or heavily loaded IO.
 * Fix for OOME when compactions include documents with many conflicts.
 * Fix for missing attachment compression when MIME types included parameters.

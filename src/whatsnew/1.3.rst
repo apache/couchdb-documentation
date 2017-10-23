@@ -100,7 +100,7 @@ Futon
 * :issue:`627`: Support all timezones. :commit:`b1a049bb`
 * :issue:`1383`: Futon view editor won't allow you to save original view after
   saving a revision. :commit:`ce48342`
-* :issue:`1470`: Futon raises popup on attempt to navigate to missed/deleted
+* :issue:`1470`: Futon raises pop-up on attempt to navigate to missed/deleted
   document. :commit:`5da40eef`
 * :issue:`1473`, :issue:`1472`: Disable buttons for actions that the user
   doesn't have permissions to. :commit:`7156254d`
@@ -235,19 +235,19 @@ UUID Algorithms
 Query and View Server
 ---------------------
 
-* :issue:`111`: Improve the errors reported by the javascript view server
+* :issue:`111`: Improve the errors reported by the JavaScript view server
   to provide a more friendly error report when something goes wrong.
   :commit:`0c619ed`
 * :issue:`410`: More graceful error handling for JavaScript validate_doc_update
   functions.
-* :issue:`1372`: `_stats` builtin reduce function no longer produces error for
+* :issue:`1372`: `_stats` built-in reduce function no longer produces error for
   empty view result.
 * :issue:`1444`: Fix missed_named_view error that occurs on existed design
   documents and views. :commit:`b59ac98b`
 * :issue:`1445`: CouchDB tries no more to delete view file if it couldn't open
   it, even if the error is `emfile`.
 * :issue:`1483`: Update handlers requires valid doc ids. :commit:`72ea7e38`
-* :issue:`1491`: Clenaup view tables. :commit:`c37204b7`
+* :issue:`1491`: Clean up view tables. :commit:`c37204b7`
 * Deprecate E4X support, :commit:`cdfdda2314`
 
 Windows

@@ -55,7 +55,7 @@ Post install
 **Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
 a single node or clustered installation.**
 
-In case the install script fails to install a noninteractive user "couchdb" to
+In case the install script fails to install a non-interactive user "couchdb" to
 be used for the database, the user needs to be created manually:
 
 I used the ``pw`` command to add a user "couchdb" in group "couchdb":

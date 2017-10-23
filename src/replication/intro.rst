@@ -18,7 +18,7 @@ Introduction to Replication
 
 One of CouchDB's strengths is the ability to synchronize two copies of the same
 database. This enables users to distribute data across several nodes or
-datacenters, but also to move data more closely to clients.
+data centers, but also to move data more closely to clients.
 
 Replication involves a source and a destination database, which can be on the
 same or on different CouchDB instances. The aim of the replication is that at
@@ -53,7 +53,7 @@ on the source will also be deleted on the target.
 
 A replication task will finish once it reaches the end of the changes feed. If
 its `continuous` property is set to true, it will wait for new changes to
-appear until the task is cancelled. Replication tasks also create checkpoint
+appear until the task is canceled. Replication tasks also create checkpoint
 documents on the destination to ensure that a restarted task can continue from
 where it stopped, for example after it has crashed.
 
