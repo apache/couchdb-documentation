@@ -521,7 +521,6 @@ ID:
 - Source and Target URI and if Source or Target are local or remote Databases
 - If Target needed to be created
 - If Replication is Continuous
-- OAuth headers if any
 - Any custom headers
 - :ref:`Filter function <filterfun>` code if used
 - Changes Feed query parameters, if any
