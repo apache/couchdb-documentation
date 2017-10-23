@@ -214,17 +214,18 @@ HTTP Server Options
         `PUT` of a document larger than 1MB, but it might also block a
         `_bulk_docs` update of 1000 1KB documents, or a multipart/related
         update of a small document followed by two 512KB attachments. This
-        setting is intended to be used as a protection aginst maliciously
+        setting is intended to be used as a protection against maliciously
         large HTTP requests rather than for limiting maximum document sizes. ::
 
             [httpd]
             max_http_request_size = 4294967296 ; 4 GB
 
         .. warning::
-           Before version 2.1.0 couchdb.max_document_size was implemented
-           effectively as max_http_request_size. That is, it checkeded HTTP
-           request bodies instead of document sizes. After the upgrade, it is
-           advisable to review the usage of these configuration settings.
+           Before version 2.1.0 :config:option:`couchdb/max_document_size` was
+           implemented effectively as ``max_http_request_size``. That is, it
+           checked HTTP request bodies instead of document sizes. After the
+           upgrade, it is advisable to review the usage of these configuration
+           settings.
 
 .. config:section:: chttpd :: Clustered HTTP Server Options
 

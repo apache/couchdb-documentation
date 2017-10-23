@@ -568,6 +568,12 @@ specific request types are provided in the corresponding API call reference.
   The request headers from the client and the capabilities of the server do not
   match.
 
+- ``413 - Request Entity Too Large``
+
+  A document exceeds the configured :config:option:`couchdb/max_document_size`
+  value or the entire request exceeds the
+  :config:option:`httpd/max_http_request_size` value.
+
 - ``415 - Bad Content Type``
 
   The content types supported, and the content type of the information being
