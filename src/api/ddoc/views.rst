@@ -653,9 +653,9 @@ regenerated and new order applied.
 Using Limits and Skipping Rows
 ==============================
 
-By default requestion views result returns all records for it. That's ok when
-they are small, but this may lead to problems when there are billions of them
-since the clients might have to read them all and consume all available memory.
+By default, views return all results. That's ok when the number of results is
+small, but this may lead to problems when there are billions results, since the
+client may have to read them all and consume all available memory.
 
 But it's possible to reduce output result rows by specifying ``limit`` query
 parameter. For example, retrieving the list of recipes using the ``by_title``

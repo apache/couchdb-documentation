@@ -12,9 +12,9 @@
 
 .. _cluster/setup:
 
-=====
-Setup
-=====
+======
+Set Up
+======
 
 Everything you need to know to prepare the cluster for the installation of
 CouchDB.
@@ -154,15 +154,14 @@ Setting up a cluster of Erlang applications correctly can be a daunting
 task. Luckily, CouchDB 2.0 comes with a convenient Cluster Setup Wizard
 as part of the Fauxton web administration interface.
 
-After installation and initial startup, visit Fauxton at
+After installation and initial start-up, visit Fauxton at
 ``http://127.0.0.1:5984/_utils#setup``. You will be asked to set up
 CouchDB as a single-node instance or set up a cluster.
 
-When you click "setup cluster" you are asked for
-admin credentials again and then to add nodes by IP address. To get
-more nodes, go through the same install procedure on other machines.
-Be sure to specify the total number of nodes you expect to add to the
-cluster before adding nodes.
+When you click "setup cluster" you are asked for admin credentials again and
+then to add nodes by IP address. To get more nodes, go through the same install
+procedure on other machines. Be sure to specify the total number of nodes you
+expect to add to the cluster before adding nodes.
 
 Before you can add nodes to form a cluster, you have to have them
 listen on a public IP address and set up an admin user. Do this, once
@@ -186,20 +185,20 @@ your cluster.
 Now your cluster is ready and available. You can send requests to any
 one of the nodes and get to all the data.
 
-For a proper production setup, you'd now set up a HTTP proxy in front
+For a proper production setup, you'd now set up an HTTP proxy in front
 of the nodes, that does load balancing. We recommend `HAProxy`_. See
 our `example configuration for HAProxy`_. All you need is to adjust the
 ip addresses and ports.
 
 .. _cluster/setup/api:
 
-The Cluster Setup Api
-========================
+The Cluster Setup API
+=====================
 
 If you would prefer to manually configure your CouchDB cluster, CouchDB exposes
-the ``_cluster_setup`` endpoint for that. After installation and initial setup.
-We can setup the cluster. On each node we need to run the following command to
-setup the node:
+the ``_cluster_setup`` endpoint for that. After installation and initial setup,
+we can set up the cluster. On each node we need to run the following command to
+set up the node:
 
 .. code-block:: bash
 
@@ -209,9 +208,9 @@ After that we can join all the nodes together. Choose one node
 as the "setup coordination node" to run all these commands on.
 This is a "setup coordination node" that manages the setup and
 requires all other nodes to be able to see it and vice versa.
-Setup will not work with unavailable nodes.
+Set up will not work with unavailable nodes.
 The notion of "setup coordination node" will be gone once the setup is finished.
-From then onwards the cluster will no longer have a "setup coordination node".
+From then on, the cluster will no longer have a "setup coordination node".
 To add a node run these two commands:
 
 .. code-block:: bash
@@ -228,7 +227,7 @@ following command to complete the setup and add the missing databases:
 
     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'
 
-You CouchDB cluster is now setup.
+You CouchDB cluster is now set up.
 
 .. _HAProxy: http://haproxy.org/
 .. _example configuration for HAProxy: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg

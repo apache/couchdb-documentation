@@ -309,7 +309,7 @@ Number Handling
 ---------------
 
 Developers and users new to computer handling of numbers often encounter
-suprises when expecting that a number stored in JSON format does not
+surprises when expecting that a number stored in JSON format does not
 necessarily return as the same number as compared character by character.
 
 Any numbers defined in JSON that contain a decimal point or exponent will be
@@ -452,7 +452,7 @@ refer to a single specific value that a double can represent.
 The important point to understand is that we're mapping from one infinite set
 onto a finite set. An easy way to see this is by reflecting on this::
 
-    1.0 == 1.00 == 1.000 = 1.(infinite zeroes)
+    1.0 == 1.00 == 1.000 = 1.(infinite zeros)
 
 Obviously a computer can't hold infinite bytes so we have to decimate our
 infinitely sized set to a finite set that can be represented concisely.
@@ -472,7 +472,7 @@ input. Its behaving the same as any other common JSON library does, its just
 not pretty printing its output.
 
 On the other hand, if you actually are in a position where an IEEE-754 double
-is not a satisfactory datatype for your numbers, then the answer as has been
+is not a satisfactory data type for your numbers, then the answer as has been
 stated is to not pass your numbers through this representation. In JSON this is
 accomplished by encoding them as a string or by using integer types (although
 integer types can still bite you if you use a platform that has a different

@@ -289,7 +289,7 @@ several *mandatory* fields, that CouchDB needs for authentication:
 - **name** (*string*): User's name aka login. **Immutable** e.g. you cannot
   rename an existing user - you have to create new one
 - **roles** (*array* of *string*): List of user roles. CouchDB doesn't provide
-  any builtin roles, so you're free to define your own depending on your needs.
+  any built-in roles, so you're free to define your own depending on your needs.
   However, you cannot set system roles like ``_admin`` there. Also, only
   administrators may assign roles to users - by default all users have no roles
 - **password_sha** (*string*): Hashed password with salt. Used for ``simple``

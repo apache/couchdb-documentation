@@ -282,7 +282,7 @@ CouchDB can solve this scenario as well, and this is where scaling is
 important again. This time it is scaling down. Imagine CouchDB installed on
 phones and other mobile devices that can synchronize data with centrally
 hosted CouchDBs when they are on a network. The synchronization is not bound
-by user interface constraints like subsecond response times. It is easier to
+by user interface constraints like sub-second response times. It is easier to
 tune for high bandwidth and higher latency than for low bandwidth and very
 low latency. Mobile applications can then use the local CouchDB to fetch
 data, and since no remote networking is required for that,

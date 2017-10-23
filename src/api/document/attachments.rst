@@ -37,7 +37,7 @@
       <api/doc/attachment/range>`. Used for attachments with
       :mimetype:`application/octet-stream` content type
     :>header Content-Encoding: Used compression codec. Available if
-      attachment's ``content_type`` is in :config:option:`list of compressiable
+      attachment's ``content_type`` is in :config:option:`list of compressible
       types <attachments/compressible_types>`
     :>header Content-Length: Attachment size. If compression codec was used,
       this value is about compressed size, not actual
@@ -92,7 +92,7 @@
       <api/doc/attachment/range>`. Used for attachments with
       :mimetype:`application/octet-stream`
     :>header Content-Encoding: Used compression codec. Available if
-      attachment's ``content_type`` is in :config:option:`list of compressiable
+      attachment's ``content_type`` is in :config:option:`list of compressible
       types <attachments/compressible_types>`
     :>header Content-Length: Attachment size. If compression codec is used,
       this value is about compressed size, not actual

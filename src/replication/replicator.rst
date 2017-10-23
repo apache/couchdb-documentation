@@ -132,7 +132,7 @@ start it would not appear here, only in ``_scheduler/docs``.
 
 If there is an error, for example if the source database is missing, the
 replication job will crash and retry after a wait period. Each
-sucesssive crash will result in a longer waiting period.
+successive crash will result in a longer waiting period.
 
 For example, POST-ing this document
 
@@ -257,7 +257,7 @@ Replication Scheduler
 
 Once replication jobs are created they are managed by the scheduler. The
 scheduler is the replication component which periodically stops some
-jobs and starts others. This behavior makes it posssible to have a
+jobs and starts others. This behavior makes it possible to have a
 larger number of jobs than the cluster could run simultaneously.
 Replication jobs which keep failing will be penalized and forced to
 wait. The wait time increases exponentially with each consecutive
@@ -368,7 +368,7 @@ retried and don't consume memory or CPU resources.
  * ``Completed``: This is a terminal, successful state for
    non-continuous replications. Once in this state the replication is
    "forgotten" by the scheduler and it doesn't consume any more CPU or
-   memory resorces. Continuous replication jobs will never reach this
+   memory resources. Continuous replication jobs will never reach this
    state.
 
 .. _Normal vs Continuous Replications:

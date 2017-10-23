@@ -140,7 +140,7 @@ Native Erlang Query Server
 
         Unlike the JavaScript query server, the Erlang one does not runs in a
         sandbox mode. This means that Erlang code has full access to your OS,
-        filesystem and network, which may lead to security issues. While Erlang
+        file system and network, which may lead to security issues. While Erlang
         functions are faster than JavaScript ones, you need to be careful
         about running them, especially if they were written by someone else.
 

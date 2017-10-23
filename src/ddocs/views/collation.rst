@@ -92,7 +92,7 @@ String Ranges
 =============
 
 If you need start and end keys that encompass every string with a given prefix,
-it is better to use a high value unicode character, than to use a ``'ZZZZ'``
+it is better to use a high value Unicode character, than to use a ``'ZZZZ'``
 suffix.
 
 That is, rather than::

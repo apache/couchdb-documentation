@@ -37,7 +37,7 @@ Overview
 --------
 
 couchup makes it easy to migrate your CouchDB 1.x databases to CouchDB
-2.x by providing useful 4 sub-commands:
+2.x by providing 4 useful sub-commands:
 
 * ``list`` - lists all CouchDB 1.x databases
 * ``replicate`` - replicates one or more 1.x databases to CouchDB 2.x

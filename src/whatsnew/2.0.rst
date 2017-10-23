@@ -147,5 +147,5 @@ The following changes in 2.0 represent a significant deviation from
 CouchDB 1.x and may alter behaviour of systems designed to work with
 older versions of CouchDB:
 
-* :ghissue:`620`: ``POST /dbname`` no longer returns an ETag reponse header,
+* :ghissue:`620`: ``POST /dbname`` no longer returns an ETag response header,
   in compliance with RFC 7231, Section 7.2.

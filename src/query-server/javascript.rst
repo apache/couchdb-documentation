@@ -219,7 +219,7 @@ modules and functions:
     Encodes `obj` to JSON string. This is an alias for the ``JSON.stringify``
     method.
 
-    :param obj: JSON encodable object
+    :param obj: JSON-encodable object
     :return: JSON string
 
 .. _commonjs:

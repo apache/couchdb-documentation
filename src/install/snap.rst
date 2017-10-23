@@ -23,7 +23,7 @@ Ubuntu snapcraft repository under the name ``couchdb``. Only snaps built
 from official stable CouchDB releases (``2.0``, ``2.1``, etc.) are available
 through this channel.
 
-After `installing snapd`_, the couchdb snap can be installed via::
+After `installing snapd`_, the CouchDB snap can be installed via::
 
     $ sudo snap install couchdb
 

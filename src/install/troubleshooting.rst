@@ -83,9 +83,9 @@ things:
     <<"[1,2,3,4,5]">>
     4> q().
 
-- At this point the only remaining dependency is your systems' unicode support
+- At this point the only remaining dependency is your system's Unicode support
   library, ICU, and the Spidermonkey Javascript VM from Mozilla. Make sure that
-  your ``LD_LIBRARY_PATH`` or similar for non-Linux systems
+  your ``LD_LIBRARY_PATH`` or equivalent for non-Linux systems
   (``DYLD_LIBRARY_PATH`` on macOS) makes these available to CouchDB.
   Linux example running as normal user:
 
@@ -125,7 +125,7 @@ correct. Please recheck your build dependencies and try again.
     … OS Process Error … {os_process_error,{exit_status,139}}
 
 this is caused by the fact that SELinux blocks access to certain areas of
-the filesystem. You must re-configure SELinux, or you can fully disable
+the file system. You must re-configure SELinux, or you can fully disable
 SELinux using the command:
 
 .. code-block:: text
@@ -195,7 +195,7 @@ Lots of memory being used on startup
 Is your CouchDB using a lot of memory (several hundred MB) on startup? This one
 seems to especially affect Dreamhost installs. It's really an issue with the
 Erlang VM pre-allocating data structures when ulimit is very large or
-unlimited. A detailed dicussion can be found on the erlang-questions list,
+unlimited. A detailed discussion can be found on the erlang-questions list,
 but the short answer is that you should decrease ``ulimit -n`` or define
 ``ERL_MAX_PORTS`` to something reasonable like 1024.
 
@@ -266,7 +266,7 @@ The function needs to return a value:
 erlang stack trace contains ``bad_utf8_character_code``
 -------------------------------------------------------
 
-CouchDB 1.1.1 and later contains stricter handling of UTF8 encoding. If you are
+CouchDB 1.1.1 and later contain stricter handling of UTF8 encoding. If you are
 replicating from older versions to newer versions, then this error may occur
 during replication.
 

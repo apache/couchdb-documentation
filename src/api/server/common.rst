@@ -802,7 +802,7 @@ error.
     :<header Accept: - :mimetype:`application/json`
     :>header Content-Type: - :mimetype:`application/json`
     :query number limit: How many results to return
-    :query number skip: How many result to skip starting at the beggining,
+    :query number skip: How many result to skip starting at the beginning,
                         ordered by replication ID
     :>json number offset: How many results were skipped
     :>json number total_rows: Total number of replication jobs
@@ -909,7 +909,7 @@ error.
     :<header Accept: - :mimetype:`application/json`
     :>header Content-Type: - :mimetype:`application/json`
     :query number limit: How many results to return
-    :query number skip: How many result to skip starting at the beggining, if
+    :query number skip: How many result to skip starting at the beginning, if
                         ordered by document ID
     :>json number offset: How many results were skipped
     :>json number total_rows: Total number of replication documents.
@@ -1006,7 +1006,7 @@ error.
     :<header Accept: - :mimetype:`application/json`
     :>header Content-Type: - :mimetype:`application/json`
     :query number limit: How many results to return
-    :query number skip: How many result to skip starting at the beggining, if
+    :query number skip: How many result to skip starting at the beginning, if
                         ordered by document ID
     :>json number offset: How many results were skipped
     :>json number total_rows: Total number of replication documents.

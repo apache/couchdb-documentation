@@ -74,7 +74,7 @@ The answer is simple: both versions exist on both sides!
     |   v2b   |                      |   v2b   |
     +---------+                      +---------+
 
-After all, this is not a filesystem, so there's no restriction that only one
+After all, this is not a file system, so there's no restriction that only one
 document can exist with the name /db/bob. These are just "conflicting" revisions
 under the same name.
 
@@ -514,7 +514,7 @@ file so that it knows whether a file has changed since the last successful
 replication.
 
 In our example it has changed on both sides. Only one file called `bob.vcf`
-can exist within the filesystem. Unison solves the problem by simply ducking
+can exist within the file system. Unison solves the problem by simply ducking
 out: the user can choose to replace the remote version with the local version,
 or vice versa (both of which would lose data), but the default action is to
 leave both sides unchanged.
@@ -697,11 +697,11 @@ useful characteristics:
    the new data, plus the revision ID of the previous.
 
 #. In addition to application data (``{"name": "Jason", "awesome": true}``),
-   every record stores the evolutionary timeline of all previous revision IDs
+   every record stores the evolutionary time line of all previous revision IDs
    leading up to itself.
 
    - Exercise: Take a moment of quiet reflection. Consider any two different
-     records, A and B. If A's revision ID appears in B's timeline, then B
+     records, A and B. If A's revision ID appears in B's time line, then B
      definitely evolved from A. Now consider Git's fast-forward merges.
      Do you hear that? That is the sound of your mind being blown.
 
@@ -709,14 +709,14 @@ useful characteristics:
    children. CouchDB has that too.
 
    - Exercise: Compare two different records, A and B. A's revision ID does not
-     appear in B's timeline; however, one revision ID, C, is in both A's and B's
-     timeline. Thus A didn't evolve from B. B didn't evolve from A. But rather,
-     A and B have a common ancestor C. In Git, that is a "fork." In CouchDB,
-     it's a "conflict."
+     appear in B's time line; however, one revision ID, C, is in both A's and
+     B's time line. Thus A didn't evolve from B. B didn't evolve from A. But
+     rather, A and B have a common ancestor C. In Git, that is a "fork." In
+     CouchDB, it's a "conflict."
 
-   - In Git, if both children go on to develop their timelines independently,
+   - In Git, if both children go on to develop their time lines independently,
      that's cool. Forks totally support that.
-   - In CouchDB, if both children go on to develop their timelines
+   - In CouchDB, if both children go on to develop their time lines
      independently, that cool too. Conflicts totally support that.
    - **Fun fact 3**: CouchDB "conflicts" do not correspond to Git "conflicts."
      A Couch conflict is a divergent revision history, what Git calls a "fork."
@@ -727,15 +727,15 @@ useful characteristics:
    has that too.
 
    - **In the data model, there is no merge.** The client simply marks one
-     timeline as deleted and continues to work with the only extant timeline.
+     time line as deleted and continues to work with the only extant time line.
    - **In the application, it feels like a merge.** Typically, the client merges
-     the *data* from each timeline in an application-specific way.
-     Then it writes the new data to the timeline. In Git, this is like copying
-     and pasting the changes from branch A into branch B, then commiting to
+     the *data* from each time line in an application-specific way.
+     Then it writes the new data to the time line. In Git, this is like copying
+     and pasting the changes from branch A into branch B, then committing to
      branch B and deleting branch A. The data was merged, but there was no
      `git merge`.
-   - These behaviors are different because, in Git, the timeline itself is
-     important; but in CouchDB, the data is important and the timeline is
+   - These behaviors are different because, in Git, the time line itself is
+     important; but in CouchDB, the data is important and the time line is
      incidental—it's just there to support replication. That is one reason why
      CouchDB's built-in revisioning is inappropriate for storing revision data
      like a wiki page.

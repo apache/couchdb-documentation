@@ -616,7 +616,7 @@ The Replication Log SHOULD contain the following fields:
   - **docs_read** (*number*): Number of read documents
   - **docs_written** (*number*): Number of written documents
   - **end_last_seq** (*number*): Last processed Update Sequence ID
-  - **end_time** (*string*): Replication completion datetime in :rfc:`5322`
+  - **end_time** (*string*): Replication completion timestamp in :rfc:`5322`
     format
   - **missing_checked** (*number*): Number of checked revisions on Source
   - **missing_found** (*number*): Number of missing revisions found on Target
@@ -624,7 +624,7 @@ The Replication Log SHOULD contain the following fields:
   - **session_id** (*string*): Unique session ID. Commonly, a random UUID value
     is used. **Required**
   - **start_last_seq** (*number*): Start update Sequence ID
-  - **start_time** (*string*): Replication start datetime in :rfc:`5322` format
+  - **start_time** (*string*): Replication start timestamp in :rfc:`5322` format
 
 - **replication_id_version** (*number*): Replication protocol version. Defines
   Replication ID calculation algorithm, HTTP API calls and the others

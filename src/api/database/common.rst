@@ -421,7 +421,7 @@ respond with a HTTP :statuscode:`202` response code immediately.
     documents will be successfully stored on disk. For example, individual
     documents may not be saved due to conflicts, rejection by
     :ref:`validation function <vdufun>` or by other reasons, even if overall
-    the batch was sucessfully submitted.
+    the batch was successfully submitted.
 
 **Request**:
 

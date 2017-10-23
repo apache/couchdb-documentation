@@ -63,7 +63,7 @@ Logging options
 
     .. config:option:: write_delay
 
-        Specifies the wait in milliseconds before commiting logs to disk, to
+        Specifies the wait in milliseconds before committing logs to disk, to
         enable delayed log writes. Only used by the ``file``
         :option:`writer <log/writer>`::
 

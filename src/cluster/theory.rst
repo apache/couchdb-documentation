@@ -55,7 +55,7 @@ comes crashing down.
 
 Computers go down and sysadmins pull out network cables in a furious rage from
 time to time, so using ``n<2`` is asking for downtime. Having too high a value
-of ``n`` adds servers and complexity without any real benefit. The sweetspot is
+of ``n`` adds servers and complexity without any real benefit. The sweet spot is
 at ``n=3``.
 
 Say that we have a database with 3 replicas and 4 shards. That would give us a
