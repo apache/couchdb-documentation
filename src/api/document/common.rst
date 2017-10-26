@@ -335,7 +335,7 @@
     :synopsis: Copies the document within the same database
 
     The :method:`COPY` (which is non-standard HTTP) copies an existing
-    document to a new or existing document.
+    document to a new document.
 
     The source document is specified on the request line, with the
     :header:`Destination` header of the request specifying the target
