@@ -229,7 +229,7 @@
                            - :mimetype:`text/plain; charset=utf-8`
     :>jsonarr string id: Document ID
     :>jsonarr string rev: New document revision token. Available
-      if document have saved without errors. *Optional*
+      if document has saved without errors. *Optional*
     :>jsonarr string error: Error type. *Optional*
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
