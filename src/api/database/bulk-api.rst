@@ -236,7 +236,6 @@
     :code 400: The request provided invalid JSON data
     :code 417: Occurs when at least one document was rejected by a
      :ref:`validation function <vdufun>`
-    :code 500: Malformed data provided, while it's still valid JSON
 
     **Request**:
 
