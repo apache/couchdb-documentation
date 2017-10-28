@@ -41,7 +41,6 @@
       types <attachments/compressible_types>`
     :>header Content-Length: Attachment size. If compression codec was used,
       this value is about compressed size, not actual
-    :>header Content-MD5: Base64 encoded MD5 binary digest
     :>header ETag: Double quoted base64 encoded MD5 binary digest
     :code 200: Attachment exists
     :code 304: Attachment wasn't modified if :header:`ETag` equals specified
@@ -65,7 +64,6 @@
         Cache-Control: must-revalidate
         Content-Encoding: gzip
         Content-Length: 100
-        Content-MD5: vVa/YgiE1+Gh0WfoFJAcSg==
         Content-Type: text/plain
         Date: Thu, 15 Aug 2013 12:42:42 GMT
         ETag: "vVa/YgiE1+Gh0WfoFJAcSg=="
@@ -96,7 +94,6 @@
       types <attachments/compressible_types>`
     :>header Content-Length: Attachment size. If compression codec is used,
       this value is about compressed size, not actual
-    :>header Content-MD5: Base64 encoded MD5 binary digest
     :>header ETag: Double quoted base64 encoded MD5 binary digest
     :response: Stored content
     :code 200: Attachment exists
