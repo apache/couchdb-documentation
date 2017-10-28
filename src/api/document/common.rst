@@ -345,7 +345,10 @@
     :param docid: Document ID
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
-    :<header Destination: Destination document
+    :<header Destination: Destination document. Must contain the target
+      document ID, and optionally the target document revision, if copying to
+      an existing document.  See :ref:`Copying to an Existing Document
+      <copy_to_existing_document>`.
     :<header If-Match: Source document's revision. Alternative to `rev` query
       parameter
     :<header X-Couch-Full-Commit: Overrides server's
@@ -1169,6 +1172,8 @@ or :header:`If-Match`:
         "ok": true,
         "rev": "1-917fa2381192822767f010b95b45325b"
     }
+
+.. _copy_to_existing_document:
 
 Copying to an Existing Document
 ===============================
