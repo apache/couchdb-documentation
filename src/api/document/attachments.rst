@@ -109,10 +109,11 @@
     :synopsis: Adds an attachment of a document
 
     Uploads the supplied content as an attachment to the specified document.
-    The attachment name provided must be a URL encoded string. You must also
-    supply either the ``rev`` query argument or the :header:`If-Match` HTTP
-    header for validation, and the HTTP headers (to set the attachment content
-    type).
+    The attachment name provided must be a URL encoded string. You must supply
+    the Content-Type header, and for an existing document you must also supply
+    either the ``rev`` query argument or the :header:`If-Match` HTTP header. If
+    the revision is omitted, a new, otherwise empty document will be created
+    with the provided attachment, or a conflict will occur.
 
     If case when uploading an attachment using an existing attachment name,
     CouchDB will update the corresponding stored content of the database. Since
@@ -129,7 +130,7 @@
     :param attname: Attachment name
     :<header Content-Type: Attachment MIME type. *Required*
     :<header If-Match: Document revision. Alternative to `rev` query parameter
-    :query string rev: Document revision. *Required*
+    :query string rev: Document revision. *Optional*
     :>json string id: Document ID
     :>json boolean ok: Operation status
     :>json string rev: Revision MVCC token
