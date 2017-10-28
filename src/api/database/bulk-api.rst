@@ -229,14 +229,13 @@
                            - :mimetype:`text/plain; charset=utf-8`
     :>jsonarr string id: Document ID
     :>jsonarr string rev: New document revision token. Available
-      if document have saved without errors. *Optional*
+      if document has saved without errors. *Optional*
     :>jsonarr string error: Error type. *Optional*
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
     :code 417: Occurs when at least one document was rejected by a
      :ref:`validation function <vdufun>`
-    :code 500: Malformed data provided, while it's still valid JSON
 
     **Request**:
 
