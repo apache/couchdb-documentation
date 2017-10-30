@@ -335,7 +335,8 @@
     :synopsis: Copies the document within the same database
 
     The :method:`COPY` (which is non-standard HTTP) copies an existing
-    document to a new or existing document.
+    document to a new or existing document. Copying a document is only possible
+    within the same database.
 
     The source document is specified on the request line, with the
     :header:`Destination` header of the request specifying the target
@@ -1150,7 +1151,7 @@ or :header:`If-Match`:
 
     COPY /recipes/SpaghettiWithMeatballs HTTP/1.1
     Accept: application/json
-    Destination: http://localhost:5984/recipes_old/SpaghettiWithMeatballs_Original
+    Destination: SpaghettiWithMeatballs_Original
     If-Match: 1-917fa2381192822767f010b95b45325b
     Host: localhost:5984
 
@@ -1164,7 +1165,7 @@ or :header:`If-Match`:
     Content-Type: application/json
     Date: Wed, 14 Aug 2013 14:21:00 GMT
     ETag: "1-917fa2381192822767f010b95b45325b"
-    Location: http://localhost:5984/recipes_old/SpaghettiWithMeatballs_Original
+    Location: http://localhost:5984/recipes/SpaghettiWithMeatballs_Original
     Server: CouchDB (Erlang/OTP)
 
     {
@@ -1188,7 +1189,7 @@ for the target document by appending the ``rev`` parameter to the
 
     COPY /recipes/SpaghettiWithMeatballs?rev=8-6f5ad8db0f34af24a6e0984cd1a6cfb9 HTTP/1.1
     Accept: application/json
-    Destination: http://localhost:5984/recipes_old/SpaghettiWithMeatballs_Original?rev=1-917fa2381192822767f010b95b45325b
+    Destination: SpaghettiWithMeatballs_Original?rev=1-917fa2381192822767f010b95b45325b
     Host: localhost:5984
 
 **Response**:
@@ -1201,7 +1202,7 @@ for the target document by appending the ``rev`` parameter to the
     Content-Type: application/json
     Date: Wed, 14 Aug 2013 14:21:00 GMT
     ETag: "2-62e778c9ec09214dd685a981dcc24074""
-    Location: http://localhost:5984/recipes_old/SpaghettiWithMeatballs_Original
+    Location: http://localhost:5984/recipes/SpaghettiWithMeatballs_Original
     Server: CouchDB (Erlang/OTP)
 
     {
