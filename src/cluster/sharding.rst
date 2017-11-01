@@ -200,7 +200,7 @@ Add, then delete
 
 In the world of CouchDB there is no such thing as "moving" shards, only adding and removing shard replicas.
 You can add a new replica of a shard and then remove the old replica, thereby creating the
-illusion of moving. To do this for a database that has ``n=1``,
+illusion of moving. If you do this for a database that has ``n=1``,
 you might be caught by the following mistake:
 
 #. Copy the shard onto a new node.
@@ -210,7 +210,7 @@ you might be caught by the following mistake:
 
 To avoid this mistake, you always want to make sure that both shards have been live for some time
 and that the shard on your new node is fully caught up before removing a shard on an old node.
-Since "moving" a more conceptually—if not technically—accurate of what you want to do,
+Since "moving" is a more conceptually—if not technically—accurate description of what you want to do,
 we'll use that word in this documentation as well.
 
 Moving
@@ -297,5 +297,5 @@ any real gain. You might even get lower performance. As an example of this, we
 can take the author's (15 year) old lab server. It gets noticeably slower with
 more than one shard and high load, as the hard drive must seek more.
 
-How many shards you should X depends, as always, on your use case and your
+How many shards you should have depends, as always, on your use case and your
 hardware. If you do not know what to do, use the default of 8 shards.
