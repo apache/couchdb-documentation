@@ -73,18 +73,24 @@ Replication state of this document can then be queried from
 .. code-block:: json
 
      {
-         "database": "_replicator",
-         "doc_id": "my_rep",
-         "error_count": 0,
-         "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
-         "info": null,
-         "last_updated": "2017-04-05T19:18:15Z",
-         "node": "node1@127.0.0.1",
-         "proxy": null,
-         "source": "http://myserver.com/foo/",
-         "start_time": "2017-04-05T19:18:15Z",
-         "state": "running",
-         "target": "http://adm:*****@localhost:5984/bar/"
+        "_id": "my_rep",
+        "_rev": "10-5a401d5fccfa2512c8622f69f69a513e",
+        "source": "http://myserver.com/foo",
+        "target": "http://adm:***@localhost:5984/bar",
+        "owner": "admin",
+        "_replication_state": "running",
+        "_replication_state_time": "2017-11-01T21:05:06Z",
+        "_replication_id": "36fbd9280bff937458177738ced9d8f7",
+        "_replication_stats": {
+            "revisions_checked": 23,
+            "missing_revisions_found": 23,
+            "docs_read": 23,
+            "docs_written": 23,
+            "changes_pending": null,
+            "doc_write_failures": 0,
+            "checkpointed_source_seq": "27-g1AAAAIbeJyV0EsOgjAQBuAGMOLCM-gRSoUKK7mJ9kWQYLtQ13oTvYneRG-CfZAYSUjqZppM5v_SmRYAENchB3OppOKilKpWx1Or2wEBdNF1XVOHJD7oxnTFKMOcDYdH4nSpK930wsQKAmYIVdBXKI2w_RGQyFJYFb7CzgiXXgDuDywXKUk4mJ0lF9VeCj6SlpGu4KofDdyMEFoBk3QtMt87OOXulIdRAqvABHPO0F_K0ymv7zYU5UVe-W_zdoK9R2QFxhjBUAwzzQch86VT",
+            "start_time": "2017-11-01T21:05:03Z"
+        }
      }
 
 The state is ``running``. That means replicator has scheduled this
