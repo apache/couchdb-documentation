@@ -46,6 +46,15 @@ Upgrade Notes
   had been unfortunately misnamed, and has now been updated to behave as the
   name would suggest. Both are documented in the shipped ``default.ini`` file.
 
+* :ghissue:`914`: Certain critical config sections are blacklisted from being
+  modified through the HTTP API. These sections can still be modified through
+  the standard ``local.ini`` or ``local.d/*.ini`` files.
+
+* :ghissue:`916`: ``couchjs`` now disables ``eval()`` and the ``Function()``
+  constructor by default. To restore the original behaviour, add the
+  ``--eval`` flag to the definition of the javascript query server in your
+  ``local.ini`` file.
+
 .. _release/2.1.1:
 
 Version 2.1.1
@@ -72,8 +81,14 @@ General
   space check performed by the compaction daemon. Erlang itself will
   correctly perform free space checks in version 21.0.
 
+* :ghissue:`824`: The current node's local interface can now be accessed at
+  ``/_node/_local/{endpoint}`` as well as at
+  ``/_node/<nodename>@<hostname>/{endpoint}``.
+
 * The Dockerfile in the source repository has been retired. For a current
   Dockerfile, see the `couchdb-docker repository`.
+
+* Fauxton now uses a version of React with a BSD license.
 
 .. _ERL-343: https://bugs.erlang.org/browse/ERL-343
 .. _couchdb-docker repository: https://github.com/apache/couchdb-docker
@@ -174,6 +189,13 @@ The 2.1.1 release also includes the following minor improvements:
     might change in the presence of an index, and operators/selectors which
     explicitly depend on a full index scan (such as ``$exists``) would not
     return a complete result set.
+  * :ghissue:`883`: Erlang time module compatibility has been improved for
+    releases of Erlang newer than 18.0.
+  * :ghissue:`933`: 410 is now returned when attempting to make a temporary
+    view request.
+  * :ghissue:`934`: The replicator now has a configurable delay before
+    retrying to retrieve a document after receiving a ``missing_doc`` error.
+  * :ghissue:`936`: jiffy now deduplicates JSON keys.
 
 .. _release/2.1.0:
 
