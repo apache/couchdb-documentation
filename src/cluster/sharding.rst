@@ -198,19 +198,25 @@ Moving Shards
 Add, then delete
 ----------------
 
-In the world of CouchDB there is no such thing as moving. You can add a new
-replica to a shard and then remove the old replica, thereby creating the
-illusion of moving. If you try to uphold this illusion with a database that have
-``n=1``, you might find yourself in the following scenario:
+In the world of CouchDB there is no such thing as "moving" shards, only adding
+and removing shard replicas.
+You can add a new replica of a shard and then remove the old replica,
+thereby creating the illusion of moving.
+If you do this for a database that has ``n=1``,
+you might be caught by the following mistake:
 
-#. Copy the shard to a new node.
+#. Copy the shard onto a new node.
 #. Update the metadata to use the new node.
 #. Delete the shard on the old node.
-#. Lose all writes made between 1 and 2.
+#. Oh, no!: You have lost all writes made between 1 and 2.
 
-As the reality "I added a new replica of the shard X on node Y and then I waited
-for them to sync, before I removed the replica of shard X from node Z." is a bit
-tedious, people and this documentation tend to use the illusion of moving.
+To avoid this mistake, you always want to make sure
+that both shards have been live for some time
+and that the shard on your new node is fully caught up
+before removing a shard on an old node.
+Since "moving" is a more conceptually (if not technically)
+accurate description of what you want to do,
+we'll use that word in this documentation as well.
 
 Moving
 ------
