@@ -24,6 +24,13 @@ HTTP Server Options
 
 .. config:section:: httpd :: HTTP Server Options
 
+.. warning::
+    In CouchDB 2.x, the `httpd` section mostly refers to the node-local port,
+    on port 5986 by default. This port is used only for maintenance and
+    administrative tasks. **It should not be used for regular CouchDB access**,
+    and for security reasons, **should always be bound to localhost**
+    (`127.0.0.1`) or a private LAN segment only.
+
     .. config:option:: allow_jsonp :: Enables JSONP support
 
         The ``true`` value of this option enables `JSONP`_ support (it's
@@ -36,27 +43,17 @@ HTTP Server Options
 
     .. config:option:: bind_address :: Listen IP address
 
-        Defines the IP address by which CouchDB will be accessible::
+        Defines the IP address by which the node-local port is available.
+        The recommended setting is always::
 
             [httpd]
             bind_address = 127.0.0.1
 
-        To let CouchDB listen any available IP address, just set up ``0.0.0.0``
-        value::
-
-            [httpd]
-            bind_address = 0.0.0.0
-
-        For IPv6 support you need to set ``::1`` if you want to let CouchDB
-        listen local address::
+        For IPv6 support you need to set `::1` if you want to let CouchDB
+        listen correctly::
 
             [httpd]
             bind_address = ::1
-
-        or ``::`` for any available::
-
-            [httpd]
-            bind_address = ::
 
     .. config:option:: changes_timeout :: Changes feed timeout
 
@@ -95,17 +92,15 @@ HTTP Server Options
 
     .. config:option:: port :: Listen port
 
-        Defined the port number to listen::
+        Defines the port number to listen::
 
             [httpd]
             port = 5984
 
-        To let CouchDB handle any free port, set this option to ``0``::
+        To let CouchDB use any free port, set this option to ``0``::
 
             [httpd]
             port = 0
-
-        After that, CouchDB URI could be located within the URI file.
 
     .. config:option:: redirect_vhost_handler :: Virtual Hosts custom redirect handler
 
@@ -228,6 +223,44 @@ HTTP Server Options
            settings.
 
 .. config:section:: chttpd :: Clustered HTTP Server Options
+
+.. note::
+    In CouchDB 2.x, the `chttpd` section refers to the standard, clustered
+    port. All use of CouchDB, aside from a few specific maintenance tasks as
+    described in this documentation, should be performed over this port.
+
+        Defines the IP address by which the clustered port is available::
+
+            [chttpd]
+            bind_address = 127.0.0.1
+
+        To let CouchDB listen any available IP address, use `0.0.0.0`::
+
+            [chttpd]
+            bind_address = 0.0.0.0
+
+        For IPv6 support you need to set `::1` if you want to let CouchDB
+        listen correctly::
+
+            [chttpd]
+            bind_address = ::1
+
+        or `::` for any available::
+
+            [chttpd]
+            bind_address = ::
+
+    .. config:option:: port :: Listen port
+
+        Defines the port number to listen::
+
+            [chttpd]
+            port = 5984
+
+        To let CouchDB use any free port, set this option to `0`::
+
+            [chttpd]
+            port = 0
 
     .. config:option:: prefer_minimal :: Sends minimal set of headers
 
