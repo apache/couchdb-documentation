@@ -46,11 +46,20 @@ Enabling the Apache CouchDB package repository
 
 .. highlight:: ini
 
-**RedHat/CentOS**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
+**CentOS**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
 
     [bintray--apache-couchdb-rpm]
     name=bintray--apache-couchdb-rpm
     baseurl=http://apache.bintray.com/couchdb-rpm/el$releasever/$basearch/
+    gpgcheck=0
+    repo_gpgcheck=0
+    enabled=1
+
+**RedHat/RHEL**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``. Be sure to replace the ``7`` below with ``6`` if you are on a EL6 distribution::
+
+    [bintray--apache-couchdb-rpm]
+    name=bintray--apache-couchdb-rpm
+    baseurl=http://apache.bintray.com/couchdb-rpm/el7/$basearch/
     gpgcheck=0
     repo_gpgcheck=0
     enabled=1
