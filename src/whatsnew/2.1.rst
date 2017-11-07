@@ -34,6 +34,10 @@ Upgrade Notes
   hand. The default has changed to meet new guidelines and to provide
   additional functionality in the future.
 
+  If you recieve errors in the logfile, such as
+  ``internal_server_error : No DB shards could be opened.`` or in Fauxton,
+  such as ``This database failed to load.`` you need to make this change.
+
 * The deprecated (and broken) OAuth 1.0 implementation has been removed.
 
 * If user code reads or manipulates replicator document states,
