@@ -27,6 +27,7 @@ to install CouchDB is to use the convenience binary packages:
 * CentOS/RHEL 6
 * CentOS/RHEL 7
 * Debian 8 (jessie)
+* Debian 9 (stretch)
 * Ubuntu 14.04 (trusty)
 * Ubuntu 16.04 (xenial)
 
@@ -75,6 +76,7 @@ and replace ``{distribution}`` with the appropriate choice for your OS
 version:
 
 * Debian 8: ``jessie``
+* Debian 9: ``stretch``
 * Ubuntu 14.04: ``trusty``
 * Ubuntu 16.04: ``xenial``
 
