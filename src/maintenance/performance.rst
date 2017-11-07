@@ -223,8 +223,8 @@ revision which contains the ``_id`` and ``_rev`` fields as well as
 the `_deleted` flag. This revision will remain even after a `database
 compaction` so that the deletion can be replicated. Deleted documents, like
 non-deleted documents, can affect view build times, :method:`PUT` and
-:method:`DELETE` requests time and size of database on disk, since they
-increase the size of the B+Tree's. You can see the number of deleted documents
+:method:`DELETE` request times, and the size of the database since they
+increase the size of the B+Tree. You can see the number of deleted documents
 in :get:`database information </{db}>`. If your use case creates lots of
 deleted documents (for example, if you are storing short-term data like log
 entries, message queues, etc), you might want to periodically switch to a new
