@@ -105,7 +105,6 @@
     :code 400: Invalid request
     :code 401: Read permission required
     :code 404: Specified database, design document or view is missed
-    :code 500: View function execution error
 
     **Request**:
 
