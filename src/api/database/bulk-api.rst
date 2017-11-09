@@ -19,59 +19,14 @@
 .. http:get:: /{db}/_all_docs
     :synopsis: Returns a built-in view of all documents in this database
 
-    Returns a JSON structure of all of the documents in a given database.
-    The information is returned as a JSON structure containing meta
-    information about the return structure, including a list of all documents
-    and basic contents, consisting the ID, revision and key. The key is the
-    from the document's ``_id``.
+    Executes the built-in `_all_docs` :ref:`view <views>`, returning all of the
+    documents in the database.  With the exception of the URL parameters
+    (described below), this endpoint works identically to any other view. Refer
+    to the :ref:`view endpoint <api/ddoc/view>` documentation for a complete
+    description of the available query parameters and the format of the returned
+    data.
 
     :param db: Database name
-    :<header Accept: - :mimetype:`application/json`
-                     - :mimetype:`text/plain`
-    :query boolean conflicts: Includes `conflicts` information in response.
-      Ignored if `include_docs` isn't ``true``. Default is ``false``.
-    :query boolean descending: Return the documents in descending by key order.
-      Default is ``false``.
-    :query string endkey: Stop returning records when the specified key is
-      reached. *Optional*.
-    :query string end_key: Alias for `endkey` param.
-    :query string endkey_docid: Stop returning records when the specified
-      document ID is reached. *Optional*.
-    :query string end_key_doc_id: Alias for `endkey_docid` param.
-    :query boolean include_docs: Include the full content of the documents in
-      the return. Default is ``false``.
-    :query boolean inclusive_end: Specifies whether the specified end key
-      should be included in the result. Default is ``true``.
-    :query string key: Return only documents that match the specified key.
-      *Optional*.
-    :query string keys: Return only documents that match the specified keys.
-      *Optional*.
-    :query number limit: Limit the number of the returned documents to the
-      specified number. *Optional*.
-    :query number skip: Skip this number of records before starting to return
-      the results. Default is ``0``.
-    :query string stale: Allow the results from a stale view to be used,
-      without triggering a rebuild of all views within the encompassing design
-      doc. Supported values: ``ok`` and ``update_after``. *Optional*.
-    :query string startkey: Return records starting with the specified key.
-      *Optional*.
-    :query string start_key: Alias for `startkey` param.
-    :query string startkey_docid: Return records starting with the specified
-      document ID. *Optional*.
-    :query string start_key_doc_id: Alias for `startkey_docid` param.
-    :query boolean update_seq: Response includes an ``update_seq`` value
-      indicating which sequence id of the underlying database the view
-      reflects. Default is ``false``.
-    :>header Content-Type: - :mimetype:`application/json`
-                           - :mimetype:`text/plain; charset=utf-8`
-    :>header ETag: Response signature
-    :>json number offset: Offset where the document list started
-    :>json array rows: Array of view row objects. By default the information
-      returned contains only the document ID and revision.
-    :>json number total_rows: Number of documents in the database/view. Note
-      that this is not the number of rows returned in the actual query.
-    :>json number update_seq: Current update sequence for the database
-    :code 200: Request completed successfully
 
     **Request**:
 
