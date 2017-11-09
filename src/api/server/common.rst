@@ -1106,6 +1106,7 @@ error.
                                To can be used to get an idea why a particular
                                replication is not making progress.
     :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
 
      **Request**:
 
