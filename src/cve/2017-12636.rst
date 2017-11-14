@@ -16,7 +16,7 @@
 CVE-2017-12636: Apache CouchDB Remote Code Execution
 ====================================================
 
-:Date: 06.11.2017-TBD
+:Date: 14.11.2017
 
 :Affected: All Versions of Apache CouchDB
 
@@ -49,6 +49,6 @@ Credit
 ======
 
 This issue was discovered by `Joan Touzet`_ of the CouchDB Security team during
-the investigation of CVE `2017-12635`.
+the investigation of :ref:`CVE-2017-12635 <cve/2017-12635>`.
 
 .. _Joan Touzet: http://www.atypical.net

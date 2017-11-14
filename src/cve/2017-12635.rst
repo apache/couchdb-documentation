@@ -16,7 +16,7 @@
 CVE-2017-12635: Apache CouchDB Remote Privilege Escalation
 ==========================================================
 
-:Date: 06.11.2017-TBD
+:Date: 14.11.2017
 
 :Affected: All Versions of Apache CouchDB
 
@@ -30,9 +30,10 @@ Description
 Due to differences in CouchDB’s Erlang-based JSON parser and JavaScript-based
 JSON parser, it is possible to submit _users documents with duplicate keys for
 `roles` used for access control within the database, including the special case
-`_admin` role, that denotes administrative users. In combination with CVE
-`2017-12636` (Remote Code Execution), this can be used to give non-admin users
-access to arbitrary shell commands on the server as the database system user.
+`_admin` role, that denotes administrative users. In combination with
+:ref:`CVE-2017-12636 <cve/2017-12636>` (Remote Code Execution), this can be used
+to give non-admin users access to arbitrary shell commands on the server as the
+database system user.
 
 Mitigation
 ==========
@@ -51,7 +52,7 @@ Example
 
 The JSON parser differences result in behaviour that if two `roles` keys
 are available in the JSON, the second one will be used for authorising the
-document write, but the first `roles` key is used for subsequent authorization
+document write, but the first `roles` key is used for subsequent authorisation
 for the newly created user. By design, users can not assign themselves roles.
 The vulnerability allows non-admin users to give themselves admin privileges.
 
