@@ -36,6 +36,11 @@ Bug Fix
 Version 1.7.0
 =============
 
+Security
+--------
+* :ref:`CVE 2017-12635 <cve/2017-12635>`
+* :ref:`CVE 2017-12636 <cve/2017-12635>`
+
 API Changes
 -----------
 
