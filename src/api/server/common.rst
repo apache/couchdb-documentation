@@ -926,8 +926,9 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json string info: Additional information about the state, such as an
-                        error message for example
+    :>json object info: May contain additional information about the state.
+                        For error states, this will be a string. For success
+                        states this will contain a JSON object (see below).
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -937,6 +938,22 @@ error.
                                replication is not making progress.
     :code 200: Request completed successfully
     :code 401: CouchDB Server Administrator privileges required
+
+    The ``info`` field of a scheduler doc:
+
+    :json number revisions_checked: The count of revisions which have been
+        checked since this replication began.
+    :json number missing_revisions_found: The count of revisions which were
+        found on the source, but missing from the target.
+    :json number docs_read: The count of docs which have been read from the
+        source.
+    :json number docs_written: The count of docs which have been written to the
+        target.
+    :json number changes_pending: The count of changes not yet replicated.
+    :json number doc_write_failures: The count of docs which failed to be
+        written to the target.
+    :json object checkpointed_source_seq: The source sequence id which was last
+        successfully replicated.
 
     **Request**:
 
@@ -1023,8 +1040,9 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json string info: Additional information about the state, such as an
-                        error message for example
+    :>json object info: May contain additional information about the state.
+                        For error states, this will be a string. For success
+                        states this will contain a JSON object (see below).
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1034,6 +1052,22 @@ error.
                                replication is not making progress.
     :code 200: Request completed successfully
     :code 401: CouchDB Server Administrator privileges required
+
+    The ``info`` field of a scheduler doc:
+
+    :json number revisions_checked: The count of revisions which have been
+        checked since this replication began.
+    :json number missing_revisions_found: The count of revisions which were
+        found on the source, but missing from the target.
+    :json number docs_read: The count of docs which have been read from the
+        source.
+    :json number docs_written: The count of docs which have been written to the
+        target.
+    :json number changes_pending: The count of changes not yet replicated.
+    :json number doc_write_failures: The count of docs which failed to be
+        written to the target.
+    :json object checkpointed_source_seq: The source sequence id which was last
+        successfully replicated.
 
     **Request**:
 
@@ -1096,8 +1130,9 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json string info: Additional information about the state, such as an
-                        error message for example
+    :>json object info: May contain additional information about the state.
+                        For error states, this will be a string. For success
+                        states this will contain a JSON object (see below).
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1106,6 +1141,23 @@ error.
                                To can be used to get an idea why a particular
                                replication is not making progress.
     :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    The ``info`` field of a scheduler doc:
+
+    :json number revisions_checked: The count of revisions which have been
+        checked since this replication began.
+    :json number missing_revisions_found: The count of revisions which were
+        found on the source, but missing from the target.
+    :json number docs_read: The count of docs which have been read from the
+        source.
+    :json number docs_written: The count of docs which have been written to the
+        target.
+    :json number changes_pending: The count of changes not yet replicated.
+    :json number doc_write_failures: The count of docs which failed to be
+        written to the target.
+    :json object checkpointed_source_seq: The source sequence id which was last
+        successfully replicated.
 
      **Request**:
 
