@@ -28,20 +28,21 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
 
-    :query boolean conflicts: Includes `conflicts` information in response.
-      Ignored if `include_docs` isn't ``true``. Default is ``false``
-    :query boolean descending: Return the documents in descending by key order.
-      Default is ``false``
+    :query boolean conflicts: Include `conflicts` information in response.
+      Ignored if `include_docs` isn't ``true``. Default is ``false``.
+    :query boolean descending: Return the documents in descending order by key.
+      Default is ``false``.
     :query json endkey: Stop returning records when the specified key is
-      reached. *Optional*
+      reached.
     :query json end_key: Alias for `endkey` param
     :query string endkey_docid: Stop returning records when the specified
-      document ID is reached. Requires ``endkey`` to be specified for this to
-      have any effect. *Optional*
-    :query string end_key_doc_id: Alias for `endkey_docid` param
+      document ID is reached. Ignored if `endkey` is not set.
+    :query string end_key_doc_id: Alias for `endkey_docid`.
     :query boolean group: Group the results using the reduce function to a
-      group or single row. Default is ``false``
-    :query number group_level: Specify the group level to be used. *Optional*
+      group or single row. Implies `reduce` is ``true`` and the maximum
+      `group_level`. Default is ``false``.
+    :query number group_level: Specify the group level to be used. Implies
+      `group` is ``true``.
     :query boolean include_docs: Include the associated document with each row.
       Default is ``false``.
     :query boolean attachments: Include the Base64-encoded content of
@@ -53,59 +54,54 @@
       attachment is compressed. Ignored if `include_docs` isn't ``true``.
       Default is ``false``.
     :query boolean inclusive_end: Specifies whether the specified end key
-      should be included in the result. Default is ``true``
+      should be included in the result. Default is ``true``.
     :query json key: Return only documents that match the specified key.
-      *Optional*
     :query json-array keys: Return only documents where the key matches one of
-      the keys specified in the array. *Optional*
+      the keys specified in the array.
     :query number limit: Limit the number of the returned documents to the
-      specified number. *Optional*
-    :query boolean reduce: Use the reduction function. Default is ``true``
+      specified number.
+    :query boolean reduce: Use the reduction function. Default is ``true`` when
+      a reduce function is defined.
     :query number skip: Skip this number of records before starting to return
-      the results. Default is ``0``
+      the results. Default is ``0``.
     :query boolean sorted: Sort returned rows (see :ref:`Sorting Returned Rows
      <api/ddoc/view/sorting>`). Setting this to ``false`` offers a performance
      boost. The `total_rows` and `offset` fields are not available when this
-     is set to ``false``. Default is ``true``
+     is set to ``false``. Default is ``true``.
     :query boolean stable: Whether or not the view results should be returned
-     from a stable set of shards. Default is ``false``. *Optional*
+     from a stable set of shards. Default is ``false``.
     :query string stale: Allow the results from a stale view to be used.
       Supported values: ``ok``, ``update_after`` and ``false``.
       ``ok`` is equivalent to ``stable=true&update=false``.
       ``update_after`` is equivalent to ``stable=true&update=lazy``.
       ``false`` is equivalent to ``stable=false&update=true``.
-      *Optional*
     :query json startkey: Return records starting with the specified key.
-      *Optional*
-    :query json start_key: Alias for `startkey` param
+    :query json start_key: Alias for `startkey`.
     :query string startkey_docid: Return records starting with the specified
-      document ID. Requires ``startkey`` to be specified for this to have any
-      effect. *Optional*
+      document ID. Ignored if ``startkey`` is not set.
     :query string start_key_doc_id: Alias for `startkey_docid` param
     :query string update: Whether or not the view in question should be updated
-     prior to responding to the user.
-     Supported values: ``true``, ``false``, ``lazy``.
-     Default is ``true``. *Optional*
-    :query boolean update_seq: Response includes an ``update_seq`` value
-      indicating which sequence id of the database the view reflects.
-      Default is ``false``.
+     prior to responding to the user. Supported values: ``true``, ``false``,
+     ``lazy``. Default is ``true``.
+    :query boolean update_seq: Whether to include in the response an
+      `update_seq` value indicating the sequence id of the database the view
+      reflects. Default is ``false``.
 
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Response signature
     :>header Transfer-Encoding: ``chunked``
 
-    :>json number offset: Offset where the document list started
+    :>json number offset: Offset where the document list started.
     :>json array rows: Array of view row objects. By default the information
-      returned contains only the document ID and revision
-    :>json number total_rows: Number of documents in the database/view
-    :>json object update_seq: Current update sequence for the database
+      returned contains only the document ID and revision.
+    :>json number total_rows: Number of documents in the database/view.
+    :>json object update_seq: Current update sequence for the database.
 
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
     :code 404: Specified database, design document or view is missed
-    :code 500: View function execution error
 
     **Request**:
 
