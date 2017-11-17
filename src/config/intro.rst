@@ -149,3 +149,15 @@ protect yourself against such accidents you may set the
 updates via the HTTP API. Once this option is set, further changes to
 non-whitelisted parameters must take place via the configuration file, and in
 most cases, will also require a server restart before taking effect.
+
+Configuring the local node
+==========================
+
+.. highlight:: sh
+
+While the :ref:`HTTP API <api/config>` allows configuring all nodes in the
+cluster, as a convenience, you can use the literal string ``_local`` in place
+of the node name, to interact with the local node's configuration.  For
+example::
+
+    curl -X PUT http://localhost:5984/_node/_local/_config/uuids/algorithm -d '"random"'
