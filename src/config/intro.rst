@@ -13,9 +13,9 @@
 .. default-domain:: config
 .. _config/intro:
 
-=============================
-Introduction Into Configuring
-=============================
+===========================
+Introduction To Configuring
+===========================
 
 Configuration files
 ===================
@@ -125,28 +125,39 @@ Setting parameters via the HTTP API
 
 .. highlight:: sh
 
-Alternatively, configuration parameters could be set via the
-:ref:`HTTP API <api/config>`. This API allows to change CouchDB configuration
+Alternatively, configuration parameters can be set via the
+:ref:`HTTP API <api/config>`. This API allows changing CouchDB configuration
 on-the-fly without requiring a server restart::
 
     curl -X PUT http://localhost:5984/_node/<name@host>/_config/uuids/algorithm -d '"random"'
 
-In the response the old parameter's value returns::
+The old parameter's value is returned in the response::
 
     "sequential"
 
-You should be careful with changing configuration via the HTTP API since it's
-easy to make CouchDB unavailable. For instance, if you'd like to change the
-:option:`httpd/bind_address` for a new one::
+You should be careful changing configuration via the HTTP API since it's
+possible  to make CouchDB unreachable, for example, by changing the
+:option:`httpd/bind_address`::
 
     curl -X PUT http://localhost:5984/_node/<name@host>/_config/httpd/bind_address -d '"10.10.0.128"'
 
-However, if you make a typo, or the specified IP address is not available
-from your network, CouchDB will be unavailable for you in both cases and
-the only way to resolve this will be by remoting into the server, correcting
-the errant file, and restarting CouchDB. To protect yourself against such
-accidents you may set the :option:`httpd/config_whitelist` of permitted
-configuration parameters for updates via the HTTP API. Once this option is set,
-further changes to non-whitelisted parameters must take place via the
-configuration file, and in most cases, also requires a server restart before
-hand-edited options take effect.
+If you make a typo or the specified IP address is not available from your
+network, CouchDB will be unreachable. The only way to resolve this will be
+to remote into the server, correct the config file, and restart CouchDB. To
+protect yourself against such accidents you may set the
+:option:`httpd/config_whitelist` of permitted configuration parameters for
+updates via the HTTP API. Once this option is set, further changes to
+non-whitelisted parameters must take place via the configuration file, and in
+most cases, will also require a server restart before taking effect.
+
+Configuring the local node
+==========================
+
+.. highlight:: sh
+
+While the :ref:`HTTP API <api/config>` allows configuring all nodes in the
+cluster, as a convenience, you can use the literal string ``_local`` in place
+of the node name, to interact with the local node's configuration.  For
+example::
+
+    curl -X PUT http://localhost:5984/_node/_local/_config/uuids/algorithm -d '"random"'
