@@ -311,14 +311,18 @@
     :<header X-Couch-Full-Commit: Overrides server's
       :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
       are: ``false`` and ``true``. *Optional*.
+
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
+
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header Location: Document's URI
+
     :>json string id: Document ID
     :>json boolean ok: Operation status
     :>json string rev: Revision info
+
     :code 201: Document created and stored on disk
     :code 202: Document data accepted, but not yet stored on disk
     :code 400: Invalid database name
@@ -406,15 +410,18 @@ document with the ID ``FishStew``.
 Batch Mode Writes
 =================
 
-You can write documents to the database at a higher rate by using the
-batch option. This collects document writes together in memory (on a
-user-by-user basis) before they are committed to disk. This increases
-the risk of the documents not being stored in the event of a failure,
-since the documents are not written to disk immediately.
+You can write documents to the database at a higher rate by using the batch
+option. This collects document writes together in memory (on a per-user basis)
+before they are committed to disk. This increases the risk of the documents not
+being stored in the event of a failure, since the documents are not written to
+disk immediately.
 
 To use batched mode, append the ``batch=ok`` query argument to the URL of the
-``PUT``, :post:`/{db}`, or ``DELETE`` request. The CouchDB server will
-respond with a HTTP :statuscode:`202` response code immediately.
+``PUT``, :post:`/{db}`, or ``DELETE`` request. The CouchDB server will respond
+with an HTTP :statuscode:`202` response code immediately.
+
+Documents in the batch may be manually flushed by using the
+:post:`/{db}/_ensure_full_commit` endpoint.
 
 .. note::
     Creating or updating documents with batch mode doesn't guarantee that all
