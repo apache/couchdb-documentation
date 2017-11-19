@@ -74,6 +74,8 @@
         body are listed, along with their values.
     :>json string warning: Execution warnings
     :>json object execution_stats: Execution statistics
+    :>json string bookmark: An opaque string used for paging. See the
+        ``bookmark`` field in the request (above) for usage details.
 
     :code 200: Request completed successfully
     :code 400: Invalid request
