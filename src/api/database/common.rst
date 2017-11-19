@@ -419,9 +419,10 @@ disk immediately.
 Batch mode is not suitable for critical data, but may be ideal for applications
 such as log data, when the risk of some data loss due to a crash is acceptable.
 
-To use batched mode, append the ``batch=ok`` query argument to the URL of the
-``PUT``, :post:`/{db}`, or ``DELETE`` request. The CouchDB server will respond
-with an HTTP :statuscode:`202` response code immediately.
+To use batch mode, append the ``batch=ok`` query argument to the URL of a
+:post:`/{db}`, :put:`/{db}/{docid}`, or :delete:`/{db}/{docid}` request. The
+CouchDB server will respond with an HTTP :statuscode:`202` response code
+immediately.
 
 Documents in the batch may be manually flushed by using the
 :post:`/{db}/_ensure_full_commit` endpoint.
