@@ -416,6 +416,9 @@ before they are committed to disk. This increases the risk of the documents not
 being stored in the event of a failure, since the documents are not written to
 disk immediately.
 
+Batch mode is not suitable for critical data, but may be ideal for applications
+such as log data, when the risk of some data loss due to a crash is acceptable.
+
 To use batched mode, append the ``batch=ok`` query argument to the URL of the
 ``PUT``, :post:`/{db}`, or ``DELETE`` request. The CouchDB server will respond
 with an HTTP :statuscode:`202` response code immediately.
