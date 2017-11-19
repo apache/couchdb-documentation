@@ -28,11 +28,14 @@
     :param db: Database name
     :param docid: Document ID
     :param attname: Attachment name
+
     :<header If-Match: Document's revision. Alternative to `rev` query
       parameter
     :<header If-None-Match: Attachment's base64 encoded MD5 binary digest.
       *Optional*
+
     :query string rev: Document's revision. *Optional*
+
     :>header Accept-Ranges: :ref:`Range request aware
       <api/doc/attachment/range>`. Used for attachments with
       :mimetype:`application/octet-stream` content type
@@ -42,9 +45,8 @@
     :>header Content-Length: Attachment size. If compression codec was used,
       this value is about compressed size, not actual
     :>header ETag: Double quoted base64 encoded MD5 binary digest
+
     :code 200: Attachment exists
-    :code 304: Attachment wasn't modified if :header:`ETag` equals specified
-      :header:`If-None-Match` header
     :code 401: Read privilege required
     :code 404: Specified database, document or attachment was not found
 
@@ -81,11 +83,14 @@
     :param db: Database name
     :param docid: Document ID
     :param attname: Attachment name
+
     :<header If-Match: Document's revision. Alternative to `rev` query
       parameter
     :<header If-None-Match: Attachment's base64 encoded MD5 binary digest.
       *Optional*
+
     :query string rev: Document's revision. *Optional*
+
     :>header Accept-Ranges: :ref:`Range request aware
       <api/doc/attachment/range>`. Used for attachments with
       :mimetype:`application/octet-stream`
@@ -95,10 +100,10 @@
     :>header Content-Length: Attachment size. If compression codec is used,
       this value is about compressed size, not actual
     :>header ETag: Double quoted base64 encoded MD5 binary digest
+
     :response: Stored content
+
     :code 200: Attachment exists
-    :code 304: Attachment wasn't modified if :header:`ETag` equals specified
-      :header:`If-None-Match` header
     :code 401: Read privilege required
     :code 404: Specified database, document or attachment was not found
 
