@@ -178,9 +178,9 @@
 .. http:delete:: /{db}/{docid}/{attname}
     :synopsis: Deletes an attachment of a document
 
-    Deletes the attachment ``attachment`` of the specified ``doc``. You must
-    supply the ``rev`` query parameter or :header:`If-Match` with the current
-    revision to delete the attachment.
+    Deletes the attachment with filename ``{attname}`` of the specified ``doc``.
+    You must supply the ``rev`` query parameter or :header:`If-Match` with the
+    current revision to delete the attachment.
 
     .. note::
         Deleting an attachment updates the corresponding document revision.
