@@ -125,12 +125,19 @@
     :param db: Database name
     :param docid: Document ID
     :param attname: Attachment name
+
     :<header Content-Type: Attachment MIME type. *Required*
     :<header If-Match: Document revision. Alternative to `rev` query parameter
+    :<header X-Couch-Full-Commit: Overrides server's
+      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
+      are: ``false`` and ``true``. *Optional*
+
     :query string rev: Document revision. *Optional*
+
     :>json string id: Document ID
     :>json boolean ok: Operation status
     :>json string rev: Revision MVCC token
+
     :code 200: Attachment successfully removed
     :code 202: Request was accepted, but changes are not yet stored on disk
     :code 400: Invalid request body or parameters
