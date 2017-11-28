@@ -72,6 +72,7 @@
     :param docid: Document ID
 
     :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`multipart/related`
                      - :mimetype:`multipart/mixed`
                      - :mimetype:`text/plain`
     :<header If-None-Match: Double quoted document's revision token
@@ -105,6 +106,7 @@
       document revisions. Default is ``false``
 
     :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`multipart/related`
                            - :mimetype:`multipart/mixed`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Double quoted document's revision token. Not available when
