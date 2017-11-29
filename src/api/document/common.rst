@@ -72,6 +72,7 @@
     :param docid: Document ID
 
     :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`multipart/related`
                      - :mimetype:`multipart/mixed`
                      - :mimetype:`text/plain`
     :<header If-None-Match: Double quoted document's revision token
@@ -105,6 +106,7 @@
       document revisions. Default is ``false``
 
     :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`multipart/related`
                            - :mimetype:`multipart/mixed`
                            - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Double quoted document's revision token. Not available when
@@ -180,14 +182,17 @@
 
     :param db: Database name
     :param docid: Document ID
+
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
-    :<header Content-Type: :mimetype:`application/json`
+    :<header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`multipart/related`
     :<header If-Match: Document's revision. Alternative to `rev` query
       parameter or document key. *Optional*
     :<header X-Couch-Full-Commit: Overrides server's
       :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
       are: ``false`` and ``true``. *Optional*
+
     :query string rev: Document's revision if updating an existing document.
       Alternative to `If-Match` header or document key. *Optional*
     :query string batch: Stores document in :ref:`batch mode
@@ -198,13 +203,16 @@
       the document. ``new_edits=false`` is used by the replicator to insert
       documents into the target database even if that leads to the creation
       of conflicts. *Optional*
+
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
+                           - :mimetype:`multipart/related`
     :>header ETag: Quoted document's new revision
     :>header Location: Document URI
     :>json string id: Document ID
     :>json boolean ok: Operation status
     :>json string rev: Revision MVCC token
+
     :code 201: Document created and stored on disk
     :code 202: Document data accepted, but not yet stored on disk
     :code 400: Invalid request body or parameters
