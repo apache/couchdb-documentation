@@ -419,10 +419,11 @@ Bulk Documents Transaction Semantics
 ====================================
 
 Bulk document operations are **non-atomic**. This means that CouchDB does not
-guarantee that documents included in a bulk update (or insert), will be saved
-when you send the request. The response will contain the list of documents
-successfully inserted or updated during the process. In the event of a crash,
-some of the documents may have been successfully saved, while others lost.
+guarantee that any individual document included in the bulk update (or insert)
+will be saved when you send the request. The response will contain the list of
+documents successfully inserted or updated during the process. In the event of
+a crash, some of the documents may have been successfully saved, while others
+lost.
 
 The response structure will indicate whether the document was updated by
 supplying the new ``_rev`` parameter indicating a new document revision was
