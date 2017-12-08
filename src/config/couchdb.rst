@@ -197,6 +197,7 @@ Base CouchDB Options
         Limit maximum document body size. Size is calculated based on the
         serialized Erlang representation of the JSON document body, because
         that reflects more accurately the amount of storage consumed on disk.
+        In particular, this limit does not include attachments.
 
         HTTP requests which create or update documents will fail with error
         code 413 if one or more documents is larger than this configuration
