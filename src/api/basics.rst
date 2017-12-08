@@ -82,7 +82,7 @@ CouchDB supports the following HTTP request methods:
   A special method that can be used to copy documents and objects.
 
 If you use an unsupported HTTP request type with an URL that does not support
-the specified type then a ``405 - Resource Not Allowed`` will be returned,
+the specified type then a ``405 - Method Not Allowed`` will be returned,
 listing the supported HTTP methods. For example:
 
 .. code-block:: javascript
@@ -549,7 +549,7 @@ specific request types are provided in the corresponding API call reference.
 
       {"error":"not_found","reason":"no_db_file"}
 
-- ``405 - Resource Not Allowed``
+- ``405 - Method Not Allowed``
 
   A request was made using an invalid HTTP request type for the URL requested.
   For example, you have requested a ``PUT`` when a ``POST`` is required. Errors
@@ -574,7 +574,7 @@ specific request types are provided in the corresponding API call reference.
   value or the entire request exceeds the
   :config:option:`httpd/max_http_request_size` value.
 
-- ``415 - Bad Content Type``
+- ``415 - Unsupported Media Type``
 
   The content types supported, and the content type of the information being
   requested or submitted indicate that the content type is not supported.
