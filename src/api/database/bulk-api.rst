@@ -322,10 +322,10 @@ documents created, here with the combination and their revision IDs:
         }
     ]
 
-The content and structure of the returned JSON will depend on the transaction
-semantics being used for the bulk update; see :ref:`api/db/bulk_docs/semantics`
-for more information. Conflicts and validation errors when updating documents
-in bulk must be handled separately; see :ref:`api/db/bulk_docs/validation`.
+For details of the semantic content and structure of the returned JSON see
+:ref:`api/db/bulk_docs/semantics`. Conflicts and validation errors when
+updating documents in bulk must be handled separately; see
+:ref:`api/db/bulk_docs/validation`.
 
 Updating Documents in Bulk
 ==========================
@@ -418,24 +418,17 @@ in bulk must be handled separately; see :ref:`api/db/bulk_docs/validation`.
 Bulk Documents Transaction Semantics
 ====================================
 
-CouchDB supports two different modes for updating (or inserting)
-documents using the bulk documentation system. Each mode affects both
-the state of the documents in the event of system failure, and the level
-of conflict checking performed on each document. The two modes are:
+Bulk document operations are **non-atomic**. This means that CouchDB does not
+guarantee that any individual document included in the bulk update (or insert)
+will be saved when you send the request. The response will contain the list of
+documents successfully inserted or updated during the process. In the event of
+a crash, some of the documents may have been successfully saved, while others
+lost.
 
--  **non-atomic**
-
-   The default mode is `non-atomic`, that is, CouchDB will only guarantee
-   that some of the documents will be saved when you send the request.
-   The response will contain the list of documents successfully inserted
-   or updated during the process. In the event of a crash, some of the
-   documents may have been successfully saved, and some will have been
-   lost.
-
-   In this mode, the response structure will indicate whether the
-   document was updated by supplying the new ``_rev`` parameter
-   indicating a new document revision was created. If the update failed,
-   then you will get an ``error`` of type ``conflict``. For example:
+The response structure will indicate whether the document was updated by
+supplying the new ``_rev`` parameter indicating a new document revision was
+created. If the update failed, you will get an ``error`` of type ``conflict``.
+For example:
 
    .. code-block:: javascript
 
@@ -457,9 +450,8 @@ of conflict checking performed on each document. The two modes are:
            }
        ]
 
-   In this case no new revision has been created and you will need to
-   submit the document update, with the correct revision tag, to update
-   the document.
+In this case no new revision has been created and you will need to submit the
+document update, with the correct revision tag, to update the document.
 
 Replication of documents is independent of the type of insert or update.
 The documents and revisions created during a bulk insert or update are
