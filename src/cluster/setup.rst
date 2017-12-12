@@ -167,6 +167,11 @@ Before you can add nodes to form a cluster, you have to have them
 listen on a public IP address and set up an admin user. Do this, once
 per node:
 
+.. note::
+change line ``-name couchdb@127.0.0.1`` in file /Couch-Install-Home/etc/vm.args
+on each node for clustered setup, each node in the system must have a unique name
+eg. ``-name couchdb@couch1`` and ``-name couchdb@couch2``
+
 .. code-block:: bash
 
     curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/admins/admin -d '"password"'
@@ -211,12 +216,11 @@ requires all other nodes to be able to see it and vice versa.
 Set up will not work with unavailable nodes.
 The notion of "setup coordination node" will be gone once the setup is finished.
 From then on, the cluster will no longer have a "setup coordination node".
-To add a node run these two commands:
+To add a node run this commands for each node you want to add:
 
 .. code-block:: bash
 
-    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"password", "port": 15984, "node_count": "3", "remote_node": "<remote-node-ip>", "remote_current_user": "<remote-node-username>", "remote_current_password": "<remote-node-password>" }'
-    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"<remote-node-ip>", "port": "<remote-node-port>", "username": "admin", "password":"password"}'
+    curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"<remote-node-ip>", "port": <remote-node-port>, "username": "admin", "password":"password"}'
 
 This will join the two nodes together.
 Keep running the above commands for each
@@ -226,6 +230,29 @@ following command to complete the setup and add the missing databases:
 .. code-block:: bash
 
     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'
+
+Verify install
+.. code-block:: bash
+    curl http://admin:password@127.0.0.1:5984/_cluster_setup
+Response
+.. code-block:: bash
+    {"state":"cluster_finished"}
+
+Verify cluster nodes
+.. code-block:: bash
+    curl http://admin:password@127.0.0.1:5984/_membership
+Response
+.. code-block:: bash
+    {
+    "all_nodes": [
+        "couchdb@couch1",
+        "couchdb@couch2",
+    ],
+    "cluster_nodes": [
+        "couchdb@couch1",
+        "couchdb@couch2",
+    ]
+}
 
 You CouchDB cluster is now set up.
 
