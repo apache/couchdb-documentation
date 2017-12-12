@@ -231,17 +231,25 @@ following command to complete the setup and add the missing databases:
 
     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'
 
-Verify install
+Verify install:
+
 .. code-block:: bash
     curl http://admin:password@127.0.0.1:5984/_cluster_setup
-Response
+
+Response:
+
 .. code-block:: bash
     {"state":"cluster_finished"}
 
-Verify cluster nodes
+
+Verify cluster nodes:
+
 .. code-block:: bash
+
     curl http://admin:password@127.0.0.1:5984/_membership
-Response
+
+Response:
+
 .. code-block:: bash
     {
     "all_nodes": [
