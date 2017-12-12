@@ -234,11 +234,13 @@ following command to complete the setup and add the missing databases:
 Verify install:
 
 .. code-block:: bash
+
     curl http://admin:password@127.0.0.1:5984/_cluster_setup
 
 Response:
 
 .. code-block:: bash
+
     {"state":"cluster_finished"}
 
 
@@ -251,16 +253,17 @@ Verify cluster nodes:
 Response:
 
 .. code-block:: bash
+
     {
-    "all_nodes": [
-        "couchdb@couch1",
-        "couchdb@couch2",
-    ],
-    "cluster_nodes": [
-        "couchdb@couch1",
-        "couchdb@couch2",
-    ]
-}
+        "all_nodes": [
+            "couchdb@couch1",
+            "couchdb@couch2",
+        ],
+        "cluster_nodes": [
+            "couchdb@couch1",
+            "couchdb@couch2",
+        ]
+    }
 
 You CouchDB cluster is now set up.
 
