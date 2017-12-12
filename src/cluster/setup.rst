@@ -167,9 +167,9 @@ Before you can add nodes to form a cluster, you have to have them
 listen on a public IP address and set up an admin user. Do this, once
 per node:
 
-Change line ``-name couchdb@127.0.0.1`` in file /Couch-Install-Home/etc/vm.args
-on each node for clustered setup, each node in the system must have a unique name.
-eg. ``-name couchdb@couch1`` and ``-name couchdb@couch2``
+Change line ``-name couchdb@127.0.0.1`` in file /Couch-Home/etc/vm.args on
+each node for clustered setup, each node in system must have a unique name.
+eg. ``-name couchdb@couch1`` | ``-name couchdb@couch2``
 
 .. code-block:: bash
 
@@ -232,7 +232,7 @@ following command to complete the setup and add the missing databases:
 
 Verify install:
 
-.. code-block::
+.. code-block:: bash
 
     curl http://admin:password@127.0.0.1:5984/_cluster_setup
 
@@ -241,7 +241,6 @@ Response:
 .. code-block:: bash
 
     {"state":"cluster_finished"}
-
 
 Verify cluster nodes:
 
