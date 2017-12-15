@@ -283,11 +283,11 @@ HTTP Server Options
         let users to use one of provided methods::
 
             [chttpd]
-            authentication_handlers = {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
+            authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
-        - ``{couch_httpd_auth, cookie_authentication_handler}``: used for Cookie auth;
+        - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
         - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
-        - ``{couch_httpd_auth, default_authentication_handler}``: used for Basic auth;
+        - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
         - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
           Everlasting `Admin Party`!
 
