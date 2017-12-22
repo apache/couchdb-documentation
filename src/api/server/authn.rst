@@ -280,7 +280,7 @@ Proxy Authentication
     .. code-block:: ini
 
         [chttpd]
-        authentication_handlers = {couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, proxy_authentication_handler}, {couch_httpd_auth, default_authentication_handler}
+        authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {couch_httpd_auth, proxy_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
 `Proxy authentication` is very useful in case your application already uses
 some external authentication service and you don't want to duplicate users and
