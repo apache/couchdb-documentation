@@ -108,7 +108,7 @@ Collation Specification
 
 This section is based on the view_collation function in `view_collation.js`_:
 
-.. _view_collation.js: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob;f=share/www/script/test/view_collation.js;hb=HEAD
+.. _view_collation.js: https://github.com/apache/couchdb/blob/master/test/javascript/tests/view_collation.js
 
 .. code-block:: javascript
 
