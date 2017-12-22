@@ -526,10 +526,10 @@ ID:
 - Changes Feed query parameters, if any
 
 .. note::
-    See `couch_replicator_utils.erl`_ for an example of a Replication ID generation
+    See `couch_replicator_ids.erl`_ for an example of a Replication ID generation
     implementation.
 
-    .. _couch_replicator_utils.erl: https://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob;f=src/couch_replicator/src/couch_replicator_utils.erl;h=d7778db;hb=HEAD
+    .. _couch_replicator_ids.erl: https://github.com/apache/couchdb/blob/master/src/couch_replicator/src/couch_replicator_ids.erl
 
 Retrieve Replication Logs from Source and Target
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
