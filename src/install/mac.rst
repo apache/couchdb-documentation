@@ -41,6 +41,11 @@ That's all, now CouchDB is installed on your Mac:
    for a single node or clustered installation.**
 #. Time to Relax!
 
+Sometimes the `Verify Installation` fails with an `undefined` error.
+This could be due to a missing dependency on mac. In the logs you will find `couchdb exit_status,134.
+If so, try installing nspr via `brew install nspr`.
+(related issue: https://github.com/apache/couchdb/issues/979)
+
 .. _Open up Fauxton: http://localhost:5984/_utils
 
 .. _install/mac/homebrew:
