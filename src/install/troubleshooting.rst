@@ -276,7 +276,7 @@ the relevant CouchDB and then compact prior to replicating.
 Alternatively, if the number of documents impacted is small, use filtered
 replication to exclude only those documents.
 
-Mac Os Known Issues
+macOS Known Issues
 ====================
 undefined error, exit_status 134
 --------------------------------
