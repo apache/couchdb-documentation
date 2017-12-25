@@ -281,9 +281,9 @@ Mac Os Known Issues
 undefined error, exit_status 134
 --------------------------------
 
-Sometimes the ``Verify Installation`` fails with an ``undefined`` error.  
-This could be due to a missing dependency with Mac.  
-In the logs, you will find ``couchdb exit_status,134``.  
+Sometimes the ``Verify Installation`` fails with an ``undefined`` error.
+This could be due to a missing dependency with Mac.
+In the logs, you will find ``couchdb exit_status,134``.
 
-If so, installing the missing ``nspr`` via ``brew install nspr`` should resolve the issue.  
-(related issue: https://github.com/apache/couchdb/issues/979)
+Installing the missing ``nspr`` via ``brew install nspr`` resolves the issue.
+(see: https://github.com/apache/couchdb/issues/979)
