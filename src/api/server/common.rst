@@ -486,6 +486,9 @@
       should occur (protocol can be "http" or "socks5")
     :<json string source: Source database name or URL
     :<json string target: Target database name or URL
+    :<json object headers: Object with header info in key value pairs.
+      Eg: {"Authorization": "Basic Ym9iQGV4YW1wbGUuY29tOnBhc3N3b3Jk",
+      "header_name_2": "header_value_2",...}.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json array history: Replication history (see below)
