@@ -208,6 +208,119 @@
            "locations"
         ]
 
+.. _api/server/dbs_info:
+
+==============
+``/_dbs_info``
+==============
+
+.. versionadded:: 2.2
+
+.. http:post:: /_dbs_info
+    :synopsis: Returns information of a list of the specified databases
+
+    Returns information of a list of the specified databases in the CouchDB
+    instance. This enables you to request information about multiple databases
+    in a single request, in place of multiple :get:`/{db}` requests.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :<json array keys: Array of database names to be requested
+    :code 200: Request completed successfully
+    :code 400: Missing keys or exceeded keys in request
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_dbs_info HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+        Content-Type: application/json
+
+        {
+            "keys": [
+                "animals",
+                "plants"
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Sat, 20 Dec 2017 06:57:48 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        [
+          {
+            "key": "animals",
+            "info": {
+              "db_name": "animals",
+              "update_seq": "52232",
+              "sizes": {
+                "file": 1178613587,
+                "external": 1713103872,
+                "active": 1162451555
+              },
+              "purge_seq": 0,
+              "other": {
+                "data_size": 1713103872
+              },
+              "doc_del_count": 0,
+              "doc_count": 52224,
+              "disk_size": 1178613587,
+              "disk_format_version": 6,
+              "data_size": 1162451555,
+              "compact_running": false,
+              "cluster": {
+                "q": 8,
+                "n": 3,
+                "w": 2,
+                "r": 2
+              },
+              "instance_start_time": "0"
+            }
+          },
+          {
+            "key": "plants",
+            "info": {
+              "db_name": "plants",
+              "update_seq": "303",
+              "sizes": {
+                "file": 3872387,
+                "external": 2339,
+                "active": 67475
+              },
+              "purge_seq": 0,
+              "other": {
+                "data_size": 2339
+              },
+              "doc_del_count": 0,
+              "doc_count": 11,
+              "disk_size": 3872387,
+              "disk_format_version": 6,
+              "data_size": 67475,
+              "compact_running": false,
+              "cluster": {
+                "q": 8,
+                "n": 3,
+                "w": 2,
+                "r": 2
+              },
+              "instance_start_time": "0"
+            }
+          }
+        ]
+
+.. note::
+    The supported number of the specified databases in the list can be limited
+    by modifying the `max_db_number_for_dbs_info_req` entry in configuration
+    file. The default limit is 100.
+
 .. _api/server/cluster_setup:
 
 ===================
