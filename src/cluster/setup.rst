@@ -227,7 +227,7 @@ following command to complete the setup and add the missing databases:
 
     curl -X POST -H "Content-Type: application/json" http://admin:password@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'
 
-You CouchDB cluster is now set up.
+Your CouchDB cluster is now set up.
 
 .. _HAProxy: http://haproxy.org/
 .. _example configuration for HAProxy: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg
