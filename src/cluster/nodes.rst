@@ -22,7 +22,7 @@ Adding a node
 =============
 
 Go to ``http://server1:5984/_membership`` to see the name of the node and all
-the nodes it knows about and is connected to.
+the nodes it is connected to and knows about.
 
 .. code-block:: text
 
