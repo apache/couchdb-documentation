@@ -30,7 +30,7 @@ As you see in ``etc/default.ini`` there is a section called [cluster]
 * ``n`` - The number of copies there is of every document. Replicas.
 
 When creating a database you can send your own values with request and
-thereby overriding the defaults in ``default.ini``.
+thereby override the defaults in ``default.ini``.
 
 The number of copies of a document with the same revision that have to be read
 before CouchDB returns with a ``200`` is equal to a half of total copies of
