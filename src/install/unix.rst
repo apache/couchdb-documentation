@@ -130,7 +130,7 @@ You should have the following installed:
 * `Erlang OTP (>=R16B03, =<19.x) <http://erlang.org/>`_
 * `ICU                          <http://icu-project.org/>`_
 * `OpenSSL                      <http://www.openssl.org/>`_
-* `Mozilla SpiderMonkey (1.8.5) <http://www.mozilla.org/js/spidermonkey/>`_
+* `Mozilla SpiderMonkey (1.8.5) <https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey>`_
 * `GNU Make                     <http://www.gnu.org/software/make/>`_
 * `GNU Compiler Collection      <http://gcc.gnu.org/>`_
 * `libcurl                      <http://curl.haxx.se/libcurl/>`_
