@@ -215,12 +215,13 @@ This TCP buffering behaviour can be disabled via
 Connection limit
 ----------------
 
-(`MochiWeb`_) is handling CouchDB requests.
+`MochiWeb`_ is handling CouchDB requests.
 By default maximum number of connections is 2048. To change this limit, use
-server_options configuration variable. 'max' indicated maximum number of
+server_options configuration variable. 'max' indicates maximum number of
 connections.
 
 .. code-block:: ini
+
     [httpd]
     server_options = [{backlog, 128}, {acceptor_pool_size, 16}, {max, 4096}]
 
