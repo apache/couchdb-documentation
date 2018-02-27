@@ -34,10 +34,17 @@ thereby override the defaults in ``default.ini``.
 
 The number of copies of a document with the same revision that have to be read
 before CouchDB returns with a ``200`` is equal to a half of total copies of
-the document plus one. It is the same for the number of nodes that need to
-save a document before a write is returned with ``201``. If there are less
-nodes than that number, then ``202`` is returned. Both read and write numbers
-can be specified with a request as ``r`` and ``w`` parameters accordingly.
+the document plus one *in the current partition*. That is, if there is a network
+partition and, for example, only 1 out of 3 nodes is available you can still
+get a ``200`` response but the data will not have come from a true quorum and
+might be stale.
+
+The number of nodes that need to save a document before a write is returned with
+``201`` is also equal to half of the total copies of the document plus one.
+However, unlike the read case, for writes this is computed for the database as a
+whole, even if there is a network partition. If there are less nodes than that
+number, then ``202`` is returned. Both read and write numbers can be specified
+with a request as ``r`` and ``w`` parameters accordingly.
 
 We will focus on the shards and replicas for now.
 
