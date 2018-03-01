@@ -42,7 +42,7 @@ might be stale.
 The number of nodes that need to save a document before a write is returned with
 ``201`` is also equal to half of the total copies of the document plus one.
 However, unlike the read case, for writes this is computed for the database as a
-whole, even if there is a network partition. If there are less nodes than that
+whole, even if there is a network partition. If there are fewer nodes than that
 number, then ``202`` is returned. Both read and write numbers can be specified
 with a request as ``r`` and ``w`` parameters accordingly.
 
