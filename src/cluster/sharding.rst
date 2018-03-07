@@ -45,13 +45,7 @@ If you look in the directory ``data/shards`` you will find the 2 shards.
     |   +-- 80000000-ffffffff/
     |        -- small.1425202577.couch
 
-Now, go to the admin panel
-
-.. code-block:: text
-
-    http://xxx.xxx.xxx.xxx:5986/_utils
-
-and look in the database ``_dbs``, it is here that the metadata for each
+Now, check the node-local ``_dbs_`` database. Here, the metadata for each
 database is stored. As the database is called small, there is a document called
 small there. Let us look in it. Yes, you can get it with curl too:
 
@@ -120,7 +114,8 @@ nodes are talking with each other.
 If you look in the directory ``data`` on node2, you will see that there is no
 directory called shards.
 
-Go to Fauxton and edit the metadata for small, so it looks like this:
+Use curl to change the ``_dbs/small`` node-local document for small, so it
+looks like this:
 
 .. code-block:: javascript
 
@@ -184,8 +179,8 @@ Go to Fauxton and edit the metadata for small, so it looks like this:
         }
     }
 
-Then press Save and marvel at the magic. The shards are now on node2 too! We
-now have ``n=2``!
+After PUTting this document, it's like magic: the shards are now on node2 too!
+We now have ``n=2``!
 
 If the shards are large, then you can copy them over manually and only have
 CouchDB syncing the changes from the last minutes instead.
