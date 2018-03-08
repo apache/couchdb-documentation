@@ -32,12 +32,21 @@ As you see in ``etc/default.ini`` there is a section called [cluster]
 When creating a database you can send your own values with request and
 thereby override the defaults in ``default.ini``.
 
-The number of copies of a document with the same revision that have to be read
-before CouchDB returns with a ``200`` is equal to a half of total copies of
-the document plus one. It is the same for the number of nodes that need to
-save a document before a write is returned with ``201``. If there are less
-nodes than that number, then ``202`` is returned. Both read and write numbers
-can be specified with a request as ``r`` and ``w`` parameters accordingly.
+In clustered operation, a quorum must be reached before CouchDB returns a
+``200`` for a fetch, or 201 for a write operation. A quorum is defined as one
+plus half the number of "relevant copies". "Relevant copies" is defined
+slightly differently for read and write operations.
+
+For read operations, the number of relevant copies is the number of
+currently-accessible shards holding the requested data, meaning that in the case
+of a failure or network partition, the number of relevant copies may be lower
+than the number of replicas in the cluster.  The number of read copies can be
+set with the rparameter.
+
+For write operations the number of relevant copies is always `n`, the number of
+replicas in the cluster.  For write operations, the number of copies can be set
+using the w parameter. If fewer than this number of nodes is available, a 202
+will be returned.
 
 We will focus on the shards and replicas for now.
 
