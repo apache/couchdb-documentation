@@ -95,7 +95,7 @@ HTTP Server Options
         Defines the port number to listen::
 
             [httpd]
-            port = 5984
+            port = 5986
 
         To let CouchDB use any free port, set this option to ``0``::
 
