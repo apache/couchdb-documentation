@@ -147,6 +147,138 @@
             "offset" : 0
         }
 
+.. _api/db/_all_docs_view_query:
+
+============================
+``/db/_all_docs_view_query``
+============================
+
+.. versionadded:: 2.1+
+
+.. http:post:: /{db}/_all_docs_view_query
+    :synopsis: Returns results for the specified queries
+
+    Executes multiple specified built-in view queries of all documents in this
+    database. This enables you to request multiple queries in a single
+    request, in place of multiple :post:`/{db}/_all_docs` requests.
+
+    :param db: Database name
+
+    :<header Content-Type: - :mimetype:`application/json`
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+
+    :query json queries: An array of query objects with fields for the
+        parameters of each individual view query to be executed. The field names
+        and their meaning are the same as the query parameters of a
+        regular :ref:`_all_docs request <api/db/all_docs>`.
+
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :>header ETag: Response signature
+    :>header Transfer-Encoding: ``chunked``
+
+    :>json array results: An array of result objects - one for each query. Each
+        result object contains the same fields as the response to a regular
+        :ref:`_all_docs request <api/db/all_docs>`.
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request
+    :code 401: Read permission required
+    :code 404: Specified database is missed
+    :code 500: Query execution error
+
+**Request**:
+
+.. code-block:: http
+
+    POST /db/_all_docs_view_query HTTP/1.1
+    Content-Type: application/json
+    Accept: application/json
+    Host: localhost:5984
+
+    {
+        "queries": [
+            {
+                "keys": [
+                    "meatballs",
+                    "spaghetti"
+                ]
+            },
+            {
+                "limit": 3,
+                "skip": 2
+            }
+        ]
+    }
+
+**Response**:
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Type: application/json
+    Date: Wed, 20 Dec 2017 11:17:07 GMT
+    ETag: "1H8RGBCK3ABY6ACDM7ZSC30QK"
+    Server: CouchDB (Erlang/OTP)
+    Transfer-Encoding: chunked
+
+    {
+        "results" : [
+            {
+                "rows": [
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "meatballs",
+                        "value": 1
+                    },
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "spaghetti",
+                        "value": 1
+                    },
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "tomato sauce",
+                        "value": 1
+                    }
+                ],
+                "total_rows": 3
+            },
+            {
+                "offset" : 2,
+                "rows" : [
+                    {
+                        "id" : "Adukiandorangecasserole-microwave",
+                        "key" : "Aduki and orange casserole - microwave",
+                        "value" : [
+                            null,
+                            "Aduki and orange casserole - microwave"
+                        ]
+                    },
+                    {
+                        "id" : "Aioli-garlicmayonnaise",
+                        "key" : "Aioli - garlic mayonnaise",
+                        "value" : [
+                            null,
+                            "Aioli - garlic mayonnaise"
+                        ]
+                    },
+                    {
+                        "id" : "Alabamapeanutchicken",
+                        "key" : "Alabama peanut chicken",
+                        "value" : [
+                            null,
+                            "Alabama peanut chicken"
+                        ]
+                    }
+                ],
+                "total_rows" : 2667
+            }
+        ]
+    }
+
 .. _api/db/bulk_docs:
 
 ==================
