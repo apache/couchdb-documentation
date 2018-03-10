@@ -33,29 +33,29 @@ When creating a database you can send your own values with request and
 thereby override the defaults in ``default.ini``.
 
 In clustered operation, a quorum must be reached before CouchDB returns a
-``200`` for a fetch, or 201 for a write operation. A quorum is defined as one
-plus half the number of "relevant copies". "Relevant copies" is defined
+``200`` for a fetch, or ``201`` for a write operation. A quorum is defined as
+one plus half the number of "relevant copies". "Relevant copies" is defined
 slightly differently for read and write operations.
 
 For read operations, the number of relevant copies is the number of
 currently-accessible shards holding the requested data, meaning that in the case
 of a failure or network partition, the number of relevant copies may be lower
 than the number of replicas in the cluster.  The number of read copies can be
-set with the rparameter.
+set with the ``r`` parameter.
 
-For write operations the number of relevant copies is always `n`, the number of
-replicas in the cluster.  For write operations, the number of copies can be set
-using the w parameter. If fewer than this number of nodes is available, a 202
-will be returned.
+For write operations the number of relevant copies is always ``n``, the number
+of replicas in the cluster.  For write operations, the number of copies can be
+set using the w parameter. If fewer than this number of nodes is available, a
+``202`` will be returned.
 
 We will focus on the shards and replicas for now.
 
 A shard is a part of a database. The more shards, the more you can scale out.
 If you have 4 shards, that means that you can have at most 4 nodes. With one
-shard you can have only one node, just the way CouchDB 1.x is.
+shard you can have only one node, just as with CouchDB 1.x.
 
-Replicas adds fail resistance, as some nodes can be offline without everything
-comes crashing down.
+Replicas add failure resistance, as some nodes can be offline without everything
+crashing down.
 
 * ``n=1`` All nodes must be up.
 * ``n=2`` Any 1 node can be down.
