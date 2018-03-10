@@ -78,7 +78,7 @@ In shell1:
 
 This will connect to the node called ``car`` on the server called ``server2``.
 
-If that returns true, then you have a Erlang cluster, and the firewalls are
+If that returns true, then you have an Erlang cluster, and the firewalls are
 open. If you get false or nothing at all, then you have a problem with the
 firewall.
 

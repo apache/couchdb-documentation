@@ -147,6 +147,183 @@
             "offset" : 0
         }
 
+.. _api/db/design_docs:
+
+====================
+``/db/_design_docs``
+====================
+
+.. versionadded:: 2.1+
+
+.. http:get:: /{db}/_design_docs
+    :synopsis: Returns a built-in view of all design documents in this database
+
+    Returns a JSON structure of all of the design documents in a given
+    database. The information is returned as a JSON structure containing meta
+    information about the return structure, including a list of all design
+    documents and basic contents, consisting the ID, revision and key. The key
+    is the from the design document's ``_id``.
+
+    :param db: Database name
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :query boolean conflicts: Includes `conflicts` information in response.
+      Ignored if `include_docs` isn't ``true``. Default is ``false``.
+    :query boolean descending: Return the design documents in descending by
+      key order. Default is ``false``.
+    :query string endkey: Stop returning records when the specified key is
+      reached. *Optional*.
+    :query string end_key: Alias for `endkey` param.
+    :query string endkey_docid: Stop returning records when the specified
+        design document ID is reached. *Optional*.
+    :query string end_key_doc_id: Alias for `endkey_docid` param.
+    :query boolean include_docs: Include the full content of the design
+      documents in the return. Default is ``false``.
+    :query boolean inclusive_end: Specifies whether the specified end key
+      should be included in the result. Default is ``true``.
+    :query string key: Return only design documents that match the specified
+      key. *Optional*.
+    :query string keys: Return only design documents that match the specified
+      keys. *Optional*.
+    :query number limit: Limit the number of the returned design documents to
+      the specified number. *Optional*.
+    :query number skip: Skip this number of records before starting to return
+      the results. Default is ``0``.
+    :query string startkey: Return records starting with the specified key.
+      *Optional*.
+    :query string start_key: Alias for `startkey` param.
+    :query string startkey_docid: Return records starting with the specified
+      design document ID. *Optional*.
+    :query string start_key_doc_id: Alias for `startkey_docid` param.
+    :query boolean update_seq: Response includes an ``update_seq`` value
+      indicating which sequence id of the underlying database the view
+      reflects. Default is ``false``.
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :>header ETag: Response signature
+    :>json number offset: Offset where the design document list started
+    :>json array rows: Array of view row objects. By default the information
+      returned contains only the design document ID and revision.
+    :>json number total_rows: Number of design documents in the database. Note
+      that this is not the number of rows returned in the actual query.
+    :>json number update_seq: Current update sequence for the database
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /db/_design_docs HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Sat, 23 Dec 2017 16:22:56 GMT
+        ETag: "1W2DJUZFZSZD9K78UFA3GZWB4"
+        Server: CouchDB (Erlang/OTP)
+        Transfer-Encoding: chunked
+
+        {
+            "offset": 0,
+            "rows": [
+                {
+                    "id": "_design/ddoc01",
+                    "key": "_design/ddoc01",
+                    "value": {
+                        "rev": "1-7407569d54af5bc94c266e70cbf8a180"
+                    }
+                },
+                {
+                    "id": "_design/ddoc02",
+                    "key": "_design/ddoc02",
+                    "value": {
+                        "rev": "1-d942f0ce01647aa0f46518b213b5628e"
+                    }
+                },
+                {
+                    "id": "_design/ddoc03",
+                    "key": "_design/ddoc03",
+                    "value": {
+                        "rev": "1-721fead6e6c8d811a225d5a62d08dfd0"
+                    }
+                },
+                {
+                    "id": "_design/ddoc04",
+                    "key": "_design/ddoc04",
+                    "value": {
+                        "rev": "1-32c76b46ca61351c75a84fbcbceece2f"
+                    }
+                },
+                {
+                    "id": "_design/ddoc05",
+                    "key": "_design/ddoc05",
+                    "value": {
+                        "rev": "1-af856babf9cf746b48ae999645f9541e"
+                    }
+                }
+            ],
+            "total_rows": 5
+        }
+
+.. http:post:: /{db}/_design_docs
+    :synopsis: Returns certain rows from the built-in view of all design
+      documents
+
+    The ``POST`` to ``_design_docs`` allows to specify multiple keys to be
+    selected from the database. This enables you to request multiple
+    design documents in a single request, in place of multiple
+    :get:`/{db}/{docid}` requests.
+
+    The request body should contain a list of the keys to be returned as an
+    array to a ``keys`` object. For example:
+
+    .. code-block:: http
+
+        POST /db/_all_docs HTTP/1.1
+        Accept: application/json
+        Content-Length: 70
+        Content-Type: application/json
+        Host: localhost:5984
+
+        {
+            "keys" : [
+                "_design/ddoc02",
+                "_design/ddoc05"
+            ]
+        }
+
+    The returned JSON is the all documents structure, but with only the
+    selected keys in the output:
+
+    .. code-block:: javascript
+
+        {
+            "total_rows" : 5,
+            "rows" : [
+                {
+                    "value" : {
+                        "rev" : "1-d942f0ce01647aa0f46518b213b5628e"
+                    },
+                    "id" : "_design/ddoc02",
+                    "key" : "_design/ddoc02"
+                },
+                {
+                    "value" : {
+                        "rev" : "1-af856babf9cf746b48ae999645f9541e"
+                    },
+                    "id" : "_design/ddoc05",
+                    "key" : "_design/ddoc05"
+                }
+            ],
+            "offset" : 0
+        }
+
 .. _api/db/bulk_docs:
 
 ==================
