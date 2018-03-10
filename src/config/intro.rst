@@ -63,6 +63,15 @@ is the same as setting the ``ERL_FLAGS`` environment variable.
     locations. Use these options only when necessary, and be sure to track
     the contents of ``etc/default.ini``, which may change in future releases.
 
+If there is a need to use different ``vm.args`` or ``sys.config`` files, for
+example, in different locations to the ones provided by CouchDB, or you don't
+want to edit the original files, the default locations may be changed by
+setting the COUCHDB_VM_ARGS_FILE or COUCHDB_SYSCONFIG_FILE environment
+variables::
+
+    export COUCHDB_VM_ARGS_FILE="/path/to/my/vm.args"
+    export COUCHDB_SYSCONFIG_FILE="/path/to/my/sys.config"
+
 Parameter names and values
 ==========================
 

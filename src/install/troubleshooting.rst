@@ -275,3 +275,15 @@ the relevant CouchDB and then compact prior to replicating.
 
 Alternatively, if the number of documents impacted is small, use filtered
 replication to exclude only those documents.
+
+macOS Known Issues
+====================
+undefined error, exit_status 134
+--------------------------------
+
+Sometimes the ``Verify Installation`` fails with an ``undefined`` error.
+This could be due to a missing dependency with Mac.
+In the logs, you will find ``couchdb exit_status,134``.
+
+Installing the missing ``nspr`` via ``brew install nspr`` resolves the issue.
+(see: https://github.com/apache/couchdb/issues/979)
