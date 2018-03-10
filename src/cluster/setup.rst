@@ -167,9 +167,8 @@ Before you can add nodes to form a cluster, you have to have them
 listen on a public IP address and set up an admin user. Do this, once
 per node:
 
-Change line ``-name couchdb@127.0.0.1`` in file /Couch-Home/etc/vm.args on
+Change line ``-name couchdb@127.0.0.1`` in file etc/vm.args on
 each node for clustered setup, each node in system must have a unique name.
-eg. ``-name couchdb@couch1`` | ``-name couchdb@couch2``
 
 .. code-block:: bash
 
