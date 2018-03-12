@@ -27,8 +27,8 @@ scale out.
 
 For simplicity we will start fresh and small.
 
-Start node1 and add a database to it. To keep it simple we will have 2 shards
-and no replicas.
+Start ``node1`` and add a database to it. To keep it simple we will have 2
+shards and no replicas.
 
 .. code-block:: bash
 
@@ -46,8 +46,8 @@ If you look in the directory ``data/shards`` you will find the 2 shards.
     |        -- small.1425202577.couch
 
 Now, check the node-local ``_dbs_`` database. Here, the metadata for each
-database is stored. As the database is called small, there is a document called
-small there. Let us look in it. Yes, you can get it with curl too:
+database is stored. As the database is called ``small``, there is a document
+called ``small`` there. Let us look in it. Yes, you can get it with curl too:
 
 .. code-block:: javascript
 
@@ -183,7 +183,7 @@ After PUTting this document, it's like magic: the shards are now on node2 too!
 We now have ``n=2``!
 
 If the shards are large, then you can copy them over manually and only have
-CouchDB syncing the changes from the last minutes instead.
+CouchDB sync the changes from the last minutes instead.
 
 .. _cluster/sharding/move:
 
@@ -254,7 +254,7 @@ without the users noticing anything.
 Views
 =====
 
-The views needs to be moved together with the shards. If you do not, then
+The views need to be moved together with the shards. If you do not, then
 CouchDB will rebuild them and this will take time if you have a lot of
 documents.
 
