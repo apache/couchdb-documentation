@@ -164,11 +164,13 @@ procedure on other machines. Be sure to specify the total number of nodes you
 expect to add to the cluster before adding nodes.
 
 Before you can add nodes to form a cluster, you have to have them
-listen on a public IP address and set up an admin user. Do this, once
+listen on a node address if all nodes can communicate over those IP's,
+also set up an admin user which should be same on all nodes. Do this, once
 per node:
-
-``-name couchdb@127.0.0.1`` in file etc/vm.args on
-For clustered setup, each node in system must have a unique name.
+In file etc/vm.args 
+``-name couchdb@<this-nodes-ip-address| FQDN>`` which defines the node and must
+be seperate for each node. For clustered setup, each node in system must have a
+unique name .i.e. must be a valid FQDN not necessary IP.
 
 .. code-block:: bash
 
