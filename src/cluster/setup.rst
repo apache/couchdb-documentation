@@ -168,7 +168,7 @@ listen on a node address if all nodes can communicate over those IP's,
 also set up an admin user which should be same on all nodes. Do this, once
 per node:
 
-In file etc/vm.args 
+In file etc/vm.args
 ``-name couchdb@<this-nodes-ip-address| FQDN>`` which defines the node and must
 be seperate for each node. For clustered setup, each node in system must have a
 unique name .i.e. must be a valid FQDN not necessary IP.
