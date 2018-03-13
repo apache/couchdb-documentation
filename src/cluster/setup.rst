@@ -166,11 +166,12 @@ expect to add to the cluster before adding nodes.
 Before you can add nodes to form a cluster, you must have them listening on an
 IP address accessible from the other nodes in the cluster. Do this once per node:
 
-In file etc/vm.args  to -name couchdb@<this-nodes-ip-address> for each node. For clustered setup, each node in the system must have a unique name.
+In file etc/vm.args  to -name couchdb@<this-nodes-ip-address> for each node. For
+clustered setup, each node in the system must have a unique name.
 
-In file etc/vm.args change the the line ``-name couchdb@127.0.0.1`` to 
-``-name couchdb@<this-nodes-ip-address| FQDN>`` for each node which defines 
-the node and must be seperate for each node. For clustered setup, each node in 
+In file etc/vm.args change the the line ``-name couchdb@127.0.0.1`` to
+``-name couchdb@<this-nodes-ip-address| FQDN>`` for each node which defines
+the node and must be seperate for each node. For clustered setup, each node in
 system must have a unique name.Can also be a valid FQDN not necessarily the IP.
 
 .. code-block:: bash
