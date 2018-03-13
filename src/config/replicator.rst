@@ -211,3 +211,21 @@ Replicator Database Configuration
 
             [replicator]
             ssl_certificate_max_depth = 3
+
+    .. config:option:: auth_plugins
+
+        .. versionadded:: 2.2
+
+        List of replicator client authentication plugins. Plugins will
+        be tried in order and the first to initialize successfully will
+        be used. By default there are two plugins available:
+        `couch_replicator_auth_session` implementing session (cookie)
+        authentication, and `couch_replicator_auth_noop` implementing basic
+        authentication. For backwards compatibility, the no-op plugin should be used at
+        the end of the plugin list::
+
+          [replicator]
+          auth_plugins = couch_replicator_auth_session,couch_replicator_auth_noop
+
+        .. note::
+             In version 2.2, the session plugin is considered experimental and is not enabled by default.

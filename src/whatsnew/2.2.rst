@@ -1,0 +1,36 @@
+.. Licensed under the Apache License, Version 2.0 (the "License"); you may not
+.. use this file except in compliance with the License. You may obtain a copy of
+.. the License at
+..
+..   http://www.apache.org/licenses/LICENSE-2.0
+..
+.. Unless required by applicable law or agreed to in writing, software
+.. distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+.. WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+.. License for the specific language governing permissions and limitations under
+.. the License.
+
+.. _release/2.2.x:
+
+============
+2.2.x Branch
+============
+
+.. contents::
+    :depth: 1
+    :local:
+
+Version 2.2.0
+=============
+
+General
+-------
+
+* :ghissue:`1153`: Plugin based replicator authentication support. Session
+  (cookie) based authentication implemented in the
+  `couch_replicator_auth_session` plugin module. In this release session based
+  authentication is considered experimental and is disabled by default. To
+  enable set `[replicator] auth_plugins =
+  couch_replicator_auth_session,couch_replicator_auth_noop`. Consider enabling
+  it when using PBKDF2 or the new bcrypt password hashing algorithm with a
+  large work factor.
