@@ -214,7 +214,7 @@
 ``/_cluster_setup``
 ===================
 
-.. versionadded: 2.0
+.. versionadded:: 2.0
 .. http:get:: /_cluster_setup
     :synopsis: Return the status of the cluster setup wizard
 
@@ -1198,51 +1198,6 @@ error.
             "start_time": "2017-04-29T05:01:37Z",
             "state": "running",
             "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
-        }
-
-.. _api/server/restart:
-
-=============
-``/_restart``
-=============
-
-.. http:post:: /_restart
-    :synopsis: Restarts the server
-
-    Restarts the CouchDB instance. You must be authenticated as a user with
-    administration privileges for this to work.
-
-    :<header Accept: - :mimetype:`application/json`
-                     - :mimetype:`text/plain`
-    :<header Content-Type: :mimetype:`application/json`
-    :>header Content-Type: - :mimetype:`application/json`
-                           - :mimetype:`text/plain; charset=utf-8`
-    :code 202: Server goes to restart (there is no guarantee that it will be
-      alive after)
-    :code 401: CouchDB Server Administrator privileges required
-    :code 415: Bad request`s :header:`Content-Type`
-
-    **Request**:
-
-    .. code-block:: http
-
-        POST /_restart HTTP/1.1
-        Accept: application/json
-        Host: localhost:5984
-
-    **Response**:
-
-    .. code-block:: http
-
-        HTTP/1.1 202 Accepted
-        Cache-Control: must-revalidate
-        Content-Length: 12
-        Content-Type: application/json
-        Date: Sat, 10 Aug 2013 11:33:50 GMT
-        Server: CouchDB (Erlang/OTP)
-
-        {
-            "ok": true
         }
 
 .. _api/server/stats:

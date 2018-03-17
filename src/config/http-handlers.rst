@@ -82,7 +82,7 @@ Global HTTP Handlers
 
     .. config:option:: _restart
 
-        ::
+        Provides an API to restart CouchDB (only on the node-local port).
 
             [httpd_global_handlers]
             _restart = {couch_httpd_misc_handlers, handle_restart_req}
