@@ -1407,6 +1407,40 @@ is as follows:
     :>header Last-Modified: Static files modification timestamp
     :code 200: Request completed successfully
 
+.. _api/server/up:
+
+========
+``/_up``
+========
+
+.. versionadded:: 2.0
+
+.. http:get:: /_up
+    :synopsis: Health check endpoint
+
+    Confirms that the server is up, running, and ready to respond to requests.
+    If :config:option:`maintenance_mode <couchdb/maintenance_mode>` is
+    ``true`` or ``nolb``, the endpoint will return a 404 response.
+
+    :>header Content-Type: :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: The server is unavaialble for requests at this time.
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 16
+        Content-Type: application/json
+        Date: Sat, 17 Mar 2018 04:46:26 GMT
+        Server: CouchDB/2.2.0-f999071ec (Erlang OTP/19)
+        X-Couch-Request-ID: c57a3b2787
+        X-CouchDB-Body-Time: 0
+
+        {"status":"ok"}
+
 .. _api/server/uuids:
 
 ===========
