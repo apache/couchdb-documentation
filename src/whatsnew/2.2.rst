@@ -20,17 +20,37 @@
     :depth: 1
     :local:
 
-Version 2.2.0
+.. _release/2.2.x/upgrade:
+
+Upgrade Notes
 =============
+
+.. rst-class:: open
+
+* Item 1
+
+* Item 2
+
+* Item 3
+
+Version 2.1.0
+=============
+
+Security
+--------
 
 General
 -------
 
-* :ghissue:`1153`: Plugin based replicator authentication support. Session
-  (cookie) based authentication implemented in the
-  `couch_replicator_auth_session` plugin module. In this release session based
-  authentication is considered experimental and is disabled by default. To
-  enable set `[replicator] auth_plugins =
-  couch_replicator_auth_session,couch_replicator_auth_noop`. Consider enabling
-  it when using PBKDF2 or the new bcrypt password hashing algorithm with a
-  large work factor.
+Performance
+-----------
+
+Mango
+-----
+
+Other
+-----
+
+The 2.2.0 release also includes the following minor improvements:
+
+* A pony! OK, no, not really. If you got this far, thank you for reading.

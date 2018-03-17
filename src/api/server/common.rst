@@ -214,7 +214,7 @@
 ``/_cluster_setup``
 ===================
 
-.. versionadded: 2.0
+.. versionadded:: 2.0
 .. http:get:: /_cluster_setup
     :synopsis: Return the status of the cluster setup wizard
 
@@ -1200,51 +1200,6 @@ error.
             "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
         }
 
-.. _api/server/restart:
-
-=============
-``/_restart``
-=============
-
-.. http:post:: /_restart
-    :synopsis: Restarts the server
-
-    Restarts the CouchDB instance. You must be authenticated as a user with
-    administration privileges for this to work.
-
-    :<header Accept: - :mimetype:`application/json`
-                     - :mimetype:`text/plain`
-    :<header Content-Type: :mimetype:`application/json`
-    :>header Content-Type: - :mimetype:`application/json`
-                           - :mimetype:`text/plain; charset=utf-8`
-    :code 202: Server goes to restart (there is no guarantee that it will be
-      alive after)
-    :code 401: CouchDB Server Administrator privileges required
-    :code 415: Bad request`s :header:`Content-Type`
-
-    **Request**:
-
-    .. code-block:: http
-
-        POST /_restart HTTP/1.1
-        Accept: application/json
-        Host: localhost:5984
-
-    **Response**:
-
-    .. code-block:: http
-
-        HTTP/1.1 202 Accepted
-        Cache-Control: must-revalidate
-        Content-Length: 12
-        Content-Type: application/json
-        Date: Sat, 10 Aug 2013 11:33:50 GMT
-        Server: CouchDB (Erlang/OTP)
-
-        {
-            "ok": true
-        }
-
 .. _api/server/stats:
 
 ===========
@@ -1451,6 +1406,40 @@ is as follows:
     :>header Content-Type: :mimetype:`text/html`
     :>header Last-Modified: Static files modification timestamp
     :code 200: Request completed successfully
+
+.. _api/server/up:
+
+========
+``/_up``
+========
+
+.. versionadded:: 2.0
+
+.. http:get:: /_up
+    :synopsis: Health check endpoint
+
+    Confirms that the server is up, running, and ready to respond to requests.
+    If :config:option:`maintenance_mode <couchdb/maintenance_mode>` is
+    ``true`` or ``nolb``, the endpoint will return a 404 response.
+
+    :>header Content-Type: :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: The server is unavaialble for requests at this time.
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 16
+        Content-Type: application/json
+        Date: Sat, 17 Mar 2018 04:46:26 GMT
+        Server: CouchDB/2.2.0-f999071ec (Erlang OTP/19)
+        X-Couch-Request-ID: c57a3b2787
+        X-CouchDB-Body-Time: 0
+
+        {"status":"ok"}
 
 .. _api/server/uuids:
 
