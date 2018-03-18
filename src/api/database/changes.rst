@@ -212,7 +212,7 @@
 .. note::
     Cloudant Sync and PouchDB already optimize the replication process by
     setting ``seq_interval`` parameter to the number of results expected per
-    batch. This parameter increase throughput by reducing latency between
+    batch. This parameter increases throughput by reducing latency between
     sequential requests in bulk document transfers. This has resulted in up to
     a 20% replication performance improvement in highly-sharded databases.
 
