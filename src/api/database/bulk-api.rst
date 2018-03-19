@@ -456,6 +456,139 @@ Sending multiple queries to a database
     The multiple queries are also supported in /db/_local_docs/queries and
     /db/_design_docs/queries (similar to /db/_all_docs/queries).
 
+.. _api/db/bulk_get:
+
+==================
+``/db/_bulk_get``
+==================
+
+.. http:post:: /{db}/_bulk_get
+    :synopsis: Fetches several documents at the given revision
+
+    This method is used by PouchDB and other client to improve the pull
+    replications, by allowing the client to request multiple documents in one
+    request.
+
+    The usual CouchDB API for bulk gets -- a POST to _all_docs with an array of
+    docIDs in the body -- isn't suitable for the replicator because:
+
+    - there's no way to specify which specific revisions are needed (it always
+      returns the default revision),
+    - the response doesn't contain the revision history,
+    - there's no way to specify that only recently changed attachments should
+      be included (a la ``atts_since``),
+    - and attachment bodies can only be encoded inline (base64) not as MIME
+      multipart bodies.
+
+    :param db: Database name
+    :<header Accept: - :mimetype:`application/json`
+    :<header Content-Type: :mimetype:`application/json`
+    :query boolean revs: Give the revisions history
+    :<json array docs: List of document objects, with ``id``, and optionnaly
+      ``rev`` and ``atts_since``
+    :>header Content-Type: - :mimetype:`application/json`
+    :>json object results: the documents, with the additionnal ``_revisions``
+      property that lists the parent revisions if ``revs=true``
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_bulk_get HTTP/1.1
+        Accept: application/json
+        Content-Type:application/json
+        Host: localhost:5984
+
+        {
+            "docs": [
+                {
+                    "id": "foo"
+                    "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                },
+                {
+                    "id": "foo"
+                    "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                },
+                {
+                    "_id": "bar",
+                }
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Mon, 19 Mar 2018 15:27:34 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "results": [
+            {
+              "id": "foo",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bbb",
+                    "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                    "value": "this is foo",
+                    "_revisions": {
+                      "start": 4,
+                      "ids": [
+                        "753875d51501a6b1883a9d62b4d33f91",
+                        "efc54218773c6acd910e2e97fea2a608",
+                        "2ee767305024673cfb3f5af037cd2729",
+                        "4a7e4ae49c4366eaed8edeaea8f784ad"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "foo",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bbb",
+                    "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                    "value": "this is the first revision of foo",
+                    "_revisions": {
+                      "start": 1,
+                      "ids": [
+                        "4a7e4ae49c4366eaed8edeaea8f784ad"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "bar",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bar",
+                    "_rev": "2-9b71d36dfdd9b4815388eb91cc8fb61d",
+                    "baz": true,
+                    "_revisions": {
+                      "start": 2,
+                      "ids": [
+                        "9b71d36dfdd9b4815388eb91cc8fb61d",
+                        "309651b95df56d52658650fb64257b97"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
 .. _api/db/bulk_docs:
 
 ==================
