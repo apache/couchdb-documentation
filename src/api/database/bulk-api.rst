@@ -465,20 +465,9 @@ Sending multiple queries to a database
 .. http:post:: /{db}/_bulk_get
     :synopsis: Fetches several documents at the given revision
 
-    This method is used by PouchDB and other client to improve the pull
-    replications, by allowing the client to request multiple documents in one
-    request.
-
-    The usual CouchDB API for bulk gets -- a POST to _all_docs with an array of
-    docIDs in the body -- isn't suitable for the replicator because:
-
-    - there's no way to specify which specific revisions are needed (it always
-      returns the default revision),
-    - the response doesn't contain the revision history,
-    - there's no way to specify that only recently changed attachments should
-      be included (a la ``atts_since``),
-    - and attachment bodies can only be encoded inline (base64) not as MIME
-      multipart bodies.
+    This method can be called to query several documents in a bulk. It is well
+    fitted when you want a specific revision of the documents, like replicators
+    do for example, or get the revision history.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
@@ -490,6 +479,10 @@ Sending multiple queries to a database
     :>json object results: the documents, with the additionnal ``_revisions``
       property that lists the parent revisions if ``revs=true``
     :code 200: Request completed successfully
+    :code 400: The request provided invalid JSON data or invalid query parameter
+    :code 401: Read permission required
+    :code 404: Invalid database name
+    :code 415: Bad :header:`Content-Type` value
 
     **Request**:
 
