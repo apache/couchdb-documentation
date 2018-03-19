@@ -47,3 +47,10 @@ span.linkdescr {
     font-size: 90%;
 }
 
+/* https://github.com/rtfd/sphinx_rtd_theme/pull/591/files and
+   https://github.com/rtfd/sphinx_rtd_theme/issues/590 */
+
+.rst-content .section ol li p:last-child,
+.rst-content .section ul li p:last-child {
+    margin-bottom: 24px !important;
+}

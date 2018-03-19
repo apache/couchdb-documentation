@@ -788,7 +788,137 @@ To omit some records you may use ``skip`` query parameter:
 Sending multiple queries to a view
 ==================================
 
-.. versionadded:: 2.0
+.. versionadded:: 2.2
+
+.. http:post:: /{db}/_design/{ddoc}/_view/{view}/queries
+    :synopsis: Returns results for the specified queries
+
+    Executes multiple specified view queries against the view function
+    from the specified design document.
+
+    :param db: Database name
+    :param ddoc: Design document name
+    :param view: View function name
+
+    :<header Content-Type: - :mimetype:`application/json`
+    :<header Accept: - :mimetype:`application/json`
+
+    :<json queries:  An array of query objects with fields for the
+        parameters of each individual view query to be executed. The field names
+        and their meaning are the same as the query parameters of a
+        regular :ref:`view request <api/ddoc/view>`.
+
+    :>header Content-Type: - :mimetype:`application/json`
+    :>header ETag: Response signature
+    :>header Transfer-Encoding: ``chunked``
+
+    :>json array results: An array of result objects - one for each query. Each
+        result object contains the same fields as the response to a regular
+        :ref:`view request <api/ddoc/view>`.
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request
+    :code 401: Read permission required
+    :code 404: Specified database, design document or view is missing
+    :code 500: View function execution error
+
+**Request**:
+
+.. code-block:: http
+
+    POST /recipes/_design/recipes/_view/by_title/queries HTTP/1.1
+    Content-Type: application/json
+    Accept: application/json
+    Host: localhost:5984
+
+    {
+        "queries": [
+            {
+                "keys": [
+                    "meatballs",
+                    "spaghetti"
+                ]
+            },
+            {
+                "limit": 3,
+                "skip": 2
+            }
+        ]
+    }
+
+**Response**:
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Type: application/json
+    Date: Wed, 20 Dec 2016 11:17:07 GMT
+    ETag: "1H8RGBCK3ABY6ACDM7ZSC30QK"
+    Server: CouchDB (Erlang/OTP)
+    Transfer-Encoding: chunked
+
+    {
+        "results" : [
+            {
+                "offset": 0,
+                "rows": [
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "meatballs",
+                        "value": 1
+                    },
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "spaghetti",
+                        "value": 1
+                    },
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "tomato sauce",
+                        "value": 1
+                    }
+                ],
+                "total_rows": 3
+            },
+            {
+                "offset" : 2,
+                "rows" : [
+                    {
+                        "id" : "Adukiandorangecasserole-microwave",
+                        "key" : "Aduki and orange casserole - microwave",
+                        "value" : [
+                            null,
+                            "Aduki and orange casserole - microwave"
+                        ]
+                    },
+                    {
+                        "id" : "Aioli-garlicmayonnaise",
+                        "key" : "Aioli - garlic mayonnaise",
+                        "value" : [
+                            null,
+                            "Aioli - garlic mayonnaise"
+                        ]
+                    },
+                    {
+                        "id" : "Alabamapeanutchicken",
+                        "key" : "Alabama peanut chicken",
+                        "value" : [
+                            null,
+                            "Alabama peanut chicken"
+                        ]
+                    }
+                ],
+                "total_rows" : 2667
+            }
+        ]
+    }
+
+.. warning::
+    Using POST to /{db}/_design/{ddoc}/_view/{view} is still supported and
+    allows you to get multiple query result to a view. This is described
+    below. However, this is not encouraged after using POST to
+    /{db}/_design/{ddoc}/_view/{view}/queries is introduced.
 
 .. http:post:: /{db}/_design/{ddoc}/_view/{view}
     :synopsis: Returns results for the specified queries

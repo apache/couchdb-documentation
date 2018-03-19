@@ -102,6 +102,13 @@
         counted as "passed" for view filter in case if map function emits
         at least one record for them.
         See :ref:`changes/filter/view` for more info.
+    :query number seq_interval: When fetching changes in a batch, setting the
+        *seq_interval* parameter tells CouchDB to only calculate the update seq
+        with every Nth result returned. By setting **seq_interval=<batch size>**
+        , where ``<batch size>`` is the number of results requested per batch,
+        load can be reduced on the source CouchDB database; computing the seq
+        value across many shards (esp. in highly-sharded databases) is expensive
+        in a heavily loaded CouchDB cluster.
     :>header Cache-Control: ``no-cache`` if changes feed is
         :ref:`eventsource <changes/eventsource>`
     :>header Content-Type: - :mimetype:`application/json`
@@ -191,7 +198,8 @@
 .. versionchanged:: 1.4.0 Support ``Last-Event-ID`` header.
 .. versionchanged:: 1.6.0 added ``attachments`` and ``att_encoding_info``
    parameters
-.. versionchanged:: 2.0.0 update sequences can be any valid json object
+.. versionchanged:: 2.0.0 update sequences can be any valid json object,
+   added ``seq_interval``
 
 .. note::
     If the specified replicas of the shards in any given since value are
@@ -200,6 +208,13 @@
     again that you have previously seen. Therefore, an application making use
     of the `_changes` feed should be ‘idempotent’, that is, able to receive the
     same data multiple times, safely.
+
+.. note::
+    Cloudant Sync and PouchDB already optimize the replication process by
+    setting ``seq_interval`` parameter to the number of results expected per
+    batch. This parameter increases throughput by reducing latency between
+    sequential requests in bulk document transfers. This has resulted in up to
+    a 20% replication performance improvement in highly-sharded databases.
 
 .. warning::
     Using the ``attachments`` parameter to include attachments in the changes
