@@ -104,7 +104,6 @@ A list of the available methods and URL paths are provided below:
       reflects. Default is ``false``.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>header ETag: Response signature
     :>json number offset: Offset where the design document list started
     :>json array rows: Array of view row objects. By default the information
       returned contains only the design document ID and revision.
@@ -129,12 +128,11 @@ A list of the available methods and URL paths are provided below:
         Cache-Control: must-revalidate
         Content-Type: application/json
         Date: Sat, 23 Dec 2017 16:22:56 GMT
-        ETag: "1W2DJUZFZSZD9K78UFA3GZWB4"
         Server: CouchDB (Erlang/OTP)
         Transfer-Encoding: chunked
 
         {
-            "offset": 0,
+            "offset": null,
             "rows": [
                 {
                     "id": "_local/localdoc01",
@@ -172,7 +170,7 @@ A list of the available methods and URL paths are provided below:
                     }
                 }
             ],
-            "total_rows": 5
+            "total_rows": null
         }
 
 .. http:post:: /{db}/_local_docs
@@ -208,7 +206,7 @@ A list of the available methods and URL paths are provided below:
     .. code-block:: javascript
 
         {
-            "total_rows" : 5,
+            "total_rows" : null,
             "rows" : [
                 {
                     "value" : {
@@ -225,7 +223,7 @@ A list of the available methods and URL paths are provided below:
                     "key" : "_local/localdoc05"
                 }
             ],
-            "offset" : 0
+            "offset" : null
         }
 
 ``/db/_local/id``
