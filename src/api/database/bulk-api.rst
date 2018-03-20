@@ -463,11 +463,11 @@ Sending multiple queries to a database
 ==================
 
 .. http:post:: /{db}/_bulk_get
-    :synopsis: Fetches several documents at the given revision
+    :synopsis: Fetches several documents at the given revisions
 
-    This method can be called to query several documents in a bulk. It is well
-    fitted when you want a specific revision of the documents, like replicators
-    do for example, or get the revision history.
+    This method can be called to query several documents in bulk. It is well
+    suited for fetching a specific revision of documents, as replicators do for
+    example, or for getting revision history.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
