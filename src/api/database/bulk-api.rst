@@ -497,14 +497,14 @@ Sending multiple queries to a database
             "docs": [
                 {
                     "id": "foo"
-                    "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                    "rev": "4-753875d51501a6b1883a9d62b4d33f91",
                 },
                 {
                     "id": "foo"
-                    "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                    "rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
                 },
                 {
-                    "_id": "bar",
+                    "id": "bar",
                 }
             ]
         }
