@@ -12,7 +12,66 @@
 
 .. _install/upgrading:
 
+=====================================
+Upgrading from prior CouchDB releases
+=====================================
+
+Important Notes
+===============
+
+* **Always back up your** ``data/`` **and** ``etc/`` **directories prior to
+  upgrading CouchDB.**
+* We recommend that you overwrite your ``etc/default.ini`` file with the
+  version provided by the new release. New defaults sometimes contain
+  mandatory changes to enable default functionality. Always places your
+  customizations in ``etc/local.ini`` or any ``etc/local.d/*.ini`` file.
+
+Upgrading from CouchDB 2.x
 ==========================
+
+If you are coming from a prior release of CouchDB 2.x, upgrading is simple.
+
+Standalone (single) node upgrades
+---------------------------------
+
+If you are running a standalone (single) CouchDB node:
+
+#. Plan for downtime.
+#. Backup everything.
+#. Check for new recommended settings in the shipped ``etc/local.ini`` file,
+   and merge any changes desired into your own local settings file(s).
+#. Stop CouchDB.
+#. Upgrade CouchDB in place.
+#. Start CouchDB.
+#. Relax! You're done.
+
+Cluster upgrades
+----------------
+
+CouchDB 2.x is explicitly designed to allow "mixed clusters" during the
+upgrade process. This allows you to perform a rolling restart across
+a cluster, upgrading one node at a time, for a *zero downtime upgrade*.
+The process is also entirely scriptable within your configuration
+management tool of choice.
+
+We're proud of this feature, and you should be, too!
+
+If you are running a CouchDB cluster:
+
+#. Backup everything.
+#. Check for new recommended settings in the shipped ``etc/local.ini`` file,
+   and merge any changes desired into your own local settings file(s),
+   staging these changes to occur as you upgrade the node.
+#. Stop CouchDB on a single node.
+#. Upgrade that CouchDB install in place.
+#. Start CouchDB.
+#. Double-check that the node has re-joined the cluster through the
+   `/_membership <api/server/membership>` endpoint. If your load balancer has
+   health check functionality driven by the `/_up <api/server/up>` endpoint,
+   check whether it thinks the node is healthy as well.
+#. Repeat the last 4 steps on the remaining nodes in the cluster.
+#. Relax! You're done.
+
 Upgrading from CouchDB 1.x
 ==========================
 
@@ -21,7 +80,7 @@ process is required to use CouchDB 1.x databases in CouchDB 2.x. CouchDB
 2.1 supplies a utility, ``couchup``, to simplify the migration process.
 
 ``couchup`` utility
-===================
+-------------------
 
 The ``couchup`` utility is a Python script that supports listing CouchDB
 1.x databases on a CouchDB 2.x installation, migrating them for use with
@@ -34,7 +93,7 @@ make use of the Python `progressbar library
 <https://pypi.python.org/pypi/progressbar>`_.
 
 Overview
---------
+^^^^^^^^
 
 couchup makes it easy to migrate your CouchDB 1.x databases to CouchDB
 2.x by providing 4 useful sub-commands:
@@ -61,7 +120,7 @@ The same process works for moving from a single 1.x node to a cluster of
 prior to running the couchup commands.
 
 Special Features
-----------------
+^^^^^^^^^^^^^^^^
 
 * Lots of extra help is available via:
 
@@ -89,7 +148,7 @@ Special Features
   ``couchup`` process.)
 
 Manual CouchDB 1.x migration
-============================
+----------------------------
 
 If you cannot use the ``couchup`` utility, or prefer to migrate
 yourself, a manual migration is also possible. In this process, a
