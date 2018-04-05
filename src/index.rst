@@ -33,6 +33,7 @@ Table of Contents
     externals
     query-server/index
     fauxton/index
+    best-practices/index
     api/index
     cluster/index
     json-structure
