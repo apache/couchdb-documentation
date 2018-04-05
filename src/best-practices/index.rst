@@ -25,3 +25,4 @@ system.
     :maxdepth: 2
 
     forms
+    jsdevel
