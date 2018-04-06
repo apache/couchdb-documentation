@@ -248,7 +248,7 @@ cluster!**
 To add a shard to a node, add entries like this to the database
 metadata's ``changelog`` attribute:
 
-.. code:: json1
+.. code:: json
 
     [
         "add",
