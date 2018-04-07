@@ -21,7 +21,7 @@
 
     Find documents using a declarative JSON querying syntax.
     Queries can use the built-in :ref:`_all_docs <api/db/all_docs>` index or
-    custom indices, specified using the :ref:`_index <api/db/find/index>`
+    custom indexes, specified using the :ref:`_index <api/db/find/index>`
     endpoint.
 
     :param db: Database name
