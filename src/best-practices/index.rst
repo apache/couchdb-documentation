@@ -26,3 +26,4 @@ system.
 
     forms
     jsdevel
+    nginx
