@@ -51,6 +51,26 @@ clarity):
 
         shell> curl 'http://couchdb:5984/_uuids?count=5'
 
+.. lint: ignore errors for the next 15 lines
+
+.. note::
+    On Microsoft Windows, use double-quotes anywhere you see single-quotes in
+    the following examples. Use doubled double-quotes ("") anywhere you see
+    single quotes. For example, if you see:
+
+    .. code-block:: bash
+
+        shell> curl -X PUT 'http:/127.0.0.1:5984/demo/doc' -d '{"motto": "I love gnomes"}'
+
+    you should replace it with:
+
+    .. code-blocK:: bash
+
+        shell> curl -X PUT "http://127.0.0.1:5984/demo/doc" -d "{""motto"": ""I love gnomes""}"
+
+    If you prefer, ``^"`` and ``\"`` may be used to escape the double-quote
+    character in quoted strings instead.
+
 You can explicitly set the HTTP command using the ``-X`` command line option.
 For example, when creating a database, you set the name of the database in the
 URL you send using a PUT request:
