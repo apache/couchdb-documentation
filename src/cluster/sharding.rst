@@ -12,9 +12,9 @@
 
 .. _cluster/sharding:
 
-========
-Sharding
-========
+================
+Shard Management
+================
 
 .. _cluster/sharding/scaling-out:
 
@@ -38,11 +38,14 @@ level, or on a per-database basis. The relevant parameters are *q* and
 *n*.
 
 *q* is the number of database shards to maintain. *n* is the number of
-copies of each document to distribute. With q=8, the database is split
-into 8 shards. With n=3, the cluster distributes three replicas of each
-shard. Altogether, that's 24 shards for a single database. In a default
-3-node cluster, each node would receive 8 shards. In a 4-node cluster,
-each node would receive 6 shards.
+copies of each document to distribute. The default value for n is 3,
+and for q is 8. With q=8, the database is split into 8 shards. With
+n=3, the cluster distributes three replicas of each shard. Altogether,
+that's 24 shards for a single database. In a default 3-node cluster,
+each node would receive 8 shards. In a 4-node cluster, each node would
+receive 6 shards. We recommend in the general case that the number of
+nodes in your cluster should be a multiple of n, so that shards are
+distributed evenly.
 
 CouchDB nodes have a ``etc/default.ini`` file with a section named
 ``[cluster]`` which looks like this:
@@ -70,13 +73,14 @@ Quorum
 
 When a CouchDB cluster serves reads and writes, it proxies the request
 to nodes with relevant shards and responds once enough nodes have
-responded to establish
-`quorum <https://en.wikipedia.org/wiki/Quorum_(distributed_computing)>`__.
-The size of the required quorum can be configured at request time by
-setting the ``r`` parameter for document and view reads, and the ``w``
-parameter for document writes. For example, here is a request that
-specifies that at least two nodes must respond in order to establish
-quorum:
+responded to obtain a `quorum
+<https://en.wikipedia.org/wiki/Quorum_(distributed_computing)>`__. By
+default, CouchDB requires a quorum of ``(n+1)/2`` nodes, or 2 in a
+default cluster. The size of the required quorum can be configured at
+request time by setting the ``r`` parameter for document and view
+reads, and the ``w`` parameter for document writes. For example, here
+is a request that specifies that at least two nodes must respond in
+order to establish a quorum:
 
 .. code:: bash
 
@@ -86,59 +90,15 @@ Here is a similar example for writing a document:
 
 .. code:: bash
 
-    $ curl -X PUT "$COUCH_URL:5984/{docId}?w=2" -d '{}'
+    $ curl -X PUT "http://xxx.xxx.xxx.xxx:5984/{docId}?w=2" -d '{...}'
 
 Setting ``r`` or ``w`` to be equal to ``n`` (the number of replicas)
 means you will only receive a response once all nodes with relevant
-shards have responded, however even this does not guarantee `ACIDic
-consistency <https://en.wikipedia.org/wiki/ACID#Consistency>`__. Setting
-``r`` or ``w`` to 1 means you will receive a response after only one
-relevant node has responded.
-
-Adding a node
--------------
-
-To add a node to a cluster, first you must have the additional node
-running somewhere. Make note of the address it binds to, like
-``127.0.0.1``, then ``PUT`` an empty document to the ``/_node``
-endpoint:
-
-.. code:: bash
-
-    $ curl -X PUT "$COUCH_URL:5984/_node/{name}@{address}" -d '{}'
-
-This will add the node to the cluster. Existing shards will not be moved
-or re-balanced in response to the addition, but future operations will
-distribute shards to the new node.
-
-Now when you GET the ``/_membership`` endpoint, you will see the new
-node.
-
-Removing a node
----------------
-
-To remove a node from the cluster, you must first acquire the ``_rev``
-value for the document that signifies its existence:
-
-.. code:: bash
-
-    $ curl "$COUCH_URL:5984/_node/{name}@{address}"
-    {"_id":"{name}@{address}","_rev":"{rev}"}
-
-Using that ``_rev``, you can delete the node using the ``/_node``
-endpoint:
-
-.. code:: bash
-
-    $ curl -X DELETE "$COUCH_URL:5984/_node/{name}@{address}?rev={rev}"
-
-.. raw:: html
-
-   <div class="alert alert-warning">
-
-**Note**: Before you remove a node, make sure to
-`move its shards <#moving-a-shard>`__
-or else they will be lost.
+shards have responded or timed out, however even this does not
+guarantee `ACIDic consistency
+<https://en.wikipedia.org/wiki/ACID#Consistency>`__. Setting ``r`` or
+``w`` to 1 means you will receive a response after only one relevant
+node has responded.
 
 Moving a shard
 --------------
@@ -167,14 +127,27 @@ example:
 
 Views are also sharded, and their shards should be moved to save the new
 node the effort of rebuilding the view. View shards live in
-``data/.shards``.
+``data/.shards``. For example:
+
+::
+
+  data/.shards
+  data/.shards/e0000000-ffffffff/_replicator.1518451591_design
+  data/.shards/e0000000-ffffffff/_replicator.1518451591_design/mrview
+  data/.shards/e0000000-ffffffff/_replicator.1518451591_design/mrview/3e823c2a4383ac0c18d4e574135a5b08.view
+  data/.shards/c0000000-dfffffff
+  data/.shards/c0000000-dfffffff/_replicator.1518451591_design
+  data/.shards/c0000000-dfffffff/_replicator.1518451591_design/mrview
+  data/.shards/c0000000-dfffffff/_replicator.1518451591_design/mrview/3e823c2a4383ac0c18d4e574135a5b08.view
+  ...
 
 Updating cluster metadata
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To update the cluster metadata, use the special node-specific ``/_dbs``
-database, accessible via a node's private port, usually at port 5986.
-First, retrieve the database's current metadata:
+To update the cluster metadata, use the special node-specific
+``/_dbs`` database, accessible via a node's private port, usually at
+port 5986. This port is only available on the localhost interface for
+security purposes. So first, retrieve the database's current metadata:
 
 .. code:: bash
 
@@ -256,7 +229,7 @@ metadata's ``changelog`` attribute:
         "{name}@{address}"
     ]
 
-*Note*: You can remove a node by specifying 'remove' instead of 'add'.
+*Note*: You can remove a shard from a node by specifying 'remove' instead of 'add'.
 
 Once you have figured out the new changelog entries, you will need to
 update the ``by_node`` and ``by_range`` to reflect who is storing what
@@ -269,7 +242,7 @@ adds shards to a second node called ``node2``:
 .. code:: json
 
     {
-        "_id": "small",
+        "_id": "{name}",
         "_rev": "1-5e2d10c29c70d3869fb7a1fd3a827a64",
         "shard_suffix": [
             46,
