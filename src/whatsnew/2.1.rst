@@ -34,7 +34,7 @@ Upgrade Notes
   hand. The default has changed to meet new guidelines and to provide
   additional functionality in the future.
 
-  If you recieve errors in the logfile, such as
+  If you receive errors in the logfile, such as
   ``internal_server_error : No DB shards could be opened.`` or in Fauxton,
   such as ``This database failed to load.`` you need to make this change.
 
@@ -67,6 +67,15 @@ Upgrade Notes
   constructor by default. To restore the original behaviour, add the
   ``--eval`` flag to the definition of the javascript query server in your
   ``local.ini`` file.
+
+.. _release/2.1.2:
+
+Version 2.1.2
+=============
+
+Security
+--------
+* :ref:`CVE 2018-8007 <cve/2018-8007>`
 
 .. _release/2.1.1:
 
