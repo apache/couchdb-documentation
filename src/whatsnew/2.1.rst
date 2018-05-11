@@ -58,7 +58,7 @@ Upgrade Notes
   :config:option:`couchdb/max_document_size` configuration parameter, which
   had been unfortunately misnamed, and has now been updated to behave as the
   name would suggest. Both are documented in the shipped ``default.ini`` file.
-  
+
   Note that the default for this new parameter is 64MB instead of 4GB. If you
   get errors when trying to PUT or POST and see HTTP 413 return codes in couchdb
   logs, this could be the culprit. This can affect couchup in-place upgrades as
