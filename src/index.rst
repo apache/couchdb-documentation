@@ -30,7 +30,6 @@ Table of Contents
     replication/index
     maintenance/index
     ddocs/index
-    externals
     query-server/index
     fauxton/index
     best-practices/index

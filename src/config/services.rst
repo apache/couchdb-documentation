@@ -71,13 +71,6 @@ CouchDB Daemonized Mini Apps
             [daemons]
             index_server={couch_index_server, start_link, []}
 
-    .. config:option:: os_daemons
-
-        :ref:`OS Daemons <config/os_daemons>` manager::
-
-            [daemons]
-            os_daemons={couch_os_daemons, start_link, []}
-
     .. config:option:: query_servers
 
         :ref:`Query servers <config/query_servers>` manager::
