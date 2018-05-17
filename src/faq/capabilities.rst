@@ -12,6 +12,7 @@
 
 .. _faq/capabilities:
 
+============
 Capabilities
 ============
 

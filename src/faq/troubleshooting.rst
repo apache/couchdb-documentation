@@ -12,6 +12,7 @@
 
 .. _faq/troubleshooting:
 
+===============
 Troubleshooting
 ===============
 
@@ -189,7 +190,8 @@ like the following:
 - When September starts, create logs_2011_10.
 - Replicate logs_2011_09 to logs_2011_10, filtered on logs from 2011_09 only.
 - During September, read/write to logs_2011_09.
-- Logs from August will be present in logs_2011_09 due to the replication, but not in logs_2011_10.
+- Logs from August will be present in logs_2011_09 due to the replication, but
+  not in logs_2011_10.
 - The entire logs_2011_08 DB can be removed.
 - Frequently_asked_questions (last edited 2013-06-13 12:47:31 by 50)
 
@@ -212,7 +214,10 @@ permission to access that resource". Most of these errors are derived from C
 used to build the Erlang VM and are documented in errno.h and related header
 files. `IBM <https://www.ibm.com/developerworks/aix/library/au-errnovariable/>`_
 provides a good introduction to these, and the relevant
-`POSIX <http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/errno.h.html>`_,
-`GNU <http://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Error-Codes.html>`_,
+`POSIX
+<http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/errno.h.html>`_,
+GNU_,
 and  `Microsoft Windows <https://msdn.microsoft.com/en-us/library/5814770t.aspx>`_
 standards will cover most cases.
+
+.. _GNU: http://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Error-Codes.html

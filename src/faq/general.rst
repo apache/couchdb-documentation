@@ -12,6 +12,7 @@
 
 .. _faq/general:
 
+=======
 General
 =======
 
