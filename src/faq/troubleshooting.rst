@@ -193,7 +193,6 @@ like the following:
 - Logs from August will be present in logs_2011_09 due to the replication, but
   not in logs_2011_10.
 - The entire logs_2011_08 DB can be removed.
-- Frequently_asked_questions (last edited 2013-06-13 12:47:31 by 50)
 
 Why are logged errors are often so confusing?
 ---------------------------------------------
