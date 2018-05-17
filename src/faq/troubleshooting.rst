@@ -192,3 +192,27 @@ like the following:
 - Logs from August will be present in logs_2011_09 due to the replication, but not in logs_2011_10.
 - The entire logs_2011_08 DB can be removed.
 - Frequently_asked_questions (last edited 2013-06-13 12:47:31 by 50)
+
+Why are logged errors are often so confusing?
+---------------------------------------------
+While the Erlang messages in the log can be confusing to someone unfamiliar with
+Erlang, with practice they become very helpful. The CouchDB developers do try
+to catch and log messages that might be useful to a system administrator in a
+friendly format, but occasionally a bug or otherwise unexpected behavior
+manifests itself in more verbose dumps of Erlang server state. These messages
+can be very useful to CouchDB developers. If you find many confusing messages in
+your log, feel free to inquire about them. If they are expected, devs can work
+to ensure that the message is more cleanly formatted. Otherwise, the messages
+may indicate a bug in the code.
+
+In many cases, this is enough to identify the problem. For example, OS errors
+are reported as tagged tuples ``{error,enospc}`` or ``{error,enoacces}`` which
+respectively is "You ran out of disk space", and "CouchDB doesn't have
+permission to access that resource". Most of these errors are derived from C
+used to build the Erlang VM and are documented in errno.h and related header
+files. `IBM <https://www.ibm.com/developerworks/aix/library/au-errnovariable/>`_
+provides a good introduction to these, and the relevant
+`POSIX <http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/errno.h.html>`_,
+`GNU <http://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Error-Codes.html>`_,
+and  `Microsoft Windows <https://msdn.microsoft.com/en-us/library/5814770t.aspx>`_
+standards will cover most cases.

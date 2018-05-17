@@ -21,5 +21,6 @@ Frequently Asked Questions
 
     general
     capabilities
+    documents
     howto
     troubleshooting
