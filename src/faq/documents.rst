@@ -16,25 +16,6 @@
 Documents
 =========
 
-Why should I generate my own UUIDs?
------------------------------------
-
-While CouchDB will generate a unique identifier for the `_id` field of any doc
-that you create, there are three reasons why you are, in most cases, better off
-generating them yourself.
-
-- If for any reason you miss the 200 OK reply from CouchDB, and storing the
-  document is attempted again, you would end up with the same document content
-  stored under duplicate ``_id``\ s. This could easily happen with intermediary
-  proxies and cache systems that may not inform developers that the failed
-  transaction is being retried.
-- ``_id``\ s are are the only unique enforced value within CouchDB so you might
-  as well make use of this. CouchDB stores its documents in a B+ tree. Each
-  additional or updated document is stored as a leaf node, and may require
-  re-writing intermediary and parent nodes. You may be able to take advantage of
-  sequencing your own ids more effectively than the automatically generated ids
-  if you can arrange them to be sequential yourself.
-
 Why use _bulk_docs instead of PUTting single documents to CouchDB?
 ------------------------------------------------------------------
 

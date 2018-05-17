@@ -16,15 +16,6 @@
 How-Tos
 =======
 
-How can I use auto-increment sequences?
----------------------------------------
-
-With replication, sequences are hard to realize. Sequences are often used to
-ensure unique identifiers for each row in a database table. CouchDB generates
-unique ids on its own and you can specify your own as well, so you don't really
-need a sequence here. If you use a sequence for something else, you might find
-a way to express it in CouchDB in another way.
-
 How can I get a list of the design documents in a database?
 -----------------------------------------------------------
 
