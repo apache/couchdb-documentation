@@ -49,16 +49,21 @@ In BigCouch, the predecessor to CouchDB 2.0's clustering functionality, there
 was the concept of zones. CouchDB 2.0 carries this forward with cluster
 placement rules.
 
-First, each node must be labelled with a zone attribute. This defines which
-zone each node is in. You do this by editing the node's document in the
-``/nodes`` database, which is accessed through the "back-door" (5986) port.
-Add a key value pair of the form:
+First, each node must be labelled with a zone attribute. This defines the zone
+where the node is located. In CouchDB 2.2.0 and later this can be accomplished
+by setting the ``[node] zone`` configuration property in a .ini config file
+(e.g. default.ini or local.ini). In older versions it is necessary to edit the
+node's document in the ``/_nodes`` database directly, accessing it through the
+"back-door" (5986) port. The direct ``/_nodes`` database approach is still
+supported in 2.2.0, but if there is a conflict between the entry in ``/_nodes``
+and the one in the config the latter will take precedence (and the entry in the
+database will be overwritten). An example zone attribute might take the form:
 
 .. code-block:: text
 
     "zone": "metro-dc-a"
 
-Do this for all of the nodes in your cluster.
+Set this attribute as appropriate for all of the nodes in your cluster.
 
 In your config file (local.ini or default.ini) on each node, define a
 consistent cluster-wide setting like:
