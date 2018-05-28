@@ -116,17 +116,16 @@ single value - which could be an array or similar object.
 Built-in Reduce Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Additionally, CouchDB has three built-in reduce functions. These are implemented
-in Erlang and run inside CouchDB, so they are much faster than the equivalent
-JavaScript functions: ``_sum``, ``_count`` and ``_stats``. Their equivalents in
-JavaScript:
+Additionally, CouchDB has a set of built-in reduce functions. These are
+implemented in Erlang and run inside CouchDB, so they are much faster than the
+equivalent JavaScript functions.
+
+.. data:: _count
+
+Counts the number of values in the index with a given key. This could be
+implemented in JavaScript as:
 
 .. code-block:: javascript
-
-    // could be replaced by _sum
-    function(keys, values) {
-        return sum(values);
-    }
 
     // could be replaced by _count
     function(keys, values, rereduce) {
@@ -136,6 +135,16 @@ JavaScript:
             return values.length;
         }
     }
+
+.. data:: _stats
+
+Computes the following quantities for numeric values associated with each key:
+``sum``, ``min``, ``max``, ``count``, and ``sumsqr``. The behavior of the
+``_stats`` function varies depending on the output of the map function. The
+simplest case is when the map phase emits a single numeric value for each key.
+In this case the ``_stats`` function is equivalent to the following JavaScript:
+
+.. code-block:: javascript
 
     // could be replaced by _stats
     function(keys, values, rereduce) {
@@ -165,6 +174,81 @@ JavaScript:
             }
         }
     }
+
+The ``_stats`` function will also work with "pre-aggregated" values from a map
+phase. A map function that emits an object containing ``sum``, ``min``, ``max``,
+``count``, and ``sumsqr`` keys and numeric values for each can use the
+``_stats`` function to combine these results with the data from other documents.
+The emitted object may contain other keys (these are ignored by the reducer),
+and it is also possible to mix raw numeric values and pre-aggregated objects
+in a single view and obtain the correct aggregated statistics.
+
+Finally, ``_stats`` can operate on key-value pairs where each value is an array
+comprised of numbers or pre-aggregated objects. In this case **every** value
+emitted from the map function must be an array, and the arrays must all be the
+same length, as ``_stats`` will compute the statistical quantities above
+*independently* for each element in the array. Users who want to compute
+statistics on multiple values from a single document should either ``emit`` each
+value into the index separately, or compute the statistics for the set of values
+using the JavaScript example above and emit a pre-aggregated object.
+
+.. data:: _sum
+
+In its simplest variation, ``_sum`` sums the numeric values associated with each
+key, as in the following JavaScript:
+
+.. code-block:: javascript
+
+    // could be replaced by _sum
+    function(keys, values) {
+        return sum(values);
+    }
+
+As with ``_stats``, the ``_sum`` function offers a number of extended
+capabilities. The ``_sum`` function requires that map values be numbers, arrays
+of numbers, or objects. When presented with array output from a map function,
+``_sum`` will compute the sum for every element of the array. A bare numeric
+value will be treated as an array with a single element, and arrays with fewer
+elements will be treated as if they contained zeroes for every additional
+element in the longest emitted array. As an example, consider the following map
+output:
+
+.. code-block:: javascript
+
+    {"total_rows":5, "offset":0, "rows": [
+        {"id":"id1", "key":"abc", "value": 2},
+        {"id":"id2", "key":"abc", "value": [3,5,7]},
+        {"id":"id2", "key":"def", "value": [0,0,0,42]},
+        {"id":"id2", "key":"ghi", "value": 1},
+        {"id":"id1", "key":"ghi", "value": 3}
+    ]}
+
+The ``_sum`` for this output without any grouping would be:
+
+.. code-block:: javascript
+
+    {"rows": [
+        {"key":null, "value": [9,5,7,42]}
+    ]}
+
+while the grouped output would be
+
+.. code-block:: javascript
+
+    {"rows": [
+        {"key":"abc", "value": [5,5,7]},
+        {"key":"def", "value": [0,0,0,42]},
+        {"key":"ghi", "value": 4
+    ]}
+
+This is in contrast to the behavior of the ``_stats`` function which requires
+that all emitted values be arrays of identical length if any array is emitted.
+
+It is also possible to have ``_sum`` recursively descend through an emitted
+object and compute the sums for every field in the object. Objects *cannot* be
+mixed with other data structures. Objects can be arbitrarily nested, provided
+that the values for all fields are themselves numbers, arrays of numbers, or
+objects.
 
 .. note::
     **Why don't reduce functions support CommonJS modules?**
