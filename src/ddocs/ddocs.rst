@@ -120,6 +120,32 @@ Additionally, CouchDB has a set of built-in reduce functions. These are
 implemented in Erlang and run inside CouchDB, so they are much faster than the
 equivalent JavaScript functions.
 
+.. data:: _approx_count_distinct
+
+.. versionadded:: 2.2
+
+Aproximates the number of distinct keys in a view index using a variant of the
+`HyperLogLog`_ algorithm. This algorithm enables an efficient, parallelizable
+computation of cardinality using fixed memory resources. CouchDB has configured
+the underlying data structure to have a relative error of ~2%.
+
+.. _HyperLogLog: https://en.wikipedia.org/wiki/HyperLogLog
+
+As this reducer ignores the emitted values entirely, an invocation with
+``group=true`` will simply return a value of 1 for every distinct key in the
+view. In the case of array keys, querying the view with a ``group_level``
+specified will return the number of distinct keys that share the common group
+prefix in each row. The algorithm is also cognizant of the ``startkey`` and
+``endkey`` boundaries and will return the number of distinct keys within the
+specified key range.
+
+A final note regarding Unicode collation: this reduce function uses the binary
+representation of each key in the index directly as input to the HyperLogLog
+filter. As such, it will (incorrectly) consider keys that are not byte identical
+but that compare equal according to the Unicode collation rules to be distinct
+keys, and thus has the potential to overestimate the cardinality of the key
+space if a large number of such keys exist.
+
 .. data:: _count
 
 Counts the number of values in the index with a given key. This could be
