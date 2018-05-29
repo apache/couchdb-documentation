@@ -22,7 +22,7 @@ Table of Contents
 =================
 .. toctree::
     :maxdepth: 3
-    :numbered: 3
+    :numbered:
 
     intro/index
     install/index
