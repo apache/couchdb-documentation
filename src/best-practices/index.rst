@@ -24,5 +24,7 @@ system.
 .. toctree::
     :maxdepth: 2
 
+    documents
     forms
     jsdevel
+    nginx

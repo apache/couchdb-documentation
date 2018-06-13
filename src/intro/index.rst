@@ -46,7 +46,7 @@ teach how to use CouchDB.
     overview
     why
     consistency
+    curl
     tour
     api
     security
-    curl

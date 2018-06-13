@@ -1315,18 +1315,22 @@ error.
 
 .. _api/server/stats:
 
-===========
-``/_stats``
-===========
+=============================
+``/_node/{node-name}/_stats``
+=============================
 
-.. http:get:: /_stats
+.. http:get:: /_node/{node-name}/_stats
     :synopsis: Returns server statistics
 
     The ``_stats`` resource returns a JSON object containing the statistics
     for the running server. The object is structured with top-level sections
     collating the statistics for a range of entries, with each individual
     statistic being easily identified, and the content of each statistic is
-    self-describing
+    self-describing.
+
+    The literal string ``_local`` serves as an alias for the local node name, so
+    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
@@ -1338,7 +1342,7 @@ error.
 
     .. code-block:: http
 
-        GET /_stats/couchdb/request_time HTTP/1.1
+        GET /_node/_local/_stats/couchdb/request_time HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -1354,150 +1358,139 @@ error.
         Server: CouchDB (Erlang/OTP)
 
         {
-            "couchdb": {
-                "request_time": {
-                    "current": 21.0,
-                    "description": "length of a request inside CouchDB without MochiWeb",
-                    "max": 19.0,
-                    "mean": 7.0,
-                    "min": 1.0,
-                    "stddev": 10.392,
-                    "sum": 21.0
-                }
-            }
+          "value": {
+            "min": 0,
+            "max": 0,
+            "arithmetic_mean": 0,
+            "geometric_mean": 0,
+            "harmonic_mean": 0,
+            "median": 0,
+            "variance": 0,
+            "standard_deviation": 0,
+            "skewness": 0,
+            "kurtosis": 0,
+            "percentile": [
+              [
+                50,
+                0
+              ],
+              [
+                75,
+                0
+              ],
+              [
+                90,
+                0
+              ],
+              [
+                95,
+                0
+              ],
+              [
+                99,
+                0
+              ],
+              [
+                999,
+                0
+              ]
+            ],
+            "histogram": [
+              [
+                0,
+                0
+              ]
+            ],
+            "n": 0
+          },
+          "type": "histogram",
+          "desc": "length of a request inside CouchDB without MochiWeb"
         }
 
 The fields provide the current, minimum and maximum, and a collection of
 statistical means and quantities. The quantity in each case is not defined, but
-the descriptions below provide
+the descriptions below provide sufficient detail to determine units.
 
-The statistics are divided into the following top-level sections:
+Statistics are reported by 'group'.  The statistics are divided into the
+following top-level sections:
 
-``couchdb``
-===========
+- ``couch_log``: Logging subsystem
+- ``couch_replicator``: Replication scheduler and subsystem
+- ``couchdb``: Primary CouchDB database operations
+- ``fabric``: Cluster-related operations
+- ``global_changes``: Global changes feed
+- ``mem3``: Node membership-related statistics
+- ``pread``: CouchDB file-related exceptions
+- ``rexi``: Cluster internal RPC-related statistics
 
-Describes statistics specific to the internals of CouchDB
+The type of the statistic is included in the ``type`` field, and is one of
+the following:
 
-.. lint: ignore errors for the next 17 lines
-
-+-------------------------+-------------------------------------------------------+----------------+
-| Statistic ID            | Description                                           | Unit           |
-+=========================+=======================================================+================+
-| ``auth_cache_hits``     | Number of authentication cache hits                   | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``auth_cache_misses``   | Number of authentication cache misses                 | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``database_reads``      | Number of times a document was read from a database   | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``database_writes``     | Number of times a database was changed                | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``open_databases``      | Number of open databases                              | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``open_os_files``       | Number of file descriptors CouchDB has open           | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``request_time``        | Length of a request inside CouchDB without MochiWeb   | milliseconds   |
-+-------------------------+-------------------------------------------------------+----------------+
-
-``httpd_request_methods``
-=========================
-
-+----------------+----------------------------------+----------+
-| Statistic ID   | Description                      | Unit     |
-+================+==================================+==========+
-| ``COPY``       | Number of HTTP COPY requests     | number   |
-+----------------+----------------------------------+----------+
-| ``DELETE``     | Number of HTTP DELETE requests   | number   |
-+----------------+----------------------------------+----------+
-| ``GET``        | Number of HTTP GET requests      | number   |
-+----------------+----------------------------------+----------+
-| ``HEAD``       | Number of HTTP HEAD requests     | number   |
-+----------------+----------------------------------+----------+
-| ``POST``       | Number of HTTP POST requests     | number   |
-+----------------+----------------------------------+----------+
-| ``PUT``        | Number of HTTP PUT requests      | number   |
-+----------------+----------------------------------+----------+
-
-``httpd_status_codes``
-======================
-
-.. lint: ignore errors for the next 29 lines
-
-+----------------+------------------------------------------------------+----------+
-| Statistic ID   | Description                                          | Unit     |
-+================+======================================================+==========+
-| ``200``        | Number of HTTP 200 OK responses                      | number   |
-+----------------+------------------------------------------------------+----------+
-| ``201``        | Number of HTTP 201 Created responses                 | number   |
-+----------------+------------------------------------------------------+----------+
-| ``202``        | Number of HTTP 202 Accepted responses                | number   |
-+----------------+------------------------------------------------------+----------+
-| ``301``        | Number of HTTP 301 Moved Permanently responses       | number   |
-+----------------+------------------------------------------------------+----------+
-| ``304``        | Number of HTTP 304 Not Modified responses            | number   |
-+----------------+------------------------------------------------------+----------+
-| ``400``        | Number of HTTP 400 Bad Request responses             | number   |
-+----------------+------------------------------------------------------+----------+
-| ``401``        | Number of HTTP 401 Unauthorized responses            | number   |
-+----------------+------------------------------------------------------+----------+
-| ``403``        | Number of HTTP 403 Forbidden responses               | number   |
-+----------------+------------------------------------------------------+----------+
-| ``404``        | Number of HTTP 404 Not Found responses               | number   |
-+----------------+------------------------------------------------------+----------+
-| ``405``        | Number of HTTP 405 Method Not Allowed responses      | number   |
-+----------------+------------------------------------------------------+----------+
-| ``409``        | Number of HTTP 409 Conflict responses                | number   |
-+----------------+------------------------------------------------------+----------+
-| ``412``        | Number of HTTP 412 Precondition Failed responses     | number   |
-+----------------+------------------------------------------------------+----------+
-| ``500``        | Number of HTTP 500 Internal Server Error responses   | number   |
-+----------------+------------------------------------------------------+----------+
-
-``httpd``
-=========
-
-.. lint: ignore errors for the next 13 lines
-
-+----------------------------------+----------------------------------------------+----------+
-| Statistic ID                     | Description                                  | Unit     |
-+==================================+==============================================+==========+
-| ``bulk_requests``                | Number of bulk requests                      | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``clients_requesting_changes``   | Number of clients for continuous _changes    | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``requests``                     | Number of HTTP requests                      | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``temporary_view_reads``         | Number of temporary view reads               | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``view_reads``                   | Number of view reads                         | number   |
-+----------------------------------+----------------------------------------------+----------+
+- ``counter``: Monotonically increasing counter, resets on restart
+- ``histogram``: Binned set of values with meaningful subdivisions
+- ``gauge``: Single numerical value that can go up and down
 
 You can also access individual statistics by quoting the statistics sections
 and statistic ID as part of the URL path. For example, to get the
-``request_time`` statistics, you can use:
+``request_time`` statistics within the ``couchdb`` section for the target
+node, you can use:
 
 .. code-block:: http
 
-    GET /_stats/couchdb/request_time HTTP/1.1
+    GET /_node/_local/_stats/couchdb/request_time HTTP/1.1
 
 This returns an entire statistics object, as with the full request, but
-containing only the request individual statistic. Hence, the returned structure
-is as follows:
+containing only the requested individual statistic.
 
-.. code-block:: javascript
+==============================
+``/_node/{node-name}/_system``
+==============================
 
-    {
-        "couchdb" : {
-            "request_time" : {
-                "stddev" : 7454.305,
-                "min" : 1,
-                "max" : 34185,
-                "current" : 34697.803,
-                "mean" : 1652.276,
-                "sum" : 34697.803,
-                "description" : "length of a request inside CouchDB without MochiWeb"
-            }
+.. http:get:: /_node/{node-name}/_system
+    :synopsis: Returns system-level server statistics
+
+    The ``_system`` resource returns a JSON object containing various
+    system-level statistics for the running server. The object is structured
+    with top-level sections collating the statistics for a range of entries,
+    with each individual statistic being easily identified, and the content of
+    each statistic is self-describing.
+
+    The literal string ``_local`` serves as an alias for the local node name, so
+    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    interact with the local node's statistics.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local/_system HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 187
+        Content-Type: application/json
+        Date: Sat, 10 Aug 2013 11:41:11 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "uptime": 259,
+          "memory": {
+          ...
         }
-    }
+
+    These statistics are generally intended for CouchDB developers only.
 
 .. _api/server/utils:
 
