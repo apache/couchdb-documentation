@@ -30,7 +30,7 @@ Server Administrators
     for in-production usage. You can crash the party simply by creating the
     first admin account. CouchDB server administrators and passwords are not
     stored in the ``_users`` database, but in the last ``[admins]`` section
-    that CouchDB finds when loading. See :config
+    that CouchDB finds when loading. See :config:intro
     This file (which could be something like ``etc/local.ini`` or
     ``etc/local.d/10-admins.ini``) should be appropriately secured and readable
     only by system administrators::
