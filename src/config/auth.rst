@@ -29,9 +29,11 @@ Server Administrators
     users. This configuration is known as `Admin Party`, and is not recommended
     for in-production usage. You can crash the party simply by creating the
     first admin account. CouchDB server administrators and passwords are not
-    stored in the ``_users`` database, but in the ``local.ini`` file, which
-    should be appropriately secured and readable only by system
-    administrators::
+    stored in the ``_users`` database, but in the last ``[admins]`` section
+    that CouchDB finds when loading. See :config
+    This file (which could be something like ``etc/local.ini`` or
+    ``etc/local.d/10-admins.ini``) should be appropriately secured and readable
+    only by system administrators::
 
         [admins]
         ;admin = mysecretpassword
@@ -69,9 +71,9 @@ Server Administrators
         }
 
     If you already have a salted, encrypted password string (for example, from
-    an old ``local.ini`` file, or from a different CouchDB server), then you
-    can store the "raw" encrypted string, without having CouchDB doubly encrypt
-    it.
+    an old ``local.ini`` or ``10-admins.ini`` file, or from a different CouchDB
+    server), then you can store the "raw" encrypted string, without having
+    CouchDB doubly encrypt it.
 
     .. code-block:: http
 
