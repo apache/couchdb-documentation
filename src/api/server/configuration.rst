@@ -84,7 +84,7 @@ interact with the local node's configuration.
                 "docroot": "./share/www",
                 "port": "5984",
                 "require_valid_user": "false",
-                "socket_options": "[{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]"
+                "socket_options": "[{recbuf, undefined}, {sndbuf, undefined}, {nodelay, true}]"
             },
             "daemons": {
                 "auth_cache": "{couch_auth_cache, start_link, []}",

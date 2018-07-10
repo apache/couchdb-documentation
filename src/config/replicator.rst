@@ -120,8 +120,8 @@ Replicator Database Configuration
         Some socket options that might boost performance in some scenarios:
 
         - ``{nodelay, boolean()}``
-        - ``{sndbuf, integer()}``
-        - ``{recbuf, integer()}``
+        - ``{sndbuf, integer()|undefined}``
+        - ``{recbuf, integer()|undefined}``
         - ``{priority, integer()}``
 
         See the `inet`_ Erlang module's man page for the full list of options::

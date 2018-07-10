@@ -136,7 +136,7 @@ HTTP Server Options
         as a list of tuples. For example::
 
             [httpd]
-            socket_options = [{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]
+            socket_options = [{recbuf, undefined}, {sndbuf, undefined}, {nodelay, true}]
 
         The options supported are a subset of full options supported by the
         TCP/IP stack. A list of the supported options are provided in the
