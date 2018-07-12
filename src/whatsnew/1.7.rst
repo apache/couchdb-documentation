@@ -20,6 +20,15 @@
    :depth: 1
    :local:
 
+.. _release/1.7.2:
+
+Version 1.7.2
+=============
+
+Security
+--------
+* :ref:`CVE 2018-8007 <cve/2018-8007>`
+
 .. _release/1.7.1:
 
 Version 1.7.1
