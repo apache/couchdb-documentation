@@ -35,7 +35,8 @@ bypassing the backlist of configuration settings that are not allowed to be
 modified via the HTTP API.
 
 This privilege escalation effectively allows a CouchDB admin user to gain
-arbitrary remote code execution, bypassing :ref:`CVE-2017-12636 <cve/2017-12636>`
+arbitrary remote code execution, bypassing
+:ref:`CVE-2017-12636 <cve/2017-12636>`
 
 Mitigation
 ==========
