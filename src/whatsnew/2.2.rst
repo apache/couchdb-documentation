@@ -27,13 +27,16 @@ Upgrade Notes
 
 .. rst-class:: open
 
-* Item 1
+* TODO WORDING: Recommend increasing PBKDF2 / bcrypt work factor and auth_plugins to
+  couch_replicator_auth_session,couch_replicator_auth_noop. Do not do this, if an older 
+  version of CouchDB is replicating TO this instance/cluster. Replicating FROM older 
+  versions is fine. A future version will make this a default.
 
 * Item 2
 
 * Item 3
 
-Version 2.1.0
+Version 2.2.0
 =============
 
 Security
