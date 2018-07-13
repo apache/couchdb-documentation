@@ -274,13 +274,13 @@ Proxy Authentication
 
 .. note::
     To use this authentication method make sure that the
-    ``{couch_httpd_auth, proxy_authentication_handler}`` value in added to the
+    ``{chttpd_auth, proxy_authentication_handler}`` value in added to the
     list of the active :config:option:`chttpd/authentication_handlers`:
 
     .. code-block:: ini
 
         [chttpd]
-        authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {couch_httpd_auth, proxy_authentication_handler}, {chttpd_auth, default_authentication_handler}
+        authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, proxy_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
 `Proxy authentication` is very useful in case your application already uses
 some external authentication service and you don't want to duplicate users and
