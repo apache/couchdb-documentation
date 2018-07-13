@@ -297,8 +297,9 @@ headers to CouchDB with related requests:
 - :config:option:`X-Auth-CouchDB-Token <couch_httpd_auth/x_auth_token>`:
   authentication token. When
   :config:option:`proxy_use_secret <couch_httpd_auth/proxy_use_secret>`
-  is set (which is strongly recommended!), this header provides the secret
-  token to prevent requests from untrusted sources.
+  is set (which is strongly recommended!), this header provides an HMAC of the
+  username to authenticate and the secret token to prevent requests from
+  untrusted sources.
 
 **Request**:
 
