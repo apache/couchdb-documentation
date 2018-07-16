@@ -279,12 +279,12 @@ replication to exclude only those documents.
 FIPS mode
 ---------
 
-Operating systems can be configured to disallow the use of OpenSSL MD5 hash 
-functions in order to prevent use of MD5 for cryptographic purposes. CouchDB 
-makes use of MD5 hashes for verifying the integrity of data (and not for 
+Operating systems can be configured to disallow the use of OpenSSL MD5 hash
+functions in order to prevent use of MD5 for cryptographic purposes. CouchDB
+makes use of MD5 hashes for verifying the integrity of data (and not for
 cryptography) and will not run without the ability to use MD5 hashes.
 
-The message below indicates that the operating system is running in "FIPS mode," 
+The message below indicates that the operating system is running in "FIPS mode,"
 which among other restrictions does not allow the use of OpenSSL's MD5 funtions:
 
 .. code-block:: text
@@ -294,13 +294,13 @@ which among other restrictions does not allow the use of OpenSSL's MD5 funtions:
     [os_mon] cpu supervisor port (cpu_sup): Erlang has closed
     Aborted
 
-A workaround for this is provided with the ``--erlang-md5`` compile flag. Use of 
-the flag results in CouchDB substituting the OpenSSL MD5 function calls with 
+A workaround for this is provided with the ``--erlang-md5`` compile flag. Use of
+the flag results in CouchDB substituting the OpenSSL MD5 function calls with
 equivalent calls to Erlang's built-in library ``erlang:md5.`` NOTE: there may be
 a performance penalty associated with this workaround.
 
-Because CouchDB does not make use of MD5 hashes for cryptographic purposes, this 
-workaround does not defeat the purpose of "FIPS mode," provided that the system 
+Because CouchDB does not make use of MD5 hashes for cryptographic purposes, this
+workaround does not defeat the purpose of "FIPS mode," provided that the system
 owner is aware of and consents to its use.
 
 macOS Known Issues
