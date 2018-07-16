@@ -285,7 +285,7 @@ makes use of MD5 hashes for verifying the integrity of data (and not for
 cryptography) and will not run without the ability to use MD5 hashes.
 
 The message below indicates that the operating system is running in "FIPS mode,"
-which among other restrictions does not allow the use of OpenSSL's MD5 funtions:
+which among other restrictions does not allow the use of OpenSSL's MD5 functions:
 
 .. code-block:: text
 
