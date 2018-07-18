@@ -45,6 +45,13 @@ Base CouchDB Options
             [couchdb]
             database_dir = /var/lib/couchdb
 
+    .. config:option:: default_security :: Default security
+
+        Default security object for databases if not explicitly set. When set to ``everyone``, anyone can performs reads and writes. When set to ``admin_only``, only admins can read and write. When set to ``admin_local``, sharded databases can be read and written by anyone but the shards can only be read and written by admins.
+
+            [couchdb]
+            default_security = admin_local
+
     .. config:option:: delayed_commits :: Delayed commits
 
         When this config value is ``false`` the CouchDB provides a guarantee
