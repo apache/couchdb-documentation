@@ -21,14 +21,15 @@ Shard Management
 Introduction
 ------------
 
-A
-`shard <https://en.wikipedia.org/wiki/Shard_(database_architecture)>`__
-is a horizontal partition of data in a database. Partitioning data into
-shards and distributing copies of each shard (called "replicas") to
-different nodes in a cluster gives the data greater durability against
-node loss. CouchDB clusters automatically shard and distribute data
-among nodes, but modifying cluster membership and customizing shard
-behavior must be done manually.
+A `shard
+<https://en.wikipedia.org/wiki/Shard_(database_architecture)>`__ is a
+horizontal partition of data in a database. Partitioning data into
+shards and distributing copies of each shard (called "shard replicas" or
+just "replicas") to different nodes in a cluster gives the data greater
+durability against node loss. CouchDB clusters automatically shard
+databases and distribute the subsections of documents that compose each
+shard among nodes. Modifying cluster membership and sharding behavior
+must be done manually.
 
 Shards and Replicas
 ~~~~~~~~~~~~~~~~~~~
@@ -69,14 +70,22 @@ That creates a database that is split into 4 shards and 2 replicas,
 yielding 8 shards distributed throughout the cluster.
 
 Quorum
-------
+~~~~~~
 
-When a CouchDB cluster serves reads and writes, it proxies the request
-to nodes with relevant shards and responds once enough nodes have
-responded to obtain a `quorum
-<https://en.wikipedia.org/wiki/Quorum_(distributed_computing)>`__. By
-default, CouchDB requires a quorum of ``(n+1)/2`` nodes, or 2 in a
-default cluster. The size of the required quorum can be configured at
+Depending on the size of the cluster, the number of shards per database,
+and the number of shard replicas, not every node may have access to
+every shard, but every node knows where all the replicas of each shard
+can be found through CouchDB's internal shard map.
+
+Each request that comes in to a CouchDB cluster is handled by any one
+random coordinating node. This coordinating node proxies the request to
+the other nodes that have the relevant data, which may or may not
+include itself. The coordinating node sends a response to the client
+once a `quorum
+<https://en.wikipedia.org/wiki/Quorum_(distributed_computing)>`__ of
+database nodes have responded; 2, by default.
+
+The size of the required quorum can be configured at
 request time by setting the ``r`` parameter for document and view
 reads, and the ``w`` parameter for document writes. For example, here
 is a request that specifies that at least two nodes must respond in
@@ -84,49 +93,85 @@ order to establish a quorum:
 
 .. code:: bash
 
-    $ curl "$COUCH_URL:5984/{docId}?r=2"
+    $ curl "$COUCH_URL:5984/<doc>?r=2"
 
 Here is a similar example for writing a document:
 
 .. code:: bash
 
-    $ curl -X PUT "http://xxx.xxx.xxx.xxx:5984/{docId}?w=2" -d '{...}'
+    $ curl -X PUT "$COUCH_URL:5984/<doc>?w=2" -d '{...}'
 
 Setting ``r`` or ``w`` to be equal to ``n`` (the number of replicas)
 means you will only receive a response once all nodes with relevant
-shards have responded or timed out, however even this does not
+shards have responded or timed out, and as such this approach does not
 guarantee `ACIDic consistency
 <https://en.wikipedia.org/wiki/ACID#Consistency>`__. Setting ``r`` or
 ``w`` to 1 means you will receive a response after only one relevant
 node has responded.
 
+.. _cluster/sharding/move:
+
 Moving a shard
 --------------
 
-Moving shards between nodes involves the following steps:
+This section describes how to manually place and replace shards, and how
+to set up placement rules to assign shards to specific nodes. These
+activities are critical steps when you determine your cluster is too big
+or too small, and want to resize it successfully, or you have noticed
+from server metrics that database/shard layout is non-optimal and you
+have some "hot spots" that need resolving.
 
-1. Copy the shard file onto the new node.
-2. Update cluster metadata to reflect the move.
-3. Replicate from the old to the new to catch any changes.
-4. Delete the old shard file.
+Consider a three node cluster with q=8 and n=3. Each database has 24
+shards, distributed across the three nodes. If you add a fourth node to
+the cluster, CouchDB will not redistribute existing database shards to
+it. This leads to unbalanced load, as the new node will only host shards
+for databases created after it joined the cluster. To balance the
+distribution of shards from existing databases, they must be moved
+manually.
+
+Moving shards between nodes in a cluster involves the following steps:
+
+1. Copy the shard(s) and any secondary index shard(s) onto the target node.
+2. Set the target node to maintenance mode.
+3. Update cluster metadata to reflect the new target shard(s).
+4. Monitor internal replication to ensure up-to-date shard(s).
+5. Clear the target node's maintenance mode.
+6. Update cluster metadata again to remove the source shard(s)
+7. Remove the shard file(s) and secondary index file(s) from the source node.
 
 Copying shard files
 ~~~~~~~~~~~~~~~~~~~
 
 Shard files live in the ``data/shards`` directory of your CouchDB
-install. Since they are just files, you can use ``cp``, ``rsync``,
+install. Within those subdirectories are the shard files themselves. For
+instance, for a q=8 database called abc, here is its database shard
+files:
+
+::
+
+  data/shards/00000000-1fffffff/abc.1529362187.couch
+  data/shards/20000000-3fffffff/abc.1529362187.couch
+  data/shards/40000000-5fffffff/abc.1529362187.couch
+  data/shards/60000000-7fffffff/abc.1529362187.couch
+  data/shards/80000000-9fffffff/abc.1529362187.couch
+  data/shards/a0000000-bfffffff/abc.1529362187.couch
+  data/shards/c0000000-dfffffff/abc.1529362187.couch
+  data/shards/e0000000-ffffffff/abc.1529362187.couch
+
+Since they are just files, you can use ``cp``, ``rsync``,
 ``scp`` or other command to copy them from one node to another. For
 example:
 
 .. code:: bash
 
     # one one machine
-    mkdir -p data/shards/{range}
+    $ mkdir -p data/shards/<range>
     # on the other
-    scp $COUCH_PATH/data/shards/{range}/{database}.{timestamp}.couch $OTHER:$COUCH_PATH/data/shards/{range}/
+    $ scp <couch-dir>/data/shards/<range>/<database>.<datecode>.couch <node>:<couch-dir>/data/shards/<range>/
 
-Views are also sharded, and their shards should be moved to save the new
-node the effort of rebuilding the view. View shards live in
+Secondary indexes (including JavaScript views, Erlang views and Mango
+indexes) are also sharded, and their shards should be moved to save the
+new node the effort of rebuilding the view. View shards live in
 ``data/.shards``. For example:
 
 ::
@@ -141,60 +186,105 @@ node the effort of rebuilding the view. View shards live in
   data/.shards/c0000000-dfffffff/_replicator.1518451591_design/mrview/3e823c2a4383ac0c18d4e574135a5b08.view
   ...
 
-Updating cluster metadata
-~~~~~~~~~~~~~~~~~~~~~~~~~
+.. warning::
+    Technically, copying database and secondary index
+    shards is optional. If you proceed to the next step without
+    performing
+    this data copy, CouchDB will use internal replication to populate
+    the
+    newly added shard replicas. However, this process can be very slow,
+    especially on a busy cluster—which is why we recommend performing this
+    manual data copy first.
 
-To update the cluster metadata, use the special node-specific
-``/_dbs`` database, accessible via a node's private port, usually at
-port 5986. This port is only available on the localhost interface for
-security purposes. So first, retrieve the database's current metadata:
+Set the target node to ``true`` maintenance mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before we tell CouchDB about the new shards on the node in question, we
+need to set the node to ``true`` maintenance mode. This special mode
+instructs CouchDB to return a ``404 Not Found`` response on the ``/_up``
+endpoint, and ensures it not participate in normal interactive clustered
+requests for its shards. A properly configured load balancer that uses
+``GET /_up`` to check the health of nodes will detect this 404 and
+remove that node from the backend target, preventing any HTTP requests
+from being sent to that node. An example HAProxy configuration to use
+the ``/_up`` endpoint is as follows:
+
+::
+
+  http-check disable-on-404
+  option httpchk GET /_up
+
+If you do not set maintenance mode, or the load balancer ignores this
+maintenance mode status, after the next step is performed the cluster
+may return incorrect responses when consulting the node in question. You
+don't want this! In the next steps, we will ensure that this shard is
+up-to-date before allowing it to participate in end-user requests.
+
+To set true maintenance mode:
+
+.. code::bash
+
+    $ curl -X PUT -H "Content-type: application/json" \
+        http://localhost:5984/_node/<nodename>/_config/couchdb/maintenance_mode \
+        -d "\"true\""
+
+Then, verify that the node is in maintenance mode by performing a ``GET
+/_up`` on that node's individual endpoint:
+
+.. code::bash
+
+    $ curl -v http://localhost:5984/_up
+    …
+    < HTTP/1.1 404 Object Not Found
+    …
+    {"status":"maintenance_mode"}
+
+Finally, check that your load balancer has removed the node from the
+pool of available backend nodes.
+
+Updating cluster metadata to reflect the move
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now we need to tell CouchDB that the target node (which must already be
+joined to the cluster) should be hosting shard replicas for a given
+database.
+
+To update the cluster metadata, use the special ``/_dbs`` database,
+which is an internal CouchDB database that maps databases to shards and
+nodes. It is accessible only via a node's private port, usually at port
+5986. By default, this port is only available on the localhost interface
+for security purposes.
+
+First, retrieve the database's current metadata:
 
 .. code:: bash
 
-    $ curl $COUCH_URL:5986/_dbs/{name}
-
+    $ curl localhost:5986/_dbs/{name}
     {
-        "_id": "{name}",
-        "_rev": "1-5e2d10c29c70d3869fb7a1fd3a827a64",
-        "shard_suffix": [
-            46,
-            49,
-            52,
-            50,
-            53,
-            50,
-            48,
-            50,
-            53,
-            55,
-            55
+      "_id": "{name}",
+      "_rev": "1-e13fb7e79af3b3107ed62925058bfa3a",
+      "shard_suffix": [46, 49, 53, 51, 48, 50, 51, 50, 53, 50, 54],
+      "changelog": [
+        ["add", "00000000-1fffffff", "node1@xxx.xxx.xxx.xxx"],
+        ["add", "00000000-1fffffff", "node2@xxx.xxx.xxx.xxx"],
+        ["add", "00000000-1fffffff", "node3@xxx.xxx.xxx.xxx"],
+        …
+      ],
+      "by_node": {
+        "node1@xxx.xxx.xxx.xxx": [
+          "00000000-1fffffff",
+          …
         ],
-        "changelog": [
-        [
-            "add",
-            "00000000-7fffffff",
-            "node1@xxx.xxx.xxx.xxx"
+        …
+      },
+      "by_range": {
+        "00000000-1fffffff": [
+          "node1@xxx.xxx.xxx.xxx",
+          "node2@xxx.xxx.xxx.xxx",
+          "node3@xxx.xxx.xxx.xxx"
         ],
-        [
-            "add",
-            "80000000-ffffffff",
-            "node1@xxx.xxx.xxx.xxx"
-        ]
-        ],
-        "by_node": {
-            "node1@xxx.xxx.xxx.xxx": [
-                "00000000-7fffffff",
-                "80000000-ffffffff"
-            ]
-        },
-        "by_range": {
-            "00000000-7fffffff": [
-                "node1@xxx.xxx.xxx.xxx"
-            ],
-            "80000000-ffffffff": [
-                "node1@xxx.xxx.xxx.xxx"
-            ]
-        }
+        …
+      }
     }
 
 Here is a brief anatomy of that document:
@@ -223,82 +313,55 @@ metadata's ``changelog`` attribute:
 
 .. code:: json
 
-    [
-        "add",
-        "{range}",
-        "{name}@{address}"
-    ]
+    ["add", "<range>", "<node-name>"]
 
-*Note*: You can remove a shard from a node by specifying 'remove' instead of 'add'.
+The ``<range>`` is the specific shard range for the shard. The ``<node-
+name>`` should match the name and address of the node as displayed in
+``GET /_membership`` on the cluster.
+
+.. warning::
+    When removing a shard from a node, specifying ``remove`` instead of ``add``.
 
 Once you have figured out the new changelog entries, you will need to
 update the ``by_node`` and ``by_range`` to reflect who is storing what
 shards. The data in the changelog entries and these attributes must
 match. If they do not, the database may become corrupted.
 
-As an example, here is an updated version of the metadata above that
-adds shards to a second node called ``node2``:
+Continuing our example, here is an updated version of the metadata above
+that adds shards to an additional node called ``node4``:
 
 .. code:: json
 
     {
-        "_id": "{name}",
-        "_rev": "1-5e2d10c29c70d3869fb7a1fd3a827a64",
-        "shard_suffix": [
-            46,
-            49,
-            52,
-            50,
-            53,
-            50,
-            48,
-            50,
-            53,
-            55,
-            55
+      "_id": "{name}",
+      "_rev": "1-e13fb7e79af3b3107ed62925058bfa3a",
+      "shard_suffix": [46, 49, 53, 51, 48, 50, 51, 50, 53, 50, 54],
+      "changelog": [
+        ["add", "00000000-1fffffff", "node1@xxx.xxx.xxx.xxx"],
+        ["add", "00000000-1fffffff", "node2@xxx.xxx.xxx.xxx"],
+        ["add", "00000000-1fffffff", "node3@xxx.xxx.xxx.xxx"],
+        …
+        ["add", "00000000-1fffffff", "node4@xxx.xxx.xxx.xxx"]
+      ],
+      "by_node": {
+        "node1@xxx.xxx.xxx.xxx": [
+          "00000000-1fffffff",
+          …
         ],
-        "changelog": [
-        [
-            "add",
-            "00000000-7fffffff",
-            "node1@xxx.xxx.xxx.xxx"
-        ],
-        [
-            "add",
-            "80000000-ffffffff",
-            "node1@xxx.xxx.xxx.xxx"
-        ],
-        [
-            "add",
-            "00000000-7fffffff",
-            "node2@yyy.yyy.yyy.yyy"
-        ],
-        [
-            "add",
-            "80000000-ffffffff",
-            "node2@yyy.yyy.yyy.yyy"
+        …
+        "node4@xxx.xxx.xxx.xxx": [
+          "00000000-1fffffff"
         ]
+      },
+      "by_range": {
+        "00000000-1fffffff": [
+          "node1@xxx.xxx.xxx.xxx",
+          "node2@xxx.xxx.xxx.xxx",
+          "node3@xxx.xxx.xxx.xxx",
+          "node4@xxx.xxx.xxx.xxx"
         ],
-        "by_node": {
-            "node1@xxx.xxx.xxx.xxx": [
-                "00000000-7fffffff",
-                "80000000-ffffffff"
-            ],
-            "node2@yyy.yyy.yyy.yyy": [
-                "00000000-7fffffff",
-                "80000000-ffffffff"
-            ]
-        },
-        "by_range": {
-            "00000000-7fffffff": [
-                "node1@xxx.xxx.xxx.xxx",
-                "node2@yyy.yyy.yyy.yyy"
-            ],
-            "80000000-ffffffff": [
-                "node1@xxx.xxx.xxx.xxx",
-                "node2@yyy.yyy.yyy.yyy"
-            ]
-        }
+        …
+      }
     }
 
 Now you can ``PUT`` this new metadata:
@@ -307,40 +370,57 @@ Now you can ``PUT`` this new metadata:
 
     $ curl -X PUT $COUCH_URL:5986/_dbs/{name} -d '{...}'
 
-Replicating from old to new
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Monitor internal replication to ensure up-to-date shard(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because shards are just CouchDB databases, you can replicate them
-around. In order to make sure the new shard receives any updates the old
-one processed while you were updating its metadata, you should replicate
-the old shard to the new one:
+After you complete the previous step, as soon as CouchDB receives a
+write request for a shard on the target node, CouchDB will check if the
+target node's shard(s) are up to date. If it finds they are not up to
+date, it will trigger an internal replication job to complete this task.
+You can observe this happening by triggering a write to the database
+(update a document, or create a new one), while monitoring the
+``/_node/<nodename>/_system`` endpoint, which includes the
+``internal_replication_jobs`` metric.
 
-::
+Once this metric has returned to the baseline from before you wrote the
+document, or is zero (0., it is safe to proceed.
 
-    $ curl -X POST $COUCH_URL:5986/_replicate -d '{ \
-        "source": $OLD_SHARD_URL,
-        "target": $NEW_SHARD_URL
-        }'
+Clear the target node's maintenance mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This will bring the new shard up to date so that we can safely delete
-the old one.
+You can now let the node back into the rotation for load balancing by
+putting ``"false"`` to the maintenance mode configuration endpoint, just
+as in step 2.
 
-Delete old shard
-~~~~~~~~~~~~~~~~
+Verify that the node is in not maintenance mode by performing a ``GET
+/_up`` on that node's individual endpoint.
 
-You can remove the old shard either by deleting its file or by deleting
-it through the private 5986 port:
+Finally, check that your load balancer has returned the node to the pool
+of available backend nodes.
 
-.. code:: bash
+Update cluster metadata again to remove the source shard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # delete the file
-    rm $COUCH_DIR/data/shards/$OLD_SHARD
+Now, remove the source shard from the shard map the same way that you
+added the new target shard to the shard map in step 2. Be sure to add
+the ``["remove", <range>, <source-shard>]`` entry to the end of the
+changelog as well as modifying both the by_node and by_range sections of
+the database metadata document.
 
-    # OR delete the database
-    curl -X DELETE $COUCH_URL:5986/$OLD_SHARD
+Remove the shard and secondary index files from the source node
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Congratulations! You have manually added a new shard. By adding and
-removing database shards in this way, they can be moved between nodes.
+Finally, you can remove the source shard by deleting its file from the
+command line on the source host, along with any view shards:
+
+.. code::bash
+
+    $ rm <couch-dir>/data/shards/<range>/<dbname>.<datecode>.couch
+    $ rm -r <couch-dir>/data/.shards/<range>/<dbname>.<datecode>*
+
+Congratulations! You have moved a database shard. By adding and removing
+database shards in this way, you can change the cluster's shard layout,
+also known as a shard map.
 
 Specifying database placement
 -----------------------------
@@ -351,7 +431,7 @@ placement rules.
 First, each node must be labeled with a zone attribute. This defines
 which zone each node is in. You do this by editing the node’s document
 in the ``/nodes`` database, which is accessed through the “back-door”
-(5986) port. Add a key value pair of the form:
+(5986. port. Add a key value pair of the form:
 
 ::
 
@@ -361,49 +441,52 @@ Do this for all of the nodes in your cluster. For example:
 
 .. code:: bash
 
-    $ curl -X PUT $COUCH_URL:5986/_nodes/{name}@{address} \
+    $ curl -X PUT $COUCH_URL:5986/_nodes/<node-name> \
         -d '{ \
-            "_id": "{name}@{address}",
-            "_rev": "{rev}",
-            "zone": "{zone-name}"
+            "_id": "<node-name>",
+            "_rev": "<rev>",
+            "zone": "<zone-name>"
             }'
 
-In the config file (local.ini or default.ini) of each node, define a
+In the local config file (``local.ini``) of each node, define a
 consistent cluster-wide setting like:
 
 ::
 
     [cluster]
-    placement = {zone-name-1}:2,{zone-name-2}:1
+    placement = <zone-name-1>:2,<zone-name-2>:1
 
-In this example, it will ensure that two replicas for a shard will be
-hosted on nodes with the zone attribute set to ``{zone-name-1}`` and one
-replica will be hosted on a new with the zone attribute set to
-``{zone-name-2}``.
+In this example, CouchDB will ensure that two replicas for a shard will
+be hosted on nodes with the zone attribute set to ``<zone-name-1>`` and
+one replica will be hosted on a new with the zone attribute set to
+``<zone-name-2>``.
+
+This approach is flexible, since you can also specify zones on a per-
+database basis by specifying the placement setting as a query parameter
+when the database is created, using the same syntax as the ini file:
+
+.. code:: bash
+
+    curl -X PUT $COUCH_URL:5984/<dbname>?zone=<zone>
 
 Note that you can also use this system to ensure certain nodes in the
 cluster do not host any replicas for newly created databases, by giving
 them a zone attribute that does not appear in the ``[cluster]``
 placement string.
 
-You can also specify zones on a per-database basis by specifying the
-zone as a query parameter when the database is created:
+Resharding a database to a new q value
+--------------------------------------
 
-.. code:: bash
+The q value for a database can only be set when the database is created,
+precluding live resharding. Instead, to reshard a database, it must be
+regenerated. Here are the steps:
 
-    curl -X PUT $COUCH_URL:5984/{dbName}?zone={zone}
-
-Resharding
-----------
-
-Shard settings for databases can only be set when the database is
-created, precluding live resharding. Instead, to reshard a database, it
-must be regenerated. Here are the steps:
-
-1. Create a temporary database with the desired shard settings.
-2. Replicate the primary database to the temporary. Multiple
-   replications may be required if the primary database is under active
-   use.
+1. Create a temporary database with the desired shard settings, by
+   specifying the q value as a query parameter during the PUT
+   operation.
+2. Replicate the primary database to the temporary one. Multiple
+   replications may be required if the primary database is under
+   active use.
 3. Delete the primary database. **Make sure nobody is using it!**
 4. Recreate the primary database with the desired shard settings.
 5. Replicate the temporary back to the primary.
@@ -412,3 +495,7 @@ must be regenerated. Here are the steps:
 Once all steps have completed, the database can be used again. The
 cluster will create and distribute its shards according to placement
 rules automatically.
+
+Downtime can be avoided in production if the client application(s) can
+be instructed to use the new database instead of the old one, and a cut-
+over is performed during a very brief outage window.
