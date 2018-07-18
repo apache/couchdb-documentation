@@ -279,10 +279,6 @@ issues. These include:
   database and then access the view to force the corresponding view index to be
   updated.
 
-- Use a monitor with the :ref:`update notification <update-notifications>`
-  section of the CouchDB configuration file to monitor for changes to your
-  database, and trigger a view query to force the view to be updated.
-
 None of these can completely eliminate the need for the indexes to be rebuilt
 or updated when the view is accessed, but they may lessen the effects on
 end-users of the index update affecting the user experience.
