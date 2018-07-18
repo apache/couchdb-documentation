@@ -119,31 +119,16 @@ To close the shells, run in both:
 Make CouchDB use the open ports.
 --------------------------------
 
-Open ``sys.config``, on all nodes, and add ``inet_dist_listen_min, 9100`` and
-``inet_dist_listen_max, 9200`` like below:
+Open ``vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
+and ``-kernel inet_dist_listen_max 9200`` like below:
 
 .. code-block:: erlang
 
-    [
-        {lager, [
-            {error_logger_hwm, 1000},
-            {error_logger_redirect, true},
-            {handlers, [
-                {lager_console_backend, [debug, {
-                    lager_default_formatter,
-                    [
-                        date, " ", time,
-                        " [", severity, "] ",
-                        node, " ", pid, " ",
-                        message,
-                        "\n"
-                    ]
-                }]}
-            ]},
-            {inet_dist_listen_min, 9100},
-            {inet_dist_listen_max, 9200}
-        ]}
-    ].
+    -name ...
+    -setcookie ...
+    ...
+    -kernel inet_dist_listen_max 9100
+    -kernel inet_dist_listen_max 9200
 
 .. _cluster/setup/wizard:
 
