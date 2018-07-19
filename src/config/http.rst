@@ -22,6 +22,75 @@ CouchDB HTTP Server
 HTTP Server Options
 ===================
 
+.. config:section:: chttpd :: Clustered HTTP Server Options
+
+.. note::
+    In CouchDB 2.x, the `chttpd` section refers to the standard, clustered
+    port. All use of CouchDB, aside from a few specific maintenance tasks as
+    described in this documentation, should be performed over this port.
+
+        Defines the IP address by which the clustered port is available::
+
+            [chttpd]
+            bind_address = 127.0.0.1
+
+        To let CouchDB listen any available IP address, use `0.0.0.0`::
+
+            [chttpd]
+            bind_address = 0.0.0.0
+
+        For IPv6 support you need to set `::1` if you want to let CouchDB
+        listen correctly::
+
+            [chttpd]
+            bind_address = ::1
+
+        or `::` for any available::
+
+            [chttpd]
+            bind_address = ::
+
+    .. config:option:: port :: Listen port
+
+        Defines the port number to listen::
+
+            [chttpd]
+            port = 5984
+
+        To let CouchDB use any free port, set this option to `0`::
+
+            [chttpd]
+            port = 0
+
+    .. config:option:: prefer_minimal :: Sends minimal set of headers
+
+        If a request has the header `"Prefer": "return=minimal"`, CouchDB
+        will only send the headers that are listed for the `prefer_minimal`
+        configuration.::
+
+            [chttpd]
+            prefer_minimal = Cache-Control, Content-Length, Content-Range, Content-Type, ETag, Server, Transfer-Encoding, Vary
+
+        .. warning::
+            Removing the Server header from the settings will mean that
+            the CouchDB server header is replaced with the
+            MochiWeb server header.
+
+    .. config:option:: authentication_handlers :: Authentication handlers
+
+        List of authentication handlers used by CouchDB. You may
+        extend them via third-party plugins or remove some of them if you won't
+        let users to use one of provided methods::
+
+            [chttpd]
+            authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, default_authentication_handler}
+
+        - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
+        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
+        - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
+        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
+          Everlasting `Admin Party`!
+
 .. config:section:: httpd :: HTTP Server Options
 
 .. warning::
@@ -221,75 +290,6 @@ HTTP Server Options
            checked HTTP request bodies instead of document sizes. After the
            upgrade, it is advisable to review the usage of these configuration
            settings.
-
-.. config:section:: chttpd :: Clustered HTTP Server Options
-
-.. note::
-    In CouchDB 2.x, the `chttpd` section refers to the standard, clustered
-    port. All use of CouchDB, aside from a few specific maintenance tasks as
-    described in this documentation, should be performed over this port.
-
-        Defines the IP address by which the clustered port is available::
-
-            [chttpd]
-            bind_address = 127.0.0.1
-
-        To let CouchDB listen any available IP address, use `0.0.0.0`::
-
-            [chttpd]
-            bind_address = 0.0.0.0
-
-        For IPv6 support you need to set `::1` if you want to let CouchDB
-        listen correctly::
-
-            [chttpd]
-            bind_address = ::1
-
-        or `::` for any available::
-
-            [chttpd]
-            bind_address = ::
-
-    .. config:option:: port :: Listen port
-
-        Defines the port number to listen::
-
-            [chttpd]
-            port = 5984
-
-        To let CouchDB use any free port, set this option to `0`::
-
-            [chttpd]
-            port = 0
-
-    .. config:option:: prefer_minimal :: Sends minimal set of headers
-
-        If a request has the header `"Prefer": "return=minimal"`, CouchDB
-        will only send the headers that are listed for the `prefer_minimal`
-        configuration.::
-
-            [chttpd]
-            prefer_minimal = Cache-Control, Content-Length, Content-Range, Content-Type, ETag, Server, Transfer-Encoding, Vary
-
-        .. warning::
-            Removing the Server header from the settings will mean that
-            the CouchDB server header is replaced with the
-            MochiWeb server header.
-
-    .. config:option:: authentication_handlers :: Authentication handlers
-
-        List of authentication handlers used by CouchDB. You may
-        extend them via third-party plugins or remove some of them if you won't
-        let users to use one of provided methods::
-
-            [chttpd]
-            authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, default_authentication_handler}
-
-        - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
-        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
-        - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
-        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
-          Everlasting `Admin Party`!
 
 .. _config/ssl:
 
