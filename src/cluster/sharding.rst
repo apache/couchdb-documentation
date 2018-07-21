@@ -142,21 +142,19 @@ they must be moved manually.
 
 Moving shards between nodes in a cluster involves the following steps:
 
-0. :ref:`Ensure the target node has joined the cluster
-    <cluster/nodes/add>`.
-1. :ref:`Copy the shard(s) and any secondary index shard(s) onto the
-    target node <cluster/sharding/copying>`.
+0. :ref:`Ensure the target node has joined the cluster <cluster/nodes/add>`.
+1. Copy the shard(s) and any secondary
+   :ref:`index shard(s) onto the target node <cluster/sharding/copying>`.
 2. :ref:`Set the target node to maintenance mode <cluster/sharding/mm>`.
-3. :ref:`Update cluster metadata to reflect the new target shard(s)
-    <cluster/sharding/add-shard>`.
-4. :ref:`Monitor internal replication to ensure up-to-date shard(s)
-    <cluster/sharding/verify>`.
-5. :ref:`Clear the target node's maintenance mode
-    <cluster/sharding/mm-2>`.
-6. :ref:`Update cluster metadata again to remove the source shard(s)
-    <cluster/sharding/remove-shard>`
-7. :ref:`Remove the shard file(s) and secondary index file(s) from the
-    source node <cluster/sharding/remove-shard-files>`.
+3. Update cluster metadata
+   :ref:`to reflect the new target shard(s) <cluster/sharding/add-shard>`.
+4. Monitor internal replication
+   :ref:`to ensure up-to-date shard(s) <cluster/sharding/verify>`.
+5. :ref:`Clear the target node's maintenance mode <cluster/sharding/mm-2>`.
+6. Update cluster metadata again
+   :ref:`to remove the source shard(s)<cluster/sharding/remove-shard>`
+7. Remove the shard file(s) and secondary index file(s)
+   :ref:`from the source node <cluster/sharding/remove-shard-files>`.
 
 .. _cluster/sharding/copying:
 
