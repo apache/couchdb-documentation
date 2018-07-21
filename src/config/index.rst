@@ -32,4 +32,3 @@ Configuring CouchDB
     http-handlers
     services
     misc
-    proxying
