@@ -108,6 +108,10 @@ Features
   now return a ``202 Accepted`` code if possible, indicating that at least one node
   has written the database record to disk, and that other nodes will be updated as they
   return to an online state. This replaces the former ``500`` internal error.
+* :ghissue:`1136`, :ghissue:`1139`: When deleting a database in a cluster without
+  quorum, CouchDB will no longer throw a ``500`` error status, but a ``202`` as long as
+  at least one node records the deletion, or a ``200`` when all nodes respond. This fix
+  parallels the one made for :ghissue:`603`.
 * :ghissue:`745`: CouchDB no longer fails to complete replicating databases with
   large attachments. The fix for this issue included several related changes:
 
@@ -153,10 +157,6 @@ Features
   in a database by adding ``conflicts: true`` to a mango selector.
 * :ghissue:`1126`: When queried back after saving, replication documents no longer
   contain sensitive credential information (such as basic authenticataion headers).
-* :ghissue:`1136`, :ghissue:`1139`: When deleting a database in a cluster without
-  quorum, CouchDB will no longer throw a ``500`` error status, but a ``202`` as long as
-  at least one node records the deletion, or a ``200`` when all nodes respond. This fix
-  parallels the one made for :ghissue:`603`.
 * :ghissue:`1203`: The compaction daemon now has a snooze period, during which it waits
   to start the next compaction after finishing the previous one. This value is useful
   in ``couch_peruser`` setups, which can cause a CPU spike every ``check_interval``
