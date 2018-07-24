@@ -195,7 +195,7 @@ def whitespace_committee(file):
 
 
 @register_rule
-def terminal_emulator(file):
+def line_length_checker(file):
     """Use a modern max line length of 90 chars, as recommended by things like
     https://github.com/ambv/black and https://youtu.be/wf-BqAjZb8M?t=260 .
     """
