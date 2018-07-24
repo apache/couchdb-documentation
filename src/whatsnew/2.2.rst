@@ -98,7 +98,11 @@ Features
 
 * Much improved Fauxton functionality. Highlights include:
 
-  * TODO Fauxton improvement list
+  * Search support in the code editor
+  * Support for relative Fauxton URLs (*i.e.*, not always at ``/_utils``)
+  * Replication setup enhancements for various authentication mechanisms
+  * Fixes for IE10, IE11, and Edge (we hope...)
+  * Resolving conflicts of design documents is now allowed
 
 * :ghissue:`496`, :issue:`3287`: New pluggable storage engine framework has landed in
   CouchDB. This internal refactor makes it possible for CouchDB to use different backends
