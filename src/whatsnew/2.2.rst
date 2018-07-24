@@ -192,7 +192,7 @@ Features
   configuration options through the ``[httpsd] server_options`` ini file setting.
 * :ghissue:`1440`: CouchDB can now be configured to prevent non-admins from accessing
   the ``GET /_all_dbs`` method by specifying ``[chttpd] admin_only_all_dbs = true`` in
-  your local ini file(s).
+  your local ini file(s). The ``true`` setting will become default in future versions.
 * :ghissue:`1171`, :ghissue:`1445`: CouchDB can now be configured to use the internal
   Erlang MD5 hash function when not available in the external environment (e.g. FIPS
   enabled CentOS) at compile time with the ``configure`` flag ``--enable-md5``. Because
