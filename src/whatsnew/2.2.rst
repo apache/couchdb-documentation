@@ -31,7 +31,7 @@ Upgrade Notes
   is still ongoing and will be provided in a future release.
 
 * The CouchDB replication client can now use the ``/_session`` endpoint when
-  authenticating against remove CouchDB instances, improving performance since
+  authenticating against remote CouchDB instances, improving performance since
   re-authorization does not have to be performed with every request. Because of
   this performance improvement, it is recommended to increase the PBKDF2 work
   factor beyond the default ``10`` to a modern default such as ``10000``. This is done
