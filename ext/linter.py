@@ -195,9 +195,9 @@ def whitespace_committee(file):
 
 
 @register_rule
-def terminal_emulator(file):
-    """Terminal emulator has screen limited by 80 chars wide, so it ensures
-    that all the documentation content fits this limit.
+def line_length_checker(file):
+    """Use a modern max line length of 90 chars, as recommended by things like
+    https://github.com/ambv/black and https://youtu.be/wf-BqAjZb8M?t=260 .
     """
     in_code_block = False
     seen_emptyline = False
@@ -212,13 +212,13 @@ def terminal_emulator(file):
         line = line.rstrip()
 
         # We have to ignore stuff in code blocks since it's hard to keep it
-        # within 80 chars wide box.
+        # within 90 chars wide box.
         if line.strip().startswith('.. code') or line.endswith('::'):
             in_code_block = True
             continue
 
         # Check for line length unless we're not in code block
-        if len(line) > 80 and not in_code_block:
+        if len(line) > 90 and not in_code_block:
             if line.startswith('..'):
                 # Ignore long lines with external links
                 continue
@@ -228,7 +228,7 @@ def terminal_emulator(file):
                 # TODO: need to be more smart here
                 continue
 
-            error = (file, n + 1, 'too long ({0} > 80) line\n{1}\n'
+            error = (file, n + 1, 'too long ({0} > 90) line\n{1}\n'
                                   ''.format(len(line), line))
 
         # Empty lines are acts as separators for code block content
