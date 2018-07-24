@@ -208,7 +208,8 @@ Performance
   stemming operation only when necessary. This new algorithm can be disabled by
   setting the option ``[couchdb] stem_interactive_updates = false`` if necessary.
 * :ghissue:`1246`: CouchDB now checks for request authorization only once per each
-  request, improving the performance of any request that requires authorization.
+  database request, improving the performance of any request that requires
+  authorization.
 
 Bugfixes
 --------
