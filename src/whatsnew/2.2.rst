@@ -261,8 +261,8 @@ Bugfixes
   flag ``enable_database_recovery`` when set when compacting databases, rather than
   always retaining the old, renamed, uncompacted database file.
 * :ghissue:`1439`: The CouchDB setup wizard now correctly validates bind_addresses. It
-  also moves logging of internal wizard setup steps to the debug level from the notice
-  level.
+  also no longer logs credentials by moving logging of internal wizard setup steps to
+  the ``debug`` level from the ``notice`` level.
 
 Mango
 -----
