@@ -54,3 +54,7 @@ span.linkdescr {
 .rst-content .section ul li p:last-child {
     margin-bottom: 24px !important;
 }
+
+ul.simple {
+  margin-bottom: 2ex !important; /* dirty but necessary hack */
+}
