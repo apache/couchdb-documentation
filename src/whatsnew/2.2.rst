@@ -317,4 +317,4 @@ The 2.2.0 release also includes the following minor improvements:
 * :ghissue:`1296`: CouchDB by default now always invokes the SMP-enabled BEAM VM, even
   on single-processor machines. A future release of Erlang will remove the non-SMP BEAM
   VM entirely.
-* A pony! OK, no, not really. If you got this far, thank you for reading.
+* A pony! OK, no, not really. If you got this far...thank you for reading.
