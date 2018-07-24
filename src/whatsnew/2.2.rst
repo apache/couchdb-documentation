@@ -159,9 +159,11 @@ Features
   contain sensitive credential information (such as basic authenticataion headers).
 * :ghissue:`1203`: The compaction daemon now has a snooze period, during which it waits
   to start the next compaction after finishing the previous one. This value is useful
-  in ``couch_peruser`` setups, which can cause a CPU spike every ``check_interval``
-  seconds. The setting can be adjusted in your local ini file via
-  ``[compaction_daemon] snooze_period``. The current default is a 3 second pause.
+  in setups with many databases (e.g. with ``couch_peruser``) or many design docs, which
+  can cause a CPU spike every ``check_interval`` seconds. The setting can be adjusted in
+  your local ini file via ``[compaction_daemon] snooze_period``. The current default is
+  a 3 second pause. In addition, the ``check_interval`` has been raised from 300 seconds
+  to 3600 seconds.
 * :ghissue:`1309`, :ghissue:`1435`: CouchDB now reports the git sha at the time of build
   in the top-level ``GET /`` version string, in a new ``git_sha`` key. This can be used
   to help ensure an unmodified version of CouchDB has been built and is running on any
