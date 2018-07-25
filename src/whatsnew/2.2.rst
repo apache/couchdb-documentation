@@ -27,7 +27,7 @@ Upgrade Notes
 
 .. rst-class:: open
 
-* The minimum supported version of Erlang is now R17, not 16B03. Support for Erlang 21
+* The minimum supported version of Erlang is now 17, not R16B03. Support for Erlang 21
   is still ongoing and will be provided in a future release.
 
 * The CouchDB replication client can now use the ``/_session`` endpoint when
