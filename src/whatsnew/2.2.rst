@@ -81,6 +81,11 @@ Upgrade Notes
   ``couch_httpd_auth`` version, as ``couch_httpd`` is in the process of being deprecated
   completely.
 
+* :ghissue:`1476`, :ghissue:`1477`: The obsolete `update_notification` feature, which
+  was replaced by `/{db}/_changes` feeds c. CouchDB 1.2, has been completely removed.
+  This feature never worked in 2.0 for databases, only for shards, making it effectively
+  useless.
+
 Version 2.2.0
 =============
 
