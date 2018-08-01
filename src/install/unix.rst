@@ -30,6 +30,7 @@ to install CouchDB is to use the convenience binary packages:
 * Debian 9 (stretch)
 * Ubuntu 14.04 (trusty)
 * Ubuntu 16.04 (xenial)
+* Ubuntu 18.04 (bionic)
 
 The RedHat-style rpm packages and Debian-style deb pacakges will install
 CouchDB at ``/opt/couchdb`` and ensure CouchDB is run at system startup by the
@@ -41,6 +42,10 @@ for the admin user. Responses to these prompts may be pre-seeded using standard
 debconf tools. Further details are in the `README.Debian`_ file.
 
 .. _README.Debian: https://github.com/apache/couchdb-pkg/blob/master/debian/README.Debian
+
+Apache CouchDB also provides packages for the SpiderMonkey 1.8.5 JavaScript
+dependency, as the upstream packages for this shared library are starting to
+disappear or become unreliable.
 
 Enabling the Apache CouchDB package repository
 ----------------------------------------------
@@ -79,6 +84,7 @@ version:
 * Debian 9: ``stretch``
 * Ubuntu 14.04: ``trusty``
 * Ubuntu 16.04: ``xenial``
+* Ubuntu 18.04: ``bionic``
 
 Installing the Apache CouchDB packages
 --------------------------------------
