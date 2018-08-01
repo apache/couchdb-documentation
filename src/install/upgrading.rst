@@ -105,7 +105,8 @@ couchup makes it easy to migrate your CouchDB 1.x databases to CouchDB
 
 Once you have installed CouchDB 2.x, copy the .couch files from
 your 1.x installation (or, if you've upgraded in-place, do nothing),
-then use commands similar to the following:
+ensure the permissions on the files are set so the ``couchdb`` user has
+proper read/write access, then use commands similar to the following:
 
 .. code-block:: bash
 
