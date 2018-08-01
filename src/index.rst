@@ -22,7 +22,7 @@ Table of Contents
 =================
 .. toctree::
     :maxdepth: 3
-    :numbered: 3
+    :numbered:
 
     intro/index
     install/index
@@ -30,9 +30,9 @@ Table of Contents
     replication/index
     maintenance/index
     ddocs/index
-    externals
     query-server/index
     fauxton/index
+    best-practices/index
     api/index
     cluster/index
     json-structure

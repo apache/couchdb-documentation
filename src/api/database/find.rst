@@ -21,7 +21,7 @@
 
     Find documents using a declarative JSON querying syntax.
     Queries can use the built-in :ref:`_all_docs <api/db/all_docs>` index or
-    custom indices, specified using the :ref:`_index <api/db/find/index>`
+    custom indexes, specified using the :ref:`_index <api/db/find/index>`
     endpoint.
 
     :param db: Database name
@@ -179,7 +179,7 @@ documents whose "director" field has the value "Lars von Trier".
 .. code:: json
 
     "selector": {
-      "$text": "Bond"
+      "$title": "Live And Let Die"
     },
     "fields": [
       "title",
@@ -453,7 +453,7 @@ The list of combination operators:
 .. _find/and:
 
 **The** ``$and`` **operator**
-    ``$and`` operator used with full text indexing
+    ``$and`` operator used with two fields
 
 .. code:: json
 
@@ -461,7 +461,7 @@ The list of combination operators:
       "selector": {
         "$and": [
           {
-            "$text": "Schwarzenegger"
+            "$title": "Total Recall"
           },
           {
             "year": {

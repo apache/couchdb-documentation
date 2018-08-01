@@ -10,25 +10,21 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-.. _config:
+.. _best-practices:
 
-===================
-Configuring CouchDB
-===================
+==============
+Best Practices
+==============
+
+In this chapter, we present some of the best ways to use Apache CouchDB. These
+usage patterns reflect many years of real-world use. We hope that these will
+jump-start your next project, or improve the performance of your current
+system.
 
 .. toctree::
     :maxdepth: 2
 
-    intro
-    couchdb
-    cluster
-    couch-peruser
-    http
-    auth
-    compaction
-    logging
-    replicator
-    query-servers
-    http-handlers
-    services
-    misc
+    documents
+    forms
+    jsdevel
+    nginx

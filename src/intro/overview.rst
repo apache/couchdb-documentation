@@ -260,10 +260,9 @@ unreliable connections make sharing data difficult.
 
 The replication process is incremental. At the database level,
 replication only examines documents updated since the last replication.
-Then for each updated document, only fields and blobs that have changed are
-replicated across the network. If replication fails at any step, due to network
-problems or crash for example, the next replication restarts at the same
-document where it left off.
+If replication fails at any step, due to network
+problems or crash for example, the next replication restarts at the last
+checkpoint.
 
 Partial replicas can be created and maintained. Replication can be filtered
 by a JavaScript function, so that only particular documents or those meeting

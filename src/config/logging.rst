@@ -81,9 +81,7 @@ Logging options
 
         Available levels:
 
-        - ``debug``: Very informative and detailed debug logging. Includes HTTP
-          headers, external processes communications, authorization information
-          and more;
+        - ``debug``: Detailed debug logging.
         - ``info``: Informative logging. Includes HTTP requests headlines,
           startup of an external processes etc.
         - ``notice``

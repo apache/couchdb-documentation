@@ -153,7 +153,7 @@
 ``/db/_design_docs``
 ====================
 
-.. versionadded:: 2.1+
+.. versionadded:: 2.2
 
 .. http:get:: /{db}/_design_docs
     :synopsis: Returns a built-in view of all design documents in this database
@@ -322,6 +322,264 @@
                 }
             ],
             "offset" : 0
+        }
+
+Sending multiple queries to a database
+======================================
+
+.. versionadded:: 2.2
+
+.. http:post:: /{db}/_all_docs/queries
+    :synopsis: Returns results for the specified queries
+
+    Executes multiple specified built-in view queries of all documents in this
+    database. This enables you to request multiple queries in a single
+    request, in place of multiple :post:`/{db}/_all_docs` requests.
+
+    :param db: Database name
+
+    :<header Content-Type: - :mimetype:`application/json`
+    :<header Accept: - :mimetype:`application/json`
+
+    :<json queries: An array of query objects with fields for the
+        parameters of each individual view query to be executed. The field names
+        and their meaning are the same as the query parameters of a
+        regular :ref:`_all_docs request <api/db/all_docs>`.
+
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :>header ETag: Response signature
+    :>header Transfer-Encoding: ``chunked``
+
+    :>json array results: An array of result objects - one for each query. Each
+        result object contains the same fields as the response to a regular
+        :ref:`_all_docs request <api/db/all_docs>`.
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request
+    :code 401: Read permission required
+    :code 404: Specified database is missing
+    :code 500: Query execution error
+
+**Request**:
+
+.. code-block:: http
+
+    POST /db/_all_docs/queries HTTP/1.1
+    Content-Type: application/json
+    Accept: application/json
+    Host: localhost:5984
+
+    {
+        "queries": [
+            {
+                "keys": [
+                    "meatballs",
+                    "spaghetti"
+                ]
+            },
+            {
+                "limit": 3,
+                "skip": 2
+            }
+        ]
+    }
+
+**Response**:
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Type: application/json
+    Date: Wed, 20 Dec 2017 11:17:07 GMT
+    ETag: "1H8RGBCK3ABY6ACDM7ZSC30QK"
+    Server: CouchDB (Erlang/OTP)
+    Transfer-Encoding: chunked
+
+    {
+        "results" : [
+            {
+                "rows": [
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "meatballs",
+                        "value": 1
+                    },
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "spaghetti",
+                        "value": 1
+                    },
+                    {
+                        "id": "SpaghettiWithMeatballs",
+                        "key": "tomato sauce",
+                        "value": 1
+                    }
+                ],
+                "total_rows": 3
+            },
+            {
+                "offset" : 2,
+                "rows" : [
+                    {
+                        "id" : "Adukiandorangecasserole-microwave",
+                        "key" : "Aduki and orange casserole - microwave",
+                        "value" : [
+                            null,
+                            "Aduki and orange casserole - microwave"
+                        ]
+                    },
+                    {
+                        "id" : "Aioli-garlicmayonnaise",
+                        "key" : "Aioli - garlic mayonnaise",
+                        "value" : [
+                            null,
+                            "Aioli - garlic mayonnaise"
+                        ]
+                    },
+                    {
+                        "id" : "Alabamapeanutchicken",
+                        "key" : "Alabama peanut chicken",
+                        "value" : [
+                            null,
+                            "Alabama peanut chicken"
+                        ]
+                    }
+                ],
+                "total_rows" : 2667
+            }
+        ]
+    }
+
+.. Note::
+    The multiple queries are also supported in /db/_local_docs/queries and
+    /db/_design_docs/queries (similar to /db/_all_docs/queries).
+
+.. _api/db/bulk_get:
+
+==================
+``/db/_bulk_get``
+==================
+
+.. http:post:: /{db}/_bulk_get
+    :synopsis: Fetches several documents at the given revisions
+
+    This method can be called to query several documents in bulk. It is well
+    suited for fetching a specific revision of documents, as replicators do for
+    example, or for getting revision history.
+
+    :param db: Database name
+    :<header Accept: - :mimetype:`application/json`
+    :<header Content-Type: :mimetype:`application/json`
+    :query boolean revs: Give the revisions history
+    :<json array docs: List of document objects, with ``id``, and optionnaly
+      ``rev`` and ``atts_since``
+    :>header Content-Type: - :mimetype:`application/json`
+    :>json object results: the documents, with the additionnal ``_revisions``
+      property that lists the parent revisions if ``revs=true``
+    :code 200: Request completed successfully
+    :code 400: The request provided invalid JSON data or invalid query parameter
+    :code 401: Read permission required
+    :code 404: Invalid database name
+    :code 415: Bad :header:`Content-Type` value
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_bulk_get HTTP/1.1
+        Accept: application/json
+        Content-Type:application/json
+        Host: localhost:5984
+
+        {
+            "docs": [
+                {
+                    "id": "foo"
+                    "rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                },
+                {
+                    "id": "foo"
+                    "rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                },
+                {
+                    "id": "bar",
+                }
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Mon, 19 Mar 2018 15:27:34 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "results": [
+            {
+              "id": "foo",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bbb",
+                    "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                    "value": "this is foo",
+                    "_revisions": {
+                      "start": 4,
+                      "ids": [
+                        "753875d51501a6b1883a9d62b4d33f91",
+                        "efc54218773c6acd910e2e97fea2a608",
+                        "2ee767305024673cfb3f5af037cd2729",
+                        "4a7e4ae49c4366eaed8edeaea8f784ad"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "foo",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bbb",
+                    "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                    "value": "this is the first revision of foo",
+                    "_revisions": {
+                      "start": 1,
+                      "ids": [
+                        "4a7e4ae49c4366eaed8edeaea8f784ad"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "bar",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bar",
+                    "_rev": "2-9b71d36dfdd9b4815388eb91cc8fb61d",
+                    "baz": true,
+                    "_revisions": {
+                      "start": 2,
+                      "ids": [
+                        "9b71d36dfdd9b4815388eb91cc8fb61d",
+                        "309651b95df56d52658650fb64257b97"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
         }
 
 .. _api/db/bulk_docs:

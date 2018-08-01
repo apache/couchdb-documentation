@@ -401,11 +401,18 @@ the reduce view:
         return sum(values)
     }
 
-returns the total number of rows between the start and end key.
-So with ``startkey=["a","b"]&endkey=["b"]`` (which includes the first three of
-the above keys) the result would equal ``3``. The effect is to count rows.
-If you’d like to count rows without depending on the row value, you can switch
-on the ``rereduce`` parameter:
+or:
+
+.. code-block:: javascript
+
+    _sum
+
+which is a built-in CouchDB reduce function (the others are ``_count`` and
+``_stats``). ``_sum`` here returns the total number of rows between the start
+and end key. So with ``startkey=["a","b"]&endkey=["b"]`` (which includes the
+first three of the above keys) the result would equal ``3``. The effect is to
+count rows.  If you’d like to count rows without depending on the row value,
+you can switch on the ``rereduce`` parameter:
 
 .. code-block:: javascript
 
@@ -604,6 +611,42 @@ reduce function does not reduce its input values.
     :alt: An overflowing reduce index
 
     Figure 4. An overflowing reduce index
+
+One vs. Multiple Design Documents
+=================================
+
+A common question is: when should I split multiple views into multiple design
+documents, or keep them together?
+
+Each view you create corresponds to one B-tree. All views in a single design
+document will live in the same set of index files on disk (one file per
+database shard; in 2.0+ by default, 8 files per node).
+
+The most practical consideration for separating views into separate documents
+is how often you change those views. Views that change often, and are in the
+same design document as other views, will invalidate those other views'
+indexes when the design document is written, forcing them all to rebuild from
+scratch. Obviously you will want to avoid this in production!
+
+However, when you have multiple views with the same map function in the same
+design document, CouchDB will optimize and only calculate that map function
+once. This lets you have two views with different *reduce* functions (say,
+one with ``_sum`` and one with ``_stats``) but build only a single copy
+of the mapped index. It also saves disk space and the time to write multiple
+copies to disk.
+
+Another benefit of having multiple views in the same design document is that
+the index files can keep a single index of backwards references from docids
+to rows. CouchDB needs these "back refs" to invalidate rows in a view when a
+document is deleted (otherwise, a delete would force a total rebuild!)
+
+One other consideration is that each separate design document will spawn
+another (set of) ``couchjs`` processes to generate the view, one per shard.
+Depending on the number of cores on your server(s), this may be efficient
+(using all of the idle cores you have) or inefficient (overloading the CPU on
+your servers). The exact situation will depend on your deployment architecture.
+
+So, should you use one or multiple design documents? The choice is yours.
 
 Lessons Learned
 ===============
