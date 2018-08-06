@@ -201,11 +201,25 @@ HTTP Server Options
 
     .. config:option:: socket_options :: Socket Options
 
-        The socket options for the listening socket in CouchDB can be specified
-        as a list of tuples. For example::
+        The socket options for the listening socket in CouchDB, as set at the
+        beginning of ever request, can be specified as a list of tuples. For example::
 
             [httpd]
-            socket_options = [{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]
+            socket_options = [{sndbuf, 262144}, {nodelay, true}]
+
+        The options supported are a subset of full options supported by the
+        TCP/IP stack. A list of the supported options are provided in the
+        `Erlang inet`_ documentation.
+
+        .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
+
+    .. config:option:: server_options :: Socket Options
+
+        The server options for any socket in the mochiweb acceptor pool in CouchDB
+        can be specified as a list of tuples. For example::
+
+            [httpd]
+            server_options = [{recbuf, undefined}]
 
         The options supported are a subset of full options supported by the
         TCP/IP stack. A list of the supported options are provided in the
