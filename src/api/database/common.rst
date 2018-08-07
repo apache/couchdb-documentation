@@ -267,7 +267,7 @@
     :code 200: Database removed successfully
     :code 400: Invalid database name or forgotten document id by accident
     :code 401: CouchDB Server Administrator privileges required
-    :code 404: Database doesn't exist
+    :code 404: Database doesn't exist or invalid database name
 
     **Request**:
 
