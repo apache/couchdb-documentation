@@ -86,6 +86,8 @@ Upgrade Notes
   This feature never worked in 2.0 for databases, only for shards, making it effectively
   useless.
 
+.. _release/2.2.0:
+
 Version 2.2.0
 =============
 
