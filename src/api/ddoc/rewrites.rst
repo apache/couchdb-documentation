@@ -28,7 +28,7 @@
 Using a stringified function for ``rewrites``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    *The 'Rewrite using JS' feature was introduced in CouchDB 1.7*. When the
+    *The 'Rewrite using JS' feature was introduced in CouchDB 2.x*. When the
     ``rewrites`` field is a stringified function, the query server is used
     to pre-process and route requests.
 
