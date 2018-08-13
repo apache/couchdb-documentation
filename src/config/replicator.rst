@@ -95,6 +95,7 @@ Replicator Database Configuration
     .. config:option:: connection_timeout
 
         HTTP connection timeout per replication.
+        This is divided by three (3) when the replicator makes changes feed requests.
         Even for very fast/reliable networks it might need to be increased if
         a remote database is too busy::
 
