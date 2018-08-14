@@ -83,7 +83,7 @@ Fauxton may not succeed.
 
 
 Reverse proxying + load balancing for CouchDB clusters
-=====================================================
+======================================================
 
 Here's a basic excerpt from a Caddyfile in
 ``/<path>/<to>/<site>/Caddyfile``. This will proxy and evenly distribute all
@@ -150,7 +150,7 @@ For a better solution, see :ref:`api/auth/proxy`.
 
 
 SSL/TLS with Caddy
-==============
+==================
 
 Caddy is http-by-default, and will automatically acquire, install, activate and,
 when necessary, renew a trusted SSL certificate for you - all in the background.
