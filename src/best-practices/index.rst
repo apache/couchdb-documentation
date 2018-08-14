@@ -27,4 +27,4 @@ system.
     documents
     forms
     jsdevel
-    nginx
+    reverse-proxies
