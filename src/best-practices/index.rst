@@ -28,3 +28,4 @@ system.
     forms
     jsdevel
     nginx
+    caddy
