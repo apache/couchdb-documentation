@@ -49,7 +49,7 @@ requests from ``http(s)://domain.com/...`` to ``http://localhost:5984/...``
     }
 
 Note that, because Caddy is https-by-default, you must explicitly include the
-``http://`` protocol in the site address if you do NOT want prevent Caddy
+``http://`` protocol in the site address if you do NOT want Caddy
 to automatically acquire and install an SSL certificate and begin accepting
 ``https`` connections on port 443.
 
