@@ -184,9 +184,6 @@ as ``http(s)://domain.com/couchdb/db1/doc1`` are proxied to
 
     }
 
-Note that in the above configuration, the *Verify Installation* link in
-Fauxton may not succeed.
-
 Reverse proxying + load balancing for CouchDB clusters
 ------------------------------------------------------
 
