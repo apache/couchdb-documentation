@@ -73,9 +73,6 @@ as ``http://domain.com/couchdb/db1/doc1`` are proxied to
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-Note that in the above configuration, the *Verify Installation* link in
-Fauxton may not succeed.
-
 Authentication with nginx as a reverse proxy
 --------------------------------------------
 
