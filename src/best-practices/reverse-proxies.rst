@@ -207,7 +207,7 @@ comes back online.
             health_check /_up
             health_check_duration 5s
             try_interval 500ms
-            timeout 1h
+            keepalive 0
             transparent
         }
 
