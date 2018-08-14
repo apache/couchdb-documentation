@@ -23,7 +23,7 @@ for configuration and montioring capabilities, as well as overall performance.
 CouchDB's sample haproxy configuration is present in the `code repository`_ and
 release tarball as ``rel/haproxy.cfg``.
 
-However, there are a suitable alternatives. Below are examples for
+However, there are suitable alternatives. Below are examples for
 configuring nginx and Caddy web-servers appropriately.
 
 .. _HAProxy: http://haproxy.org/
