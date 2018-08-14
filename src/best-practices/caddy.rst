@@ -48,6 +48,16 @@ requests from ``http(s)://domain.com/...`` to ``http://localhost:5984/...``
 
     }
 
+.. Note::
+    The ``transparent`` preset in the ``proxy`` directive is shorthand for:
+
+    .. code-block:: text
+
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-For {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+
 Note that, because Caddy is https-by-default, you must explicitly include the
 ``http://`` protocol in the site address if you do NOT want Caddy
 to automatically acquire and install an SSL certificate and begin accepting
