@@ -247,7 +247,7 @@ For a better solution, see :ref:`api/auth/proxy`.
 SSL/TLS with Caddy
 ------------------
 
-Caddy is http-by-default, and will automatically acquire, install, activate and,
+Caddy is https-by-default, and will automatically acquire, install, activate and,
 when necessary, renew a trusted SSL certificate for you - all in the background.
 Certificates are issued by the LetsEncrypt certificate authority.
 
