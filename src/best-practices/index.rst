@@ -27,5 +27,4 @@ system.
     documents
     forms
     jsdevel
-    nginx
-    caddy
+    reverse-proxies
