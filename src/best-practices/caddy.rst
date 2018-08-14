@@ -65,7 +65,6 @@ as ``http(s)://domain.com/couchdb/db1/doc1`` are proxied to
 
 .. code-block:: text
 
-
     domain.com {
 
         import /path/to/other/config.caddy # logging, error handling etc.
@@ -77,10 +76,8 @@ as ``http(s)://domain.com/couchdb/db1/doc1`` are proxied to
 
     }
 
-
 Note that in the above configuration, the *Verify Installation* link in
 Fauxton may not succeed.
-
 
 Reverse proxying + load balancing for CouchDB clusters
 ======================================================
@@ -95,7 +92,6 @@ if a node goes down, Caddy will avoid proxying requests to that node until it
 comes back online.
 
 .. code-block:: text
-
 
     domain.com {
 
@@ -112,7 +108,6 @@ comes back online.
 
     }
 
-
 Note that in the above configuration, the *Verify Installation* link in
 Fauxton may not succeed.
 
@@ -123,7 +118,6 @@ Here's a sample config setting with basic authentication enabled, placing
 CouchDB in the ``/couchdb`` subdirectory:
 
 .. code-block:: text
-
 
     domain.com {
 
@@ -147,7 +141,6 @@ instead, e.g. ``{$COUCH_PW}``.
 This setup leans entirely on Caddy performing authorization, and forwarding
 requests to CouchDB with no authentication (with CouchDB in Admin Party mode).
 For a better solution, see :ref:`api/auth/proxy`.
-
 
 SSL/TLS with Caddy
 ==================
