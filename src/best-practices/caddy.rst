@@ -118,9 +118,6 @@ comes back online.
 
     }
 
-Note that in the above configuration, the *Verify Installation* link in
-Fauxton may not succeed.
-
 Authentication with Caddy as a reverse proxy
 ============================================
 
