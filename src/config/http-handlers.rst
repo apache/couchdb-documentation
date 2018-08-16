@@ -80,13 +80,6 @@ Global HTTP Handlers
             [httpd_global_handlers]
             _replicate = {couch_replicator_httpd, handle_req}
 
-    .. config:option:: _restart
-
-        Provides an API to restart CouchDB (only on the node-local port).
-
-            [httpd_global_handlers]
-            _restart = {couch_httpd_misc_handlers, handle_restart_req}
-
     .. config:option:: _session
 
         Provides a resource with information about the current user's session::
