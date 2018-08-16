@@ -229,4 +229,4 @@ Replicator Database Configuration
           auth_plugins = couch_replicator_auth_session,couch_replicator_auth_noop
 
         .. note::
-             In version 2.2, the session plugin is considered experimental and is not enabled by default.
+             In version 2.2.0, the session plugin is enabled by default and may break replication with peers using `require_valid_user`.
