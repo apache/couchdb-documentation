@@ -129,7 +129,6 @@ interact with the local node's configuration.
                 "_all_dbs": "{couch_httpd_misc_handlers, handle_all_dbs_req}",
                 "_config": "{couch_httpd_misc_handlers, handle_config_req}",
                 "_replicate": "{couch_httpd_misc_handlers, handle_replicate_req}",
-                "_restart": "{couch_httpd_misc_handlers, handle_restart_req}",
                 "_session": "{couch_httpd_auth, handle_session_req}",
                 "_stats": "{couch_httpd_stats_handlers, handle_stats_req}",
                 "_utils": "{couch_httpd_misc_handlers, handle_utils_dir_req, \"/usr/share/couchdb/www\"}",
