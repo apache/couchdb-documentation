@@ -130,7 +130,7 @@ HTTP Server Options
         milliseconds (60000 by default)::
 
             [httpd]
-            changes_feed = 60000 ; 60 seconds
+            changes_timeout = 60000 ; 60 seconds
 
     .. config:option:: config_whitelist :: Config options while list
 
