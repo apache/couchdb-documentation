@@ -23,28 +23,28 @@ Query Servers Definition
 
 .. config:section:: query_servers :: Query Servers Definition
 
-    .. versionchanged:: 1.2: Added CoffeeScript query server
+    .. versionchanged:: 2.3 Changed configuration method for Query Servers
+      and Native Query Servers.
 
     CouchDB delegates computation of :ref:`design documents <ddocs>` functions
     to external query servers. The external query server is a special OS
     process which communicates with CouchDB over standard input/output using a
     very simple line-based protocol with JSON messages.
 
-    The external query server may be defined in configuration file following
-    next pattern::
+    An external query server may be defined with environment variables following
+    this pattern::
 
-        [query_servers]
-        LANGUAGE = PATH ARGS
+        COUCHDB_QUERY_SERVER_LANGUAGE="PATH ARGS"
 
     Where:
 
     - ``LANGUAGE``: is a programming language which code this query server may
-      execute. For instance, there are `python`, `ruby`, `clojure` and other
-      query servers in wild. This value is also used for `ddoc` field
-      ``language`` to determine which query server processes the functions.
+      execute. For instance, there are `PYTHON`, `RUBY`, `CLOJURE` and other
+      query servers in the wild. This value in *lowercase* is also used for `ddoc`
+      field ``language`` to determine which query server processes the functions.
 
       Note, that you may set up multiple query servers for the same programming
-      language, but you have to name them different (like `python-dev` etc.).
+      language, but you have to name them differently (like `PYTHONDEV` etc.).
 
     - ``PATH``: is a system path to the executable binary program that runs the
       query server.
@@ -53,26 +53,29 @@ Query Servers Definition
       for the executable ``PATH``.
 
     The default query server is written in :ref:`JavaScript <query-server/js>`,
-    running via `Mozilla SpiderMonkey`_::
+    running via `Mozilla SpiderMonkey`_. It requires no special environment
+    settings to enable, but is the equivalent of these two variables::
 
-        [query_servers]
-        javascript = /usr/bin/couchjs /usr/share/couchdb/server/main.js
-        coffeescript = /usr/bin/couchjs /usr/share/couchdb/server/main-coffee.js
+        COUCHDB_QUERY_SERVER_JAVASCRIPT="/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main.js"
+        COUCHDB_QUERY_SERVER_COFFEESCRIPT="/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main-coffee.js"
 
     By default, ``couchjs`` limits the max runtime allocation to 64MiB.
     If you run into out of memory issue in your ddoc functions,
-    you can adjust the memory limitation::
+    you can adjust the memory limitation (here, increasing to 512 MiB)::
 
-        [query_servers]
-        javascript = /usr/bin/couchjs -S 536870912 /usr/share/couchdb/server/main.js ; 512 MiB
+        COUCHDB_QUERY_SERVER_JAVASCRIPT="/usr/bin/couchjs -S 536870912 /usr/share/server/main.js"
 
     For more info about the available options, please consult ``couchjs -h``.
 
     .. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
 
     .. seealso::
-        :ref:`Native Erlang Query Server <config/native_query_servers>` that
-        allows to process Erlang `ddocs` and runs within CouchDB bypassing
+        The :ref:`Mango Query Server <api/db/_find>` is a declarative language
+        that requires *no programming*, allowing for easier indexing and finding
+        of data in documents.
+
+        The :ref:`Native Erlang Query Server <config/native_query_servers>`
+        allows running `ddocs` written in Erlang natively, bypassing
         stdio communication and JSON serialization/deserialization round trip
         overhead.
 
@@ -160,7 +163,7 @@ Native Erlang Query Server
     ``[native_query_servers]`` section::
 
         [native_query_servers]
-        erlang = {couch_native_process, start_link, []}
+        enable_erlang_query_server = true
 
     To see these changes you will also need to restart the server.
 
