@@ -19,6 +19,10 @@
 .. http:post:: /{db}/_purge
     :synopsis: Purges documents entirely from database
 
+    .. warning::
+        Planned for future development - Not implemented in vesrion 2.x to 2.2.0
+
+
     A database purge permanently removes the references to documents
     in the database. Normal deletion of a document within CouchDB does not
     remove the document from the database, instead, the document is marked as
