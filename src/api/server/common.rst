@@ -42,20 +42,25 @@
     .. code-block:: http
 
         HTTP/1.1 200 OK
-        Cache-Control: must-revalidate
-        Content-Length: 179
-        Content-Type: application/json
-        Date: Sat, 10 Aug 2013 06:33:33 GMT
-        Server: CouchDB (Erlang/OTP)
+        Content-Length : 141
+        Content-Type : application/json
+        Date : Fri, 21 Sep 2018 20:30:42 GMT
+        Server : CouchDB/2.2.0 (Erlang OTP/20)
+        X-Couch-Request-Id : 4f4b22e5ed
+        X-Couchdb-Body-Time : 0
+        Cache-Control : must-revalidate
 
         {
             "couchdb": "Welcome",
-            "uuid": "85fb71bf700c17267fef77535820e371",
+            "version": "2.2.0",
+            "git_sha": "2a16ec4",
+            "features": [
+                "pluggable-storage-engines",
+                "scheduler"
+            ],
             "vendor": {
-                "name": "The Apache Software Foundation",
-                "version": "1.3.1"
-            },
-            "version": "1.3.1"
+                "name": "FreeBSD"
+            }
         }
 
 .. _api/server/active_tasks:
