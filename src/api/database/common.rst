@@ -154,6 +154,9 @@
     :param db: Database name
     :query integer q: Shards, aka the number of range partitions. Default is
       8, unless overridden in the :config:option:`cluster config <cluster/q>`.
+    :query boolean partitioned: Specifies whether the database
+                                supports :ref:`user-defined
+                                partitions <api/db/_partition>`. Default is ``false``.
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`

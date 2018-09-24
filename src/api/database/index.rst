@@ -43,4 +43,5 @@ Where ``db`` is the name of any database.
     changes
     compact
     security
+    partitions
     misc
