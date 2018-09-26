@@ -143,7 +143,7 @@
     :>json boolean ok: Operation status
     :>json string rev: Revision MVCC token
 
-    :code 200: Attachment successfully removed
+    :code 201: Attachment created and stored on disk
     :code 202: Request was accepted, but changes are not yet stored on disk
     :code 400: Invalid request body or parameters
     :code 401: Write privileges required
