@@ -41,10 +41,15 @@ The reply should look something like:
 
     {
         "couchdb": "Welcome",
+        "version": "2.2.0",
+        "git_sha":"2a16ec4",
+        "features": [
+            "pluggable-storage-engines",
+            "scheduler"
+        ],
         "vendor": {
             "name": "The Apache Software Foundation"
-        },
-        "version": "2.0.0"
+        }
     }
 
 Not all that spectacular. CouchDB is saying "hello" with the running version
@@ -58,7 +63,7 @@ All we added to the previous request is the _all_dbs string.
 
 The response should look like::
 
-    ["_replicator","_users"]
+    []
 
 Oh, that's right, we didn't create any databases yet! All we see is an empty
 list.
@@ -335,7 +340,7 @@ Edit the map function, on the right, so that it looks like the following:
 This is a JavaScript function that CouchDB runs for each of our documents as
 it computes the view. We'll leave the reduce function blank for the time being.
 
-Click "Run" and you should see result rows,
+Click "Save Document and then Build Index" and you should see result rows,
 with the various items sorted by price. This map function could be even more
 useful if it grouped the items by type so that all the prices for bananas were
 next to each other in the result set. CouchDB's key sorting system allows any
