@@ -69,3 +69,14 @@ Cluster Options
 
     .. seealso::
         :ref:`cluster/databases/placement`
+
+    .. config:option:: seedlist
+
+    An optional, comma-delimited list of node names that this node should
+    contact in order to join a cluster. If a seedlist is configured the ``_up``
+    endpoint will return a 404 until the node has successfully contacted at
+    least one of the members of the seedlist and replicated an up-to-date copy
+    of the ``_nodes``, ``_dbs``, and ``_users`` system databases.
+
+        [cluster]
+        seedlist = couchdb@node1.example.com,couchdb@node2.example.com
