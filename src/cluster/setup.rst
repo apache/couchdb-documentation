@@ -48,13 +48,20 @@ your firewalls and it is time to test it.
 Configure and Test the Communication with Erlang
 ================================================
 
-Make CouchDB use correct IP|FQDN and the open ports.
+Make CouchDB use correct IP|FQDN and the open ports
 ----------------------------------------------------
 
 In file ``etc/vm.args`` change the line ``-name couchdb@127.0.0.1`` to
-``-name couchdb@<this-nodes-ip-address|FQDN>`` which defines the name of the node.
-For clustered setup, each node in system must have a unique name. Can also be a
-valid FQDN not necessarily the IP.
+``-name couchdb@<public-ip-address|fully-qualified-domain-name>`` which defines
+the name of the node. Each node must have an identifier that allows remote
+systems to talk to it. The node name is of the form
+``<name>@<public-ip-address|fully-qualified-domain-name>``. The name portion can
+be couchdb on all nodes, unless you are running more than 1 CouchDB node on the
+same server with the same IP address or domain name. In that case, we recommend
+names of ``couchdb1``, ``couchdb2``, etc. The second portion of the node name
+must be an identifier by which other nodes can access this node -- either the
+node's fully qualified domain name (FQDN) or the node's IP address. The FQDN is
+preferred so that you can renumber the node without disruption to the cluster.
 
 Open ``vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
 and ``-kernel inet_dist_listen_max 9200`` like below:
