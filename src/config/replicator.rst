@@ -48,7 +48,7 @@ Replicator Database Configuration
         .. versionadded:: 2.1
 
         Scheduling interval in milliseconds.
-        During each reschedule cycle scheduler might start or stop up to ``max_churn``
+        During each reschedule cycle the scheduler might start or stop up to ``max_churn``
         number of jobs::
 
              [replicator]
