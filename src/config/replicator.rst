@@ -59,7 +59,7 @@ Replicator Database Configuration
         .. versionadded:: 2.1
 
         Maximum number of replication jobs to start and stop during rescheduling.
-        This parameter along with ``interval`` defines the rate of job replacement.
+        This parameter, along with ``interval``, defines the rate of job replacement.
         During startup, however a much larger number of jobs could be started
         (up to ``max_jobs``) in a short period of time::
 
