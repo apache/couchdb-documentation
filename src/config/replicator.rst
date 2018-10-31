@@ -28,7 +28,7 @@ Replicator Database Configuration
         .. versionadded:: 2.1
 
         Number of actively running replications.
-        This value represent the threshold to trigger the automatic replication
+        This value represents the threshold to trigger the automatic replication
         scheduler.
         The system will check every ``interval`` milliseconds how many replication
         jobs are running, and if there are more than ``max_jobs`` active jobs,
