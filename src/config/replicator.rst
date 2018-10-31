@@ -34,7 +34,7 @@ Replicator Database Configuration
         jobs are running, and if there are more than ``max_jobs`` active jobs,
         the scheduler will pause-and-restart up to ``max_churn`` jobs in the
         scheduler queue.
-        Making this  valute too high could cause performance issues, while making
+        Making this value too high could cause performance issues, while making
         it too low could mean replications jobs might not have enough time to make
         progress before getting unscheduled again.
         This parameter can be adjusted at runtime and will take effect during next
