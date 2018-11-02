@@ -32,7 +32,7 @@ to install CouchDB is to use the convenience binary packages:
 * Ubuntu 16.04 (xenial)
 * Ubuntu 18.04 (bionic)
 
-The RedHat-style rpm packages and Debian-style deb pacakges will install
+The RedHat-style rpm packages and Debian-style deb packages will install
 CouchDB at ``/opt/couchdb`` and ensure CouchDB is run at system startup by the
 appropriate init subsystem (SysV-style initd, upstart, systemd).
 
