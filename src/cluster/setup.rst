@@ -45,6 +45,35 @@ possible to force an Erlang application to use a specific port rage.
 This documentation will use the range TCP ``9100-9200``. Open up those ports in
 your firewalls and it is time to test it.
 
+Configure and Test the Communication with Erlang
+================================================
+
+Make CouchDB use correct IP|FQDN and the open ports
+----------------------------------------------------
+
+In file ``etc/vm.args`` change the line ``-name couchdb@127.0.0.1`` to
+``-name couchdb@<public-ip-address|fully-qualified-domain-name>`` which defines
+the name of the node. Each node must have an identifier that allows remote
+systems to talk to it. The node name is of the form
+``<name>@<public-ip-address|fully-qualified-domain-name>``. The name portion can
+be couchdb on all nodes, unless you are running more than 1 CouchDB node on the
+same server with the same IP address or domain name. In that case, we recommend
+names of ``couchdb1``, ``couchdb2``, etc. The second portion of the node name
+must be an identifier by which other nodes can access this node -- either the
+node's fully qualified domain name (FQDN) or the node's IP address. The FQDN is
+preferred so that you can renumber the node without disruption to the cluster.
+
+Open ``vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
+and ``-kernel inet_dist_listen_max 9200`` like below:
+
+.. code-block:: erlang
+
+    -name ...
+    -setcookie ...
+    ...
+    -kernel inet_dist_listen_min 9100
+    -kernel inet_dist_listen_max 9200
+
 You need 2 servers with working hostnames. Let us call them server1 and server2.
 
 On server1:
@@ -116,20 +145,6 @@ To close the shells, run in both:
 
     q().
 
-Make CouchDB use the open ports.
---------------------------------
-
-Open ``vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
-and ``-kernel inet_dist_listen_max 9200`` like below:
-
-.. code-block:: erlang
-
-    -name ...
-    -setcookie ...
-    ...
-    -kernel inet_dist_listen_max 9100
-    -kernel inet_dist_listen_max 9200
-
 .. _cluster/setup/wizard:
 
 The Cluster Setup Wizard
@@ -148,19 +163,14 @@ then to add nodes by IP address. To get more nodes, go through the same install
 procedure on other machines. Be sure to specify the total number of nodes you
 expect to add to the cluster before adding nodes.
 
-In file etc/vm.args change the the line ``-name couchdb@127.0.0.1`` to
-``-name couchdb@<this-nodes-ip-address| FQDN>`` for each node which defines
-the node and must be seperate for each node. For clustered setup, each node in
-system must have a unique name. Can also be a valid FQDN not necessarily the IP.
-
 Before you can add nodes to form a cluster, you must have them listening on an
 IP address accessible from the other nodes in the cluster.
 Do this once per node:
 
 .. code-block:: bash
 
-    curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/admins/admin -d '"password"'
-    curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address>/_config/chttpd/bind_address -d '"0.0.0.0"'
+    curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address|FQDN>/_config/admins/admin -d '"password"'
+    curl -X PUT http://127.0.0.1:5984/_node/couchdb@<this-nodes-ip-address|FQDN>/_config/chttpd/bind_address -d '"0.0.0.0"'
 
 Now you can enter their IP addresses in the setup screen on your first
 node. And make sure to put in the admin username and password. And use

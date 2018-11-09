@@ -464,7 +464,7 @@ HTML page:
             }
         });
         send('<html><body><table>');
-        send('<tr><th>ID</th><th>Key</th><th>Value</th></tr>')
+        send('<tr><th>ID</th><th>Key</th><th>Value</th></tr>');
         while(row = getRow()){
             send(''.concat(
                 '<tr>',
