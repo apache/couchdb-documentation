@@ -127,8 +127,11 @@ The replication job will also appear in
       }
 
 ``_scheduler/jobs`` shows more information such as a detailed history of
-state changes. However if replication has completed or has failed to
-start it would not appear here, only in ``_scheduler/docs``.
+state changes. If a replication backed by a document has not yet started,
+has failed or is completed information about its state can only be found
+in ``_scheduler/docs``. Keep in mind that some replication documents could be
+invalid and could not become a replication job. Others might be delayed
+because they are fetching say the filter code from a slow source database.
 
 If there is an error, for example if the source database is missing, the
 replication job will crash and retry after a wait period. Each
