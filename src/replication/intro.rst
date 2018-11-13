@@ -30,18 +30,14 @@ databases are also deleted on the destination database (if they even existed).
 Transient and Persistant Replication
 ====================================
 
-There are two different kinds of setting up a replication. The first one that was
-introduced into CouchDB leads do a replication that could be called `trancient`.
-Trancient means that there are no documents backing up the replication. So after a
-restart of the CouchDB server the replication will disapear. Later in time the
-:ref:`_replicator <replicator>` database was introduced which keeps documents
+There are two different ways to set up a replication. The first one that was
+introduced into CouchDB leads do a replication that could be called `transient`.
+Transient means that there are no documents backing up the replication. So after a
+restart of the CouchDB server the replication will disapear. Later, the
+:ref:`_replicator <replicator>` database was introduced, which keeps documents
 containing your replication parameter. Such a replication can be called `persisent`.
-Trancient and persistent replications can have different
-:ref:`replication states <replicator/states>`.
-
-The reason there are two is because transient ones where implemented first and
-were kept for backwards compatibility and are actually useful in some cases when
-programmatically creating replication jobs.
+Trancient replications were kept for backward compatibility. Both replications can
+have different :ref:`replication states <replicator/states>`.
 
 Triggering, Stopping and Monitoring Replications
 ================================================
@@ -58,7 +54,7 @@ If a replication is currently performed its status can be inspected through the
 active tasks API (see :ref:`api/server/active_tasks`, :ref:`replication-status`
 and :ref:`api/server/_scheduler/jobs` ).
 
-For document based replications :ref:`api/server/_scheduler/docs` can be used to
+For document based-replications, :ref:`api/server/_scheduler/docs` can be used to
 get a complete state summary. This API is preferred as it will show the state of the
 replication document before it becomes a replication job.
 For transient replications there is no way to query their state when the job is
