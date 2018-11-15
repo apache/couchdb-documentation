@@ -154,7 +154,9 @@
     :param db: Database name
     :query integer q: Shards, aka the number of range partitions. Default is
       8, unless overridden in the :config:option:`cluster config <cluster/q>`.
-    :query integer n: Replicas. The number of copies of the database in the cluster. The default is 3, unless overridden in the :config:option:`cluster config <cluster/n>` .
+    :query integer n: Replicas. The number of copies of the database in the
+      cluster. The default is 3, unless overridden in the
+      :config:option:`cluster config <cluster/n>` .
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
