@@ -32,8 +32,9 @@ Server Administrators
     stored in the ``_users`` database, but in the last ``[admins]`` section
     that CouchDB finds when loading its ini files. See :config:intro for details
     on config file order and behaviour. This file (which could be something like
-    ``etc/local.ini`` or ``etc/local.d/10-admins.ini``) should be appropriately
-    secured and readable only by system administrators::
+    ``etc/local.ini`` or ``etc/local.d/10-admins.ini`` on a Debian/Ubuntu system
+    installed from packages) should be appropriately secured and readable only
+    by system administrators::
 
         [admins]
         ;admin = mysecretpassword
