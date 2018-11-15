@@ -429,10 +429,6 @@ the `xml` provider in our function needs more care to handle nested objects
 correctly, and keys with invalid characters, but you've got the idea!
 
 .. seealso::
-    CouchDB Wiki:
-        - `Showing Documents
-          <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Showing_Documents>`_
-
     CouchDB Guide:
         - `Show Functions <http://guide.couchdb.org/editions/1/en/show.html>`_
 
@@ -486,10 +482,6 @@ be a string when used inside a list function, so you'll need to use
 returning it.
 
 .. seealso::
-    CouchDB Wiki:
-        - `Listing Views with CouchDB 0.10 and later
-          <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Listing_Views_with_CouchDB_0.10_and_later>`_
-
     CouchDB Guide:
         - `Transforming Views with List Functions
           <http://guide.couchdb.org/draft/transforming.html>`_
@@ -540,11 +532,6 @@ A basic example that demonstrates all use-cases of update handlers:
         doc['edited_by'] = req['userCtx']['name']
         return [doc, 'Edited World!']
     }
-
-.. seealso::
-    CouchDB Wiki:
-        - `Document Update Handlers
-          <http://wiki.apache.org/couchdb/Document_Update_Handlers>`_
 
 .. _filterfun:
 
@@ -683,10 +670,6 @@ parameters to the :ref:`changes feed<changes>`::
     CouchDB Guide:
         - `Guide to filter change notification
           <http://guide.couchdb.org/draft/notifications.html#filters>`_
-
-    CouchDB Wiki:
-        - `Filtered replication
-          <http://wiki.apache.org/couchdb/Replication#Filtered_Replication>`_
 
 .. _vdufun:
 
@@ -871,7 +854,3 @@ modified by a user with the ``_admin`` role:
     CouchDB Guide:
         - `Validation Functions
           <http://guide.couchdb.org/editions/1/en/validation.html>`_
-
-    CouchDB Wiki:
-        - `Document Update Validation
-          <http://wiki.apache.org/couchdb/Document_Update_Validation>`_
