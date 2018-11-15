@@ -1891,7 +1891,6 @@ Reference
 
 * `Refuge RCouch wiki <https://github.com/refuge/rcouch/wiki/Replication-Algorithm>`_
 * `CouchBase Lite IOS wiki <https://github.com/couchbase/couchbase-lite-ios/wiki/Replication-Algorithm>`_
-* `CouchDB documentation <http://wiki.apache.org/couchdb/Replication>`_
 
 .. _ECMA-262: http://www.ecma-international.org/publications/files/ecma-st/ECMA-262.pdf
 .. _MVCC: http://en.wikipedia.org/wiki/Multiversion_concurrency_control

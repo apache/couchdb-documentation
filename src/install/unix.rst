@@ -151,10 +151,6 @@ Python and Sphinx are only required for building the online documentation.
 Documentation build can be disabled by adding the ``--disable-docs`` flag to
 the ``configure`` script.
 
-.. seealso::
-
-    * `Installing CouchDB <https://cwiki.apache.org/confluence/display/COUCHDB/Installing+CouchDB>`_
-
 Debian-based Systems
 --------------------
 
