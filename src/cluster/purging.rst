@@ -129,7 +129,7 @@ consistency within the main database.
 
 Config Settings
 ====================================
-These settings ca be updated in the default.ini or local.ini:
+These settings can be updated in the default.ini or local.ini:
 
 .. code-block:: text
 
