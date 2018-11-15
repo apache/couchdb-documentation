@@ -71,9 +71,8 @@ Server Administrators
         }
 
     If you already have a salted, encrypted password string (for example, from
-    an old ``local.ini`` or ``10-admins.ini`` file, or from a different CouchDB
-    server), then you can store the "raw" encrypted string, without having
-    CouchDB doubly encrypt it.
+    an old ini file, or from a different CouchDB server), then you can store
+    the "raw" encrypted string, without having CouchDB doubly encrypt it.
 
     .. code-block:: http
 
