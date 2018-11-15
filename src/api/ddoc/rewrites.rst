@@ -21,33 +21,41 @@
                array of routing rules or JavaScript function
 
     Rewrites the specified path by rules defined in the specified design
-    document. The rewrite rules are defined in *array* or *string* field
-    of the design document called ``rewrites``.
+    document. The rewrite rules are defined by the ``rewrites`` field of the
+    design document. The ``rewrites`` field can either be a *string* containing
+    the a rewrite function or an *array* of rule definitions.
 
-Rewrite section a is stringified function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using a stringified function for ``rewrites``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    *'Rewrite using JS' feature was introduced in CouchDB 1.7*. If the
-    ``rewrites`` field is a stringified function, query server is used
-    to pre-process and route a request.
+.. versionadded:: 2.0
 
-    The function receives truncated version of req object as a single argument
-    and must return object, containing new information about request.
+    When the ``rewrites`` field is a stringified function, the query server is used
+    to pre-process and route requests.
 
-    Returned object should include properties as:
+    The function takes a :ref:`request2_object`.
 
-    - **path** (*string*): Rewritten path, mandatory if no *code* provided
-    - **query** (*array*): Rewritten query, if omitted original query keys
-      are used
-    - **headers** (*object*): Rewritten headers. If omitted, original
-      request headers are used
-    - **method** (*string*): Method of rewritten request. If omitted,
-      original request method is used
-    - **code** (*number*): Returned code. If provided, request is not rewritten
-      and user immediately receives response with the code
-    - **body** (*string*): Body for POST/PUT requests, or for returning to user
-      if *code* field provided. If POST/PUT request is being rewritten and no
-      body returned by rewrite function, original request body is used
+    The return value of the function will cause the server to rewrite the
+    request to a new location or immediately return a response.
+
+    To rewrite the request, return an object containing the following
+    properties:
+
+    - **path** (*string*): Rewritten path.
+    - **query** (*array*): Rewritten query. If omitted, the original
+      query keys are used.
+    - **headers** (*object*): Rewritten headers. If omitted, the original
+      request headers are used.
+    - **method** (*string*): HTTP method of rewritten request (``"GET"``,
+      ``"POST"``, etc). If omitted, the original request method is used.
+    - **body** (*string*): Body for ``"POST"``/``"PUT"`` requests. If omitted,
+      the original request body is used.
+
+    To immediately respond to the request, return an object containing the
+    following properties:
+
+    - **code** (*number*): Returned HTTP status code (``200``, ``404``, etc).
+    - **body** (*string*): Body of the response to user.
 
     **Example A**. Restricting access.
 
@@ -56,20 +64,20 @@ Rewrite section a is stringified function
         function(req2) {
           var path = req2.path.slice(4),
             isWrite = /^(put|post|delete)$/i.test(req2.method),
-            isFin = req2.userCtx.roles.indexOf("finance")>-1;
-          if (path[0] == "finance" && isWrite && !isFin) {
+            isFinance = req2.userCtx.roles.indexOf("finance") > -1;
+          if (path[0] == "finance" && isWrite && !isFinance) {
             // Deny writes to  DB "finance" for users
             // having no "finance" role
             return {
               code: 403,
-              body:JSON.stringify({
-                error:"forbidden".
-                reason:"You are not allowed to modify docs in this DB"
+              body: JSON.stringify({
+                error: "forbidden".
+                reason: "You are not allowed to modify docs in this DB"
               })
-            }
+            };
           }
           // Pass through all other requests
-          return {path:"../../../"+path.join("/")}
+          return { path: "../../../" + path.join("/") };
         }
 
     **Example B**. Different replies for JSON and HTML requests.
@@ -79,7 +87,7 @@ Rewrite section a is stringified function
         function(req2) {
           var path = req2.path.slice(4),
             h = headers,
-            wantsJson = (h.Accept||"").indexOf("application/json")>-1,
+            wantsJson = (h.Accept || "").indexOf("application/json") > -1,
             reply = {};
           if (!wantsJson) {
             // Here we should prepare reply object
@@ -91,51 +99,58 @@ Rewrite section a is stringified function
           return reply;
         }
 
-      The req2 object rewrites is called with is a slightly truncated version
-      of req object, provided for list and update functions. Fields *info*,
-      *uuid*, *id* and *form* are removed to speed up request processing.
-      All other fields of the req object are in place.
+Using an array of rules for ``rewrites``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rewrite section is an array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    When the ``rewrites`` field is an array of rule objects, the server will
+    rewrite the request based on the first matching rule in the array.
 
-    Each rule is an *object* with next structure:
+    Each rule in the array is an *object* with the following fields:
 
-    - **from** (*string*): The path rule used to bind current URI to the rule.
-      It uses pattern matching for that.
-    - **to** (*string*): Rule to rewrite a URL. It can contain variables
-      depending on  binding variables discovered during pattern matching and
-      query args (URL args and from the query member)
     - **method** (*string*): HTTP request method to bind the request method to
-      the rule. Default is ``"*"``
-    - **query** (*object*): Query args you want to define they can contain
-      dynamic variable by binding the key
+      the rule. If omitted, uses ``"*"``, which matches all methods.
+    - **from** (*string*): The pattern used to compare against the URL and
+      define dynamic variables.
+    - **to** (*string*): The path to rewrite the URL to. It can contain
+      variables depending on binding variables discovered during pattern
+      matching and query args (URL args and from the query member).
+    - **query** (*object*): Query args passed to the rewritten URL. They may
+      contain dynamic variables.
 
-    The ``to``and ``from`` paths may contains string patterns with leading
-    ``:`` or ``*`` characters.
+    The ``to`` and ``from`` paths may contains string patterns with leading
+    ``:`` or ``*`` characters to define dynamic variables in the match.
 
-    For example: ``/somepath/:var/*``
+    The first rule in the ``rewrites`` array that matches the incoming request
+    is used to define the rewrite. To match the incoming request, the
+    rule's ``method`` must match the request's HTTP method and the rule's
+    ``from`` must match the request's path using the following pattern matching
+    logic.
 
-    - This path is converted in Erlang list by splitting ``/``
-    - Each ``var`` are converted in atom
-    - ``""`` are converted to ``''`` atom
-    - The pattern matching is done by splitting ``/`` in request URL in a list
-      of token
-    - A string pattern will match equal token
-    - The star atom (``'*'`` in single quotes) will match any number of tokens,
-      but may only be present as the last `pathterm` in a `pathspec`
-    - If all tokens are matched and all `pathterms` are used, then the
-      `pathspec` matches
+    - The *from* pattern and URL are first split on ``/`` to get a list of
+      tokens. For example, if *from* field is ``/somepath/:var/*`` and the URL
+      is ``/somepath/a/b/c``, the tokens are ``somepath``, ``:var``, and
+      ``*`` for the *from* pattern and ``somepath``, ``a``, ``b``, and
+      ``c`` for the URL.
+    - Each token starting with ``:`` in the pattern will match the
+      corresponding token in the URL and define a new dynamic variable whose
+      name is the remaining string after the ``:`` and value is the token from
+      the URL. In this example, the ``:var`` token will match ``b``
+      and set ``var`` = ``a``.
+    - The star token ``*`` in the pattern will match any number of tokens in
+      the URL and must be the last token in the pattern. It will define a
+      dynamic variable with the remaining tokens. In this example, the ``*``
+      token will match the ``b`` and ``c`` tokens and set ``*`` =
+      ``b/c``.
+    - The remaining tokens must match exactly for the pattern to be considered
+      a match. In this example, ``somepath`` in the pattern matches
+      ``somepath`` in the URL and all tokens in the URL have matched, causing
+      this rule to be a match.
 
-    The pattern matching is done by first matching the HTTP request method to a
-    rule. ``method`` is equal to ``"*"`` by default, and will match any HTTP
-    method. It will then try to match the path to one rule. If no rule matches,
-    then a :statuscode:`404` response returned.
+    Once a rule is found, the request URL is rewritten using the ``to`` and
+    ``query`` fields. Dynamic variables are substituted into the ``:`` and
+    ``*`` variables in these fields to produce the final URL.
 
-    Once a rule is found we rewrite the request URL using the ``to`` and
-    ``query`` fields. The identified token are matched to the rule and will
-    replace var. If ``'*'`` is found in the rule it will contain the remaining
-    part if it exists.
+    If no rule matches, a :statuscode:`404` response is returned.
 
     Examples:
 
@@ -155,7 +170,7 @@ Rewrite section is an array
     |  "to": "/some/:var"}              |          |                  |       |
     +-----------------------------------+----------+------------------+-------+
     | {"from": "/a/:foo/",              | /a/b/c   | /some/b/c?foo=b  | foo=b |
-    | "to": "/some/:foo/"}              |          |                  |       |
+    |  "to": "/some/:foo/"}             |          |                  |       |
     +-----------------------------------+----------+------------------+-------+
     | {"from": "/a/:foo",               | /a/b     | /some/?k=b&foo=b | foo=b |
     |  "to": "/some",                   |          |                  |       |
@@ -166,7 +181,7 @@ Rewrite section is an array
     +-----------------------------------+----------+------------------+-------+
 
     Request method, header, query parameters, request payload and response body
-    are depended on endpoint to which URL will be rewritten.
+    are dependent on the endpoint to which the URL will be rewritten.
 
     :param db: Database name
     :param ddoc: Design document name

@@ -26,6 +26,13 @@ tips and tricks that will ease the difficulty.
   ECMA-262 5th edition ("ES5") of the language. ES6/2015 and newer constructs
   cannot be used.
 
+  Fortunately, there are many tools available for transpiling modern JavaScript
+  into code compatible with older JS engines. The `Babel Project website
+  <http://babeljs.io/repl>`_, for example, offers an in-browser text editor
+  which transpiles JavaScript in real-time. Configuring CouchDB-compatibility
+  is as easy as enabling the ``ENV PRESET`` option, and typing "firefox 4.0"
+  into the *Browsers* field.
+
 - The ``log()`` function will log output to the CouchDB log file or stream.
   You can log strings, objects, and arrays directly, without first converting
   to JSON.  Use this in conjunction with a local CouchDB instance for best

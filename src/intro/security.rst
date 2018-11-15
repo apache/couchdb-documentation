@@ -70,8 +70,8 @@ identification for certain requests:
   </{db}/_design/{ddoc}>`)
 - Triggering compaction (:post:`POST /database/_compact </{db}/_compact>`)
 - Reading the task status list (:get:`GET /_active_tasks </_active_tasks>`)
-- Restarting the server on the node-local port
-  (:post:`POST /_restart </_restart>`)
+- Restarting the server on a given node
+  (:post:`POST /_node/{node-name}/_restart </_restart>`)
 - Reading the active configuration
   (:get:`GET /_node/{node-name}/_config </_config>`)
 - Updating the active configuration

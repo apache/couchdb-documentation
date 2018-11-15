@@ -154,6 +154,9 @@
     :param db: Database name
     :query integer q: Shards, aka the number of range partitions. Default is
       8, unless overridden in the :config:option:`cluster config <cluster/q>`.
+    :query integer n: Replicas. The number of copies of the database in the
+      cluster. The default is 3, unless overridden in the
+      :config:option:`cluster config <cluster/n>` .
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
@@ -267,7 +270,7 @@
     :code 200: Database removed successfully
     :code 400: Invalid database name or forgotten document id by accident
     :code 401: CouchDB Server Administrator privileges required
-    :code 404: Database doesn't exist
+    :code 404: Database doesn't exist or invalid database name
 
     **Request**:
 

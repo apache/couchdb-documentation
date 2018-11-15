@@ -31,3 +31,4 @@ cluster.
     nodes
     databases
     sharding
+    purging

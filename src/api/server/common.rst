@@ -1492,6 +1492,20 @@ containing only the requested individual statistic.
 
     These statistics are generally intended for CouchDB developers only.
 
+.. _api/server/restart:
+
+===============================
+``/_node/{node-name}/_restart``
+===============================
+
+.. http:post:: /_node/{node-name}/_restart
+    :synopsis: Restarts CouchDB application on a given node
+
+    This API is to facilitate integration testing only
+    it is not meant to be used in production
+
+    :code 200: Request completed successfully
+
 .. _api/server/utils:
 
 ===========

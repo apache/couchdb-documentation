@@ -84,7 +84,8 @@ interact with the local node's configuration.
                 "docroot": "./share/www",
                 "port": "5984",
                 "require_valid_user": "false",
-                "socket_options": "[{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]"
+                "socket_options": "[{sndbuf, 262144}, {nodelay, true}]",
+                "server_options": "[{recbuf, undefined}]"
             },
             "daemons": {
                 "auth_cache": "{couch_auth_cache, start_link, []}",
@@ -128,7 +129,6 @@ interact with the local node's configuration.
                 "_all_dbs": "{couch_httpd_misc_handlers, handle_all_dbs_req}",
                 "_config": "{couch_httpd_misc_handlers, handle_config_req}",
                 "_replicate": "{couch_httpd_misc_handlers, handle_replicate_req}",
-                "_restart": "{couch_httpd_misc_handlers, handle_restart_req}",
                 "_session": "{couch_httpd_auth, handle_session_req}",
                 "_stats": "{couch_httpd_stats_handlers, handle_stats_req}",
                 "_utils": "{couch_httpd_misc_handlers, handle_utils_dir_req, \"/usr/share/couchdb/www\"}",
