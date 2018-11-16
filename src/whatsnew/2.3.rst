@@ -82,7 +82,7 @@ Upgrade Notes
         [ssl]
         enable = true
 
-    If the legacy httpsd configuration is found in your ini file, this will 
+    If the legacy httpsd configuration is found in your ini file, this will
     still enable SSL support, so existing configurations do not need to be
     changed.
 
