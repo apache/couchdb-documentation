@@ -26,6 +26,7 @@ Table of Contents
 
     intro/index
     install/index
+    setup/index
     config/index
     replication/index
     maintenance/index
