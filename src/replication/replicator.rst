@@ -127,7 +127,7 @@ The replication job will also appear in
       }
 
 ``_scheduler/jobs`` shows more information, such as a detailed history of
-state changes. If a persisent replication has not yet started,
+state changes. If a persistent replication has not yet started,
 has failed, or is completed, information about its state can only be found
 in ``_scheduler/docs``. Keep in mind that some replication documents could be
 invalid and could not become a replication job. Others might be delayed

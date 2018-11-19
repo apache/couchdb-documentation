@@ -35,8 +35,8 @@ introduced into CouchDB leads do a replication that could be called `transient`.
 Transient means that there are no documents backing up the replication. So after a
 restart of the CouchDB server the replication will disapear. Later, the
 :ref:`_replicator <replicator>` database was introduced, which keeps documents
-containing your replication parameter. Such a replication can be called `persisent`.
-Trancient replications were kept for backward compatibility. Both replications can
+containing your replication parameter. Such a replication can be called `persistent`.
+Transient replications were kept for backward compatibility. Both replications can
 have different :ref:`replication states <replicator/states>`.
 
 Triggering, Stopping and Monitoring Replications
@@ -57,6 +57,7 @@ and :ref:`api/server/_scheduler/jobs` ).
 For document based-replications, :ref:`api/server/_scheduler/docs` can be used to
 get a complete state summary. This API is preferred as it will show the state of the
 replication document before it becomes a replication job.
+
 For transient replications there is no way to query their state when the job is
 finished.
 
