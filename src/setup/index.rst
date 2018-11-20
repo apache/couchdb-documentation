@@ -10,24 +10,18 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-.. _cluster:
+.. _setup:
 
-=================
-Cluster Reference
-=================
+=====
+Setup
+=====
 
-As of CouchDB 2.0.0, CouchDB can be run in two different modes of operation:
-    * Standalone
-    * Cluster
-
-This section details the theory behind CouchDB clusters, and provides specific
-operational instructions on node, database and shard management.
+CouchDB 2.x can be deployed in either a single-node or a clustered
+configuration. This section covers the first-time setup steps required for each
+of these configurations.
 
 .. toctree::
     :maxdepth: 2
 
-    theory
-    nodes
-    databases
-    sharding
-    purging
+    single-node
+    cluster

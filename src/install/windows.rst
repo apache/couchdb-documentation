@@ -29,10 +29,12 @@ This is the simplest way to go.
 #. Follow the installation wizard steps. **Be sure to install CouchDB to a
    path with no spaces, such as** ``C:\CouchDB``.
 
+#. **Your installation is not complete. Be sure to complete the**
+   :ref:`Setup <setup>` **steps for a single node or clustered installation.**
+
 #. `Open up Fauxton`_
 
-#. It's time to Relax! **Be sure to complete the** :ref:`First-time Setup
-   <install/setup>` **steps for a single node or clustered installation.**
+#. It's time to Relax!
 
 .. note::
     In some cases you might been asked to reboot Windows to complete
