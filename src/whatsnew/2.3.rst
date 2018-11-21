@@ -93,7 +93,7 @@ Upgrade Notes
     you can modify the app context using a couchdb.config file as usual.
 
 * :ghissue:`1602`: Also to improve security, the deprecated ``os_daemons`` and
-  ``couch_http_proxy`` functionality has been completely removed ahead of the planned
+  ``couch_httpd_proxy`` functionality has been completely removed ahead of the planned
   CouchDB 3.0 release. We recommend the use of OS-level daemons such as runit, sysvinit,
   systemd, upstart, etc. to launch and maintain OS daemons instead, and the use of
   a reverse proxy server in front of CouchDB (such as haproxy) to proxy access to other

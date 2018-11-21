@@ -12,6 +12,7 @@
 
 .. _setup/single-node:
 
+=================
 Single Node Setup
 =================
 

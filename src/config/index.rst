@@ -29,6 +29,5 @@ Configuring CouchDB
     logging
     replicator
     query-servers
-    http-handlers
     services
     misc
