@@ -45,12 +45,12 @@ Triggering, Stopping and Monitoring Replications
 A persistent replication is controlled through a document in the
 :ref:`_replicator <replicator>` database, where each document describes one
 replication process (see :ref:`replication-settings`). For setting up a
-replication that is transient the api endpoint
+transient replication the api endpoint
 :ref:`/_replicate <api/server/replicate>` can be used. A replication is triggered
 by sending a JSON object either to the ``_replicate`` endpoint or storing it as a
 document into the ``_replicator`` database.
 
-If a replication is currently performed its status can be inspected through the
+If a replication is currently running its status can be inspected through the
 active tasks API (see :ref:`api/server/active_tasks`, :ref:`replication-status`
 and :ref:`api/server/_scheduler/jobs`).
 
