@@ -80,13 +80,12 @@
         Server: CouchDB/2.0.0-2ccd4bf (Erlang OTP/18)
 
         {
-          "purge_seq": "3",
+          "purge_seq": null,
           "purged": {
             "c6114c65e295552ab1019e2b046b10e": {
               "purged": [
                 "3-c50a32451890a3f1c3e423334cc92745"
-              ],
-              "ok": true
+              ]
             }
           }
         }

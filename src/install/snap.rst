@@ -30,9 +30,11 @@ After `installing snapd`_, the CouchDB snap can be installed via::
 CouchDB will be installed at ``/snap/couchdb``. Data will be stored at
 ``/var/snap/couchdb/``.
 
-.. _installing snapd: https://snapcraft.io/docs/core/install
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 Further details on the snap build process are available in our
 `couchdb-pkg git repository`_.
 
+.. _installing snapd: https://snapcraft.io/docs/core/install
 .. _couchdb-pkg git repository: https://github.com/apache/couchdb-pkg

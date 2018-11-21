@@ -66,7 +66,7 @@ databases, or they can be set on a per-database basis by specifying the
 ``q`` and ``n`` query parameters when the database is created. For
 example:
 
-.. code:: bash
+.. code-block:: bash
 
     $ curl -X PUT "$COUCH_URL:5984/database-name?q=4&n=2"
 
@@ -103,13 +103,13 @@ parameter for document writes. For example, here is a request that
 directs the coordinating node to send a response once at least two nodes
 have responded:
 
-.. code:: bash
+.. code-block:: bash
 
     $ curl "$COUCH_URL:5984/<doc>?r=2"
 
 Here is a similar example for writing a document:
 
-.. code:: bash
+.. code-block:: bash
 
     $ curl -X PUT "$COUCH_URL:5984/<doc>?w=2" -d '{...}'
 
@@ -206,7 +206,7 @@ Since they are files, you can use ``cp``, ``rsync``,
 ``scp`` or other file-copying command to copy them from one node to
 another. For example:
 
-.. code:: bash
+.. code-block:: bash
 
     # one one machine
     $ mkdir -p data/.shards/<range>
@@ -249,7 +249,7 @@ up-to-date before allowing it to participate in end-user requests.
 
 To enable maintenance mode:
 
-.. code::bash
+.. code-block::bash
 
     $ curl -X PUT -H "Content-type: application/json" \
         $COUCH_URL:5984/_node/<nodename>/_config/couchdb/maintenance_mode \
@@ -258,7 +258,7 @@ To enable maintenance mode:
 Then, verify that the node is in maintenance mode by performing a ``GET
 /_up`` on that node's individual endpoint:
 
-.. code::bash
+.. code-block::bash
 
     $ curl -v $COUCH_URL/_up
     …
@@ -286,7 +286,7 @@ only available on the localhost interface for security purposes.
 
 First, retrieve the database's current metadata:
 
-.. code:: bash
+.. code-block:: bash
 
     $ curl http://localhost:5986/_dbs/{name}
     {
@@ -342,7 +342,7 @@ As of this writing, this process must be done manually.
 To add a shard to a node, add entries like this to the database
 metadata's ``changelog`` attribute:
 
-.. code:: json
+.. code-block:: javascript
 
     ["add", "<range>", "<node-name>"]
 
@@ -361,7 +361,7 @@ match. If they do not, the database may become corrupted.
 Continuing our example, here is an updated version of the metadata above
 that adds shards to an additional node called ``node4``:
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "_id": "{name}",
@@ -371,15 +371,15 @@ that adds shards to an additional node called ``node4``:
         ["add", "00000000-1fffffff", "node1@xxx.xxx.xxx.xxx"],
         ["add", "00000000-1fffffff", "node2@xxx.xxx.xxx.xxx"],
         ["add", "00000000-1fffffff", "node3@xxx.xxx.xxx.xxx"],
-        …
+        ...
         ["add", "00000000-1fffffff", "node4@xxx.xxx.xxx.xxx"]
       ],
       "by_node": {
         "node1@xxx.xxx.xxx.xxx": [
           "00000000-1fffffff",
-          …
+          ...
         ],
-        …
+        ...
         "node4@xxx.xxx.xxx.xxx": [
           "00000000-1fffffff"
         ]
@@ -391,13 +391,13 @@ that adds shards to an additional node called ``node4``:
           "node3@xxx.xxx.xxx.xxx",
           "node4@xxx.xxx.xxx.xxx"
         ],
-        …
+        ...
       }
     }
 
 Now you can ``PUT`` this new metadata:
 
-.. code:: bash
+.. code-block:: bash
 
     $ curl -X PUT http://localhost:5986/_dbs/{name} -d '{...}'
 
@@ -453,7 +453,7 @@ Remove the shard and secondary index files from the source node
 Finally, you can remove the source shard replica by deleting its file from the
 command line on the source host, along with any view shard replicas:
 
-.. code::bash
+.. code-block::bash
 
     $ rm <couch-dir>/data/shards/<range>/<dbname>.<datecode>.couch
     $ rm -r <couch-dir>/data/.shards/<range>/<dbname>.<datecode>*
@@ -479,7 +479,7 @@ port. Add a key value pair of the form:
 
 Do this for all of the nodes in your cluster. For example:
 
-.. code:: bash
+.. code-block:: bash
 
     $ curl -X PUT http://localhost:5986/_nodes/<node-name> \
         -d '{ \
@@ -505,7 +505,7 @@ This approach is flexible, since you can also specify zones on a per-
 database basis by specifying the placement setting as a query parameter
 when the database is created, using the same syntax as the ini file:
 
-.. code:: bash
+.. code-block:: bash
 
     curl -X PUT $COUCH_URL:5984/<dbname>?zone=<zone>
 

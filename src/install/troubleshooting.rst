@@ -141,7 +141,7 @@ Quick Build
 Having problems getting CouchDB to run for the first time? Follow this simple
 procedure and report back to the user mailing list or IRC with the output
 of each step. Please put the output of these steps into a paste service (such
-as https://paste.apache.org/) rather than including the output of your entire
+as https://paste.ee/) rather than including the output of your entire
 run in IRC or the mailing list directly.
 
 1. Note down the name and version of your operating system and your processor
@@ -183,7 +183,7 @@ run in IRC or the mailing list directly.
 Upgrading
 =========
 
-Are you upgrading from CouchDB 2.0? Install CouchDB into a fresh directory.
+Are you upgrading from CouchDB 1.x? Install CouchDB into a fresh directory.
 CouchDB's directory layout has changed and may be confused by libraries
 present from previous releases.
 
