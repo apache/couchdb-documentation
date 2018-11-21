@@ -117,11 +117,11 @@ improve configuration readability.
     without modifying that file, you may override in `local.ini`, but without
     any value::
 
-        [httpd_global_handlers]
-        _all_dbs =
+        [compactions]
+        _default =
 
-    This could be read as: "remove the `_all_dbs` parameter from the
-    `httpd_global_handlers` section if it was ever set before".
+    This could be read as: "remove the `_default` parameter from the
+    `compactions` section if it was ever set before".
 
 The semicolon (``;``) signals the start of a comment. Everything after this
 character is ignored by CouchDB.
