@@ -101,7 +101,8 @@ Upgrade Notes
 * :ghissue:`1543`: The node-local (default port 5986) ``/_restart`` endpoint has been
   replaced by the clustered (default port 5984) endpoint ``/_node/$node/_restart`` and
   ``/_node/_local/_restart`` endpoints. The node-local endpoint has been removed.
-* All python scripts shipped with CouchDB now specify and require Python 3.x.
+* :ghissue:`1764`: All python scripts shipped with CouchDB, including ``couchup`` and the
+  ``dev/run`` development cluster script, now specify and require Python 3.x.
 * :ghissue:`1396`: CouchDB is now compatible with Erlang 21.x.
 * :ghissue:`1680`: The embedded version of ``rebar`` used to build CouchDB has been
   updated to the last version of ``rebar2`` available. This assists in building on
@@ -230,6 +231,19 @@ Bugfixes
   populated with valid values.
 * :ghissue:`1717`: If the ``.ini`` config file is read only, an attempt to update the
   config through the HTTP API will now result in a proper ``eacces`` error response.
+* :ghissue:`1603`: CouchDB now returns the correct ``total_rows`` result when querying
+  ``/{db}/_design_docs``.
+* :ghissue:`1629`: Internal load validation functions no longer incorrectly hold open
+  a deleted database or its host process.
+* :ghissue:`1746`: Server admins defined in the ini file accessing via HTTP API no longer
+  result in the auth cache logging the access as a miss in the statistics.
+* :ghissue:`1607`: The replicator no longer fails to re-authenticate to open a remote
+  database when its session cookie times out due to a VDU function forbidding writes
+  or a non-standard cookie expiration duration.
+* :ghissue:`1579`: The compaction daemon no longer incorrectly only compacts a single
+  view shard for databases with a ``q`` value greater than 1.
+* :ghissue:`1737`: CouchDB 2.x now performs as well as 1.x when using a ``_doc_ids``
+  or ``_design_docs`` filter on a changes feed.
 
 Mango
 -----
