@@ -63,7 +63,12 @@ All we added to the previous request is the _all_dbs string.
 
 The response should look like::
 
-    []
+    ["_global_changes","_replicator","_users"]
+
+.. note::
+    In case this returns an empty Array for you, it means you haven't finished
+    installation correctly. Please refer to :ref:`install/setup` for further
+    information on this.
 
 Oh, that's right, we didn't create any databases yet! All we see is an empty
 list.
