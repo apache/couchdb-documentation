@@ -59,6 +59,15 @@ Query Servers Definition
         javascript = /usr/bin/couchjs /usr/share/couchdb/server/main.js
         coffeescript = /usr/bin/couchjs /usr/share/couchdb/server/main-coffee.js
 
+    By default, ``couchjs`` limits the max runtime allocation to 64MiB.
+    If you run into out of memory issue in your ddoc functions,
+    you can adjust the memory limitation::
+
+        [query_servers]
+        javascript = /usr/bin/couchjs -S 536870912 /usr/share/couchdb/server/main.js ; 512 MiB
+
+    For more info about the available options, please consult ``couchjs -h``.
+
     .. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
 
     .. seealso::
