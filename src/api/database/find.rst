@@ -176,7 +176,7 @@ documents whose "director" field has the value "Lars von Trier".
 
     A simple selector, inspecting specific fields
 
-.. code:: json
+.. code-block:: javascript
 
     "selector": {
       "$title": "Live And Let Die"
@@ -317,7 +317,7 @@ value equal to ``8``.
 
 Example of implicit operator applied to a subfield test
 
-.. code:: json
+.. code-block:: javascript
 
         {
             "imdb": {
@@ -337,7 +337,7 @@ Again, you can make the equality operator explicit.
 
 An example of the ``$eq`` operator used with full text indexing
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -355,7 +355,7 @@ An example of the ``$eq`` operator used with full text indexing
 
 An example of  the ``$eq`` operator used with database indexed on the field ``"year"``
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -455,7 +455,7 @@ The list of combination operators:
 **The** ``$and`` **operator**
     ``$and`` operator used with two fields
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -815,7 +815,7 @@ versions.
 
     A simple query, using sorting:
 
-.. code:: json
+.. code-block:: javascript
 
     {
         "selector": {"Actor_name": "Robert De Niro"},
@@ -999,7 +999,7 @@ The returned JSON confirms the index has been created:
 
 Example index creation using all available query parameters
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -1027,7 +1027,7 @@ map cleanly to a range query on an index.
 
 Let's look at an example query:
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -1070,7 +1070,7 @@ where  ``"status": { "$ne": "archived" }`` at index time using the
 Partial indexes are not currently used by the query planner unless specified
 by a ``"use_index"`` field, so we need to modify the original query:
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {

@@ -117,7 +117,7 @@ proper read/write access, then use commands similar to the following:
     $ couchup list           # Should show no remaining databases!
 
 The same process works for moving from a single 1.x node to a cluster of
-2.x nodes; the only difference is that you must complete cluster setup
+2.x nodes; the only difference is that you must :ref:`complete cluster setup <setup>`
 prior to running the couchup commands.
 
 Special Features

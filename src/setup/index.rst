@@ -10,28 +10,18 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-.. _releases:
+.. _setup:
 
-===============
-Release History
-===============
+=====
+Setup
+=====
+
+CouchDB 2.x can be deployed in either a single-node or a clustered
+configuration. This section covers the first-time setup steps required for each
+of these configurations.
 
 .. toctree::
-    :glob:
+    :maxdepth: 2
 
-    2.3
-    2.2
-    2.1
-    2.0
-    1.7
-    1.6
-    1.5
-    1.4
-    1.3
-    1.2
-    1.1
-    1.0
-    0.11
-    0.10
-    0.9
-    0.8
+    single-node
+    cluster

@@ -95,8 +95,8 @@ Installing the Apache CouchDB packages
 
     $ sudo yum -y install epel-release && yum install couchdb
 
-**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
-a single node or clustered installation.**
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 **Debian/Ubuntu**: First, install the repository key::
 
@@ -109,9 +109,8 @@ Then update the repository cache and install the package::
 
 Debian/Ubuntu installs from binaries will be pre-configured for single node or
 clustered installations. For clusters, multiple nodes will still need to be
-joined together; **follow the**
-:ref:`Cluster Setup Wizard <cluster/setup/wizard>` **steps** to complete the
-process.
+joined together and configured consistently across all machines; **follow the**
+:ref:`Cluster Setup <setup/cluster>` **walkthrough** to complete the process.
 
 Relax! CouchDB is installed and running.
 
@@ -150,10 +149,6 @@ help2man is only need if you plan on installing the CouchDB man pages.
 Python and Sphinx are only required for building the online documentation.
 Documentation build can be disabled by adding the ``--disable-docs`` flag to
 the ``configure`` script.
-
-.. seealso::
-
-    * `Installing CouchDB <https://cwiki.apache.org/confluence/display/COUCHDB/Installing+CouchDB>`_
 
 Debian-based Systems
 --------------------
@@ -339,8 +334,8 @@ From here you should verify your installation by pointing your web browser to::
 
     http://localhost:5984/_utils/index.html#verifyinstall
 
-**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
-a single node or clustered installation.**
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 Running as a Daemon
 ===================

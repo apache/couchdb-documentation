@@ -12,9 +12,9 @@
 
 .. _install:
 
-===============================
-Installation & First-Time Setup
-===============================
+============
+Installation
+============
 
 .. toctree::
     :maxdepth: 2
@@ -25,6 +25,5 @@ Installation & First-Time Setup
     freebsd
     docker
     snap
-    setup
     upgrading
     troubleshooting

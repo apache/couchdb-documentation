@@ -53,14 +53,6 @@ CouchDB Daemonized Mini Apps
             [daemons]
             httpd={couch_httpd, start_link, []}
 
-    .. config:option:: httpsd
-
-        Provides :ref:`SSL support <config/ssl>`. The default SSL port CouchDB
-        listens on is `6984`::
-
-            [daemons]
-            httpsd = {chttpd, start_link, [https]}
-
     .. config:option:: index_server
 
         The `couch_index` application is responsible for managing all of the

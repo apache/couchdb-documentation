@@ -37,8 +37,8 @@ That's all, now CouchDB is installed on your Mac:
 #. Run Apache CouchDB application
 #. `Open up Fauxton`_, the CouchDB admin interface
 #. Verify the install by clicking on `Verify`, then `Verify Installation`.
-#. **Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps
-   for a single node or clustered installation.**
+#. **Your installation is not complete. Be sure to complete the**
+   :ref:`Setup <setup>` **steps for a single node or clustered installation.**
 #. Time to Relax!
 
 .. _Open up Fauxton: http://localhost:5984/_utils

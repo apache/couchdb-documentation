@@ -126,9 +126,12 @@ The replication job will also appear in
           "total_rows": 1
       }
 
-``_scheduler/jobs`` shows more information such as a detailed history of
-state changes. However if replication has completed or has failed to
-start it would not appear here, only in ``_scheduler/docs``.
+``_scheduler/jobs`` shows more information, such as a detailed history of
+state changes. If a persistent replication has not yet started,
+has failed, or is completed, information about its state can only be found
+in ``_scheduler/docs``. Keep in mind that some replication documents could be
+invalid and could not become a replication job. Others might be delayed
+because they are fetching data from a slow source database.
 
 If there is an error, for example if the source database is missing, the
 replication job will crash and retry after a wait period. Each
