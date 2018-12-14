@@ -177,6 +177,17 @@
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
+    :query boolean descending: Return the databases in descending order by key.
+      Default is ``false``.
+    :query json endkey: Stop returning databases when the specified key is
+      reached.
+    :query json end_key: Alias for `endkey` param
+    :query number limit: Limit the number of the returned databases to the
+      specified number.
+    :query number skip: Skip this number of databases before starting to return
+      the results. Default is ``0``.
+    :query json startkey: Return databases starting with the specified key.
+    :query json start_key: Alias for `startkey`.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :code 200: Request completed successfully
