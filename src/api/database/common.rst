@@ -74,7 +74,9 @@
     :>json string instance_start_time: Always ``"0"``. (Returned for legacy
       reasons.)
     :>json object other: Used by Cloudant. *Deprecated.*
-    :>json number purge_seq: The number of purge operations on the database.
+    :>json string purge_seq: An opaque string that describes the purge state
+      of the database. Do not rely on this string for counting the number
+      of purge operations.
     :>json number sizes.active: The size of live data inside the database, in
       bytes.
     :>json number sizes.external: The uncompressed size of database contents
