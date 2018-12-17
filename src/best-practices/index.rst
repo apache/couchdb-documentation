@@ -26,5 +26,6 @@ system.
 
     documents
     forms
+    iso-date
     jsdevel
     reverse-proxies
