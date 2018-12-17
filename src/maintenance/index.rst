@@ -18,3 +18,4 @@ CouchDB Maintenance
 
     compaction
     performance
+    backups
