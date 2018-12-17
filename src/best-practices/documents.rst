@@ -104,7 +104,7 @@ to CNN, renames "Register" to "The Register", and adds a new link to slashdot
 just after it. On the desktop, her husband deletes the Weather link, and adds a
 new link to CNET in the Tech folder.
 
-So after these changes, the laptop has: 
+So after these changes, the laptop has:
 
 .. code-block:: javascript
 

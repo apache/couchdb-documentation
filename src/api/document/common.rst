@@ -339,6 +339,8 @@
             "rev": "2-056f5f44046ecafc08a2bc2b9c229e20"
         }
 
+.. _api/doc/copy:
+
 .. http:copy:: /{db}/{docid}
     :synopsis: Copies the document within the same database
 

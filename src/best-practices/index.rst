@@ -27,4 +27,5 @@ system.
     documents
     forms
     jsdevel
+    views
     reverse-proxies
