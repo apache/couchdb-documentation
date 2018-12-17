@@ -48,3 +48,24 @@ to ensure unique identifiers for each row in a database table. CouchDB generates
 unique ids on its own and you can specify your own as well, so you don't really
 need a sequence here. If you use a sequence for something else, you will be
 better off finding another way to express it in CouchDB in another way.
+
+Pre-aggregating your data
+-------------------------
+
+If your intent for CouchDB is as a collect-and-report model, not a real-time view,
+you may not need to store a single document for every event you're recording.
+In this case, pre-aggregating your data may be a good idea. You probably don't
+need 1000 documents per second if all you are trying to do is to track
+summary statistics about those documents. This reduces the computational pressure
+on CouchDB's MapReduce engine(s), as well as reduces its storage requirements.
+
+In this case, using an in-memory store to summarize your statistical information,
+then writing out to CouchDB every 10 seconds / 1 minute / whatever level of
+granularity you need would greatly reduce the number of documents you'll put in
+your database.
+
+Later, you can then further `decimate
+<https://en.wikipedia.org/wiki/Downsampling_(signal_processing)>`_ your data by
+walking the entire database and generating documents to be stored in a new
+database with a lower level of granularity (say, 1 document a day). You can then
+delete the older, more fine-grained database when you're done with it.
