@@ -312,3 +312,39 @@ they will attempt to compress it by packing multiple revisions so that only
 their diffs are stored). With Git you can use "history rewriting" to remove old
 history, but this may prohibit merging if history doesn't go back far enough in
 time.
+
+Adding client-side security with a translucent database
+-------------------------------------------------------
+
+Many applications do not require a thick layer of security at the server. It is
+possible to use a modest amount of encryption and one-way functions to obscure
+the sensitive columns or key-value pairs, a technique often called a
+translucent database. (See `a description <http://www.wayner.org/node/52>`_.)
+
+The simplest solutions use a one-way function like SHA-256 at the client to
+scramble the name and password before storing the information.  This solution
+gives the client control of the data in the database without requiring a thick
+layer on the database to test each transaction. Some advantages are:
+
+* Only the client or someone with the knowledge of the name and password can compute
+  the value of SHA256 and recover the data.
+* Some columns are still left in the clear, an advantage if the marketing department
+  wants to compute aggregated statistics.
+* Computation of SHA256 is left to the client side computer which usually has cycles
+  to spare.
+* The system prevents server-side snooping by insiders and any attacker who might
+  penetrate the OS or any of the tools running upon it.
+
+There are limitations:
+
+* There is no root password. If the person forgets their name and password, their
+  access is gone forever. This limits its use to databases that can continue by
+  issuing a new user name and password.
+
+There are many variations on this theme detailed in the book `Translucent Databases
+<http://www.wayner.org/node/46>`_, including:
+
+* Adding a backdoor with public-key cryptography.
+* Adding a second layer with steganography.
+* Dealing with typographical errors.
+* Mixing encryption with one-way functions.
