@@ -3,3 +3,4 @@ ext/__pycache__/
 build/
 *~
 *.swp
+*.bak
