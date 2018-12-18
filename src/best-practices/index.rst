@@ -28,4 +28,5 @@ system.
     forms
     iso-date
     jsdevel
+    views
     reverse-proxies
