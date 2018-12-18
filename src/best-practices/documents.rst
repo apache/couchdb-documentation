@@ -141,8 +141,7 @@ periodically, and are disconnected for more than this time before they
 resynchronise.
 
 All of the approaches below which allow automated merging of changes rely on
-having some sort of history back in time to the point where the replicas
-diverged.
+having some sort of history, back to the point where the replicas diverged.
 
 CouchDB does not provide a mechanism for this itself. It stores arbitrary
 numbers of old _ids for one document (trunk now has a mechanism for pruning the
@@ -160,7 +159,7 @@ live replicas last diverged.
 Approach 1: Single JSON doc
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The above structure is already valid Javascript, and so could be represented in
+The above structure is already valid JSON, and so could be represented in
 CouchDB just by wrapping it in an object and storing as a single document:
 
 .. code-block:: javascript
@@ -328,8 +327,8 @@ layer on the database to test each transaction. Some advantages are:
 
 * Only the client or someone with the knowledge of the name and password can compute
   the value of SHA256 and recover the data.
-* Some columns are still left in the clear, an advantage if the marketing department
-  wants to compute aggregated statistics.
+* Some columns are still left in the clear, an advantage for computing aggregated
+  statistics.
 * Computation of SHA256 is left to the client side computer which usually has cycles
   to spare.
 * The system prevents server-side snooping by insiders and any attacker who might
