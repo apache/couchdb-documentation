@@ -322,7 +322,7 @@ Basic Configuration
 
 Here's a basic excerpt for using a ``VirtualHost`` block config to use Apache
 as a reverse proxy for CouchDB. You need at least to configure Apache with the
-``--enable-proxy --enable-proxy-http`` options and use a version equal or
+``--enable-proxy --enable-proxy-http`` options and use a version equal to or
 higher than Apache 2.2.7 in order to use the ``nocanon`` option in the
 ``ProxyPass`` directive. The ``ProxyPass`` directive adds the ``X-Forwarded-For``
 header needed by CouchDB, and the ``ProxyPreserveHost`` directive ensures the
@@ -348,4 +348,3 @@ original client ``Host`` header is preserved.
        ErrorLog "logs/couchdb.localhost-error_log"
        CustomLog "logs/couchdb.localhost-access_log" common
     </VirtualHost>
-
