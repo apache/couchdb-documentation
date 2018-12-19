@@ -186,3 +186,6 @@ Native Erlang Query Server
 
     If all has gone well, after running the view you should see a list of the
     total number of documents at each revision number.
+
+    Additional examples are on the `users@couchdb.apache.org mailing list
+    <https://lists.apache.org/thread.html/9b5f2837bd32189385bb82eee44aec243f2ecacc6e907ffe0e1e03d3@1360091211@%3Cuser.couchdb.apache.org%3E>`_.
