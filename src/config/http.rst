@@ -606,6 +606,10 @@ with the vhost name prefixed by ``cors:``. Example case for the vhost
     ; List of accepted methods
     methods = HEAD, GET
 
+A video from 2010 on vhost and rewrite configuration `is available
+<https://vimeo.com/20773112>`_, but is not guaranteed to match current syntax
+or behaviour.
+
 .. _config/vhosts:
 
 Virtual Hosts

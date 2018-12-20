@@ -45,7 +45,7 @@ man: $(SPHINXBUILD)
 	$(SPHINXBUILD) -b $@ $(SPHINXOPTS) $(BUILDDIR)/$@
 
 check:
-	python ext/linter.py $(SOURCE)
+	python3 ext/linter.py $(SOURCE)
 
 install-html:
 install-pdf:
