@@ -258,6 +258,48 @@ delete.
 Multiple document API
 =====================
 
+Finding conflicted documents with Mango
+---------------------------------------
+
+.. versionadded:: 2.2.0
+
+CouchDB's :ref:`Mango system <api/db/_find>` allows easy querying of
+documents with conflicts, returning the full body of each document as well.
+
+Here's how to use it to find all conflicts in a database:
+
+.. code-block:: bash
+
+    $ curl -X POST http://127.0.0.1/dbname/_find \
+        -d '{"selector": {"_conflicts": { "$exists": true}}, "conflicts": true}' \
+        -Hcontent-type:application/json
+
+.. code-block:: javascript
+
+    {"docs": [
+    {"_id":"doc","_rev":"1-3975759ccff3842adf690a5c10caee42","a":2,"_conflicts":["1-23202479633c2b380f79507a776743d5"]}
+    ],
+    "bookmark": "g1AAAABheJzLYWBgYMpgSmHgKy5JLCrJTq2MT8lPzkzJBYozA1kgKQ6YVA5QkBFMgKSVDHWNjI0MjEzMLc2MjZONkowtDNLMLU0NzBPNzc3MTYxTTLOysgCY2ReV"}
+
+The ``bookmark`` value can be used to navigate through additional pages of
+results if necessary. Mango by default only returns 25 results per request.
+
+If you expect to run this query often, be sure to create a Mango secondary
+index to speed the query:
+
+.. code-block:: bash
+
+    $ curl -X POST http://127.0.0.1/dbname/_index \
+        -d '{"index":{"fields": ["_conflicts"]}}' \
+        -Hcontent-type:application/json
+
+Of course, the selector can be enhanced to filter documents on additional
+keys in the document. Be sure to add those keys to your secondary index as
+well, or a full database scan will be triggered.
+
+Finding conflicted documents using the ``_all_docs`` index
+----------------------------------------------------------
+
 You can fetch multiple documents at once using ``include_docs=true`` on a view.
 However, a ``conflicts=true`` request is ignored; the "doc" part of the value
 never includes a ``_conflicts`` member. Hence you would need to do another query

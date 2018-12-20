@@ -54,9 +54,8 @@ A list of the available methods and URL paths are provided below:
 
 .. _api/local/doc:
 
-========================
 ``/db/_local_docs``
-========================
+===================
 
 .. http:get:: /{db}/_local_docs
     :synopsis: Returns a built-in view of all local (non-replicating) documents
@@ -227,7 +226,7 @@ A list of the available methods and URL paths are provided below:
         }
 
 ``/db/_local/id``
-========================
+=================
 
 .. http:get:: /{db}/_local/{docid}
     :synopsis: Returns the latest revision of the local document

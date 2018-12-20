@@ -57,8 +57,8 @@ class ConfigObject(ObjectDescription):
 class ConfigIndex(Index):
 
     name = "ref"
-    localname = "Configuration Reference"
-    shortname = "Config Reference"
+    localname = "Configuration Quick Reference"
+    shortname = "Config Quick Reference"
 
     def generate(self, docnames=None):
         content = dict(

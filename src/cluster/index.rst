@@ -12,9 +12,9 @@
 
 .. _cluster:
 
-=================
-Cluster Reference
-=================
+==================
+Cluster Management
+==================
 
 As of CouchDB 2.0.0, CouchDB can be run in two different modes of operation:
     * Standalone

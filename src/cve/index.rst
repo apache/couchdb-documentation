@@ -12,9 +12,9 @@
 
 .. _cve:
 
-===========================
-Security Issues Information
-===========================
+======================
+Security Issues / CVEs
+======================
 
 .. toctree::
     :maxdepth: 1

@@ -12,9 +12,9 @@
 
 .. _config:
 
-===================
-Configuring CouchDB
-===================
+=============
+Configuration
+=============
 
 .. toctree::
     :maxdepth: 2

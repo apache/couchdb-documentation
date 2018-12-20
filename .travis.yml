@@ -2,6 +2,14 @@ language: python
 python:
   - 3.6
 
+# start a push build on master and release branches + PRs build on every branch
+# Avoid double build on PRs (See https://github.com/travis-ci/travis-ci/issues/1147)
+branches:
+  only:
+    - master
+    - /^\d+\.x\.x$/
+    - /^\d+\.\d+\.x$/
+
 install:
   - pip install -r requirements.txt
 
