@@ -37,7 +37,7 @@ editing the same document saves their changes first, the client gets an edit
 conflict error on save. To resolve the update conflict, the latest document
 version can be opened, the edits reapplied and the update tried again.
 
-Document updates (add, edit, delete) are all or nothing, either succeeding
+Single document updates (add, edit, delete) are all or nothing, either succeeding
 entirely or failing completely. The database never contains partially saved
 or edited documents.
 
@@ -59,7 +59,8 @@ reading documents without being locked out or interrupted by concurrent
 updates, even on the same document. CouchDB read operations use a
 `Multi-Version Concurrency Control` (`MVCC`_) model where each client sees a
 consistent snapshot of the database from the beginning to the end of the read
-operation.
+operation. This means that CouchDB can guarantee transactional semantics on
+a per-document basis.
 
 Documents are indexed in `B-trees`_ by their name (DocID) and a Sequence ID.
 Each update to a database instance generates a new sequential number.
@@ -317,15 +318,6 @@ document management application with granular security and full revision
 histories. Updates to documents can be implemented to exploit incremental
 field and blob replication, where replicated updates are nearly as efficient
 and incremental as the actual edit differences ("diffs").
-
-The CouchDB replication model can be modified for other distributed update
-models. If the storage engine is enhanced to allow multi-document update
-transactions, it is possible to perform Subversion-like "all or nothing"
-atomic commits when replicating with an upstream server, such that any single
-document conflict or validation failure will cause the entire update to fail.
-Like Subversion, conflicts would be resolved by doing a "pull" replication to
-force the conflicts locally, then merging and  re-replicating to the upstream
-server.
 
 Implementation
 ==============

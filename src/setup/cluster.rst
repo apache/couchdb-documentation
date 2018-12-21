@@ -278,10 +278,10 @@ Now your cluster is ready and available! You can send requests to any one of
 the nodes, and all three will respond as if you are working with a single
 CouchDB cluster.
 
-For a proper production setup, you'd now set up an HTTP proxy in front of the
-node that does load balancing and SSL termination, if desired. We recommend
-`HAProxy`_. See our `example configuration for HAProxy`_. All you need is to
-adjust the IP addresses or hostnames and ports.
+For a proper production setup, you'd now set up an HTTP reverse proxy in front
+of the cluster, for load balancing and SSL termination. We recommend
+`HAProxy`_, but others can be used. Sample configurations are available in the
+:ref:`best-practices` section.
 
 .. _cluster/setup/api:
 

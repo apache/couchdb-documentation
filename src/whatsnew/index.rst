@@ -12,12 +12,13 @@
 
 .. _releases:
 
-===============
-Release History
-===============
+=============
+Release Notes
+=============
 
 .. toctree::
     :glob:
+    :maxdepth: 2
 
     2.3
     2.2

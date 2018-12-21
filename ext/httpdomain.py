@@ -495,7 +495,7 @@ class HTTPXRefRole(XRefRole):
 class HTTPIndex(Index):
 
     name = "api"
-    localname = "HTTP API Reference"
+    localname = "API Quick Reference"
     shortname = "API Reference"
 
     def generate(self, docnames=None):
