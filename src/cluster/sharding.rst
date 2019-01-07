@@ -249,7 +249,7 @@ up-to-date before allowing it to participate in end-user requests.
 
 To enable maintenance mode:
 
-.. code-block::bash
+.. code-block:: bash
 
     $ curl -X PUT -H "Content-type: application/json" \
         $COUCH_URL:5984/_node/<nodename>/_config/couchdb/maintenance_mode \
@@ -258,7 +258,7 @@ To enable maintenance mode:
 Then, verify that the node is in maintenance mode by performing a ``GET
 /_up`` on that node's individual endpoint:
 
-.. code-block::bash
+.. code-block:: bash
 
     $ curl -v $COUCH_URL/_up
     …
@@ -453,7 +453,7 @@ Remove the shard and secondary index files from the source node
 Finally, you can remove the source shard replica by deleting its file from the
 command line on the source host, along with any view shard replicas:
 
-.. code-block::bash
+.. code-block:: bash
 
     $ rm <couch-dir>/data/shards/<range>/<dbname>.<datecode>.couch
     $ rm -r <couch-dir>/data/.shards/<range>/<dbname>.<datecode>*
