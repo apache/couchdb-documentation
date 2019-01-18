@@ -16,7 +16,7 @@
 Shard Management
 ================
 
-.. _cluster/sharding/scaling-out:
+.. _cluster/sharding/intro:
 
 Introduction
 ------------
@@ -105,13 +105,13 @@ have responded:
 
 .. code-block:: bash
 
-    $ curl "$COUCH_URL:5984/<doc>?r=2"
+    $ curl "$COUCH_URL:5984/<db>/<doc>?r=2"
 
 Here is a similar example for writing a document:
 
 .. code-block:: bash
 
-    $ curl -X PUT "$COUCH_URL:5984/<doc>?w=2" -d '{...}'
+    $ curl -X PUT "$COUCH_URL:5984/<db>/<doc>?w=2" -d '{...}'
 
 Setting ``r`` or ``w`` to be equal to ``n`` (the number of replicas)
 means you will only receive a response once all nodes with relevant
@@ -120,6 +120,127 @@ guarantee `ACIDic consistency
 <https://en.wikipedia.org/wiki/ACID#Consistency>`__. Setting ``r`` or
 ``w`` to 1 means you will receive a response after only one relevant
 node has responded.
+
+.. _cluster/sharding/examine:
+
+Examining database shards
+-------------------------
+
+There are a few API endpoints that help you understand how a database
+is sharded. Let's start by making a new database on a cluster, and putting
+a couple of documents into it:
+
+.. code-block:: bash
+
+    $ curl -X PUT $COUCH_URL:5984/mydb
+    {"ok":true}
+    $ curl -X PUT $COUCH_URL:5984/mydb/joan -d '{"loves":"cats"}'
+    {"ok":true,"id":"joan","rev":"1-cc240d66a894a7ee7ad3160e69f9051f"}
+    $ curl -X PUT $COUCH_URL:5984/mydb/robert -d '{"loves":"dogs"}'
+    {"ok":true,"id":"robert","rev":"1-4032b428c7574a85bc04f1f271be446e"}
+
+First, the top level :ref:`api/db` endpoint will tell you what the sharding parameters
+are for your database:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/db | jq .
+    {
+      "db_name": "mydb",
+    ...
+      "cluster": {
+        "q": 8,
+        "n": 3,
+        "w": 2,
+        "r": 2
+      },
+    ...
+    }
+
+So we know this database was created with 8 shards (``q=8``), and each
+shard has 3 replicas (``n=3``) for a total of 24 shard replicas across
+the nodes in the cluster.
+
+Now, let's see how those shard replicas are placed on the cluster with
+the :ref:`api/db/shards` endpoint:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/mydb/_shards | jq .
+    {
+      "shards": {
+        "00000000-1fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "20000000-3fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "40000000-5fffffff": [
+          "node2@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "60000000-7fffffff": [
+          "node1@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "80000000-9fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "a0000000-bfffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "c0000000-dfffffff": [
+          "node2@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "e0000000-ffffffff": [
+          "node1@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ]
+      }
+    }
+
+Now we see that there are actually 4 nodes in this cluster, and CouchDB
+has spread those 24 shard replicas evenly across all 4 nodes.
+
+We can also see exactly which shard contains a given document with
+the :ref:`api/db/shards/doc` endpoint:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/mydb/_shards/joan | jq .
+    {
+      "range": "e0000000-ffffffff",
+      "nodes": [
+        "node1@127.0.0.1",
+        "node3@127.0.0.1",
+        "node4@127.0.0.1"
+      ]
+    }
+    $ curl -s $COUCH_URL:5984/mydb/_shards/robert | jq .
+    {
+      "range": "60000000-7fffffff",
+      "nodes": [
+        "node1@127.0.0.1",
+        "node3@127.0.0.1",
+        "node4@127.0.0.1"
+      ]
+    }
+
+CouchDB shows us the specific shard into which each of the two sample
+documents is mapped.
 
 .. _cluster/sharding/move:
 
@@ -401,23 +522,46 @@ Now you can ``PUT`` this new metadata:
 
     $ curl -X PUT http://localhost:5986/_dbs/{name} -d '{...}'
 
+.. _cluster/sharding/sync:
+
+Forcing synchronization of the shard(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4.0
+
+Whether you pre-copied shards to your new node or not, you can force
+CouchDB to synchronize all replicas of all shards in a database with the
+:ref:`api/db/sync_shards` endpoint:
+
+.. code-block:: bash
+
+    $ curl -X POST $COUCH_URL:5984/{dbname}/_sync_shards
+    {"ok":true}
+
+This starts the synchronization process. Note that this will put
+additional load onto your cluster, which may affect performance.
+
+It is also possible to force synchronization on a per-shard basis by
+writing to a document that is stored within that shard.
+
+.. note::
+
+    Admins may want to bump their ``[mem3] sync_concurrency`` value to a
+    larger figure for the duration of the shards sync.
+
 .. _cluster/sharding/verify:
 
 Monitor internal replication to ensure up-to-date shard(s)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After you complete the previous step, as soon as CouchDB receives a
-write request for a shard on the target node, CouchDB will check if the
-target node's shard(s) are up to date. If it finds they are not up to
-date, it will trigger an internal replication job to complete this task.
-You can observe this happening by triggering a write to the database
-(update a document, or create a new one), while monitoring the
-``/_node/<nodename>/_system`` endpoint, which includes the
+After you complete the previous step, CouchDB will have started
+synchronizing the shards. You can observe this happening by monitoring
+the ``/_node/<nodename>/_system`` endpoint, which includes the
 ``internal_replication_jobs`` metric.
 
-Once this metric has returned to the baseline from before you wrote the
-document, or is ``0``, the shard replica is ready to serve data and we
-can bring the node out of maintenance mode.
+Once this metric has returned to the baseline from before you started
+the shard sync, or is ``0``, the shard replica is ready to serve data
+and we can bring the node out of maintenance mode.
 
 .. _cluster/sharding/mm-2:
 
