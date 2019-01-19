@@ -86,7 +86,7 @@ Configure and Test the Communication with Erlang
 Make CouchDB use correct IP|FQDN and the open ports
 ----------------------------------------------------
 
-In file ``etc/vm.args`` change the line ``-name couchdb@127.0.0.1`` to
+In file ``etc/vm.args`` change the line ``-name couchdb@127.0.0.1`` to
 ``-name couchdb@<reachable-ip-address|fully-qualified-domain-name>`` which defines
 the name of the node. Each node must have an identifier that allows remote
 systems to talk to it. The node name is of the form
@@ -101,6 +101,12 @@ can access this node -- either the node's fully qualified domain name (FQDN) or
 the node's IP address. The FQDN is preferred so that you can renumber the node's
 IP address without disruption to the cluster. (This is common in cloud-hosted
 environments.)
+
+.. warning::
+
+    Tricks with ``/etc/hosts`` and ``libresolv`` don't work with Erlang.
+    Either properly set up DNS and use fully-qualified domain names, or
+    use IP addresses. DNS and FQDNs are preferred.
 
 Open ``etc/vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
 and ``-kernel inet_dist_listen_max 9200`` like below:
@@ -120,15 +126,16 @@ Confirming connectivity between nodes
 -------------------------------------
 
 For this test, you need 2 servers with working hostnames. Let us call them
-server1 and server2.
+server1.test.com and server2.test.com. They reside at ``192.168.0.1`` and
+``192.168.0.2``, respectively.
 
-On server1:
+On server1.test.com:
 
 .. code-block:: bash
 
     erl -name bus@192.168.0.1 -setcookie 'brumbrum' -kernel inet_dist_listen_min 9100 -kernel inet_dist_listen_max 9200
 
-Then on server2:
+Then on server2.test.com:
 
 .. code-block:: bash
 
@@ -150,9 +157,10 @@ In shell1:
 
 .. code-block:: erlang
 
-    net_kernel:connect_node(car@server2).
+    net_kernel:connect_node(car@192.168.0.2).
 
-This will connect to the node called ``car`` on the server called ``server2``.
+This will connect to the node called ``car`` on the server called
+``192.168.0.2``.
 
 If that returns true, then you have an Erlang cluster, and the firewalls are
 open. This means that 2 CouchDB nodes on these two servers will be able to
@@ -260,14 +268,14 @@ should show all of the nodes in your cluster:
 
     {
       "all_nodes": [
-        "couchdb@server1",
-        "couchdb@server2",
-        "couchdb@server3"
+        "couchdb@server1.test.com",
+        "couchdb@server2.test.com",
+        "couchdb@server3.test.com"
       ],
       "cluster_nodes": [
-        "couchdb@server1",
-        "couchdb@server2",
-        "couchdb@server3"
+        "couchdb@server1.test.com",
+        "couchdb@server2.test.com",
+        "couchdb@server3.test.com"
       ]
     }
 
@@ -345,14 +353,14 @@ Response:
 
     {
         "all_nodes": [
-            "couchdb@couch1",
-            "couchdb@couch2",
-            "couchdb@couch3",
+            "couchdb@couch1.test.com",
+            "couchdb@couch2.test.com",
+            "couchdb@couch3.test.com",
         ],
         "cluster_nodes": [
-            "couchdb@couch1",
-            "couchdb@couch2",
-            "couchdb@couch3",
+            "couchdb@couch1.test.com",
+            "couchdb@couch2.test.com",
+            "couchdb@couch3.test.com",
         ]
     }
 
