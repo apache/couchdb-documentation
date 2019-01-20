@@ -526,7 +526,7 @@ Sending multiple queries to a database
               "docs": [
                 {
                   "ok": {
-                    "_id": "bbb",
+                    "_id": "foo",
                     "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
                     "value": "this is foo",
                     "_revisions": {
@@ -547,7 +547,7 @@ Sending multiple queries to a database
               "docs": [
                 {
                   "ok": {
-                    "_id": "bbb",
+                    "_id": "foo",
                     "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
                     "value": "this is the first revision of foo",
                     "_revisions": {
