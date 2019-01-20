@@ -471,6 +471,8 @@ Sending multiple queries to a database
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`multipart/related`
+                     - :mimetype:`multipart/mixed`
     :<header Content-Type: :mimetype:`application/json`
     :query boolean revs: Give the revisions history
     :<json array docs: List of document objects, with ``id``, and optionally
