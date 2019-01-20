@@ -612,6 +612,11 @@ Specifying database placement
 You can configure CouchDB to put shard replicas on certain nodes at
 database creation time using placement rules.
 
+.. warning::
+
+    Use of the ``placement`` option will **override** the ``n`` option,
+    both in the ``.ini`` file as well as when specified in a ``URL``.
+
 First, each node must be labeled with a zone attribute. This defines
 which zone each node is in. You do this by editing the node’s document
 in the ``/_nodes`` database, which is accessed through the node-local
@@ -652,6 +657,9 @@ when the database is created, using the same syntax as the ini file:
 .. code-block:: bash
 
     curl -X PUT $COUCH_URL:5984/<dbname>?zone=<zone>
+
+The ``placement`` argument may also be specified. Note that this *will*
+override the logic that determines the number of created replicas!
 
 Note that you can also use this system to ensure certain nodes in the
 cluster do not host any replicas for newly created databases, by giving

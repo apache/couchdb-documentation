@@ -56,6 +56,11 @@ Cluster Options
 
     .. config:option:: placement
 
+    .. warning::
+
+        Use of this option will **override** the ``n`` option for replica
+        cardinality. Use with care.
+
     Sets the cluster-wide replica placement policy when creating new
     databases. The value must be a comma-delimited list of strings of the
     format ``zone_name:#``, where ``zone_name`` is a zone as specified in
