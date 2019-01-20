@@ -40,6 +40,7 @@ Where ``db`` is the name of any database.
     common
     bulk-api
     find
+    shard
     changes
     compact
     security
