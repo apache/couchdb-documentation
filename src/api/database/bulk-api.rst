@@ -476,8 +476,12 @@ Sending multiple queries to a database
     :<json array docs: List of document objects, with ``id``, and optionally
       ``rev`` and ``atts_since``
     :>header Content-Type: - :mimetype:`application/json`
-    :>json object results: the documents, with the additional ``_revisions``
-      property that lists the parent revisions if ``revs=true``
+    :>json object results: an array of results for each requested document/rev
+      pair. ``id`` key lists the requested document ID, ``docs`` contains a
+      single-item array of objects, each of which has either an ``error`` key and
+      value describing the error, or ``ok`` key and associated value of the
+      requested document, with the additional ``_revisions`` property that lists
+      the parent revisions if ``revs=true``.
     :code 200: Request completed successfully
     :code 400: The request provided invalid JSON data or invalid query parameter
     :code 401: Read permission required
