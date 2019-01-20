@@ -473,10 +473,10 @@ Sending multiple queries to a database
     :<header Accept: - :mimetype:`application/json`
     :<header Content-Type: :mimetype:`application/json`
     :query boolean revs: Give the revisions history
-    :<json array docs: List of document objects, with ``id``, and optionnaly
+    :<json array docs: List of document objects, with ``id``, and optionally
       ``rev`` and ``atts_since``
     :>header Content-Type: - :mimetype:`application/json`
-    :>json object results: the documents, with the additionnal ``_revisions``
+    :>json object results: the documents, with the additional ``_revisions``
       property that lists the parent revisions if ``revs=true``
     :code 200: Request completed successfully
     :code 400: The request provided invalid JSON data or invalid query parameter
