@@ -506,6 +506,9 @@ Sending multiple queries to a database
                 {
                     "id": "bar",
                 }
+                {
+                    "id": "baz",
+                }
             ]
         }
 
@@ -575,6 +578,19 @@ Sending multiple queries to a database
                         "309651b95df56d52658650fb64257b97"
                       ]
                     }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "baz",
+              "docs": [
+                {
+                  "error": {
+                    "id": "baz",
+                    "rev": "undefined",
+                    "error": "not_found",
+                    "reason": "missing"
                   }
                 }
               ]
