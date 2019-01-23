@@ -86,6 +86,8 @@
     :>json string update_seq: An opaque string that describes the state
       of the database. Do not rely on this string for counting the number
       of updates.
+    :>json boolean props.partitioned: (optional) If present and true this
+      indicates the the database is partitioned.
     :code 200: Request completed successfully
     :code 404: Requested database not found
 
@@ -126,6 +128,7 @@
             "other": {
                 "data_size": 66982448
             },
+            "props": {},
             "purge_seq": 0,
             "sizes": {
                 "active": 65031503,
@@ -159,6 +162,8 @@
     :query integer n: Replicas. The number of copies of the database in the
       cluster. The default is 3, unless overridden in the
       :config:option:`cluster config <cluster/n>` .
+    :query boolean partitioned: Whether to create a partitioned database.
+      Default is false.
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
