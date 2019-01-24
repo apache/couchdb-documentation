@@ -10,7 +10,9 @@ You can view the latest rendered build of this content at:
 Install Python 2.7+ and pip. Then:
 
 ```sh
-$ sudo pip install Sphinx sphinx_rtd_theme
+$ virtualenv venv
+$ . ./venv/bin/activate
+$ pip install -r requirements.txt
 $ make html # builds the docs
 $ make check # syntax checks the docs
 ```
