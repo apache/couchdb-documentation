@@ -160,7 +160,7 @@ Configuration of Compaction Daemon
         indexes need to be compacted::
 
             [compaction_daemon]
-            check_interval = 300
+            check_interval = 3600
 
     .. config:option:: min_file_size
 
