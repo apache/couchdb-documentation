@@ -157,7 +157,8 @@ Configuration of Compaction Daemon
     .. config:option:: check_interval
 
         The delay, in seconds, between each check for which database and view
-        indexes need to be compacted::
+        indexes need to be compacted. In other words, this delay will occur
+        after *all* databases and views are compacted (or at least checked)::
 
             [compaction_daemon]
             check_interval = 3600
