@@ -172,6 +172,17 @@ Configuration of Compaction Daemon
             [compaction_daemon]
             min_file_size = 131072
 
+    .. config:option:: snooze_period_ms
+
+        With lots of databases and/or with lots of design docs in one or more
+        databases, the compaction_daemon can create significant CPU load when
+        checking whether databases and view indexes need compacting. The
+        ``snooze_period_ms`` setting ensures a smoother CPU load. Defaults to
+        3000 milliseconds wait.
+
+            [compaction_daemon]
+            snooze_period_ms = 3000
+
 .. _config/view_compaction:
 
 Views Compaction Options
