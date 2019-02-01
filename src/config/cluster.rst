@@ -40,7 +40,7 @@ Cluster Options
     creation time.
 
     .. seealso::
-        httpdomain:put:`PUT /{db} </{db}>`
+        :http:put:`PUT /{db} </{db}>`
 
     .. config:option:: n
 

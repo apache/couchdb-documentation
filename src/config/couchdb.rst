@@ -24,8 +24,6 @@ Base CouchDB Options
 
 .. config:section:: couchdb :: Base CouchDB Options
 
-    .. lint: ignore errors for the next 1 line
-
     .. config:option:: attachment_stream_buffer_size :: Attachment streaming buffer
 
         Higher values may result in better read performance due to fewer read

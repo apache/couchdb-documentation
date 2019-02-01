@@ -26,7 +26,6 @@ IGNORE_ERROR = False
 def error_report(file, line, msg, _state=[]):
     global HAS_ERRORS, IGNORE_ERROR
     if IGNORE_ERROR:
-        IGNORE_ERROR = False
         return
     if _state and _state[0] == file.name:
         pass
@@ -64,6 +63,8 @@ def iter_rst_files(path):
 
 
 def validate(file):
+    global IGNORE_ERROR
+    IGNORE_ERROR = False
     rules = [rule(file) for rule in RULES]
     for rule in rules:
         for _ in rule:
@@ -103,6 +104,8 @@ def silent_scream(file):
         if counter:
             IGNORE_ERROR = True
             counter -= 1
+        else:
+            IGNORE_ERROR = False
 
         match = re.match("\s*.. lint: ignore errors for the next (\d+) line?", line)
         if match:
