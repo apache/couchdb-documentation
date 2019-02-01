@@ -26,7 +26,6 @@ the end of the process, all active documents on the source database are also in
 the destination database and all documents that were deleted in the source
 databases are also deleted on the destination database (if they even existed).
 
-
 Transient and Persistant Replication
 ====================================
 
