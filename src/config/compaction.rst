@@ -157,10 +157,11 @@ Configuration of Compaction Daemon
     .. config:option:: check_interval
 
         The delay, in seconds, between each check for which database and view
-        indexes need to be compacted::
+        indexes need to be compacted. In other words, this delay will occur
+        after *all* databases and views are compacted (or at least checked)::
 
             [compaction_daemon]
-            check_interval = 300
+            check_interval = 3600
 
     .. config:option:: min_file_size
 
@@ -170,6 +171,17 @@ Configuration of Compaction Daemon
 
             [compaction_daemon]
             min_file_size = 131072
+
+    .. config:option:: snooze_period_ms
+
+        With lots of databases and/or with lots of design docs in one or more
+        databases, the compaction_daemon can create significant CPU load when
+        checking whether databases and view indexes need compacting. The
+        ``snooze_period_ms`` setting ensures a smoother CPU load. Defaults to
+        3000 milliseconds wait.
+
+            [compaction_daemon]
+            snooze_period_ms = 3000
 
 .. _config/view_compaction:
 
