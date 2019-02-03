@@ -132,7 +132,7 @@ Authentication Configuration
 
             [couch_httpd_auth]
             allow_persistent_cookies = false
-    
+
     .. config:option:: cookie_domain :: Cookie Domain
 
         .. versionadded:: 2.1.1
