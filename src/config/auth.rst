@@ -132,6 +132,16 @@ Authentication Configuration
 
             [couch_httpd_auth]
             allow_persistent_cookies = false
+    
+    .. config:option:: cookie_domain :: Cookie Domain
+
+        .. versionadded:: 2.1.1
+
+        Configures the ``domain`` attribute of the ``AuthSession`` cookie. By default the
+        ``domain`` attribute is empty, resulting in the cookie being set on CouchDB's domain. ::
+
+            [couch_httpd_auth]
+            cookie_domain = example.com
 
     .. config:option:: auth_cache_size :: Authentication cache
 
