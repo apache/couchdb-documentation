@@ -71,7 +71,7 @@ all nodes are connected to all other nodes, in a mesh network configuration.
 Every Erlang application running on that machine (such as CouchDB) then uses
 automatically assigned ports for communciation with other nodes. Yes, this
 means random ports. This will obviously not work with a firewall, but it is
-possible to force an Erlang application to use a specific port rage.
+possible to force an Erlang application to use a specific port range.
 
 This documentation will use the range TCP ``9100-9200``, but this range is
 unnecessarily broad. If you only have a single Erlang application running on a
@@ -146,8 +146,8 @@ An explanation to the commands:
     * ``-name bus@192.168.0.1`` the name of the Erlang node and its IP address or FQDN.
     * ``-setcookie 'brumbrum'`` the "password" used when nodes connect to each
       other.
-    * ``-kernel inet_dist_listen_min 9100`` the lowest port in the rage.
-    * ``-kernel inet_dist_listen_max 9200`` the highest port in the rage.
+    * ``-kernel inet_dist_listen_min 9100`` the lowest port in the range.
+    * ``-kernel inet_dist_listen_max 9200`` the highest port in the range.
 
 This gives us 2 Erlang shells. shell1 on server1, shell2 on server2.
 Time to connect them. Enter the following, being sure to end the line with a
