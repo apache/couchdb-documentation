@@ -568,6 +568,14 @@ Cross-Origin Resource Sharing
             [cors]
             methods = GET,POST
 
+    .. config:option:: max_age
+
+        Sets the ``Access-Control-Max-Age`` header in seconds. Use it to
+        avoid repeated ``OPTIONS`` requests.
+
+            [cors]
+            max_age = 3600
+
     .. seealso::
         Original JIRA `implementation ticket <https://issues.apache.org/jira/browse/COUCHDB-431>`_
 
