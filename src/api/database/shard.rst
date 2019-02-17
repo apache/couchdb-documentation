@@ -165,7 +165,7 @@
 ``/db/_sync_shards``
 =====================
 
-.. versionadded:: 2.4.0
+.. versionadded:: 2.3.1
 
 .. http:post:: /{db}/_sync_shards
     :synopsis: Trigger a synchronization of all shard replicas

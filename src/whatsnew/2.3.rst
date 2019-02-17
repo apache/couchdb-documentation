@@ -107,6 +107,46 @@ Upgrade Notes
 * :ghissue:`1680`: The embedded version of ``rebar`` used to build CouchDB has been
   updated to the last version of ``rebar2`` available. This assists in building on
   non-x86 platforms.
+* :ghissue:`1875`: Refuse building with known bad versions of Erlang.
+
+.. _release/2.3.1:
+
+Version 2.3.1
+=============
+
+Features
+--------
+
+.. rst-class:: open
+
+* :ghissue:`1811`: Add new ``/{db}/_sync_shards`` endpoint (admin-only).
+* :ghissue:`1870`: Update to mochiweb 2.19.0. See also :ghissue:`1875`.
+* :ghissue:`1875`: Refuse building with known bad versions of Erlang.
+* :ghissue:`1880`: Compaction: Add snooze_period_ms for finer tuning.
+
+Bugfixes
+--------
+
+.. rst-class:: open
+
+* :ghissue:`1795`: Filter out empty missing_revs results in ``mem3_rep``.
+* :ghissue:`1384`: Fix ``function_clause`` error on invalid DB ``_security`` objects.
+* :ghissue:`1841`: Fix ``end_time`` field in ``/_replicate`` response.
+* :ghissue:`1860`: Fix read repair in a mixed cluster environment.
+* :ghissue:`1862`: Fix ``fabric_open_doc_revs``.
+* :ghissue:`1865`: Support purge requests with more than 100 doc ids.
+* :ghissue:`1867`: Fix timeout in ``chttpd_purge_tests``.
+* :ghissue:`1766`: Add default fabric request timeouts.
+* :ghissue:`1810`: Requests return 400 Bad Request when URL length exceeds 1460
+  characters. See :ghissue:`1870` for details.
+* :ghissue:`1799`: Restrict ``_purge`` to server admin.
+* :ghissue:`1874`: This fixes inability to set keys with regex symbols in them.
+* :ghissue:`1901`: Fix badarg crash on invalid rev for individual doc update.
+* :ghissue:`1897`: Fix ``from_json_obj_validate`` crash when provided rev isn't
+  a valid hex.
+* :ghissue:`1803`: Use the same salt for admin passwords on cluster setup.
+* :ghissue:`1053`: Fix python2 compatibility for ``couchup``.
+* :ghissue:`1905`: Fix python3 compatibility for ``couchup``.
 
 .. _release/2.3.0:
 
