@@ -21,63 +21,61 @@ Query Servers
 Query Servers Definition
 ========================
 
-.. config:section:: query_servers :: Query Servers Definition
+.. versionchanged:: 2.3 Changed configuration method for Query Servers
+  and Native Query Servers.
 
-    .. versionchanged:: 2.3 Changed configuration method for Query Servers
-      and Native Query Servers.
+CouchDB delegates computation of :ref:`design documents <ddocs>` functions
+to external query servers. The external query server is a special OS
+process which communicates with CouchDB over standard input/output using a
+very simple line-based protocol with JSON messages.
 
-    CouchDB delegates computation of :ref:`design documents <ddocs>` functions
-    to external query servers. The external query server is a special OS
-    process which communicates with CouchDB over standard input/output using a
-    very simple line-based protocol with JSON messages.
+An external query server may be defined with environment variables following
+this pattern::
 
-    An external query server may be defined with environment variables following
-    this pattern::
+    COUCHDB_QUERY_SERVER_LANGUAGE="PATH ARGS"
 
-        COUCHDB_QUERY_SERVER_LANGUAGE="PATH ARGS"
+Where:
 
-    Where:
+- ``LANGUAGE``: is a programming language which code this query server may
+  execute. For instance, there are `PYTHON`, `RUBY`, `CLOJURE` and other
+  query servers in the wild. This value in *lowercase* is also used for `ddoc`
+  field ``language`` to determine which query server processes the functions.
 
-    - ``LANGUAGE``: is a programming language which code this query server may
-      execute. For instance, there are `PYTHON`, `RUBY`, `CLOJURE` and other
-      query servers in the wild. This value in *lowercase* is also used for `ddoc`
-      field ``language`` to determine which query server processes the functions.
+  Note, that you may set up multiple query servers for the same programming
+  language, but you have to name them differently (like `PYTHONDEV` etc.).
 
-      Note, that you may set up multiple query servers for the same programming
-      language, but you have to name them differently (like `PYTHONDEV` etc.).
+- ``PATH``: is a system path to the executable binary program that runs the
+  query server.
 
-    - ``PATH``: is a system path to the executable binary program that runs the
-      query server.
+- ``ARGS``: optionally, you may specify additional command line arguments
+  for the executable ``PATH``.
 
-    - ``ARGS``: optionally, you may specify additional command line arguments
-      for the executable ``PATH``.
+The default query server is written in :ref:`JavaScript <query-server/js>`,
+running via `Mozilla SpiderMonkey`_. It requires no special environment
+settings to enable, but is the equivalent of these two variables::
 
-    The default query server is written in :ref:`JavaScript <query-server/js>`,
-    running via `Mozilla SpiderMonkey`_. It requires no special environment
-    settings to enable, but is the equivalent of these two variables::
+    COUCHDB_QUERY_SERVER_JAVASCRIPT="/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main.js"
+    COUCHDB_QUERY_SERVER_COFFEESCRIPT="/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main-coffee.js"
 
-        COUCHDB_QUERY_SERVER_JAVASCRIPT="/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main.js"
-        COUCHDB_QUERY_SERVER_COFFEESCRIPT="/opt/couchdb/bin/couchjs /opt/couchdb/share/server/main-coffee.js"
+By default, ``couchjs`` limits the max runtime allocation to 64MiB.
+If you run into out of memory issue in your ddoc functions,
+you can adjust the memory limitation (here, increasing to 512 MiB)::
 
-    By default, ``couchjs`` limits the max runtime allocation to 64MiB.
-    If you run into out of memory issue in your ddoc functions,
-    you can adjust the memory limitation (here, increasing to 512 MiB)::
+    COUCHDB_QUERY_SERVER_JAVASCRIPT="/usr/bin/couchjs -S 536870912 /usr/share/server/main.js"
 
-        COUCHDB_QUERY_SERVER_JAVASCRIPT="/usr/bin/couchjs -S 536870912 /usr/share/server/main.js"
+For more info about the available options, please consult ``couchjs -h``.
 
-    For more info about the available options, please consult ``couchjs -h``.
+.. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
 
-    .. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
+.. seealso::
+    The :ref:`Mango Query Server <api/db/_find>` is a declarative language
+    that requires *no programming*, allowing for easier indexing and finding
+    of data in documents.
 
-    .. seealso::
-        The :ref:`Mango Query Server <api/db/_find>` is a declarative language
-        that requires *no programming*, allowing for easier indexing and finding
-        of data in documents.
-
-        The :ref:`Native Erlang Query Server <config/native_query_servers>`
-        allows running `ddocs` written in Erlang natively, bypassing
-        stdio communication and JSON serialization/deserialization round trip
-        overhead.
+    The :ref:`Native Erlang Query Server <config/native_query_servers>`
+    allows running `ddocs` written in Erlang natively, bypassing
+    stdio communication and JSON serialization/deserialization round trip
+    overhead.
 
 .. _config/query_server_config:
 
