@@ -33,6 +33,9 @@ couch_peruser Options
 
         [couch_peruser]
         enable = false
+        
+    .. note::
+        The ``_users`` database must exist before couch_peruser can be enabled.
 
     .. config:option:: delete_dbs
 
