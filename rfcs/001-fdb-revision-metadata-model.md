@@ -26,6 +26,21 @@ interpreted as described in [RFC
 [TIP]:  # ( Provide a list of any unique terms or acronyms, and their
 definitions here.)
 
+`Versionstamp`: a 10 byte, unique, monotonically (but not sequentially)
+increasing value for each committed transaction. The first 8 bytes are the
+committed version of the database. The last 2 bytes are monotonic in the
+serialization order for transactions.
+
+`Incarnation`: a single byte, monotonically increasing value specified for each
+CouchDB database. The `Incarnation` starts at `\x00` when a database is created
+and is incremented by one whenever a database is relocated to a different
+FoundationDB cluster.
+
+`Sequence`: An 11 byte value formed by combining the current `Incarnation` of
+the database and the `Versionstamp` of the transaction. Sequences are
+monotonically increasing even when a database is relocated across FoundationDB
+clusters.
+
 ---
 
 # Detailed Description
@@ -37,11 +52,10 @@ value formats, one that is used for the "winning" edit branch and one used for
 any additional edit branches of the document. The winning edit branch includes
 the following information:
 
-`(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) =
-(Incarnation, Versionstamp, BranchCount, [ParentRev, GrandparentRev, …])`
+`(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) = (Sequence,
+BranchCount, [ParentRev, GrandparentRev, …])`
 
-while the other edit branches omit the `Incarnation`, `Versionstamp` and
-`BranchCount`:
+while the other edit branches omit the `Sequence` and `BranchCount`:
 
 `(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) = (NUL,
 [ParentRev, GrandparentRev, …])`
@@ -55,16 +69,9 @@ The individual elements of the key and value are defined as follows:
 - `RevPosition`: positive integer encoded using standard tuple layer encoding
   (signed, variable-length, order-preserving)
 - `RevHash`: 16 bytes uniquely identifying this revision
-- `(Incarnation, Versionstamp)`: the combination of these two numbers provides a
-  reliable, monotonically incrementing sequence number for a given CouchDB
-  database, even as the database might be moved to different FoundationDB
-  clusters. The `Incarnation` starts at 1 for a database and is incremented if
-  the database is moved to a new cluster, so that all sequences on the new
-  cluster sort after the old one. The `Incarnation` and
-  [Versionstamp](https://apple.github.io/foundationdb/api-python.html#fdb.tuple.Versionstamp)
-  here correspond to the the last transaction that modified the document (NB:
-  not necessarily the last edit to *this* branch).
-- `BranchCount`: the number of KV pairs associated with this document.
+- `Sequence`: the sequence of the last transaction that modified the document
+  (NB: not necessarily the last edit to *this* branch).
+- `BranchCount`: the number of edit branches associated with this document.
 - `[ParentRev, GrandparentRev, ...]`: 16 byte identifiers of ancestors, up to
   1000 by default
 
@@ -77,10 +84,10 @@ single value. Suggest **4000** as a max.
 ## Update Path
 
 Multiple edit branches on a document are largely independent of one another in
-this design, but some coordination is required around the `Versionstamp`. Recall
+this design, but some coordination is required around the `Sequence`. Recall
 that the `_changes` feed includes each document exactly once, so we do not want
 to be able to extend different edit branches in parallel and end up adding both
-stamps to the feed. We address this by storing the `Versionstamp` only on the
+stamps to the feed. We address this by storing the `Sequence` only on the
 so-called "winning" branch. Other branches set this to null.
 
 If a writer comes in and tries to extend a losing edit branch, it will find the
@@ -90,11 +97,11 @@ one will be the winner following that edit, and can assign the extra metadata to
 that branch accordingly.
 
 A writer attempting to delete the winning branch (i.e., setting `NotDeleted` to
-0) will need to read two contiguous KVs, the one for the winner and the one
+`\x00`) will need to read two contiguous KVs, the one for the winner and the one
 right before it. If the branch before it will be the winner following the
-deletion then we move the storage of the extra metadata to it accordingly.
-If the tombstoned branch remains the winner for this document then we only
-update that branch.
+deletion then we move the storage of the extra metadata to it accordingly. If
+the tombstoned branch remains the winner for this document then we only update
+that branch.
 
 A writer extending the winning branch with an updated document (the common case)
 will proceed reading just the one branch.
@@ -139,17 +146,17 @@ The `RevFormat` enum gives us the ability to evolve revision history storage
 over time, and to support alternative conflict resolution policies like Last
 Writer Wins.
 
-Access to `Incarnation` and `Versionstamp` ensures we can clear the old entry in
-the `by_seq` space during an edit. The `set_versionstamped_value` API is used to
+Access to the indexed `Sequence` ensures we can clear the old entry in the
+`changes` subspace during an edit. The `set_versionstamped_value` API is used to
 store this value automatically.
 
 The key structure above naturally sorts so that the "winning" revision is the
 last one in the list, which we leverage when deleting the winning edit branch
 (and thus promoting the one next in line), and extending a conflict branch (to
-coordinate the update to the `Versionstamp`) This is also a small optimization
-for reads with `?revs=true` or `?revs_info=true`, where we want the details of
-the winning edit branch but don't actually know the `RevPosition` and `RevHash`
-of that branch.
+coordinate the update to the `Sequence`) This is also a small optimization for
+reads with `?revs=true` or `?revs_info=true`, where we want the details of the
+winning edit branch but don't actually know the `RevPosition` and `RevHash` of
+that branch.
 
 # Disadvantages
 
@@ -167,7 +174,6 @@ deleted edit branch can succeed if some other `deleted=false` edit branch
 exists. This is an undocumented and seemingly unintentional behavior. If we need
 to match that behavior it will require reading 3 KVs in 2 roundtrips for *every*
 edit that we reject with a conflict.
-
 
 ## Modules affected
 
