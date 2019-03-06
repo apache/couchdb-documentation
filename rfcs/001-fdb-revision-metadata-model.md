@@ -32,14 +32,21 @@ definitions here.)
 
 The size limits in FoundationDB preclude storing the entire revision tree as a
 single value; in pathological situations the tree could exceed 100KB. Rather, we
-propose to store each edit *branch* as a separate KV. Specifically, we create a
-"revisions" subdirectory in each database directory to store the revision trees
-with keys and values that look like
+propose to store each edit *branch* as a separate KV. We have two different
+value formats, one that is used for the "winning" edit branch and one used for
+any additional edit branches of the document. The winning edit branch includes
+the following information:
 
 `(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) =
-(Versionstamp, [ParentRev, GrandparentRev, …])`
+(Incarnation, Versionstamp, BranchCount, [ParentRev, GrandparentRev, …])`
 
-where the individual elements of the key and value are defined as follows:
+while the other edit branches omit the `Incarnation`, `Versionstamp` and
+`BranchCount`:
+
+`(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) = (NUL,
+[ParentRev, GrandparentRev, …])`
+
+The individual elements of the key and value are defined as follows:
 - `DocID`: the document ID
 - `NotDeleted`: `\x00` if the leaf of the edit branch is deleted, `\x01`
   otherwise
@@ -48,10 +55,16 @@ where the individual elements of the key and value are defined as follows:
 - `RevPosition`: positive integer encoded using standard tuple layer encoding
   (signed, variable-length, order-preserving)
 - `RevHash`: 16 bytes uniquely identifying this revision
-- `Versionstamp`: the FoundationDB
-  [versionstamp](https://apple.github.io/foundationdb/api-python.html#fdb.tuple.Versionstamp)
-  associated with the last transaction that modified the document (NB: not
-  necessarily the last edit to *this* branch).
+- `(Incarnation, Versionstamp)`: the combination of these two numbers provides a
+  reliable, monotonically incrementing sequence number for a given CouchDB
+  database, even as the database might be moved to different FoundationDB
+  clusters. The `Incarnation` starts at 1 for a database and is incremented if
+  the database is moved to a new cluster, so that all sequences on the new
+  cluster sort after the old one. The `Incarnation` and
+  [Versionstamp](https://apple.github.io/foundationdb/api-python.html#fdb.tuple.Versionstamp)
+  here correspond to the the last transaction that modified the document (NB:
+  not necessarily the last edit to *this* branch).
+- `BranchCount`: the number of KV pairs associated with this document.
 - `[ParentRev, GrandparentRev, ...]`: 16 byte identifiers of ancestors, up to
   1000 by default
 
@@ -71,20 +84,28 @@ stamps to the feed. We address this by storing the `Versionstamp` only on the
 so-called "winning" branch. Other branches set this to null.
 
 If a writer comes in and tries to extend a losing edit branch, it will find the
-`Versionstamp` to be null and will do an additional edit branch read to retrieve
-the winning branch. It can then compare both branches to see which one will be
-the winner following that edit, and can assign the new `Versionstamp` to that
-branch accordingly.
+first element of the value to be null and will do an additional edit branch read
+to retrieve the winning branch. It can then compare both branches to see which
+one will be the winner following that edit, and can assign the extra metadata to
+that branch accordingly.
 
 A writer attempting to delete the winning branch (i.e., setting `NotDeleted` to
 0) will need to read two contiguous KVs, the one for the winner and the one
 right before it. If the branch before it will be the winner following the
-deletion then we move the storage of the new `Versionstamp` to it accordingly.
+deletion then we move the storage of the extra metadata to it accordingly.
 If the tombstoned branch remains the winner for this document then we only
 update that branch.
 
 A writer extending the winning branch with an updated document (the common case)
 will proceed reading just the one branch.
+
+New edit branches can only be created with `new_edits=false`, so interactive
+writers will just carry over the `BranchCount` with each edit they make. A
+writer with `new_edits=false` will retrieve the full range of KV pairs and set
+the `BranchCount` accordingly. Tracking the `BranchCount` here enables us to
+push that information into the `_changes` feed index, where it can be used to
+optimize the popular `style=all_docs` queries in the common case of a single
+edit branch per document.
 
 Summarizing the performance profile:
 - Extending a losing branch: 2 KVs, 2 roundtrips
@@ -118,9 +139,9 @@ The `RevFormat` enum gives us the ability to evolve revision history storage
 over time, and to support alternative conflict resolution policies like Last
 Writer Wins.
 
-Access to `Versionstamp` ensures we can clear the old entry in the `by_seq`
-space during an edit. The `set_versionstamped_value` API is used to store this
-value automatically.
+Access to `Incarnation` and `Versionstamp` ensures we can clear the old entry in
+the `by_seq` space during an edit. The `set_versionstamped_value` API is used to
+store this value automatically.
 
 The key structure above naturally sorts so that the "winning" revision is the
 last one in the list, which we leverage when deleting the winning edit branch
