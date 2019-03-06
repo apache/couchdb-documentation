@@ -52,23 +52,23 @@ value formats, one that is used for the "winning" edit branch and one used for
 any additional edit branches of the document. The winning edit branch includes
 the following information:
 
-`(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) = (Sequence,
+`(“revisions”, DocID, NotDeleted, RevPosition, RevHash) = (RevFormat, Sequence,
 BranchCount, [ParentRev, GrandparentRev, …])`
 
 while the other edit branches omit the `Sequence` and `BranchCount`:
 
-`(“revisions”, DocID, NotDeleted, RevFormat, RevPosition, RevHash) = (NUL,
+`(“revisions”, DocID, NotDeleted, RevPosition, RevHash) = (RevFormat,
 [ParentRev, GrandparentRev, …])`
 
 The individual elements of the key and value are defined as follows:
 - `DocID`: the document ID
 - `NotDeleted`: `\x00` if the leaf of the edit branch is deleted, `\x01`
   otherwise
-- `RevFormat`: enum for the revision encoding being used, start at `\x01` with
-  this proposal
 - `RevPosition`: positive integer encoded using standard tuple layer encoding
   (signed, variable-length, order-preserving)
 - `RevHash`: 16 bytes uniquely identifying this revision
+- `RevFormat`: enum for the revision encoding being used to enable schema
+  evolution
 - `Sequence`: the sequence of the last transaction that modified the document
   (NB: not necessarily the last edit to *this* branch).
 - `BranchCount`: the number of edit branches associated with this document.
