@@ -112,6 +112,18 @@ as ``http://domain.com/couchdb/db1/doc1`` are proxied to
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
+To enable session based replication with reverse proxied CouchDB in a subdirectory.
+
+.. code-block:: text
+
+    location /_session {
+        proxy_pass http://localhost:5984/_session;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
 Authentication with nginx as a reverse proxy
 --------------------------------------------
 
