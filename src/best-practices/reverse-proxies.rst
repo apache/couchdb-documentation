@@ -112,7 +112,7 @@ as ``http://domain.com/couchdb/db1/doc1`` are proxied to
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-To enable session based replication with reverse proxied CouchDB in a subdirectory.
+Session based replication is default functionality since CouchDB 2.3.0. To enable session based replication with reverse proxied CouchDB in a subdirectory.
 
 .. code-block:: text
 
