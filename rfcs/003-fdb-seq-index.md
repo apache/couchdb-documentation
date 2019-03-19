@@ -203,9 +203,9 @@ it existed at the *beginning* of the response. While future enhancements in
 FoundationDB may allow us to recover that behavior, in the current version we
 may end up with duplicate entries for individual documents that are updated
 during the course of streaming the `_changes` response. The end result will be
-that each document in the database shows up at least once, and if take the last
-entry for each document that you observe in the feed, you'll have the state of
-the database as it existed at the *end* of the response.
+that each document in the database shows up at least once, and if you take the
+last entry for each document that you observe in the feed, you'll have the state
+of the database as it existed at the *end* of the response.
 
 Finally, when a user requests `_changes` with `feed=continuous` there is no
 expectation of exactly-once semantics, and in fact this is implemented using
