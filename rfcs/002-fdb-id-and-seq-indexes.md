@@ -67,11 +67,10 @@ In a future release of CouchDB based on FoundationDB we will be able to offer st
 
 Each database will contain a `changes` subspace with keys and values that take the form
 
-`("changes", Sequence) = (SeqFormat, DocID, RevPosition, RevHash, BranchCount)`
+`("changes", Sequence) = (SeqFormat, DocID, RevPosition, RevHash, BranchCount, NotDeleted)`
 
 where the individual elements are defined as follows:
 
-- `Sequence`: an 11 byte value uniquely identifying th
 - `SeqFormat`: enum for the value encoding, to enable schema evolution
 - `DocID`: the document ID
 - `RevPosition`: positive integer encoded using standard tuple layer encoding
@@ -80,6 +79,8 @@ where the individual elements are defined as follows:
 - `Sequence`: the sequence of the last transaction that modified the document
   (NB: not necessarily the transaction that produced the `RevPosition-RevHash` edit).
 - `BranchCount`: the number of edit branches associated with this document
+- `NotDeleted`: `\x00` if the leaf of the edit branch is deleted, `\x01`
+  otherwise
 
 A typical response to `_changes` includes all of this information in each row except the internal `SeqFormat` and the `BranchCount`. The latter is used as an optimization for the `style=all_docs` request; if this parameter is specified and the `BranchCount` is 1 we can avoid making an extra request to the "revisions" space to discover that there are no other revisions to include.
 
@@ -87,9 +88,9 @@ A typical response to `_changes` includes all of this information in each row ex
 
 As discussed in [RFC 001]() (link TBD), an update attempt always retrieves the metadata KV for the current winning branch from the "revisions" subspace. This metadata entry includes the sequence of the last edit to the document, which serves as the key into the index in our "changes" subspace. The writer will use that information to clear the existing KV from the `_changes` subspace as part of the transaction.
 
-The writer also knows in all cases what the `RevPosition`, `RevHash`, and `BranchCount` will be following the edit, and can use the `set_versionstamped_key` API to write a new KV with the correct new sequence of the transaction into the "changes" subspace.
+The writer also knows in all cases what the `RevPosition`, `RevHash`, `BranchCount`, and `NotDeleted` will be following the edit, and can use the `set_versionstamped_key` API to write a new KV with the correct new sequence of the transaction into the "changes" subspace. Knowledge of `NotDeleted` is slightly subtle; it relies on the sorting of the Keys in the "revisions" subspace to ensure that if any live edit branch exists it will be the winner (and the system always reads the winning branch on any edit).
 
-In short:
+In short, the operations in this subspace are
 - doc insert: 0 read, 0 clear, 1 insert
 - doc update: 0 read, 1 clear, 1 insert
 
