@@ -26,17 +26,18 @@ interpreted as described in [RFC
 [TIP]:  # ( Provide a list of any unique terms or acronyms, and their
 definitions here.)
 
-`Versionstamp`: a 10 byte, unique, monotonically (but not sequentially)
+`Versionstamp`: a 12 byte, unique, monotonically (but not sequentially)
 increasing value for each committed transaction. The first 8 bytes are the
-committed version of the database. The last 2 bytes are monotonic in the
-serialization order for transactions.
+committed version of the database. The next 2 bytes are monotonic in the
+serialization order for transactions. The final 2 bytes are user-defined and can
+be used to create multiple versionstamps in a single transaction.
 
 `Incarnation`: a single byte, monotonically increasing value specified for each
 CouchDB database. The `Incarnation` starts at `\x00` when a database is created
 and is incremented by one whenever a database is relocated to a different
 FoundationDB cluster.
 
-`Sequence`: An 11 byte value formed by combining the current `Incarnation` of
+`Sequence`: a 13 byte value formed by combining the current `Incarnation` of
 the database and the `Versionstamp` of the transaction. Sequences are
 monotonically increasing even when a database is relocated across FoundationDB
 clusters.
