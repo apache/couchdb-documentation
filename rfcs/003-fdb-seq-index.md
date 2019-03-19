@@ -171,12 +171,13 @@ Landing on the ¯\\_(ツ)_/¯ case would require all of the following:
 ### Option 3: Store all transaction IDs, cleanup async
 
 Rather than storing the transaction IDs with the revision IDs, one could write a
-separate blind KV into a transaction ID space. After a successful transaction
-commit, the CouchDB layer could delete the transaction ID asynchronously. For
-example, each process could dump the transaction ID of a successful commit into
-a local ets table, and a process could scan that table once every few seconds
-and clear the associated entries from FDB in a single transaction. The flow for
-this design in the case of `commit_unknown_result` is dramatically simpler:
+separate blind KV into a dedicated transaction ID space. After a successful
+transaction commit, the CouchDB layer could delete the transaction ID
+asynchronously. For example, each process could dump the transaction ID of a
+successful commit into a local ets table (shared by all databases), and a
+process could scan that table once every few seconds and clear the associated
+entries from FDB in a single transaction. The flow for this design in the case
+of `commit_unknown_result` is dramatically simpler:
 
 ![option3](images/003-option3.png)
 
