@@ -129,7 +129,7 @@ L --> |No| M
 L --> |Yes| F
 M --> J
 ```
-![option1](../images/003-option1.png)
+![option1](images/003-option1.png)
 
 The flow above refers to a "transaction ID"; this is an extension of the
 revision metadata to uniquely identify each transaction attempt. A versionstamp
@@ -175,7 +175,7 @@ L --> |No| M
 L --> |Yes| N
 M --> J
 ```
-![option2](../images/003-option2.png)
+![option2](images/003-option2.png)
 
 Landing on the ¯\\_(ツ)_/¯ case would require all of the following:
 - Txn A with `commit_unknown_result`
@@ -201,7 +201,7 @@ A --> |Yes| C
 B[Previous txn failed, retry using normal flow]
 C[Do not retry, return 201 to client]
 ```
-![option3](../images/003-option3.png)
+![option3](images/003-option3.png)
 
 Leaving this section available for comments and suggestions on how to proceed.
 
