@@ -84,12 +84,11 @@ single value. Suggest **4000** as a max.
 
 ## Update Path
 
-Multiple edit branches on a document are largely independent of one another in
-this design, but some coordination is required around the `Sequence`. Recall
-that the `_changes` feed includes each document exactly once, so we do not want
-to be able to extend different edit branches in parallel and end up adding both
-stamps to the feed. We address this by storing the `Sequence` only on the
-so-called "winning" branch. Other branches set this to null.
+Each edit on a document will read and modify the so-called "winning" edit
+branch, a property that is essential for FoundationDB to correctly identify
+concurrent modifications to a given document as conflicting. We enforce this
+specifically by storing the `Sequence` only on the winning branch. Other
+branches set this to null.
 
 If a writer comes in and tries to extend a losing edit branch, it will find the
 first element of the value to be null and will do an additional edit branch read
@@ -107,13 +106,22 @@ that branch.
 A writer extending the winning branch with an updated document (the common case)
 will proceed reading just the one branch.
 
-New edit branches can only be created with `new_edits=false`, so interactive
-writers will just carry over the `BranchCount` with each edit they make. A
-writer with `new_edits=false` will retrieve the full range of KV pairs and set
-the `BranchCount` accordingly. Tracking the `BranchCount` here enables us to
-push that information into the `_changes` feed index, where it can be used to
-optimize the popular `style=all_docs` queries in the common case of a single
-edit branch per document.
+A writer attempting to insert a new document without any base revision will need
+to execute a `get_range_startswith` operation with `limit=1` and `reverse=true`
+on the key range prefixed by ("revisions", DocID). A null result from that range
+read would be the signal to go ahead with the write. If another transaction
+races our writer and inserts the document first FoundationDB will detect the
+intersection between the write set of that transaction and the read range here
+and correctly cause our writer to fail.
+
+New edit branches can only be created on that first edit to a document or during
+`new_edits=false`, so most interactive writers will just carry over the
+`BranchCount` with each edit they make. A writer with `new_edits=false` will
+retrieve the full range of KV pairs and set the `BranchCount` accordingly.
+Tracking the `BranchCount` here enables us to push that information into the
+`_changes` feed index, where it can be used to optimize the popular
+`style=all_docs` queries in the common case of a single edit branch per
+document.
 
 Summarizing the performance profile:
 - Extending a losing branch: 2 KVs, 2 roundtrips
