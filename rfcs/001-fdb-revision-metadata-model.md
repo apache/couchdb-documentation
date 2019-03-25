@@ -63,8 +63,8 @@ while the other edit branches omit the `Sequence` and `BranchCount`:
 
 The individual elements of the key and value are defined as follows:
 - `DocID`: the document ID
-- `NotDeleted`: `\x00` if the leaf of the edit branch is deleted, `\x01`
-  otherwise
+- `NotDeleted`: `\x26` if the leaf of the edit branch is deleted, `\x27`
+  otherwise (following tuple encoding for booleans)
 - `RevPosition`: positive integer encoded using standard tuple layer encoding
   (signed, variable-length, order-preserving)
 - `RevHash`: 16 bytes uniquely identifying this revision
@@ -97,7 +97,7 @@ one will be the winner following that edit, and can assign the extra metadata to
 that branch accordingly.
 
 A writer attempting to delete the winning branch (i.e., setting `NotDeleted` to
-`\x00`) will need to read two contiguous KVs, the one for the winner and the one
+`\x26`) will need to read two contiguous KVs, the one for the winner and the one
 right before it. If the branch before it will be the winner following the
 deletion then we move the storage of the extra metadata to it accordingly. If
 the tombstoned branch remains the winner for this document then we only update
