@@ -94,8 +94,8 @@ where the individual elements are defined as follows:
   (NB: not necessarily the transaction that produced the `RevPosition-RevHash`
   edit).
 - `BranchCount`: the number of edit branches associated with this document
-- `NotDeleted`: `\x00` if the leaf of the edit branch is deleted, `\x01`
-  otherwise
+- `NotDeleted`: `\x26` if the leaf of the edit branch is deleted, `\x27`
+  otherwise (following tuple encoding for booleans)
 
 A typical response to `_changes` includes all of this information in each row
 except the internal `SeqFormat` and the `BranchCount`. The latter is used as an
