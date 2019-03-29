@@ -84,6 +84,7 @@ Let's do another walk through the API using `curl` to see how CouchDB behaves
 when you add admin users. ::
 
     > HOST="http://127.0.0.1:5984"
+    > NODENAME="_local"
     > curl -X PUT $HOST/database
     {"ok":true}
 
@@ -98,6 +99,13 @@ value for the :ref:`configuration API <api/config>`::
 As per the :ref:`_config <api/config>` API's behavior, we're getting
 the previous value for the config item we just wrote. Since our admin user
 didn't exist, we get an empty string.
+
+Please note that ``_local`` serves as an  alias for the local node name, so
+for all configuration URLs, ``NODENAME`` may be set to ``_local``, to interact
+with the local node’s configuration.
+
+.. seealso::
+    :ref:`Node Management <cluster/nodes>`
 
 Hashing Passwords
 ^^^^^^^^^^^^^^^^^
