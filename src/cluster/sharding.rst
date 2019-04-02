@@ -247,6 +247,10 @@ documents is mapped.
 Moving a shard
 --------------
 
+When moving shards or performing other shard manipulations on the cluster, it
+is advisable to stop all resharding jobs on the cluster. See
+:ref:`cluster/sharding/stop_resharding` for more details.
+
 This section describes how to manually place and replace shards. These
 activities are critical steps when you determine your cluster is too big
 or too small, and want to resize it successfully, or you have noticed
@@ -666,25 +670,207 @@ cluster do not host any replicas for newly created databases, by giving
 them a zone attribute that does not appear in the ``[cluster]``
 placement string.
 
-Resharding a database to a new q value
---------------------------------------
+.. _cluster/sharding/splitting_shards:
 
-The ``q`` value for a database can only be set when the database is
-created, precluding live resharding. Instead, to reshard a database, it
-must be regenerated. Here are the steps:
+Splitting Shards
+----------------
 
-1. Create a temporary database with the desired shard settings, by
+The :ref:`api/server/reshard` is an HTTP API for shard manipulation. Currently
+it only supports shard splitting. To perform shard merging, refer to the manual
+process outlined in the :ref:`cluster/sharding/merging_shards` section.
+
+The main way to interact with :ref:`api/server/reshard` is to create resharding
+jobs, monitor those jobs, wait until they complete, remove them, post new jobs,
+and so on. What follows are a few steps one might take to use this API to split
+shards.
+
+At first, it's a good idea to call ``GET /_reshard`` to see a summary of
+resharding on the cluster.
+
+.. code-block:: bash
+
+   $ curl -s $COUCH_URL:5984/_reshard | jq .
+   {
+     "state": "running",
+     "state_reason": null,
+     "completed": 3,
+     "failed": 0,
+     "running": 0,
+     "stopped": 0,
+     "total": 3
+   }
+
+Two important things to pay attention to are the total number of jobs and the state.
+
+The ``state`` field indicates the state of resharding on the cluster. Normally
+it would be ``running``, however, another user could have disabled resharding
+temporarily. Then, the state would be ``stopped`` and hopefully, there would be
+a reason or a comment in the value of the ``state_reason`` field. See
+:ref:`cluster/sharding/stop_resharding` for more details.
+
+The ``total`` number of jobs is important to keep an eye on because there is a
+maximum number of resharding jobs per node, and creating new jobs after the
+limit has been reached will result in an error. Before staring new jobs it's a
+good idea to remove already completed jobs. See :ref:`reshard configuration
+section <config/reshard>` for the default value of ``max_jobs`` parameter and
+how to adjust if needed.
+
+For example, if the jobs have completed, to remove all the jobs run:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/_reshard/jobs | jq -r '.jobs[].id' |\
+      while read -r jobid; do\
+          curl -s -XDELETE $COUCH_URL:5984/_reshard/jobs/$jobid\
+      done
+
+Then it's a good idea to see what the db shard map looks like.
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/db1/_shards | jq '.'
+    {
+      "shards": {
+        "00000000-7fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "80000000-ffffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ]
+      }
+    }
+
+In this example we'll split all the copies of the ``00000000-7fffffff`` range.
+The API allows a combination of parameters such as: splitting all
+the ranges on all the nodes, all the ranges on just one node, or one particular
+range on one particular node. These are specified via the ``db``,
+``node`` and ``range`` job parameters.
+
+To split all the copies of ``00000000-7fffffff`` we issue a request like this:
+
+.. code-block:: bash
+
+    $ curl -s -H "Content-type: application/json" -XPOST $COUCH_URL:5984/_reshard/jobs \
+      -d '{"type": "split", "db":"db1", "range":"00000000-7fffffff"}' | jq '.'
+    [
+      {
+        "ok": true,
+        "id": "001-ef512cfb502a1c6079fe17e9dfd5d6a2befcc694a146de468b1ba5339ba1d134",
+        "node": "node1@127.0.0.1",
+        "shard": "shards/00000000-7fffffff/db1.1554242778"
+      },
+      {
+        "ok": true,
+        "id": "001-cec63704a7b33c6da8263211db9a5c74a1cb585d1b1a24eb946483e2075739ca",
+        "node": "node2@127.0.0.1",
+        "shard": "shards/00000000-7fffffff/db1.1554242778"
+      },
+      {
+        "ok": true,
+        "id": "001-fc72090c006d9b059d4acd99e3be9bb73e986d60ca3edede3cb74cc01ccd1456",
+        "node": "node3@127.0.0.1",
+        "shard": "shards/00000000-7fffffff/db1.1554242778"
+      }
+    ]
+
+The request returned three jobs, one job for each of the three copies.
+
+To check progress of these jobs use ``GET /_reshard/jobs`` or ``GET
+/_reshard/jobs/{jobid}``.
+
+Eventually, these jobs should complete and the shard map should look like this:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/db1/_shards | jq '.'
+    {
+      "shards": {
+        "00000000-3fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "40000000-7fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "80000000-ffffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ]
+      }
+    }
+
+.. _cluster/sharding/stop_resharding:
+
+Stopping Resharding Jobs
+------------------------
+
+Resharding at the cluster level could be stopped and then restarted. This can
+be helpful to allow external tools which manipulate the shard map to avoid
+interfering with resharding jobs. To stop all resharding jobs on a cluster
+issue a ``PUT`` to ``/_reshard/state`` endpoint with the ``"state": "stopped"``
+key and value. You can also specify an optional note or reason for stopping.
+
+For example:
+
+.. code-block:: bash
+
+    $ curl -s -H "Content-type: application/json" \
+      -XPUT $COUCH_URL:5984/_reshard/state \
+      -d '{"state": "stopped", "reason":"Moving some shards"}'
+    {"ok": true}
+
+This state will then be reflected in the global summary:
+
+.. code-block:: bash
+
+   $ curl -s $COUCH_URL:5984/_reshard | jq .
+   {
+     "state": "stopped",
+     "state_reason": "Moving some shards",
+     "completed": 74,
+     "failed": 0,
+     "running": 0,
+     "stopped": 0,
+     "total": 74
+   }
+
+To restart, issue a ``PUT`` request like above with ``running`` as the state.
+That should resume all the shard splitting jobs since their last checkpoint.
+
+See the API reference for more details: :ref:`api/server/reshard`.
+
+.. _cluster/sharding/merging_shards:
+
+Merging Shards
+--------------
+
+The ``q`` value for a database can be set when the database is created or it
+can be increased later by splitting some of the shards
+:ref:`cluster/sharding/splitting_shards`. In order to decrease ``q`` and merge
+some shards together, the database must be regenerated. Here are the steps:
+
+1. If there are running shard splitting jobs on the cluster, stop them via the
+   HTTP API :ref:`cluster/sharding/stop_resharding`.
+2. Create a temporary database with the desired shard settings, by
    specifying the q value as a query parameter during the PUT
    operation.
-2. Stop clients accessing the database.
-3. Replicate the primary database to the temporary one. Multiple
+3. Stop clients accessing the database.
+4. Replicate the primary database to the temporary one. Multiple
    replications may be required if the primary database is under
    active use.
-4. Delete the primary database. **Make sure nobody is using it!**
-5. Recreate the primary database with the desired shard settings.
-6. Clients can now access the database again.
-7. Replicate the temporary back to the primary.
-8. Delete the temporary database.
+5. Delete the primary database. **Make sure nobody is using it!**
+6. Recreate the primary database with the desired shard settings.
+7. Clients can now access the database again.
+8. Replicate the temporary back to the primary.
+9. Delete the temporary database.
 
 Once all steps have completed, the database can be used again. The
 cluster will create and distribute its shards according to placement
