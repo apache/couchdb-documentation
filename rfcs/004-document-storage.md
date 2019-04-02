@@ -192,6 +192,8 @@ The disadvantages of this approach are that it uses a larger number of key-value
 pairs and has a higher overall storage overhead from the repeated common key
 prefixes. The new FoundationDB storage engine should eliminate some of the
 storage overhead.
+As per the FoundationDB discussion about being able to co-locate compute operations with data storage servers/nodes](https://forums.foundationdb.org/t/feature-request-predicate-pushdown/954/6), if we were to make use of this hypothetical feature, we’d not get a guarantee of entire documents being co-located on one storage node, requiring us to do extra work should we want to, say, assemble a full `doc` to send to a map function. JS views would have a harder time, while Mango indexes with their explicit field declarations might get around this particular complexity more easily. For now, this is recorded here so we don’t forget track of this later.
+
 
 # Key Changes
 
