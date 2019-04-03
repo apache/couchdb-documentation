@@ -31,3 +31,4 @@ Configuration
     query-servers
     services
     misc
+    resharding
