@@ -88,6 +88,11 @@ would be represented by a key-value pair of
 pack({"foo", "bar", "baz"}) = pack({123})
 ```
 
+Clients SHOULD NOT submit objects containing duplicate keys, as CouchDB will
+only preserve  the last occurence of the key and will silently drop the other
+occurrences. Similarly, clients MUST NOT rely on the ordering of keys within an
+Object as this ordering will generally not be preserved by the database.
+
 An array of N elements is represented by N distinct key-value pairs, where the
 last element of the tuple key is an integer representing the zero-indexed
 position of the value within the array. As an example:
