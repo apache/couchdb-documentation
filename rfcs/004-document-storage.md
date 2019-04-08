@@ -85,7 +85,7 @@ identifying the path to a final leaf value. For example, the object
 would be represented by a key-value pair of
 
 ```
-pack({"foo", "bar", "baz"}) = pack(123)
+pack({"foo", "bar", "baz"}) = pack({123})
 ```
 
 An array of N elements is represented by N distinct key-value pairs, where the
