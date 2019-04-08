@@ -37,8 +37,8 @@ key prefix elision in the Redwood engine should also help on that front.
 
 FoundationDB imposes a hard 10MB limit on transactions. In order to reserve
 space for additional metadata, user-defined indexes, and generally drive users
-towards best practices in data modeling this RFC proposes a **1 MiB** limit on
-document sizes going forward.
+towards best practices in data modeling this RFC proposes a **1MB (1,000,000
+byte)** limit on document sizes going forward.
 
 ## Requirements Language
 
@@ -139,8 +139,8 @@ in the key space.
 FoundationDB transactions have a hard limit of 10 MB each. Our document
 operations will need to modify some metadata alongside the user data, and we'd
 also like to reserve space for updating indexes as part of the same transaction.
-This document proposes to limit the maximum document size to **1 MiB** going
-forward (excluding attachments).
+This document proposes to limit the maximum document size to **1 MB (1,000,000
+bytes)** going forward (excluding attachments).
 
 A document insert does not need to clear any data in the `?DOCUMENTS` subspace,
 and simply inserts the new document content. The transaction will issue a read
