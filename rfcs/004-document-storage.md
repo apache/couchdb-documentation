@@ -106,11 +106,11 @@ position of the value within the array. As an example:
 becomes
 
 ```
-pack({"states", 0}) = "MA"
-pack({"states", 1}) = "OH"
-pack({"states", 2}) = "TX"
-pack({"states", 3}) = "NM"
-pack({"states", 4}) = "PA"
+pack({"states", 0}) = pack({"MA"})
+pack({"states", 1}) = pack({"OH"})
+pack({"states", 2}) = pack({"TX"})
+pack({"states", 3}) = pack({"NM"})
+pack({"states", 4}) = pack({"PA"})
 ```
 
 More details on the encodings in the FoundationDB Tuple Layer can be found in
