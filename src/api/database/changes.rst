@@ -114,7 +114,7 @@
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/event-stream`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>header ETag: Response hash is changes feed is `normal`
+    :>header ETag: Response hash if changes feed is `normal`
     :>header Transfer-Encoding: ``chunked``
     :>json json last_seq: Last change update sequence
     :>json number pending: Count of remaining items in the feed
