@@ -35,7 +35,7 @@ document are to be interpreted as described in
 
 # Detailed Description
 
-Mango is a declarative JSON querying syntax that allows a user to retrieve documents based on a given selector. It supports defining indexes for queries which will improve query performance. In CouchDB 2.x Mango is a query layer built on top of Map/Reduce indexes. Each Mango query  follows a two step process, first a subset of the selector is converted into a map query to be used with a predefined index or falling back to _all_docs if no indexes are available. Each document retrieved from the index is then matched against the query selector. 
+Mango is a declarative JSON querying syntax that allows a user to retrieve documents based on a given selector. It supports defining indexes for queries which will improve query performance. In CouchDB 2.x Mango is a query layer built on top of Map/Reduce indexes. Each Mango query  follows a two step process, first a subset of the selector is converted into a map query to be used with a predefined index or falling back to `_all_docs` if no indexes are available. Each document retrieved from the index is then matched against the query selector. 
 
 In a future release of CouchDB with FoundationDB the external behaviour of Mango will remain the same but internally will have its own indexes and index management. This will allow for Mango indexes to be updated in the same transaction where a write request happens - index on write. Later we can also look at adding Mango specific functionality.
 
@@ -84,7 +84,7 @@ CouchDB has a defined [index collation specification](http://docs.couchdb.org/en
 \x50 Array
 \x60 Objects
 
-An example for a number key would be (\x30, 1). Just too note, Null and Boolean values won’t need to be composite keys as the type key is the value.
+An example for a number key would be (\x30, 1). Note, Null and Boolean values won’t need to be composite keys as the type key is the value.
 
 ### Index Limits
 
