@@ -62,7 +62,7 @@ A map index is created via a design document, an example is shown below:
 The view’s map function will be used to generate keys and values which will be stored in FDB as the secondary index. Format for storing the key/values is:
 
 ```json
-{<database>, ?VIEWS, <view_signature>, ?VIEWS, <view_id>, ?MAP, <keys>, <_id>} -> <emitted_value>
+{<database>, ?VIEWS, <view_signature>, ?VIEW_KVS, <view_id>, ?MAP, <key>, <count>, <_id>} -> <emitted_value>
 ```
 
 Where each field is defined as:
@@ -72,7 +72,8 @@ Where each field is defined as:
 * `view_signature` is the design documents `View Signature`
 * `view_id` name of a view defined in the design document
 * `?MAP` is the standard map namespace
-* `keys` are the emitted keys from the map function
+* `key` is the emitted row key from a map function
+* `count` is a value to allow duplicate keys to be emitted for a document
 * `values` is the emitted value from the map function
 
 ### Key ordering
@@ -81,7 +82,7 @@ FoundationDB orders key by byte value which is not how CouchDB currently orders 
 
 Strings will need an additional change in terms of how they are compared with ICU. An ICU sort string will be generated upfront and added to the string key. This value will be used to sort the string in FDB. The original string will be stored so that it can be used when returning the keys to the user.
 
-CouchDB allows duplicate keys to be emitted for an index, to allow for that a counter value will be added to the end of the keys.
+CouchDB allows duplicate keys to be emitted for an index, to allow for that a counter value `count` will be added to the end of the keys.
 
 ### Emitting document
 
@@ -89,11 +90,13 @@ In a map function it is possible to emit the full document as the value, this wi
 
 The second option is to detect that a map function is emitting the full document and then add in a foreign key reference back to the document subspace. The issue here is that CouchDB would only be able to return the latest version of the document, which would cause consistency issues when combined with the `update=false` argument.
 
+A third option would be to split the document across multiple keys in FoundationDB. This will still be limited by the transaction size limit.
+
 ### Index Management
 
 For every document that needs to be processed for an index, we have to run the document through the javascript query server to get the emitted keys and values. This means that it won’t be possible to update a map/reduce index in the same transaction that a document is updated. To account for this, we will need to keep an `id index` similar to the `id tree`  that is currently keep in CouchDB. This index will hold the document id as the key and the value would be the keys that were emitted. CouchDB will use this information to know which fields need to be updated, added or removed from the index when a document is changed.  A data model for this would be:
 
-{?DATABASE, ?VIEWS, <view_signature>, ?VIEWS, ?ID_INDEX, <_id>, <view_id>} -> [emitted keys]
+`{<database>, ?VIEWS, <view_signature>, ?VIEW_ID_INDEX, <_id>, <view_id>} -> [emitted keys]`
 
 Each index will be built and updated via the Background job queue [RFC Link TBD]. When a request for a view is received, the request process will add a job item onto the background queue for the index to be updated. A worker will take the item off the queue and update the index. Once the index has been built, the request will return with the results. This process can also be optimised in two ways. Firstly, using a new couch_events system to listen for document changes in an database and then adding indexing jobs to the queue to keep indexes warm. The second optimisation is if the index only requires a small update, rather update the index in the http request process instead of doing the work via the background queue.
 
@@ -101,26 +104,36 @@ Initially the building of an index will be a single worker running through the c
 
 ### View clean up
 
-When a design document is changed, new indexes will be built and grouped under a new  `View Signature` . The old map indexes will still be in FDB.  CouchDB will need to run a clean up process that scans all the `View Signature`s and links them to a design document. If a `View Signature` is not linked to any design doc, that `View Signature` namespace can be removed. This will be done via the background jobs scheduler.
+When a design document is changed, new indexes will be built and grouped under a new `View Signature`. The old map indexes will still be in FDB.  CouchDB will need to monitor `View Signatures` and be able to remove old indexes. To do this we create the following data model:
+
+`(<database>, ?VIEW_DDOC_IDS, <design_doc_id>) = ViewSignature`
+`(<database>, ?VIEW_SIGS, <view_signature>) = Counter`
+
+When a design document is created, CouchDB will store the design document id and the view signature and set the view signature counter to one. On update or deletion of a design document, CouchDB will get the old signature and decrement the counter. 
+If the counter is 0, then CouchDB will remove the old view index.
 
 ### Stale = “ok” and stable = true
 
- With the consistency guarantee’s CouchDB will get from FDB,  stable = true will no longer be an option that CouchDB would support. Similar `stale = “ok”` would now be translated to `update = false`
+ With the consistency guarantee’s CouchDB will get from FDB, `stable = true` will no longer be an option that CouchDB would support and so the argument would be ignored. Similar `stale = “ok”` would now be translated to `update = false`.
 
 ### Size limits
 
+* The sum of all keys emitted for do a document cannot exceed 100 KB
 * Emitted keys will not be able to exceed 10 KB
 * Values cannot exceed 100 KB
 * There could be rare cases where the number of key-value pairs emitted for a map function could lead to a transaction either exceeding 10 MB in size which isn’t allowed or exceeding 5 MB which impacts the performance of the cluster. Ideally CouchDB will need to detect these situations and split the transaction into smaller transactions
 
+These limits are the hard limits imposed by FoundationDB. We will have to set the user imposed limits to lower than that as we store more information than just the user keys and values.
+
 ## Advantages
 
-* Map indexes will work on FoundationDB with same behaviour as current CouchDB 2.x
+* Map indexes will work on FoundationDB with same behaviour as current CouchDB 1.x
 * Options like stale = “ok” and ‘stable = true’ will no longer be needed
 
 ## Disadvantages
 
 * Size limits on key and values
+* This RFC does not include a design for reduce functions. That will be done later.
 
 ## Key Changes
 
@@ -138,11 +151,20 @@ The API will remain the same.
 
 ## HTTP API deprecations
 
-No deprecations.
+* `stable = true` is no longer supported
+* `stale = "ok"` is now converted to `update = false`
+* reduce functions are not supported in this RFC
 
 ## Security Considerations
 
 None have been identified.
+
+## Future improvements
+
+Two future improvements we could look to do that builds upon this work:
+
+* Better error handling for user functions. Currently if a document fails when run through the map function, a user has to read the logs to discover that. We could look at adding an error index and a new api endpoint.
+* Parallel building of the index. In this RFC, the index is only built sequentially by one index worker. In the future it would be nice to split that work up and parallelize the building of the index.
 
 ## References
 
