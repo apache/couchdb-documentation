@@ -32,6 +32,19 @@ them extensively within each function:
 - :ref:`Database Security object <security_object>`
 - :ref:`Guide to JavaScript Query Server <query-server/js>`
 
+Creation
+========
+
+Design documents are denoted by an id field with the format ``_design/{name}``.
+
+**Example**:
+
+.. code-block:: json
+
+    {
+        "id": "_design/example",
+    }
+
 .. _viewfun:
 
 View Functions
