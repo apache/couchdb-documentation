@@ -81,7 +81,6 @@ interact with the local node's configuration.
             "chttpd": {
                 "backlog": "512",
                 "bind_address": "0.0.0.0",
-                "docroot": "./share/www",
                 "port": "5984",
                 "require_valid_user": "false",
                 "socket_options": "[{sndbuf, 262144}, {nodelay, true}]",
