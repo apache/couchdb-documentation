@@ -149,6 +149,10 @@
     :synopsis: Makes sure all uncommitted changes are written and synchronized
                to the disk
 
+       .. note::
+           As of CouchDB 2.0, this endpoint is a no-op. It is retained for backward
+           compatibility with the replication protocol.
+
     Commits any recent changes to the specified database to disk. You should
     call this if you want to ensure that recent changes have been flushed.
     This function is likely not required, assuming you have the recommended
@@ -193,6 +197,8 @@
             "instance_start_time": "0",
             "ok": true
         }
+
+.. versionchanged:: 2.0.0 this endpoint became a no-op
 
 .. _api/db/view_cleanup:
 
