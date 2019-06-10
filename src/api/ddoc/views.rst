@@ -332,7 +332,7 @@ You can query the API by using one of the following methods: URI, CouchDB Dashbo
 
 *Example design document that defines a search index:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
     	"_id": "_design/search_example",
@@ -352,7 +352,7 @@ field of the design document that contains it.
 Index functions
 ---------------
 
-Attempting to index by using a data field that does not exist fails. To avoid this problem, use an appropriate :ref:`index_guard_clauses`.
+Attempting to index by using a data field that does not exist fails. To avoid this problem, use an appropriate :ref:`index_guard_clauses <api/ddoc/view>`.
 
 .. note:: 
     Your indexing functions operate in a memory-constrained environment where the 
@@ -368,7 +368,7 @@ Attempting to index by using a data field that does not exist fails. To avoid th
     lines in the same search index function, as they index the ``myfield`` field as two 
     different data types: a string ``"this is a string"`` and a number ``123``.
 
-.. code-block:: json
+.. code-block:: javascript
 
     index("myfield", "this is a string");
     index("myfield", 123);
@@ -424,12 +424,12 @@ The third, optional, parameter is a JavaScript object with the following fields:
 |              | Content with a boost value less than one is not so relevant.         |                                  |                 |
 +--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
 | ``facet``    | Creates a faceted index. For more information, see                   | ``true``, ``false``              | ``false``       |
-|              | :ref:`faceting`.                                                     |                                  |                 |
+|              | :ref:`faceting <api/ddoc/view>`.                                     |                                  |                 |
 +--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
 | ``index``    | Whether the data is indexed, and if so, how. If set to ``false``,    | ``true``, ``false``              | ``false``       |
 |              | the data cannot be used for searches, but can still be retrieved     |                                  |                 |
 |              | from the index if ``store`` is set to ``true``.                      |                                  |                 |
-|              | For more information, see :ref:`analyzers`.                          |                                  |                 |
+|              | For more information, see :ref:`analyzers <api/ddoc/view>`.          |                                  |                 |
 +--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
 | ``store``    | If ``true``, the value is returned in the search result;             | ``true``, ``false``              | ``false``       |
 |              | otherwise, the value is not returned.                                |                                  |                 |
@@ -525,7 +525,7 @@ Analyzers
 ---------
 
 Analyzers are settings that define how to recognize terms within text.
-Analyzers can be helpful if you need to :ref:`language-specific-analyzers`.
+Analyzers can be helpful if you need to :ref:`language-specific-analyzers <api/ddoc/view>`.
 
 Here's the list of generic analyzers that are supported by search:
 
@@ -608,7 +608,7 @@ The name of the language is also the name of the analyzer.
 
 .. note::
 
-    Language-specific analyzers are optimized for the specified language. You cannot combine a generic analyzer with a language-specific analyzer. Instead, you might use a :ref:`per-field-analyzers` to select different analyzers for different fields within the documents.
+    Language-specific analyzers are optimized for the specified language. You cannot combine a generic analyzer with a language-specific analyzer. Instead, you might use a :ref:`per-field-analyzers <api/ddoc/view>` to select different analyzers for different fields within the documents.
 
 .. _api/ddoc/view/per-field-analyzers:
 
@@ -650,7 +650,7 @@ You define them within a design document by turning the analyzer string into an 
 
 The default stop words for the ``standard`` analyzer are included below:
 
-.. code-block:: json
+.. code-block:: javascript
 
     "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", 
     "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", 
@@ -660,7 +660,7 @@ The default stop words for the ``standard`` analyzer are included below:
 
 *Example of defining non-indexed ('stop') words:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
 	    "_id": "_design/stop_words_example",
@@ -701,7 +701,7 @@ You can test the results of analyzer tokenization by posting sample data to the 
 
 *Result of testing the ``keyword`` analyzer:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
 	    "tokens": [
@@ -726,7 +726,7 @@ You can test the results of analyzer tokenization by posting sample data to the 
 
 *Result of testing the ``standard`` analyzer:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
 	    "tokens": [
@@ -778,7 +778,7 @@ Specify your search by using the ``query`` parameter.
 Query Parameters
 ^^^^^^^^^^^^^^^^
 
-You must enable :ref:`faceting` before you can use the following parameters:
+You must enable :ref:`faceting <api/ddoc/view>` before you can use the following parameters:
 
 -	``counts``
 -	``drilldown``
@@ -796,8 +796,8 @@ You must enable :ref:`faceting` before you can use the following parameters:
 |                        | fields, for which counts are requested. The response |                   |                  | names.                |                   |
 |                        | contains counts for each unique value of this        |                   |                  |                       |                   |
 |                        | field name among the documents that match the search |                   |                  |                       |                   | 
-|                        | query. :ref:`faceting` must be enabled for           |                   |                  |                       |                   |
-|                        | this parameter to function.                          |                   |                  |                       |                   |
+|                        | query. :ref:`faceting <api/ddoc/view>` must          |                   |                  |                       |                   |
+|                        | be enabled for this parameter to function.           |                   |                  |                       |                   |
 +------------------------+------------------------------------------------------+-------------------+------------------+-----------------------+-------------------+
 | ``drilldown``          | This field can be used several times. Each use       | no                | JSON             | A JSON array with two | yes               |
 |                        | defines a pair with a field name and a value.        |                   |                  | elements: the field   |                   |
@@ -805,8 +805,8 @@ You must enable :ref:`faceting` before you can use the following parameters:
 |                        | value that was provided in the named field. It       |                   |                  |                       |                   |
 |                        | differs from using ``"fieldname:value"`` in          |                   |                  |                       |                   |
 |                        | the ``q`` parameter only in that the values are not  |                   |                  |                       |                   |
-|                        | analyzed. :ref:`faceting` must be enabled for this   |                   |                  |                       |                   |
-|                        | parameter to function.                               |                   |                  |                       |                   |
+|                        | analyzed. :ref:`faceting <api/ddoc/view>` must       |                   |                  |                       |                   |
+|                        | be enabled for this parameter to function.           |                   |                  |                       |                   |
 +------------------------+------------------------------------------------------+-------------------+------------------+-----------------------+-------------------+
 | ``group_field``        | Field that groups search matches                     | yes               |  String          | A string that         | no                |
 |                        |                                                      |                   |                  | contains the name of  |                   |
@@ -965,7 +965,7 @@ Each parameter in the previous table corresponds to a field in the JSON object i
 
 *Example JSON document that contains a search request:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "q": "index:my query",
@@ -984,34 +984,52 @@ as demonstrated in the following examples:
 
 *Example search query expressions:*
 
-.. code-block:: 
+.. code-block:: javascript
 
     // Birds
     class:bird
 
+.. code-block:: text
+
     // Animals that begin with the letter "l"
     l*
+
+.. code-block:: text
 
     // Carnivorous birds
     class:bird AND diet:carnivore
 
+.. code-block:: text
+
     // Herbivores that start with letter "l"
     l* AND diet:herbivore
+
+.. code-block:: text
 
     // Medium-sized herbivores
     min_length:[1 TO 3] AND diet:herbivore
 
+.. code-block:: text
+
     // Herbivores that are 2m long or less
     diet:herbivore AND min_length:[-Infinity TO 2]
+
+.. code-block:: text
 
     // Mammals that are at least 1.5m long
     class:mammal AND min_length:[1.5 TO Infinity]
 
+.. code-block:: text
+
     // Find "Meles meles"
     latin_name:"Meles meles"
 
+.. code-block:: text
+
     // Mammals who are herbivore or carnivore
     diet:(herbivore OR omnivore) AND class:mammal
+
+.. code-block:: text
 
     // Return all results
     *:*
@@ -1054,7 +1072,7 @@ Use ``*:*`` to return all results.
 Result sets from searches are limited to 200 rows,
 and return 25 rows by default.
 The number of rows that are returned can be changed
-by using the :ref:`query-parameters`.
+by using the :ref:`query-parameters <api/ddoc/view>`.
 
 If the search query does *not* specify the ``"group_field"`` argument,
 the response contains a bookmark.
@@ -1063,7 +1081,7 @@ the response skips the rows that were seen already,
 making it quick and easy to get the next set of results.
 
 .. note:: 
-    The response never includes a bookmark if the ``"group_field"`` parameter is included in the search query. For more information, see :ref:`query-parameters`. 
+    The response never includes a bookmark if the ``"group_field"`` parameter is included in the search query. For more information, see :ref:`query-parameters <api/ddoc/view>`. 
 
 .. note:: 
     The ``group_field``, ``group_limit``, and ``group_sort`` options are only available when making global queries.
@@ -1080,10 +1098,10 @@ use a preceding backslash character (``\``).
 
 The response to a search query contains an ``order`` field for each of the results.
 The ``order`` field is an array where the first element is the field or fields that are specified
-in the ``sort`` parameter. See :ref:`query-parameters`.
+in the ``sort`` parameter. See :ref:`query-parameters <api/ddoc/view>`.
 If no ``sort`` parameter is included in the query,
 then the ``order`` field contains the `Lucene relevance score <https://lucene.apache.org/core/3_6_0/scoring.html>`_.
-If you use the 'sort by distance' feature as described in :ref:`geographical-searches`,
+If you use the 'sort by distance' feature as described in :ref:`geographical-searches <api/ddoc/view>`,
 then the first element is the distance from a point.
 The distance is measured by using either kilometers or miles.
 
@@ -1156,7 +1174,7 @@ and returns the number of query results for each unique value of each named fiel
 
 *Example response after using of the ``counts`` facet syntax:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "total_rows":100000,
@@ -1214,7 +1232,7 @@ Exclusive range queries are denoted by curly brackets (``{``, ``}``).
 
 *Example results after a ``ranges`` check on a faceted search:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "total_rows":100000,
@@ -1259,7 +1277,7 @@ and narrow down the search with extra criteria.
 
 *Example geographical data:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "name":"Aberdeen, Scotland",
@@ -1294,7 +1312,7 @@ and narrow down the search with extra criteria.
 
 *Example (abbreviated) response, containing a list of northern hemisphere cities sorted by distance to New York:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "total_rows": 205,
@@ -1386,7 +1404,7 @@ you receive an array of fragments with the search term highlighted.
 
 *Example of highlighted search results:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "highlights": {
@@ -1424,7 +1442,7 @@ such as the number of documents in the index and the size of the index on disk.
 
 *Example response after requesting search index metadata:*
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         "name": "_design/DDOC/INDEX",
