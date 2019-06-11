@@ -328,8 +328,6 @@ To create a search index, you add a JavaScript function to a design document in 
 
 By default, a search index response returns 25 rows. The number of rows that is returned can be changed by using the ``limit`` parameter. However, a result set from a search is limited to 200 rows. Each response includes a ``bookmark`` field. You can include the value of the ``bookmark`` field in later queries to look through the responses.
 
-You can query the API by using one of the following methods: URI, CouchDB Dashboard, curl, or a browser plug-in, such as Postman or RESTClient.
-
 *Example design document that defines a search index:*
 
 .. code-block:: javascript
@@ -357,8 +355,8 @@ Attempting to index by using a data field that does not exist fails. To avoid th
 .. note:: 
     Your indexing functions operate in a memory-constrained environment where the 
     document itself forms a part of the memory that is used in that environment. 
-    Your code's stack and document must fit inside this memory. Documents are limited 
-    to a maximum size of 64 MB.
+    Your code's stack and document must fit inside this memory. In other words, a document 
+    must be loaded in order to be indexed. Documents are limited to a maximum size of 64 MB.
 
 .. note:: 
     Within a search index, do not index the same field name with more than one data 
@@ -813,7 +811,7 @@ You must enable :ref:`faceting <api/ddoc/view>` before you can use the following
 |                        |                                                      |                   |                  | a string field.       |                   |
 |                        |                                                      |                   |                  | Fields containing     |                   |
 |                        |                                                      |                   |                  | other data such as    |                   | 
-|                        |                                                      |                   |                  | numbers,objects, or   |                   |
+|                        |                                                      |                   |                  | numbers, objects, or   |                   |
 |                        |                                                      |                   |                  | arrays cannot be      |                   |
 |                        |                                                      |                   |                  | used.                 |                   |
 +------------------------+------------------------------------------------------+-------------------+------------------+-----------------------+-------------------+
