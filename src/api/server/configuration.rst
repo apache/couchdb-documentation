@@ -23,7 +23,7 @@ Accessing the local node's configuration
 ========================================
 
 The literal string ``_local`` serves as an alias for the local node name, so
-for all configuration URLs, ``{node-name}`` may be replaced ``_local``, to
+for all configuration URLs, ``{node-name}`` may be replaced with ``_local``, to
 interact with the local node's configuration.
 
 ``/_node/{node-name}/_config``
