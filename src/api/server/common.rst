@@ -1340,7 +1340,7 @@ error.
     self-describing.
 
     The literal string ``_local`` serves as an alias for the local node name, so
-    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
@@ -1467,7 +1467,7 @@ containing only the requested individual statistic.
     each statistic is self-describing.
 
     The literal string ``_local`` serves as an alias for the local node name, so
-    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
