@@ -318,15 +318,34 @@ sequence exposed in the database information (returned by :get:`/{db}`).
 Search
 ======
 
-Search indexes enable you to query a database by using `Lucene Query Parser Syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_. A search index uses one, or multiple, fields from your documents. You can use a search index to run queries, find documents based on the content they contain, or work with groups, facets, or geographical searches.
+Search indexes enable you to query a database by using 
+`Lucene Query Parser Syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_. 
+A search index uses one, or multiple, fields from your documents. 
+You can use a search index to run queries, find documents based on 
+the content they contain, or work with groups, facets, or 
+geographical searches.
 
-To create a search index, you add a JavaScript function to a design document in the database. An index builds after processing one search request or after the server detects a document update. The ``index`` function takes the following parameters: 
+.. warning::
+    Search cannot function unless it has a functioning, cluster-connected 
+    Clouseau instance.
 
-1.  Field name - The name of the field you want to use when you query the index. If you set this parameter to ``default``, then this field is queried if no field is specified in the query syntax.
+To create a search index, you add a JavaScript function to a design document 
+in the database. An index builds after processing one search request or after 
+the server detects a document update. The ``index`` function takes the 
+following parameters: 
+
+1.  Field name - The name of the field you want to use when you query the index. 
+If you set this parameter to ``default``, then this field is queried if no field 
+is specified in the query syntax.
 2.  Data that you want to index, for example, ``doc.address.country``. 
-3.  (Optional) The third parameter includes the following fields: ``boost``, ``facet``, ``index``, and ``store``. These fields are described in more detail later.   
+3.  (Optional) The third parameter includes the following fields: ``boost``, ``facet``, 
+``index``, and ``store``. These fields are described in more detail later.   
 
-By default, a search index response returns 25 rows. The number of rows that is returned can be changed by using the ``limit`` parameter. However, a result set from a search is limited to 200 rows. Each response includes a ``bookmark`` field. You can include the value of the ``bookmark`` field in later queries to look through the responses.
+By default, a search index response returns 25 rows. The number of rows that is 
+returned can be changed by using the ``limit`` parameter. However, a result set 
+from a search is limited to 200 rows. Each response includes a ``bookmark`` field. 
+You can include the value of the ``bookmark`` field in later queries to look 
+through the responses.
 
 *Example design document that defines a search index:*
 
@@ -344,19 +363,21 @@ By default, a search index response returns 25 rows. The number of rows that is 
 Search index partitioning type
 ------------------------------
 
-A search index will inherit the partitioning type from the ``options.partitioned``
-field of the design document that contains it.
+A search index will inherit the partitioning type from the 
+``options.partitioned`` field of the design document that contains it.
 
 Index functions
 ---------------
 
-Attempting to index by using a data field that does not exist fails. To avoid this problem, use an appropriate :ref:`index_guard_clauses <api/ddoc/view>`.
+Attempting to index by using a data field that does not exist fails. To avoid 
+this problem, use the appropriate :ref:`index_guard_clauses <api/ddoc/view>`.
 
 .. note:: 
-    Your indexing functions operate in a memory-constrained environment where the 
-    document itself forms a part of the memory that is used in that environment. 
-    Your code's stack and document must fit inside this memory. In other words, a document 
-    must be loaded in order to be indexed. Documents are limited to a maximum size of 64 MB.
+    Your indexing functions operate in a memory-constrained environment 
+    where the document itself forms a part of the memory that is used 
+    in that environment. Your code's stack and document must fit inside this 
+    memory. In other words, a document must be loaded in order to be indexed. 
+    Documents are limited to a maximum size of 64 MB.
 
 .. note:: 
     Within a search index, do not index the same field name with more than one data 
@@ -374,8 +395,8 @@ Attempting to index by using a data field that does not exist fails. To avoid th
 The function that is contained in the index field is a JavaScript function
 that is called for each document in the database.
 The function takes the document as a parameter,
-extracts some data from it,
-and then calls the function that is defined in the ``index`` field to index that data.
+extracts some data from it, and then calls the function that is defined 
+in the ``index`` field to index that data.
 
 The ``index`` function takes three parameters, where the third parameter is optional.
 
@@ -404,34 +425,54 @@ The effect is that the query can be simplified:
 
     query=red
 
-The second parameter is the data to be indexed. Keep the following information in mind when you index your data: 
+The second parameter is the data to be indexed. Keep the following information 
+in mind when you index your data: 
 
-- This data must be only a string, number, or boolean. Other types will cause an error to be thrown by the index function call.
-- If an error is thrown when running your function, for this reason or others, the document will not be added to that search index.
+- This data must be only a string, number, or boolean. Other types will cause 
+  an error to be thrown by the index function call.
+
+- If an error is thrown when running your function, for this reason or others, 
+  the document will not be added to that search index.
 
 The third, optional, parameter is a JavaScript object with the following fields:
 
 *Index function (optional parameter)*
 
-+--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
-| Option       | Description                                                          | Values                           | Default         |
-+==============+======================================================================+==================================+=================+
-| ``boost``    | A number that specifies the relevance in search results.             | A positive floating point number | 1 (no boosting) |
-|              | Content that is indexed with a boost value greater than 1            |                                  |                 |
-|              | is more relevant than content that is indexed without a boost value. |                                  |                 |
-|              | Content with a boost value less than one is not so relevant.         |                                  |                 |
-+--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
-| ``facet``    | Creates a faceted index. For more information, see                   | ``true``, ``false``              | ``false``       |
-|              | :ref:`faceting <api/ddoc/view>`.                                     |                                  |                 |
-+--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
-| ``index``    | Whether the data is indexed, and if so, how. If set to ``false``,    | ``true``, ``false``              | ``false``       |
-|              | the data cannot be used for searches, but can still be retrieved     |                                  |                 |
-|              | from the index if ``store`` is set to ``true``.                      |                                  |                 |
-|              | For more information, see :ref:`analyzers <api/ddoc/view>`.          |                                  |                 |
-+--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
-| ``store``    | If ``true``, the value is returned in the search result;             | ``true``, ``false``              | ``false``       |
-|              | otherwise, the value is not returned.                                |                                  |                 |
-+--------------+----------------------------------------------------------------------+----------------------------------+-----------------+
++-------------+-----------------------------------+----------------+-----------+
+| Option      | Description                       | Values         | Default   |
++=============+===================================+================+===========+
+|  ``boost``  | A number that specifies           | A positive     | 1 (no     |
+|             | the relevance in                  | floating point | boosting) |
+|             | search results. Content           | number         |           |
+|             | that is indexed with a            |                |           |
+|             | boost value greater               |                |           |
+|             | than 1 is more relevant           |                |           |
+|             | than content that is              |                |           |
+|             | indexed without a boost           |                |           |
+|             | value. Content with a             |                |           |
+|             | boost value less than             |                |           |
+|             | one is not so relevant.           |                |           |
++-------------+-----------------------------------+----------------+-----------+
+| ``facet``   | Creates a faceted                 | ``true``,      | ``false`` |
+|             | index. For more                   | ``false``      |           |
+|             | information, see                  |                |           |
+|             | :ref:`faceting <api/ddoc/view>`.  |                |           |
++-------------+-----------------------------------+----------------+-----------+
+| ``index``   | Whether the data is indexed,      | ``true``,      | ``false`` |
+|             | and if so, how. If set to         | ``false``      |           |
+|             | ``false``, the data cannot        |                |           |
+|             | be used for searches, but         |                |           |
+|             | can still be retrieved            |                |           |
+|             | from the index if ``store``       |                |           |
+|             | is set to ``true``.  For more     |                |           |
+|             | information, see                  |                |           |
+|             | :ref:`analyzers <api/ddoc/view>`. |                |           |
++-------------+-----------------------------------+----------------+-----------+
+| ``store``   | If ``true``, the value is         | ``true``,      | ``false`` |
+|             | returned in the search result;    | ``false``      |           |
+|             | otherwise, the value is           |                |           |
+|             | not returned.                     |                |           |
++-------------+-----------------------------------+----------------+-----------+
 
 .. note:: 
 
@@ -463,11 +504,11 @@ The third, optional, parameter is a JavaScript object with the following fields:
 Index guard clauses
 ^^^^^^^^^^^^^^^^^^^
 
-The ``index`` function requires the name of the data field to index as the second parameter.
-However,
+The ``index`` function requires the name of the data field to index as 
+the second parameter. However,
 if that data field does not exist for the document,
-an error occurs.
-The solution is to use an appropriate 'guard clause' that checks if the field exists,
+an error occurs. The solution is to use an appropriate 
+'guard clause' that checks if the field exists,
 and contains the expected type of data,
 *before* any attempt to create the corresponding index.
 
@@ -497,8 +538,7 @@ JavaScript considers a result to be false if one of the following values is test
 *	"" (the empty string)
 
 *Using a guard clause to check whether the required data field exists,
-and holds a number,
-before an attempt to index:*
+and holds a number, before an attempt to index:*
 
 .. code-block:: javascript
 
@@ -506,7 +546,8 @@ before an attempt to index:*
 	    index("min_length", doc.min_length, {"store": true});
     }
 
-Use a generic guard clause test to ensure that the type of the candidate data field is defined.
+Use a generic guard clause test to ensure that the type of the candidate data 
+field is defined.
 
 *Example of a 'generic' guard clause:*
 
@@ -523,7 +564,8 @@ Analyzers
 ---------
 
 Analyzers are settings that define how to recognize terms within text.
-Analyzers can be helpful if you need to :ref:`language-specific-analyzers <api/ddoc/view>`.
+Analyzers can be helpful if you need to 
+:ref:`language-specific-analyzers <api/ddoc/view>`.
 
 Here's the list of generic analyzers that are supported by search:
 
@@ -569,44 +611,88 @@ These analyzers omit common words in the specific language,
 and many also `remove prefixes and suffixes <http://en.wikipedia.org/wiki/Stemming>`_.
 The name of the language is also the name of the analyzer.
 
-*	``arabic``
-*	``armenian``
-*	``basque``
-*	``bulgarian``
-*	``brazilian``
-*	``catalan``
-*	``cjk`` (Chinese, Japanese, Korean)
-*	``chinese`` (`smartcn <http://lucene.apache.org/core/4_2_1/analyzers-smartcn/org/apache/lucene/analysis/cn/smart/SmartChineseAnalyzer.html>`_)
-*	``czech``
-*	``danish``
-*	``dutch``
-*	``english``
-*	``finnish``
-*	``french``
-*	``german``
-*	``greek``
-*	``galician``
-*	``hindi``
-*	``hungarian``
-*	``indonesian``
-*	``irish``
-*	``italian``
-*	``japanese`` (`kuromoji <http://lucene.apache.org/core/4_2_1/analyzers-kuromoji/overview-summary.html>`_)
-*	``latvian``
-*	``norwegian``
-*	``persian``
-*	``polish`` (`stempel <http://lucene.apache.org/core/4_2_1/analyzers-stempel/overview-summary.html>`_)
-*	``portuguese``
-*	``romanian``
-*	``russian``
-*	``spanish``
-*	``swedish``
-*	``thai``
-*	``turkish``
++----------------+----------------------------------------------------------+
+| Language       | Analyzer                                                 |
++================+==========================================================+
+| ``arabic``     | org.apache.lucene.analysis.ar.ArabicAnalyzer             |
++----------------+----------------------------------------------------------+
+| ``armenian``   | org.apache.lucene.analysis.hy.ArmenianAnalyzer           |
++----------------+----------------------------------------------------------+
+| ``basque``     | org.apache.lucene.analysis.eu.BasqueAnalyzer             |
++----------------+----------------------------------------------------------+
+| ``bulgarian``  | org.apache.lucene.analysis.bg.BulgarianAnalyzer          |
++----------------+----------------------------------------------------------+
+| ``brazilian``  | org.apache.lucene.analysis.br.BrazilianAnalyzer          |
++----------------+----------------------------------------------------------+
+| ``catalan``    | org.apache.lucene.analysis.ca.CatalanAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``cjk``        | org.apache.lucene.analysis.cjk.CJKAnalyzer               |
++----------------+----------------------------------------------------------+
+| ``chinese``    | org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer |
++----------------+----------------------------------------------------------+
+| ``czech``      | org.apache.lucene.analysis.cz.CzechAnalyzer              |
++----------------+----------------------------------------------------------+
+| ``danish``     | org.apache.lucene.analysis.da.DanishAnalyzer             |
++----------------+----------------------------------------------------------+
+| ``dutch``      | org.apache.lucene.analysis.nl.DutchAnalyzer              |
++----------------+----------------------------------------------------------+
+| ``english``    | org.apache.lucene.analysis.en.EnglishAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``finnish``    | org.apache.lucene.analysis.fi.FinnishAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``french``     | org.apache.lucene.analysis.fr.FrenchAnalyzer             |
++----------------+----------------------------------------------------------+
+| ``german``     | org.apache.lucene.analysis.de.GermanAnalyzer             |
++----------------+----------------------------------------------------------+
+| ``greek``      | org.apache.lucene.analysis.el.GreekAnalyzer              |
++----------------+----------------------------------------------------------+
+| ``galician``   | org.apache.lucene.analysis.gl.GalicianAnalyzer           |
++----------------+----------------------------------------------------------+
+| ``hindi``      | org.apache.lucene.analysis.hi.HindiAnalyzer              |
++----------------+----------------------------------------------------------+
+| ``hungarian``  | org.apache.lucene.analysis.hu.HungarianAnalyzer          |
++----------------+----------------------------------------------------------+
+| ``indonesian`` | org.apache.lucene.analysis.id.IndonesianAnalyzer         |
++----------------+----------------------------------------------------------+
+| ``irish``      | org.apache.lucene.analysis.ga.IrishAnalyzer              |
++----------------+----------------------------------------------------------+
+| ``italian``    | org.apache.lucene.analysis.it.ItalianAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``japanese``   | org.apache.lucene.analysis.ja.JapaneseAnalyzer           |
++----------------+----------------------------------------------------------+
+| ``japanese``   | import org.apache.lucene.analysis.ja.JapaneseTokenizer   |
+|                | (with DEFAULT_MODE and defaultStopTags)                  |
++----------------+----------------------------------------------------------+
+| ``latvian``    | org.apache.lucene.analysis.lv.LatvianAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``norwegian``  | org.apache.lucene.analysis.no.NorwegianAnalyzer          |
++----------------+----------------------------------------------------------+
+| ``persian``    | org.apache.lucene.analysis.fa.PersianAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``polish``     | org.apache.lucene.analysis.pl.PolishAnalyzer             |
++----------------+----------------------------------------------------------+
+| ``portuguese`` | org.apache.lucene.analysis.pt.PortugueseAnalyzer         |
++----------------+----------------------------------------------------------+
+| ``romanian``   | org.apache.lucene.analysis.ro.RomanianAnalyzer           |
++----------------+----------------------------------------------------------+
+| ``russian``    | org.apache.lucene.analysis.ru.RussianAnalyzer            | 
++----------------+----------------------------------------------------------+
+| ``spanish``    | org.apache.lucene.analysis.es.SpanishAnalyzer            |
++----------------+----------------------------------------------------------+
+| ``swedish``    | import org.apache.lucene.analysis.sv.SwedishAnalyzer     |
++----------------+----------------------------------------------------------+
+| ``thai``       | import org.apache.lucene.analysis.th.ThaiAnalyzer        |
++----------------+----------------------------------------------------------+
+| ``turkish``    | import org.apache.lucene.analysis.tr.TurkishAnalyzer     |
++----------------+----------------------------------------------------------+
 
 .. note::
 
-    Language-specific analyzers are optimized for the specified language. You cannot combine a generic analyzer with a language-specific analyzer. Instead, you might use a :ref:`per-field-analyzers <api/ddoc/view>` to select different analyzers for different fields within the documents.
+    Language-specific analyzers are optimized for the specified language. You 
+    cannot combine a generic analyzer with a language-specific analyzer. 
+    Instead, you might use a :ref:`per-field-analyzers <api/ddoc/view>` to 
+    select different analyzers for different fields within the documents.
+ 
 
 .. _api/ddoc/view/per-field-analyzers:
 
@@ -639,8 +725,8 @@ The ``perfield`` analyzer configures multiple analyzers for different fields.
 Stop words
 ^^^^^^^^^^
 
-Stop words are words that do not get indexed.
-You define them within a design document by turning the analyzer string into an object.
+Stop words are words that do not get indexed. You define them within 
+a design document by turning the analyzer string into an object.
 
 .. note:: 
 
@@ -680,7 +766,8 @@ The default stop words for the ``standard`` analyzer are included below:
 Testing analyzer tokenization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can test the results of analyzer tokenization by posting sample data to the ``_search_analyze`` endpoint.
+You can test the results of analyzer tokenization by posting sample data to the 
+``_search_analyze`` endpoint.
 
 *Example of using HTTP to test the ``keyword`` analyzer:*
 
@@ -738,8 +825,11 @@ Queries
 
 After you create a search index, you can query it.
 
-- Issue a partition query using: ``GET /$DATABASE/_partition/$PARTITION_KEY/_design/$DDOC/_search/$INDEX_NAME``
-- Issue a global query using: ``GET /$DATABASE/_design/$DDOC/_search/$INDEX_NAME``
+- Issue a partition query using: 
+``GET /$DATABASE/_partition/$PARTITION_KEY/_design/$DDOC/_search/$INDEX_NAME``
+
+- Issue a global query using: 
+``GET /$DATABASE/_design/$DDOC/_search/$INDEX_NAME``
 
 Specify your search by using the ``query`` parameter.
 
@@ -776,7 +866,8 @@ Specify your search by using the ``query`` parameter.
 Query Parameters
 ^^^^^^^^^^^^^^^^
 
-You must enable :ref:`faceting <api/ddoc/view>` before you can use the following parameters:
+You must enable :ref:`faceting <api/ddoc/view>` before you can use the 
+following parameters:
 
 -	``counts``
 -	``drilldown``
@@ -811,7 +902,7 @@ You must enable :ref:`faceting <api/ddoc/view>` before you can use the following
 |                        |                                                      |                   |                  | a string field.       |                   |
 |                        |                                                      |                   |                  | Fields containing     |                   |
 |                        |                                                      |                   |                  | other data such as    |                   | 
-|                        |                                                      |                   |                  | numbers, objects, or   |                   |
+|                        |                                                      |                   |                  | numbers, objects, or  |                   |
 |                        |                                                      |                   |                  | arrays cannot be      |                   |
 |                        |                                                      |                   |                  | used.                 |                   |
 +------------------------+------------------------------------------------------+-------------------+------------------+-----------------------+-------------------+
@@ -908,7 +999,10 @@ You must enable :ref:`faceting <api/ddoc/view>` before you can use the following
 +------------------------+------------------------------------------------------+-------------------+------------------+-----------------------+-------------------+
 
 .. note::
-    Do not combine the ``bookmark`` and ``stale`` options. These options constrain the choice of shard replicas to use for the response. When used together, the options might cause problems when contact is attempted with replicas that are slow or not available.
+    Do not combine the ``bookmark`` and ``stale`` options. These options 
+    constrain the choice of shard replicas to use for the response. When used 
+    together, the options might cause problems when contact is attempted 
+    with replicas that are slow or not available.
 
 Relevance
 ^^^^^^^^^
@@ -946,7 +1040,8 @@ Instead of using the ``GET`` HTTP method,
 you can also use ``POST``.
 The main advantage of ``POST`` queries is that they can have a request body,
 so you can specify the request as a JSON object.
-Each parameter in the previous table corresponds to a field in the JSON object in the request body.
+Each parameter in the previous table corresponds to a field in the JSON object 
+in the request body.
 
 *Example of using HTTP to ``POST`` a search request:*
 
@@ -1043,7 +1138,12 @@ For instance,
 ``look~`` finds the terms ``book`` and ``took``.
 
 .. note::
-    If the lower and upper bounds of a range query are both strings that contain only numeric digits, the bounds are treated as numbers not as strings. For example, if you search by using the query ``mod_date:["20170101" TO "20171231"]``, the results include documents for which ``mod_date`` is between the numeric values 20170101 and 20171231, not between the strings "20170101" and "20171231".
+    If the lower and upper bounds of a range query are both strings that 
+    contain only numeric digits, the bounds are treated as numbers not as 
+    strings. For example, if you search by using the query 
+    ``mod_date:["20170101" TO "20171231"]``, the results include documents 
+    for which ``mod_date`` is between the numeric values 20170101 and 
+    20171231, not between the strings "20170101" and "20171231".
 
 You can alter the importance of a search term by adding ``^`` and a positive number.
 This alteration makes matches containing the term more or less relevant,
@@ -1079,10 +1179,13 @@ the response skips the rows that were seen already,
 making it quick and easy to get the next set of results.
 
 .. note:: 
-    The response never includes a bookmark if the ``"group_field"`` parameter is included in the search query. For more information, see :ref:`query-parameters <api/ddoc/view>`. 
+    The response never includes a bookmark if the ``"group_field"`` 
+    parameter is included in the search query. For more information, 
+    see :ref:`query-parameters <api/ddoc/view>`. 
 
 .. note:: 
-    The ``group_field``, ``group_limit``, and ``group_sort`` options are only available when making global queries.
+    The ``group_field``, ``group_limit``, and ``group_sort`` options 
+    are only available when making global queries.
 
 The following characters require escaping if you want to search on them:
 
@@ -1094,12 +1197,16 @@ The following characters require escaping if you want to search on them:
 To escape one of these characters,
 use a preceding backslash character (``\``).
 
-The response to a search query contains an ``order`` field for each of the results.
-The ``order`` field is an array where the first element is the field or fields that are specified
+The response to a search query contains an ``order`` field 
+for each of the results.
+The ``order`` field is an array where the first element is 
+the field or fields that are specified
 in the ``sort`` parameter. See :ref:`query-parameters <api/ddoc/view>`.
 If no ``sort`` parameter is included in the query,
-then the ``order`` field contains the `Lucene relevance score <https://lucene.apache.org/core/3_6_0/scoring.html>`_.
-If you use the 'sort by distance' feature as described in :ref:`geographical-searches <api/ddoc/view>`,
+then the ``order`` field contains the 
+`Lucene relevance score <https://lucene.apache.org/core/3_6_0/scoring.html>`_.
+If you use the 'sort by distance' feature as described 
+in :ref:`geographical-searches <api/ddoc/view>`,
 then the first element is the distance from a point.
 The distance is measured by using either kilometers or miles.
 
@@ -1129,16 +1236,19 @@ set ``{"facet": true}`` in its options.
     }
 
 To use facets,
-all the documents in the index must include all the fields that have faceting enabled.
+all the documents in the index must include all the fields 
+that have faceting enabled.
 If your documents do not include all the fields,
-you receive a ``bad_request`` error with the following reason, "The ``field_name`` does not exist."
+you receive a ``bad_request`` error with the following reason, 
+"The ``field_name`` does not exist."
 If each document does not contain all the fields for facets,
 create separate indexes for each field.
 If you do not create separate indexes for each field,
 you must include only documents that contain all the fields.
 Verify that the fields exist in each document by using a single ``if`` statement.
 
-*Example ``if`` statement to verify that the required fields exist in each document:*
+*Example ``if`` statement to verify that the required fields exist 
+in each document:*
 
 .. code-block:: javascript
 
@@ -1154,14 +1264,16 @@ Counts
     The ``counts`` option is only available when making global queries.
 
 The ``counts`` facet syntax takes a list of fields,
-and returns the number of query results for each unique value of each named field.
+and returns the number of query results for each unique 
+value of each named field.
 
 .. note::
     The ``count`` operation works only if the indexed values are strings.
     The indexed values cannot be mixed types. For example,
     if 100 strings are indexed, and one number,
     then the index cannot be used for ``count`` operations. 
-    You can check the type by using the ``typeof`` operator, and convert it by using the ``parseInt``,
+    You can check the type by using the ``typeof`` operator, and convert it 
+    by using the ``parseInt``,
     ``parseFloat``, or ``.toString()`` functions.
 
 *Example of a query using the ``counts`` facet syntax:* 
@@ -1193,16 +1305,21 @@ and returns the number of query results for each unique value of each named fiel
 .. note:: 
     The ``drilldown`` option is only available when making global queries.
 
-You can restrict results to documents with a dimension equal to the specified label.
-Restrict the results by adding ``drilldown=["dimension","label"]`` to a search query.
-You can include multiple ``drilldown`` parameters to restrict results along multiple dimensions.
+You can restrict results to documents with a dimension equal to 
+the specified label.
+Restrict the results by adding ``drilldown=["dimension","label"]`` 
+to a search query.
+You can include multiple ``drilldown`` parameters to restrict results 
+along multiple dimensions.
 
-Using a ``drilldown`` parameter is similar to using ``key:value`` in the ``q`` parameter,
+Using a ``drilldown`` parameter is similar to using ``key:value`` in 
+the ``q`` parameter,
 but the ``drilldown`` parameter returns values that the analyzer might skip.
 
 For example,
 if the analyzer did not index a stop word like ``"a"``,
-using ``drilldown`` returns it when you specify ``drilldown=["key","a"]``.
+using ``drilldown`` returns it when you specify 
+``drilldown=["key","a"]``.
 
 Ranges
 ^^^^^^
@@ -1217,7 +1334,8 @@ Exclusive range queries are denoted by curly brackets (``{``, ``}``).
 
 .. note::
     The ``range`` operation works only if the indexed values are numbers. 
-    The indexed values cannot be mixed types. For example, if 100 strings are indexed,
+    The indexed values cannot be mixed types. For example, if 100 strings 
+    are indexed,
     and one number, then the index cannot be used for ``range`` operations.
     You can check the type by using the ``typeof`` operator, and convert 
     it by using the ``parseInt``, ``parseFloat``, or ``.toString()`` functions.
@@ -1256,14 +1374,23 @@ To sort your results in this way,
 you must index two numeric fields,
 representing the longitude and latitude.
 
+.. note:: 
+    You can also sort your results by their distance from a geographic coordinate
+    using Lucene's built-in geospatial capabilities.
+
 You can then query by using the special ``<distance...>`` sort field,
 which takes five parameters:
 
--   Longitude field name: The name of your longitude field (``mylon`` in the example).
--   Latitude field name: The name of your latitude field (``mylat`` in the example).
--   Longitude of origin: The longitude of the place you want to sort by distance from.
--   Latitude of origin: The latitude of the place you want to sort by distance from.
--   Units: The units to use: ``km`` for kilometers or ``mi`` for miles. The distance is returned in the order field.
+- Longitude field name: The name of your longitude field (``mylon`` in the example).
+
+- Latitude field name: The name of your latitude field (``mylat`` in the example).
+
+- Longitude of origin: The longitude of the place you want to sort by distance from.
+
+- Latitude of origin: The latitude of the place you want to sort by distance from.
+
+- Units: The units to use: ``km`` for kilometers or ``mi`` for miles. 
+  The distance is returned in the order field.
 
 You can combine sorting by distance with any other search query,
 such as range searches on the latitude and longitude,
@@ -1296,7 +1423,8 @@ and narrow down the search with extra criteria.
         }
     }
 
-*An example of using HTTP for a query that sorts cities in the northern hemisphere by their distance to New York:*
+*An example of using HTTP for a query that sorts cities in the northern hemisphere by 
+their distance to New York:*
 
 .. code-block:: http
 
@@ -1308,7 +1436,8 @@ and narrow down the search with extra criteria.
 
     curl 'https://$HOST:5984/examples/_design/cities-designdoc/_search/cities?q=lat:[0+TO+90]&sort="<distance,lon,lat,-74.0059,40.7127,km>"'
 
-*Example (abbreviated) response, containing a list of northern hemisphere cities sorted by distance to New York:*
+*Example (abbreviated) response, containing a list of northern hemisphere 
+cities sorted by distance to New York:*
 
 .. code-block:: javascript
 
@@ -1358,7 +1487,8 @@ and narrow down the search with extra criteria.
 Highlighting search terms
 -------------------------
 
-Sometimes it is useful to get the context in which a search term was mentioned
+Sometimes it is useful to get the context in which a search 
+term was mentioned
 so that you can display more emphasized results to a user.
 
 To get more emphasized results,
@@ -1368,13 +1498,14 @@ with the highlighted search term returned.
 
 By default,
 the search term is placed in ``<em>`` tags to highlight it,
-but the highlight can be overridden by using the ``highlights_pre_tag`` and ``highlights_post_tag`` parameters.
+but the highlight can be overridden by using the ``highlights_pre_tag`` 
+and ``highlights_post_tag`` parameters.
 
 The length of the fragments is 100 characters by default.
 A different length can be requested with the ``highlights_size`` parameter.
 
-The ``highlights_number`` parameter controls the number of fragments that are returned,
-and defaults to 1.
+The ``highlights_number`` parameter controls the number of fragments 
+that are returned, and defaults to 1.
 
 In the response,
 a ``highlights`` field is added,
@@ -1394,7 +1525,8 @@ you receive an array of fragments with the search term highlighted.
     GET /movies/_design/searches/_search/movies?q=movie_name:Azazel&highlight_fields=["movie_name"]&highlight_pre_tag="**"&highlight_post_tag="**"&highlights_size=30&highlights_number=2 HTTP/1.1
     Authorization: ...
 
-*Example of using the command line to search with highlighting enabled:*
+*Example of using the command line to search with 
+highlighting enabled:*
 
 .. code-block:: sh
 
@@ -1436,7 +1568,8 @@ and ``INDEX_NAME`` is the name of the index.
          -X GET
 
 The response contains information about your index,
-such as the number of documents in the index and the size of the index on disk.
+such as the number of documents in the index and the size of 
+the index on disk.
 
 *Example response after requesting search index metadata:*
 
@@ -1458,17 +1591,25 @@ such as the number of documents in the index and the size of the index on disk.
 Sorting Returned Rows
 =====================
 
-Each element within the returned array is sorted using native UTF-8 sorting
-according to the contents of the key portion of the emitted content. The basic
+Each element within the returned array is sorted using 
+native UTF-8 sorting
+according to the contents of the key portion of the 
+emitted content. The basic
 order of output is as follows:
 
--  ``null``
--  ``false``
--  ``true``
--  Numbers
--  Text (case sensitive, lowercase first)
--  Arrays (according to the values of each element, in order)
--  Objects (according to the values of keys, in key order)
+- ``null``
+
+- ``false``
+
+- ``true``
+
+- Numbers
+
+- Text (case sensitive, lowercase first)
+
+- Arrays (according to the values of each element, in order)
+
+- Objects (according to the values of keys, in key order)
 
 **Request**:
 
@@ -1593,8 +1734,8 @@ order of output is as follows:
         "total_rows": 17
     }
 
-You can reverse the order of the returned view information by using the
-``descending`` query value set to true:
+You can reverse the order of the returned view information 
+by using the ``descending`` query value set to true:
 
 **Request**:
 
