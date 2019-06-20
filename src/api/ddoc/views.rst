@@ -826,10 +826,9 @@ Queries
 After you create a search index, you can query it.
 
 - Issue a partition query using: 
-``GET /$DATABASE/_partition/$PARTITION_KEY/_design/$DDOC/_search/$INDEX_NAME``
-
+  ``GET /$DATABASE/_partition/$PARTITION_KEY/_design/$DDOC/_search/$INDEX_NAME``
 - Issue a global query using: 
-``GET /$DATABASE/_design/$DDOC/_search/$INDEX_NAME``
+  ``GET /$DATABASE/_design/$DDOC/_search/$INDEX_NAME``
 
 Specify your search by using the ``query`` parameter.
 
