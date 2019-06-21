@@ -1585,6 +1585,37 @@ the index on disk.
         }
     }
 
+``dreyfus``
+-----------
+
+``name`` = ``clouseau@127.0.0.1``
+The name and location of the Clouseau Java service required to
+enable Search functionality.
+
+``retry_limit`` = 5
+CouchDB will try to reconnect to Clouseau using a bounded
+exponential backoff with the following number of iterations.
+
+``limit`` = 25
+The default number of results returned from a global search query.
+
+``limit_partitions`` = 2000
+The default number of results returned from a search on a partition
+of a database.
+
+``max_limit`` = 200
+The maximum number of results that can be returned from a global
+search query (or any search query on a database without user-defined
+partitions). Attempts to set ?limit=N higher than this value will
+be rejected.
+
+``max_limit_partitions`` = 2000
+The maximum number of results that can be returned when searching
+a partition of a database. Attempts to set ``?limit=N`` higher than this
+value will be rejected. If this config setting is not defined,
+CouchDB will use the value of ``max_limit`` instead. If neither is
+defined, the default is 2000 as stated here.
+
 .. _api/ddoc/view/sorting:
 
 Sorting Returned Rows
