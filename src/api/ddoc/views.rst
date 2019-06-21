@@ -1606,7 +1606,7 @@ of a database.
 ``max_limit`` = 200
 The maximum number of results that can be returned from a global
 search query (or any search query on a database without user-defined
-partitions). Attempts to set ?limit=N higher than this value will
+partitions). Attempts to set ``?limit=N higher`` than this value will
 be rejected.
 
 ``max_limit_partitions`` = 2000
