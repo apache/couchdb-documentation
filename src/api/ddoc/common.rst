@@ -268,5 +268,3 @@ The response from :get:`/{db}/_design/{ddoc}/_info` contains
        			 “run”
    			 ]
 		}
-
-
