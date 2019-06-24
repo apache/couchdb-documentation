@@ -317,7 +317,7 @@ Search
 ======
 
 Search indexes enable you to query a database by using
-`Lucene Query Parser Syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_.
+`Lucene Query Parser Syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_
 A search index uses one, or multiple, fields from your documents.
 You can use a search index to run queries, find documents based on
 the content they contain, or work with groups, facets, or
@@ -570,11 +570,11 @@ supported by search:
 
 - ``classic`` - The standard Lucene analyzer, circa release 3.1.
 - ``email`` - Like the ``standard`` analyzer, but tries harder to
-match an email address as a complete token.
+  match an email address as a complete token.
 - ``keyword`` - Input is not tokenized at all.
 - ``simple`` - Divides text at non-letters.
-- ``standard`` - The default analyzer. It implements the Word Break rules from the
-`Unicode Text Segmentation algorithm <http://www.unicode.org/reports/tr29/>`_.
+- ``standard`` - The default analyzer. It implements the Word Break
+  rules from the `Unicode Text Segmentation algorithm <http://www.unicode.org/reports/tr29/>`_
 - ``whitespace`` - Divides text at white space boundaries.
 
 *Example analyzer document:*
@@ -855,8 +855,8 @@ Query Parameters
 You must enable :ref:`faceting <api/ddoc/view>` before you can use the
 following parameters:
 
--	``counts``
--	``drilldown``
+- ``counts``
+- ``drilldown``
 
 Here's the list of arguments and their descriptions:
 
@@ -1105,7 +1105,7 @@ Query syntax
 ------------
 
 The CouchDB search query syntax is based on the
-`Lucene syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_.
+`Lucene syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_
 Search queries take the form of ``name:value`` unless the name is omitted,
 in which case they use the default field,
 as demonstrated in the following examples:
