@@ -83,7 +83,7 @@
     The :method:`COPY` (which is non-standard HTTP) copies an existing design
     document to a new or existing one.
 
-    Given that view indexes on disk are named after their MD5 hash of the
+    Given that view indexes on disk are named after their MD5 hash of the
     view definition, and that a `COPY` operation won't actually change
     that definition, the copied views won't have to be reconstructed.
     Both views will be served from the same index on disk.
@@ -214,3 +214,57 @@ The response from :get:`/{db}/_design/{ddoc}/_info` contains
   this design document
 * **waiting_commit** (*boolean*): Indicates if there are outstanding commits
   to the underlying database that need to processed
+
+==========================================
+``/db/_design/design-doc/_search_analyze``
+==========================================
+
+.. http:put:: /{db}/_design/{ddoc}/_search_analyze
+    :synopsis: Tests the results of analyzer tokenization
+
+    Tests the results of analyzer tokenization by posting sample data to
+    the ``_search_analyze`` endpoint.
+
+    :param field: Type of analyzer
+    :param text:  Analyzer token you want to test
+    :code 200: Request completed successfully
+    :code 400: Request body is wrong (malformed or missing one of the mandatory fields)
+    :code 500: A server error (or other kind of error) occurred
+
+    **Request to test the ``standard`` analyzer**:
+
+    .. code-block:: http
+
+        Host: $ACCOUNT.cloudant.com
+        POST /_search_analyze HTTP/1.1
+        Content-Type: application/json
+        {"analyzer”:”standard”, "text”:”running”}
+
+    **Result of testing the ``standard`` analyzer**:
+
+    .. code-block:: http
+
+        {
+            "tokens": [
+                “running”
+            ]
+        }
+
+    **Request to test the ``english`` analyzer**:
+
+    .. code-block:: http
+
+        Host: $ACCOUNT.cloudant.com
+        POST /_search_analyze HTTP/1.1
+        Content-Type: application/json
+        {"analyzer”:”english”, "text”:”running”}
+
+      **Result of testing the ``english`` analyzer**:
+
+    .. code-block:: http
+
+        {
+            "tokens": [
+                “run”
+            ]
+        }
