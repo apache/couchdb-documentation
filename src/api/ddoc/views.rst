@@ -317,16 +317,15 @@ Search
 ======
 
 Search indexes enable you to query a database by using
-`Lucene Query Parser Syntax 
-<http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_
+`Lucene Query Parser Syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_.
 A search index uses one, or multiple, fields from your documents.
 You can use a search index to run queries, find documents based on
 the content they contain, or work with groups, facets, or
 geographical searches.
 
 .. warning::
-   Search cannot function unless it has a functioning, cluster-connected
-   Clouseau instance.
+    Search cannot function unless it has a functioning, cluster-connected
+    Clouseau instance.
 
 To create a search index, you add a JavaScript function to a design document
 in the database. An index builds after processing one search request or after
@@ -334,11 +333,11 @@ the server detects a document update. The ``index`` function takes the
 following parameters:
 
 1.  Field name - The name of the field you want to use when you query the index.
-    If you set this parameter to ``default``, then this field is queried if no field
-    is specified in the query syntax.
+If you set this parameter to ``default``, then this field is queried if no field
+is specified in the query syntax.
 2.  Data that you want to index, for example, ``doc.address.country``.
 3.  (Optional) The third parameter includes the following fields: ``boost``, ``facet``,
-    ``index``, and ``store``. These fields are described in more detail later.
+``index``, and ``store``. These fields are described in more detail later.
 
 By default, a search index response returns 25 rows. The number of rows that is
 returned can be changed by using the ``limit`` parameter. However, a result set
@@ -443,7 +442,7 @@ The third, optional, parameter is a JavaScript object with the following fields:
 |  ``boost``  | A number that specifies           | A positive     | 1 (no     |
 |             | the relevance in                  | floating point | boosting) |
 |             | search results. Content           | number         |           |
-|             | that is indexed with a            |                |           |
+|             | that is indexed with a            |                |           |
 |             | boost value greater               |                |           |
 |             | than 1 is more relevant           |                |           |
 |             | than content that is              |                |           |
@@ -529,12 +528,12 @@ therefore you would not attempt to index the field.
 
 JavaScript considers a result to be false if one of the following values is tested:
 
-*    'undefined'
-*    null
-*    The number +0
-*    The number -0
-*    NaN (not a number)
-*    "" (the empty string)
+* 'undefined'
+* null
+* The number +0
+* The number -0
+* NaN (not a number)
+* "" (the empty string)
 
 *Using a guard clause to check whether the required data field exists,
 and holds a number, before an attempt to index:*
@@ -569,14 +568,14 @@ Analyzers can be helpful if you need to
 Here's the list of generic analyzers, and their descriptions, that are
 supported by search:
 
--    ``classic`` - The standard Lucene analyzer, circa release 3.1.
--    ``email`` - Like the ``standard`` analyzer, but tries harder to
-     match an email address as a complete token.
--    ``keyword`` - Input is not tokenized at all.
--    ``simple`` - Divides text at non-letters.
--    ``standard`` - The default analyzer. It implements the Word Break rules from the
-     `Unicode Text Segmentation algorithm <http://www.unicode.org/reports/tr29/>`_.
--    ``whitespace`` - Divides text at white space boundaries.
+- ``classic`` - The standard Lucene analyzer, circa release 3.1.
+- ``email`` - Like the ``standard`` analyzer, but tries harder to
+match an email address as a complete token.
+- ``keyword`` - Input is not tokenized at all.
+- ``simple`` - Divides text at non-letters.
+- ``standard`` - The default analyzer. It implements the Word Break rules from the
+`Unicode Text Segmentation algorithm <http://www.unicode.org/reports/tr29/>`_.
+- ``whitespace`` - Divides text at white space boundaries.
 
 *Example analyzer document:*
 
@@ -735,20 +734,20 @@ The default stop words for the ``standard`` analyzer are included below:
 .. code-block:: javascript
 
     {
-	    "_id": "_design/stop_words_example",
-	    "indexes": {
-		    "INDEX_NAME": {
-			    "analyzer": {
-				    "name": "portuguese",
-				    "stopwords": [
-					    "foo",
-					    "bar",
-					    "baz"
-				    ]
-			    },
-			    "index": "function (doc) { ... }"
-		    }
-	    }
+        "_id": "_design/stop_words_example",
+        "indexes": {
+            "INDEX_NAME": {
+                "analyzer": {
+                    "name": "portuguese",
+                    "stopwords": [
+                        "foo",
+                        "bar",
+                        "baz"
+                    ]
+                },
+                "index": "function (doc) { ... }"
+            }
+        }
     }
 
 Testing analyzer tokenization
@@ -770,16 +769,16 @@ You can test the results of analyzer tokenization by posting sample data to the
 .. code-block:: sh
 
     curl 'https://$HOST:5984/_search_analyze' -H 'Content-Type: application/json'
-	    -d '{"analyzer":"keyword", "text":"ablanks@renovations.com"}'
+        -d '{"analyzer":"keyword", "text":"ablanks@renovations.com"}'
 
 *Result of testing the ``keyword`` analyzer:*
 
 .. code-block:: javascript
 
     {
-	    "tokens": [
-		    "ablanks@renovations.com"
-	    ]
+        "tokens": [
+            "ablanks@renovations.com"
+        ]
     }
 
 *Example of using HTTP to test the ``standard`` analyzer:*
@@ -795,17 +794,17 @@ You can test the results of analyzer tokenization by posting sample data to the
 .. code-block:: sh
 
     curl 'https://$HOST:5984/_search_analyze' -H 'Content-Type: application/json'
-	    -d '{"analyzer":"standard", "text":"ablanks@renovations.com"}'
+        -d '{"analyzer":"standard", "text":"ablanks@renovations.com"}'
 
 *Result of testing the ``standard`` analyzer:*
 
 .. code-block:: javascript
 
     {
-	    "tokens": [
-		    "ablanks",
-		    "renovations.com"
-	    ]
+        "tokens": [
+            "ablanks",
+            "renovations.com"
+        ]
     }
 
 Queries
@@ -1106,7 +1105,7 @@ Query syntax
 ------------
 
 The CouchDB search query syntax is based on the
-`Lucene syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_
+`Lucene syntax <http://lucene.apache.org/core/4_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview>`_.
 Search queries take the form of ``name:value`` unless the name is omitted,
 in which case they use the default field,
 as demonstrated in the following examples:
@@ -1626,33 +1625,27 @@ the index on disk.
 -----------
 
 ``name`` = ``clouseau@127.0.0.1``
-
 The name and location of the Clouseau Java service required to
 enable Search functionality.
 
 ``retry_limit`` = 5
-
 CouchDB will try to reconnect to Clouseau using a bounded
 exponential backoff with the following number of iterations.
 
 ``limit`` = 25
-
 The default number of results returned from a global search query.
 
 ``limit_partitions`` = 2000
-
 The default number of results returned from a search on a partition
 of a database.
 
 ``max_limit`` = 200
-
 The maximum number of results that can be returned from a global
 search query (or any search query on a database without user-defined
 partitions). Attempts to set ``?limit=N higher`` than this value will
 be rejected.
 
 ``max_limit_partitions`` = 2000
-
 The maximum number of results that can be returned when searching
 a partition of a database. Attempts to set ``?limit=N`` higher than this
 value will be rejected. If this config setting is not defined,
@@ -1808,7 +1801,7 @@ order of output is as follows:
     }
 
 You can reverse the order of the returned view information
-by using the ``descending`` query value set to true:m
+by using the ``descending`` query value set to true:
 
 **Request**:
 
