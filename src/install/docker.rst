@@ -32,8 +32,8 @@ use of a Docker volume for data at ``/opt/couchdb/data``.
 Note that you can also use the ``NODENAME`` environment variable to set the
 name of the CouchDB node inside the container.
 
-**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
-a single node or clustered installation.**
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 Further details on the Docker configuration are available in our
 `couchdb-docker git repository`_.

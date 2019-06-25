@@ -10,8 +10,6 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-.. lint: ignore errors for the next 5 lines
-
 .. _cve/2012-5641:
 
 ==================================================================================
@@ -55,9 +53,8 @@ Work-Around
 Users may simply exclude any file-based web serving components directly
 within their configuration file, typically in `local.ini`. On a default
 CouchDB installation, this requires amending the
-:config:option:`httpd_global_handlers/favicon.ico` and
-:config:option:`httpd_global_handlers/_utils` lines within
-:config:section:`httpd_global_handlers`::
+`httpd_global_handlers/favicon.ico` and `httpd_global_handlers/_utils`
+lines within `httpd_global_handlers`::
 
     [httpd_global_handlers]
     favicon.ico = {couch_httpd_misc_handlers, handle_welcome_req, <<"Forbidden">>}

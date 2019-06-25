@@ -12,21 +12,20 @@
 
 .. _cluster:
 
-=================
-Cluster Reference
-=================
+==================
+Cluster Management
+==================
 
-As of 2.0 CouchDB now have two modes of operations:
+As of CouchDB 2.0.0, CouchDB can be run in two different modes of operation:
     * Standalone
     * Cluster
 
-This part of the documentation is about setting up and maintain a CouchDB
-cluster.
+This section details the theory behind CouchDB clusters, and provides specific
+operational instructions on node, database and shard management.
 
 .. toctree::
     :maxdepth: 2
 
-    setup
     theory
     nodes
     databases

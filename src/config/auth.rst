@@ -29,9 +29,12 @@ Server Administrators
     users. This configuration is known as `Admin Party`, and is not recommended
     for in-production usage. You can crash the party simply by creating the
     first admin account. CouchDB server administrators and passwords are not
-    stored in the ``_users`` database, but in the ``local.ini`` file, which
-    should be appropriately secured and readable only by system
-    administrators::
+    stored in the ``_users`` database, but in the last ``[admins]`` section
+    that CouchDB finds when loading its ini files. See :config:intro for
+    details on config file order and behaviour. This file (which could be
+    something like ``etc/local.ini`` or ``etc/local.d/10-admins.ini`` on a
+    Debian/Ubuntu system installed from packages) should be appropriately
+    secured and readable only by system administrators::
 
         [admins]
         ;admin = mysecretpassword
@@ -69,9 +72,8 @@ Server Administrators
         }
 
     If you already have a salted, encrypted password string (for example, from
-    an old ``local.ini`` file, or from a different CouchDB server), then you
-    can store the "raw" encrypted string, without having CouchDB doubly encrypt
-    it.
+    an old ini file, or from a different CouchDB server), then you can store
+    the "raw" encrypted string, without having CouchDB doubly encrypt it.
 
     .. code-block:: http
 
@@ -130,6 +132,16 @@ Authentication Configuration
 
             [couch_httpd_auth]
             allow_persistent_cookies = false
+
+    .. config:option:: cookie_domain :: Cookie Domain
+
+        .. versionadded:: 2.1.1
+
+        Configures the ``domain`` attribute of the ``AuthSession`` cookie. By default the
+        ``domain`` attribute is empty, resulting in the cookie being set on CouchDB's domain. ::
+
+            [couch_httpd_auth]
+            cookie_domain = example.com
 
     .. config:option:: auth_cache_size :: Authentication cache
 

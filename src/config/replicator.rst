@@ -27,11 +27,18 @@ Replicator Database Configuration
 
         .. versionadded:: 2.1
 
-        Number of actively running replications. Making this too high could
-        cause performance issues. Making it too low could mean replications
-        jobs might not have enough time to make progress before getting
-        unscheduled again. This parameter can be adjusted at runtime and will
-        take effect during next rescheduling cycle::
+        Number of actively running replications.
+        This value represents the threshold to trigger the automatic replication
+        scheduler.
+        The system will check every ``interval`` milliseconds how many replication
+        jobs are running, and if there are more than ``max_jobs`` active jobs,
+        the scheduler will pause-and-restart up to ``max_churn`` jobs in the
+        scheduler queue.
+        Making this value too high could cause performance issues, while making
+        it too low could mean replications jobs might not have enough time to make
+        progress before getting unscheduled again.
+        This parameter can be adjusted at runtime and will take effect during next
+        rescheduling cycle::
 
              [replicator]
              max_jobs = 500
@@ -40,8 +47,9 @@ Replicator Database Configuration
 
         .. versionadded:: 2.1
 
-        Scheduling interval in milliseconds. During each reschedule cycle
-        scheduler might start or stop up to "max_churn" number of jobs::
+        Scheduling interval in milliseconds.
+        During each reschedule cycle the scheduler might start or stop up to ``max_churn``
+        number of jobs::
 
              [replicator]
              interval = 60000
@@ -50,10 +58,10 @@ Replicator Database Configuration
 
         .. versionadded:: 2.1
 
-        Maximum number of replications to start and stop during rescheduling.
-        This parameter along with ``interval`` defines the rate of job
-        replacement. During startup, however a much larger number of jobs could
-        be started (up to ``max_jobs``) in a short period of time::
+        Maximum number of replication jobs to start and stop during rescheduling.
+        This parameter, along with ``interval``, defines the rate of job replacement.
+        During startup, however, a much larger number of jobs could be started
+        (up to ``max_jobs``) in a short period of time::
 
              [replicator]
              max_churn = 20

@@ -51,8 +51,6 @@ clarity):
 
         shell> curl 'http://couchdb:5984/_uuids?count=5'
 
-.. lint: ignore errors for the next 15 lines
-
 .. note::
     On Microsoft Windows, use double-quotes anywhere you see single-quotes in
     the following examples. Use doubled double-quotes ("") anywhere you see

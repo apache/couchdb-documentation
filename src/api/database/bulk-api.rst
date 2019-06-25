@@ -471,13 +471,19 @@ Sending multiple queries to a database
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`multipart/related`
+                     - :mimetype:`multipart/mixed`
     :<header Content-Type: :mimetype:`application/json`
     :query boolean revs: Give the revisions history
-    :<json array docs: List of document objects, with ``id``, and optionnaly
+    :<json array docs: List of document objects, with ``id``, and optionally
       ``rev`` and ``atts_since``
     :>header Content-Type: - :mimetype:`application/json`
-    :>json object results: the documents, with the additionnal ``_revisions``
-      property that lists the parent revisions if ``revs=true``
+    :>json object results: an array of results for each requested document/rev
+      pair. ``id`` key lists the requested document ID, ``docs`` contains a
+      single-item array of objects, each of which has either an ``error`` key and
+      value describing the error, or ``ok`` key and associated value of the
+      requested document, with the additional ``_revisions`` property that lists
+      the parent revisions if ``revs=true``.
     :code 200: Request completed successfully
     :code 400: The request provided invalid JSON data or invalid query parameter
     :code 401: Read permission required
@@ -506,6 +512,9 @@ Sending multiple queries to a database
                 {
                     "id": "bar",
                 }
+                {
+                    "id": "baz",
+                }
             ]
         }
 
@@ -526,7 +535,7 @@ Sending multiple queries to a database
               "docs": [
                 {
                   "ok": {
-                    "_id": "bbb",
+                    "_id": "foo",
                     "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
                     "value": "this is foo",
                     "_revisions": {
@@ -547,7 +556,7 @@ Sending multiple queries to a database
               "docs": [
                 {
                   "ok": {
-                    "_id": "bbb",
+                    "_id": "foo",
                     "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
                     "value": "this is the first revision of foo",
                     "_revisions": {
@@ -575,6 +584,19 @@ Sending multiple queries to a database
                         "309651b95df56d52658650fb64257b97"
                       ]
                     }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "baz",
+              "docs": [
+                {
+                  "error": {
+                    "id": "baz",
+                    "rev": "undefined",
+                    "error": "not_found",
+                    "reason": "missing"
                   }
                 }
               ]

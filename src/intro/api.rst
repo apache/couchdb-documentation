@@ -466,7 +466,8 @@ mechanisms, but we'll explore these later in the documents.
     start learning one of the popular systems). Using new versions for document
     changes works a lot like version control, but there's an important
     difference: **CouchDB does not guarantee that older versions are kept
-    around**.
+    around. Don't use the ``_rev`` token in CouchDB as a revision control system
+    for your documents.**
 
 Documents in Detail
 -------------------

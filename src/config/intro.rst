@@ -66,10 +66,10 @@ is the same as setting the ``ERL_FLAGS`` environment variable.
 If there is a need to use different ``vm.args`` or ``sys.config`` files, for
 example, in different locations to the ones provided by CouchDB, or you don't
 want to edit the original files, the default locations may be changed by
-setting the COUCHDB_VM_ARGS_FILE or COUCHDB_SYSCONFIG_FILE environment
+setting the COUCHDB_ARGS_FILE or COUCHDB_SYSCONFIG_FILE environment
 variables::
 
-    export COUCHDB_VM_ARGS_FILE="/path/to/my/vm.args"
+    export COUCHDB_ARGS_FILE="/path/to/my/vm.args"
     export COUCHDB_SYSCONFIG_FILE="/path/to/my/sys.config"
 
 Parameter names and values
@@ -117,11 +117,11 @@ improve configuration readability.
     without modifying that file, you may override in `local.ini`, but without
     any value::
 
-        [httpd_global_handlers]
-        _all_dbs =
+        [compactions]
+        _default =
 
-    This could be read as: "remove the `_all_dbs` parameter from the
-    `httpd_global_handlers` section if it was ever set before".
+    This could be read as: "remove the `_default` parameter from the
+    `compactions` section if it was ever set before".
 
 The semicolon (``;``) signals the start of a comment. Everything after this
 character is ignored by CouchDB.

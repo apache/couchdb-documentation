@@ -74,7 +74,9 @@
     :>json string instance_start_time: Always ``"0"``. (Returned for legacy
       reasons.)
     :>json object other: Used by Cloudant. *Deprecated.*
-    :>json number purge_seq: The number of purge operations on the database.
+    :>json string purge_seq: An opaque string that describes the purge state
+      of the database. Do not rely on this string for counting the number
+      of purge operations.
     :>json number sizes.active: The size of live data inside the database, in
       bytes.
     :>json number sizes.external: The uncompressed size of database contents
@@ -154,7 +156,9 @@
     :param db: Database name
     :query integer q: Shards, aka the number of range partitions. Default is
       8, unless overridden in the :config:option:`cluster config <cluster/q>`.
-    :query integer n: Replicas. The number of copies of the database in the cluster. The default is 3, unless overridden in the :config:option:`cluster config <cluster/n>` .
+    :query integer n: Replicas. The number of copies of the database in the
+      cluster. The default is 3, unless overridden in the
+      :config:option:`cluster config <cluster/n>` .
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
@@ -164,7 +168,8 @@
     :>json string error: Error type. Available if response code is ``4xx``
     :>json string reason: Error description. Available if response code is
       ``4xx``
-    :code 201: Database created successfully
+    :code 201: Database created successfully (quorum is met)
+    :code 202: Accepted (at least by one node)
     :code 400: Invalid database name
     :code 401: CouchDB Server Administrator privileges required
     :code 412: Database already exists
@@ -265,7 +270,8 @@
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json boolean ok: Operation status
-    :code 200: Database removed successfully
+    :code 200: Database removed successfully (quorum is met and database is deleted by at least one node)
+    :code 202: Accepted (deleted by at least one of the nodes, quorum is not met yet)
     :code 400: Invalid database name or forgotten document id by accident
     :code 401: CouchDB Server Administrator privileges required
     :code 404: Database doesn't exist or invalid database name

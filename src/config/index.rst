@@ -12,9 +12,9 @@
 
 .. _config:
 
-===================
-Configuring CouchDB
-===================
+=============
+Configuration
+=============
 
 .. toctree::
     :maxdepth: 2
@@ -29,6 +29,6 @@ Configuring CouchDB
     logging
     replicator
     query-servers
-    http-handlers
     services
     misc
+    resharding

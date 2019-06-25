@@ -74,8 +74,8 @@ local checkpoint purge document:
     {
       "_id": "_local/purge-mrview-86cacdfbaf6968d4ebbc324dd3723fe7",
       "type": "mrview",
-      "purge_seq": "10",
-      "updated_on": "2018-05-09T08:41:37.183026Z",
+      "purge_seq": 10,
+      "updated_on": 1540541874,
       "ddoc_id": "_design/foo",
       "signature": "5d10247925f826ae3e00966ec24b7bf6"
     }
@@ -91,8 +91,12 @@ have.
 
 Internal Replication
 ====================================
+
+.. rst-class:: open
+
 Purge requests are replayed across all nodes in an eventually consistent manner.
 Internal replication of purges consists of two steps:
+
 1. Pull replication. Internal replication first starts by pulling purges from
 target and applying them on source to make sure we don't reintroduce to target
 source's docs/revs that have been already purged on target. In this step, we use
@@ -101,6 +105,7 @@ purge checkpoint documents stored on target to keep track of the last target's
 this ``purge_seq``, and replay them on source. This step is done by updating
 the target's checkpoint purge documents with the latest process ``purge_seq``
 and timestamp.
+
 2. Push replication. Then internal replication proceeds as usual with an extra
 step inserted to push source's purge requests to target. In this step, we use
 local internal replication checkpoint documents, that are updated both on target
@@ -129,45 +134,52 @@ consistency within the main database.
 
 Config Settings
 ====================================
-These settings ca be updated in the default.ini or local.ini:
+These settings can be updated in the default.ini or local.ini:
+
++-----------------------+--------------------------------------------+----------+
+| Field                 | Description                                | Default  |
++=======================+============================================+==========+
+| max_document_id_number| Allowed maximum number of documents in one | 100      |
+|                       | purge request                              |          |
++-----------------------+--------------------------------------------+----------+
+| max_revisions_number  | Allowed maximum number of accumulated      | 1000     |
+|                       | revisions in one purge request             |          |
++-----------------------+--------------------------------------------+----------+
+| allowed_purge_seq_lag | Beside purged_infos_limit, allowed         | 100      |
+|                       | additional buffer to store purge requests  |          |
++-----------------------+--------------------------------------------+----------+
+| index_lag_warn_seconds| Allowed durations when index is not        | 86400    |
+|                       | updated for local purge checkpoint document|          |
++-----------------------+--------------------------------------------+----------+
+
+During a database compaction,  we check all checkpoint purge docs. A client (an
+index or internal replication job) is allowed to have the last reported
+``purge_seq`` to be smaller than the current database shard's ``purge_seq`` by
+the value of ``(purged_infos_limit + allowed_purge_seq_lag)``.  If the client's
+``purge_seq`` is even smaller, and the client has not checkpointed within
+``index_lag_warn_seconds``, it prevents compaction of purge trees and we have to
+issue the following log warning for this client:
 
 .. code-block:: text
 
-    [purge]
-    max_document_id_number = 100
-    max_revisions_number = 1000
-    allowed_purge_seq_lag = 100
-    index_lag_warn_seconds =  86400
+    Purge checkpoint '_local/purge-mrview-9152d15c12011288629bcffba7693fd4’
+    not updated in 86400 seconds in
+    <<"shards/00000000-1fffffff/testdb12.1491979089">>
 
-    1. ``max_document_id_number`` (default 100)
-        Allowed maximum number of documents in one purge request
-    2. ``max_revisions_number`` (default 1000)
-        Allowed maximum number of accumulated revisions in one purge request.
-    3. ``index_lag_warn_seconds`` (default 86400 sec or 1 day)
-        During a database compaction,  we check all checkpoint purge docs. A client (an
-        index or internal replication job) is allowed to have the last reported
-        ``purge_seq`` to be smaller than the current database shard's ``purge_seq`` by
-        the value of ``(purged_infos_limit + index_lag_warn_seconds)``.  If the client's
-        ``purge_seq`` is even smaller, and the client has not checkpointed within
-        ``index_lag_warn_seconds``, it prevents compaction of purge trees and we have to
-        issue the following log warning for this client:
+If this type of log warning occurs, check the client to see why the processing
+of purge requests is stalled in it.
 
-        ::
-                Purge checkpoint '<<"_design/bar">>' not updated in 86400 seconds
+There is a mapping relationship between a design document of indexes and local
+checkpoint docs. If a design document of indexes is updated or deleted, the
+corresponding local checkpoint document should be also automatically deleted.
+But in an unexpected case, when a design doc was updated/deleted, but its
+checkpoint document still exists in a database, the following warning will be
+issued:
 
-        If this type of log warnings occurs, check the client to see why the processing
-        of purge requests is stalled in it.
+.. code-block:: text
 
-        There is a mapping relationship between design document of indexes and local
-        checkpoint docs. If a design document of indexes is updated or deleted, the
-        corresponding local checkpoint document should be also automatically deleted.
-        But in an unexpected case, when a design doc was updated/deleted, but its
-        checkpoint document still exist in a database, the following warning will be
-        issued:
+    "Invalid purge doc '<<"_design/bar">>' on database
+    <<"shards/00000000-1fffffff/testdb12.1491979089">>
+    with purge_seq '50'"
 
-        ::
-                "Invalid purge doc '<<"_design/bar">>' on database
-                <<"shards/00000000-1fffffff/testdb12.1491979089">>
-                with purge_seq '50'"
-
-        If this type of log warnings occur, remove the local purge doc from a database.
+If this type of log warning occurs, remove the local purge doc from a database.

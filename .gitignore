@@ -1,5 +1,7 @@
 ext/*.pyc
 ext/__pycache__/
 build/
+venv
 *~
 *.swp
+*.bak

@@ -178,6 +178,20 @@ confusion. CouchDB automatically includes the document ID of the document that
 created the entry in the view result. We’ll use this as well when constructing
 links to the blog post pages.
 
+.. warning::
+
+    Do not emit the entire document as the value of your ``emit(key, value)``
+    statement unless you're sure you know you want it. This stores an entire
+    additional copy of your document in the view's secondary index. Views with
+    ``emit(key, doc)`` take longer to update, longer to write to disk, and
+    consume significantly more disk space. The only advantage is that they
+    are faster to query than using the ``?include_docs=true`` parameter when
+    querying a view.
+
+    Consider the trade-offs before emitting the entire document. Often it is
+    sufficient to emit only a portion of the document, or just a single key /
+    value pair, in your views.
+
 Efficient Lookups
 =================
 

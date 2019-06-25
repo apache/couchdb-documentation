@@ -16,10 +16,10 @@ specific language governing permissions and limitations under the License.
 {% extends "layout.html" %}
 {% set title = _('Overview') %}
 {% block body %}
-  <h1>{{ docstitle|e }}</h1>
+  <h1>Apache CouchDB<sup>&reg;</sup> {{ release|e }} Documentation</h1>
   <p>
     {{ _('Welcome! This is') }}
-    {% block description %}{{ _('the documentation for') }} {{ project|e }}
+    {% block description %}{{ _('the documentation for') }} Apache CouchDB<sup>&reg;</sup>
     {{ release|e }}{% if last_updated %}, {{ _('last updated') }} {{ last_updated|e }}{% endif %}{% endblock %}.
 </p>
 {% block tables %}

@@ -307,23 +307,22 @@ HTTP Server Options
 
 .. _config/ssl:
 
-Secure Socket Level Options
-===========================
+HTTPS (SSL/TLS) Options
+=======================
 
-.. config:section:: ssl :: Secure Socket Level Options
+.. config:section:: ssl :: HTTPS (SSL/TLS) Options
 
-    CouchDB supports SSL natively. All your secure connection needs can now be
-    served without needing to set up and maintain a separate proxy server that
-    handles SSL.
+    CouchDB supports TLS/SSL natively, without the use of a proxy server.
 
-    SSL setup can be tricky, but the configuration in CouchDB was designed to
+    HTTPS setup can be tricky, but the configuration in CouchDB was designed to
     be as easy as possible. All you need is two files; a certificate and a
-    private key. If you bought an official SSL certificate from a certificate
+    private key. If you have an official certificate from a certificate
     authority, both should be in your possession already.
 
-    If you just want to try this out and don't want to pay anything upfront,
-    you can create a self-signed certificate. Everything will work the same,
-    but clients will get a warning about an insecure certificate.
+    If you just want to try this out and don't want to go through the hassle of
+    obtaining an official certificate, you can create a self-signed certificate.
+    Everything will work the same, but clients will get a warning about an insecure
+    certificate.
 
     You will need the `OpenSSL`_ command line tool installed. It probably
     already is.
@@ -340,14 +339,11 @@ Secure Socket Level Options
     Now, you need to edit CouchDB's configuration, by editing your
     ``local.ini`` file. Here is what you need to do.
 
-    At first, :option:`enable the HTTPS daemon <daemons/httpsd>`::
-
-        [daemons]
-        httpsd = {chttpd, start_link, [https]}
-
-    Next, under the ``[ssl]`` section set up the newly generated certificates::
+    Under the ``[ssl]`` section, enable HTTPS and set up the newly generated
+    certificates::
 
         [ssl]
+        enable = true
         cert_file = /etc/couchdb/cert/couchdb.pem
         key_file = /etc/couchdb/cert/privkey.pem
 
@@ -385,6 +381,11 @@ Secure Socket Level Options
         {"couchdb":"Welcome","version":"1.5.0"}
 
     All done.
+
+    For performance reasons, and for ease of setup, you may still wish to
+    terminate HTTPS connections at your load balancer / reverse proxy, then use
+    unencrypted HTTP between it and your CouchDB cluster. This is a recommended
+    approach.
 
     .. _`certificates HOWTO`: http://www.openssl.org/docs/HOWTO/certificates.txt
     .. _OpenSSL: http://www.openssl.org/
@@ -567,6 +568,14 @@ Cross-Origin Resource Sharing
             [cors]
             methods = GET,POST
 
+    .. config:option:: max_age
+
+        Sets the ``Access-Control-Max-Age`` header in seconds. Use it to
+        avoid repeated ``OPTIONS`` requests.
+
+            [cors]
+            max_age = 3600
+
     .. seealso::
         Original JIRA `implementation ticket <https://issues.apache.org/jira/browse/COUCHDB-431>`_
 
@@ -604,6 +613,10 @@ with the vhost name prefixed by ``cors:``. Example case for the vhost
     headers = X-CouchDB-Header
     ; List of accepted methods
     methods = HEAD, GET
+
+A video from 2010 on vhost and rewrite configuration `is available
+<https://vimeo.com/20773112>`_, but is not guaranteed to match current syntax
+or behaviour.
 
 .. _config/vhosts:
 
