@@ -335,7 +335,9 @@ following parameters:
 1.  Field name - The name of the field you want to use when you query the index.
 If you set this parameter to ``default``, then this field is queried if no field
 is specified in the query syntax.
+
 2.  Data that you want to index, for example, ``doc.address.country``.
+
 3.  (Optional) The third parameter includes the following fields: ``boost``, ``facet``,
 ``index``, and ``store``. These fields are described in more detail later.
 
@@ -368,7 +370,7 @@ Index functions
 ---------------
 
 Attempting to index by using a data field that does not exist fails. To avoid
-this problem, use the appropriate :ref:`index_guard_clauses <api/ddoc/view>`.
+this problem, use the appropriate :ref:`guard clause <api/ddoc/view/index_guard_clauses>`.
 
 .. note::
     Your indexing functions operate in a memory-constrained environment
@@ -436,41 +438,21 @@ The third, optional, parameter is a JavaScript object with the following fields:
 
 *Index function (optional parameter)*
 
-+-------------+-----------------------------------+----------------+-----------+
-| Option      | Description                       | Values         | Default   |
-+=============+===================================+================+===========+
-|  ``boost``  | A number that specifies           | A positive     | 1 (no     |
-|             | the relevance in                  | floating point | boosting) |
-|             | search results. Content           | number         |           |
-|             | that is indexed with a            |                |           |
-|             | boost value greater               |                |           |
-|             | than 1 is more relevant           |                |           |
-|             | than content that is              |                |           |
-|             | indexed without a boost           |                |           |
-|             | value. Content with a             |                |           |
-|             | boost value less than             |                |           |
-|             | one is not so relevant.           |                |           |
-+-------------+-----------------------------------+----------------+-----------+
-| ``facet``   | Creates a faceted                 | ``true``,      | ``false`` |
-|             | index. For more                   | ``false``      |           |
-|             | information, see                  |                |           |
-|             | :ref:`faceting <api/ddoc/view>`.  |                |           |
-+-------------+-----------------------------------+----------------+-----------+
-| ``index``   | Whether the data is indexed,      | ``true``,      | ``false`` |
-|             | and if so, how. If set to         | ``false``      |           |
-|             | ``false``, the data cannot        |                |           |
-|             | be used for searches, but         |                |           |
-|             | can still be retrieved            |                |           |
-|             | from the index if ``store``       |                |           |
-|             | is set to ``true``.  For more     |                |           |
-|             | information, see                  |                |           |
-|             | :ref:`analyzers <api/ddoc/view>`. |                |           |
-+-------------+-----------------------------------+----------------+-----------+
-| ``store``   | If ``true``, the value is         | ``true``,      | ``false`` |
-|             | returned in the search result;    | ``false``      |           |
-|             | otherwise, the value is           |                |           |
-|             | not returned.                     |                |           |
-+-------------+-----------------------------------+----------------+-----------+
+* **boost** - A number that specifies the relevance in search results. Content that is
+  indexed with a boost value greater than 1 is more relevant than content that is
+  indexed without a boost value. Content with a boost value less than one is not so
+  relevant. Value is a positive floating point number. Default is 1 (no boosting).
+
+* **facet** - Creates a faceted index. See :ref:`Faceting <api/ddoc/view/faceting>`.
+  Values are ``true`` or ``false``. Default is ``false``.
+
+* **index** - Whether the data is indexed, and if so, how. If set to ``false``, the data
+  cannot be used for searches, but can still be retrieved from the index if ``store`` is
+  set to ``true``. See :ref:`Analyzers <api/ddoc/view/analyzers>`.
+  Values are ``true`` or ``false``. Default is ``true``
+
+* **store** - If ``true``, the value is returned in the search result; otherwise,
+  the value is not returned. Values are ``true`` or ``false``. Default is ``false``.
 
 .. note::
 
@@ -563,7 +545,7 @@ Analyzers
 
 Analyzers are settings that define how to recognize terms within text.
 Analyzers can be helpful if you need to
-:ref:`language-specific-analyzers <api/ddoc/view>`.
+:ref:`index multiple languages <api/ddoc/view/language-specific-analyzers>`.
 
 Here's the list of generic analyzers, and their descriptions, that are
 supported by search:
@@ -650,7 +632,6 @@ The name of the language is also the name of the analyzer.
 | ``japanese``   | org.apache.lucene.analysis.ja.JapaneseAnalyzer           |
 +----------------+----------------------------------------------------------+
 | ``japanese``   | import org.apache.lucene.analysis.ja.JapaneseTokenizer   |
-|                | (with DEFAULT_MODE and defaultStopTags)                  |
 +----------------+----------------------------------------------------------+
 | ``latvian``    | org.apache.lucene.analysis.lv.LatvianAnalyzer            |
 +----------------+----------------------------------------------------------+
@@ -677,9 +658,15 @@ The name of the language is also the name of the analyzer.
 
 .. note::
 
+    The ``japanese`` analyzer, import org.apache.lucene.analysis.ja.JapaneseTokenizer,
+    includes DEFAULT_MODE and defaultStopTags.
+
+.. note::
+
     Language-specific analyzers are optimized for the specified language. You
     cannot combine a generic analyzer with a language-specific analyzer.
-    Instead, you might use a :ref:`per-field-analyzers <api/ddoc/view>` to
+    Instead, you might use a
+    :ref:`per field analyzer <api/ddoc/view/per-field-analyzers>` to
     select different analyzers for different fields within the documents.
 
 .. _api/ddoc/view/per-field-analyzers:
@@ -756,7 +743,7 @@ Testing analyzer tokenization
 You can test the results of analyzer tokenization by posting sample data to the
 ``_search_analyze`` endpoint.
 
-*Example of using HTTP to test the ``keyword`` analyzer:*
+*Example of using HTTP to test the keyword analyzer:*
 
 .. code-block:: http
 
@@ -764,14 +751,14 @@ You can test the results of analyzer tokenization by posting sample data to the
     Content-Type: application/json
     {"analyzer":"keyword", "text":"ablanks@renovations.com"}
 
-*Example of using the command line to test the ``keyword`` analyzer:*
+*Example of using the command line to test the keyword analyzer:*
 
 .. code-block:: sh
 
     curl 'https://$HOST:5984/_search_analyze' -H 'Content-Type: application/json'
         -d '{"analyzer":"keyword", "text":"ablanks@renovations.com"}'
 
-*Result of testing the ``keyword`` analyzer:*
+*Result of testing the keyword analyzer:*
 
 .. code-block:: javascript
 
@@ -781,7 +768,7 @@ You can test the results of analyzer tokenization by posting sample data to the
         ]
     }
 
-*Example of using HTTP to test the ``standard`` analyzer:*
+*Example of using HTTP to test the standard analyzer:*
 
 .. code-block:: http
 
@@ -789,14 +776,14 @@ You can test the results of analyzer tokenization by posting sample data to the
     Content-Type: application/json
     {"analyzer":"standard", "text":"ablanks@renovations.com"}
 
-*Example of using the command line to test the ``standard`` analyzer:*
+*Example of using the command line to test the standard analyzer:*
 
 .. code-block:: sh
 
     curl 'https://$HOST:5984/_search_analyze' -H 'Content-Type: application/json'
         -d '{"analyzer":"standard", "text":"ablanks@renovations.com"}'
 
-*Result of testing the ``standard`` analyzer:*
+*Result of testing the standard analyzer:*
 
 .. code-block:: javascript
 
@@ -852,7 +839,7 @@ Specify your search by using the ``query`` parameter.
 Query Parameters
 ^^^^^^^^^^^^^^^^
 
-You must enable :ref:`faceting <api/ddoc/view>` before you can use the
+You must enable :ref:`faceting <api/ddoc/view/faceting>` before you can use the
 following parameters:
 
 - ``counts``
@@ -860,7 +847,7 @@ following parameters:
 
 Here's the list of arguments and their descriptions:
 
-* ``bookmark`` - A bookmark that was received from a previous search. This parameter
+* **bookmark** - A bookmark that was received from a previous search. This parameter
   enables paging through the results. If there are no more results after the bookmark,
   you get a response with an empty rows array and the same bookmark, confirming the end
   of the result list.
@@ -870,21 +857,22 @@ Here's the list of arguments and their descriptions:
     * Supported values = N/A
     * Partitioned query = yes
 
-* ``counts`` - This field defines an array of names of string fields, for which counts
+* **counts** - This field defines an array of names of string fields, for which counts
   are requested. The response contains counts for each unique value of this field
-  name among the documents that match the search query. :ref:`faceting <api/ddoc/view>`
-  must be enabled for this parameter to function.
+  name among the documents that match the search query.
+  :ref:`Faceting <api/ddoc/view/faceting>` must be enabled for this parameter
+  to function.
 
     * Optional = yes
     * Type = JSON
     * Supported values = A JSON array of field names.
     * Partitioned query = no
 
-* ``drilldown`` -  This field can be used several times. Each use defines a pair
+* **drilldown** -  This field can be used several times. Each use defines a pair
   with a field name and a value. The search matches only documents containing the
   value that was provided in the named field. It differs from using
   ``"fieldname:value"`` in the ``q`` parameter only in that the values are not
-  analyzed. :ref:`faceting <api/ddoc/view>` must be enabled for this
+  analyzed. :ref:`Faceting <api/ddoc/view/faceting>` must be enabled for this
   parameter to function.
 
     * Optional = no
@@ -892,9 +880,7 @@ Here's the list of arguments and their descriptions:
     * Supported values = A JSON array with two elements: the field name and the value.
     * Partitioned query = yes
 
-* ``group_field`` - Field by which to group search matches.
-  (Optional) (String) (Supports: A string that contains the name of a string field. Fields
-  containing other data such as numbers, objects, or arrays cannot be used.)
+* **group_field** - Field by which to group search matches.
 
     * Optional = yes
     * Type = string
@@ -902,7 +888,7 @@ Here's the list of arguments and their descriptions:
       containing other data such as numbers, objects, or arrays cannot be used.
     * Partitioned query = no
 
-* ``group_limit`` - Maximum group count. This field can be used only if
+* **group_limit** - Maximum group count. This field can be used only if
   ``group_field`` is specified.
 
     * Optional = yes
@@ -910,8 +896,8 @@ Here's the list of arguments and their descriptions:
     * Supported values = none
     * Partitioned query = no
 
-* ``group_sort`` - This field defines the order of the groups in a search that
-  uses group_field. The default sort order is relevance.
+* **group_sort** - This field defines the order of the groups in a search that
+  uses ``group_field``. The default sort order is relevance.
 
     * Optional = yes
     * Type = JSON
@@ -919,7 +905,7 @@ Here's the list of arguments and their descriptions:
       so single fields and arrays of fields are supported.
     * Partitioned query = no
 
-* ``highlight_fields` - Specifies which fields to highlight. If specified, the
+* **highlight_fields** - Specifies which fields to highlight. If specified, the
   result object contains a ``highlights`` field with an entry for each
   specified field.
 
@@ -928,7 +914,7 @@ Here's the list of arguments and their descriptions:
     * Supported values = none
     * Partitioned query = yes
 
-* ``highlight_pre_tag`` - A string that is inserted before the highlighted word
+* **highlight_pre_tag** - A string that is inserted before the highlighted word
   in the highlights output.
 
     * Optional = yes, defaults to ``<em>``
@@ -936,7 +922,7 @@ Here's the list of arguments and their descriptions:
     * Supported values = none
     * Partitioned query = yes
 
-* ``highlight_post_tag`` - A string that is inserted after the highlighted
+* **highlight_post_tag** - A string that is inserted after the highlighted
   word in the highlights output.
 
     * Optional = yes, defaults to ``<em>``
@@ -944,7 +930,7 @@ Here's the list of arguments and their descriptions:
     * Supported values = none
     * Partitioned query = yes
 
-* ``highlight_number`` - Number of fragments that are returned in highlights.
+* **highlight_number** - Number of fragments that are returned in highlights.
   If the search term occurs less often than the number of fragments that are
   specified, longer fragments are returned.
 
@@ -953,21 +939,21 @@ Here's the list of arguments and their descriptions:
     * Supported values = none
     * Partitioned query = yes
 
-* ``highlight_size`` - Number of characters in each fragment for highlights.
+* **highlight_size** - Number of characters in each fragment for highlights.
 
     * Optional = yes, defaults to 100 characters
     * Type = numeric
     * Supported values = none
     * Partitioned query = yes
 
-*  ``include_docs`` - Include the full content of the documents in the response.
+*  **include_docs** - Include the full content of the documents in the response.
 
     * Optional = yes
     * Type = Boolean
     * Supported values = none
     * Partitioned query = yes
 
-* ``include_fields`` - A JSON array of field names to include in search results.
+* **include_fields** - A JSON array of field names to include in search results.
   Any fields that are included must be indexed with the store:true option.
 
     * Optional = yes, the default is all fields
@@ -975,7 +961,7 @@ Here's the list of arguments and their descriptions:
     * Supported values = none
     * Partitioned query = yes
 
-* ``limit`` - Limit the number of the returned documents to the specified number.
+* **limit** - Limit the number of the returned documents to the specified number.
   For a grouped search, this parameter limits the number of documents per group.
 
     * Optional = yes
@@ -984,21 +970,21 @@ Here's the list of arguments and their descriptions:
       to and including 200.
     * Partitioned query = yes
 
-* ``q`` - Abbreviation for ``query``. Runs a Lucene query.
+* **q** - Abbreviation for ``query``. Runs a Lucene query.
 
     * Optional = no
     * Type = string or number
     * Supported values = none
     * Partitioned query = yes
 
-* ``query`` - Runs a Lucene query.
+* **query** - Runs a Lucene query.
 
     * Optional = no
     * Type = string or number
     * Supported values = none
     * Partitioned query = yes
 
-* ``ranges`` - This field defines ranges for faceted, numeric search fields. The
+* **ranges** - This field defines ranges for faceted, numeric search fields. The
   value is a JSON object where the fields names are faceted numeric search fields,
   and the values of the fields are JSON objects. The field names of the JSON objects
   are names for ranges. The values are strings that describe the range, for
@@ -1010,7 +996,7 @@ Here's the list of arguments and their descriptions:
       their values. These objects must have strings with ranges as their field values.
     * Partitioned query = no
 
-* ``sort`` - Specifies the sort order of the results. In a grouped search (when
+* **sort** - Specifies the sort order of the results. In a grouped search (when
   ``group_field`` is used), this parameter specifies the sort order within a group.
   The default sort order is relevance.
 
@@ -1026,11 +1012,11 @@ Here's the list of arguments and their descriptions:
       for sorting must be indexed by the same indexer that is used for the search query.
     * Partitioned query = yes
 
-* ``stale`` - Do not wait for the index to finish building to return results.
+* **stale** - Do not wait for the index to finish building to return results.
 
     * Optional = yes
     * Type = string
-    * Supported values = OK
+    * Supported values = ok
     * Partitioned query = yes
 
 .. note::
@@ -1078,14 +1064,14 @@ so you can specify the request as a JSON object.
 Each parameter in the previous table corresponds to a field in the JSON object
 in the request body.
 
-*Example of using HTTP to ``POST`` a search request:*
+*Example of using HTTP to POST a search request:*
 
 .. code-block:: http
 
     POST /db/_design/ddoc/_search/searchname HTTP/1.1
     Content-Type: application/json
 
-*Example of using the command line to ``POST`` a search request:*
+*Example of using the command line to POST a search request:*
 
 .. code-block:: sh
 
@@ -1206,7 +1192,7 @@ Use ``*:*`` to return all results.
 Result sets from searches are limited to 200 rows,
 and return 25 rows by default.
 The number of rows that are returned can be changed
-by using the :ref:`query-parameters <api/ddoc/view>`.
+by using the :ref:`limit parameter <api/ddoc/view/query_parameters>`.
 
 If the search query does *not* specify the ``"group_field"`` argument,
 the response contains a bookmark.
@@ -1216,8 +1202,8 @@ making it quick and easy to get the next set of results.
 
 .. note::
     The response never includes a bookmark if the ``"group_field"``
-    parameter is included in the search query. For more information,
-    see :ref:`query-parameters <api/ddoc/view>`.
+    parameter is included in the search query.
+    See :ref:`group_field parameter <api/ddoc/view/query_parameters>`.
 
 .. note::
     The ``group_field``, ``group_limit``, and ``group_sort`` options
@@ -1236,12 +1222,12 @@ The response to a search query contains an ``order`` field
 for each of the results.
 The ``order`` field is an array where the first element is
 the field or fields that are specified
-in the ``sort`` parameter. See :ref:`query-parameters <api/ddoc/view>`.
+in the ``sort`` parameter. See the :ref:`sort parameter <api/ddoc/view/query_parameters>`.
 If no ``sort`` parameter is included in the query,
 then the ``order`` field contains the
 `Lucene relevance score <https://lucene.apache.org/core/3_6_0/scoring.html>`_.
 If you use the 'sort by distance' feature as described
-in :ref:`geographical-searches <api/ddoc/view>`,
+in :ref:`geographical searches <api/ddoc/view/geographical_searches>`,
 then the first element is the distance from a point.
 The distance is measured by using either kilometers or miles.
 
@@ -1282,7 +1268,7 @@ If you do not create separate indexes for each field,
 you must include only documents that contain all the fields.
 Verify that the fields exist in each document by using a single ``if`` statement.
 
-*Example ``if`` statement to verify that the required fields exist
+*Example if statement to verify that the required fields exist
 in each document:*
 
 .. code-block:: javascript
@@ -1311,13 +1297,13 @@ value of each named field.
     by using the ``parseInt``,
     ``parseFloat``, or ``.toString()`` functions.
 
-*Example of a query using the ``counts`` facet syntax:*
+*Example of a query using the counts facet syntax:*
 
 .. code-block:: http
 
     ?q=*:*&counts=["type"]
 
-*Example response after using of the ``counts`` facet syntax:*
+*Example response after using of the counts facet syntax:*
 
 .. code-block:: javascript
 
@@ -1375,13 +1361,13 @@ Exclusive range queries are denoted by curly brackets (``{``, ``}``).
     You can check the type by using the ``typeof`` operator, and convert
     it by using the ``parseInt``, ``parseFloat``, or ``.toString()`` functions.
 
-*Example of a request that uses faceted search for matching ``ranges``:*
+*Example of a request that uses faceted search for matching ranges:*
 
 .. code-block:: http
 
     ?q=*:*&ranges={"price":{"cheap":"[0 TO 100]","expensive":"{100 TO Infinity}"}}
 
-*Example results after a ``ranges`` check on a faceted search:*
+*Example results after a ranges check on a faceted search:*
 
 .. code-block:: javascript
 
@@ -1624,28 +1610,28 @@ the index on disk.
 ``dreyfus``
 -----------
 
-``name`` = ``clouseau@127.0.0.1``
+**name** = ``clouseau@127.0.0.1``
 The name and location of the Clouseau Java service required to
 enable Search functionality.
 
-``retry_limit`` = 5
+**retry_limit** = 5
 CouchDB will try to reconnect to Clouseau using a bounded
 exponential backoff with the following number of iterations.
 
-``limit`` = 25
+**limit** = 25
 The default number of results returned from a global search query.
 
-``limit_partitions`` = 2000
+**limit_partitions** = 2000
 The default number of results returned from a search on a partition
 of a database.
 
-``max_limit`` = 200
+**max_limit** = 200
 The maximum number of results that can be returned from a global
 search query (or any search query on a database without user-defined
 partitions). Attempts to set ``?limit=N higher`` than this value will
 be rejected.
 
-``max_limit_partitions`` = 2000
+**max_limit_partitions** = 2000
 The maximum number of results that can be returned when searching
 a partition of a database. Attempts to set ``?limit=N`` higher than this
 value will be rejected. If this config setting is not defined,
