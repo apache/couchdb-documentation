@@ -370,7 +370,8 @@ Index functions
 ---------------
 
 Attempting to index by using a data field that does not exist fails. To avoid
-this problem, use the appropriate :ref:`guard clause <api/ddoc/view/index_guard_clauses>`.
+this problem, use the appropriate
+:ref:`guard clause <api/ddoc/view/index_guard_clauses>`.
 
 .. note::
     Your indexing functions operate in a memory-constrained environment
@@ -631,7 +632,7 @@ The name of the language is also the name of the analyzer.
 +----------------+----------------------------------------------------------+
 | ``japanese``   | org.apache.lucene.analysis.ja.JapaneseAnalyzer           |
 +----------------+----------------------------------------------------------+
-| ``japanese``   | import org.apache.lucene.analysis.ja.JapaneseTokenizer   |
+| ``japanese``   | org.apache.lucene.analysis.ja.JapaneseTokenizer          |
 +----------------+----------------------------------------------------------+
 | ``latvian``    | org.apache.lucene.analysis.lv.LatvianAnalyzer            |
 +----------------+----------------------------------------------------------+
@@ -649,16 +650,16 @@ The name of the language is also the name of the analyzer.
 +----------------+----------------------------------------------------------+
 | ``spanish``    | org.apache.lucene.analysis.es.SpanishAnalyzer            |
 +----------------+----------------------------------------------------------+
-| ``swedish``    | import org.apache.lucene.analysis.sv.SwedishAnalyzer     |
+| ``swedish``    | org.apache.lucene.analysis.sv.SwedishAnalyzer            |
 +----------------+----------------------------------------------------------+
-| ``thai``       | import org.apache.lucene.analysis.th.ThaiAnalyzer        |
+| ``thai``       | org.apache.lucene.analysis.th.ThaiAnalyzer               |
 +----------------+----------------------------------------------------------+
-| ``turkish``    | import org.apache.lucene.analysis.tr.TurkishAnalyzer     |
+| ``turkish``    | org.apache.lucene.analysis.tr.TurkishAnalyzer            |
 +----------------+----------------------------------------------------------+
 
 .. note::
 
-    The ``japanese`` analyzer, import org.apache.lucene.analysis.ja.JapaneseTokenizer,
+    The ``japanese`` analyzer, org.apache.lucene.analysis.ja.JapaneseTokenizer,
     includes DEFAULT_MODE and defaultStopTags.
 
 .. note::
@@ -1389,7 +1390,8 @@ Geographical searches
 ---------------------
 
 In addition to searching by the content of textual fields,
-you can also sort your results by their distance from a geographic coordinate.
+you can also sort your results by their distance from a geographic
+coordinate using Lucene's built-in geospatial capabilities.
 
 To sort your results in this way,
 you must index two numeric fields,
