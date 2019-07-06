@@ -608,15 +608,13 @@
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
     :<json string proxy: Address of a proxy server through which replication
       should occur (protocol can be "http" or "socks5")
-    :<json string/object source: Source database name or URL or an object
-      which contains the full URL of the source database with additional
-      parameters like headers. Eg: 'source_db_name' or
-      'http://example.com/source_db_name' or
+    :<json string/object source: Fully qualified source database URL or an
+      object which contains the full URL of the source database with additional
+      parameters like headers. Eg: 'http://example.com/source_db_name' or
       {"url":"url in here", "headers": {"header1":"value1", ...}}
-    :<json string/object target: Target database name or URL or an object
-      which contains the full URL of the target database with additional
-      parameters like headers. Eg: 'target_db_name' or
-      'http://example.com/target_db_name' or
+    :<json string/object target: Fully qualified target database URL or an
+      object which contains the full URL of the target database with additional
+      parameters like headers. Eg: 'http://example.com/target_db_name' or
       {"url":"url in here", "headers": {"header1":"value1", ...}}
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
@@ -660,13 +658,13 @@
 
         POST /_replicate HTTP/1.1
         Accept: application/json
-        Content-Length: 36
+        Content-Length: 80
         Content-Type: application/json
         Host: localhost:5984
 
         {
-            "source": "db_a",
-            "target": "db_b"
+            "source": "http://127.0.0.1:5984/db_a",
+            "target": "http://127.0.0.1:5984/db_b"
         }
 
     **Response**
