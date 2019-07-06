@@ -652,6 +652,10 @@
     :json string start_time:  Date/Time replication operation started in
       :rfc:`2822` format
 
+.. note::
+    As of CouchDB 2.0.0, fully qualified URLs are required for both the
+    replication `source` and `target` parameters.
+
     **Request**
 
     .. code-block:: http

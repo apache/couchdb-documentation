@@ -609,6 +609,10 @@ Now we can use the database `albums-replica` as a replication target::
          -H "Content-Type: application/json"
 
 .. note::
+    As of CouchDB 2.0.0, fully qualified URLs are required for both the
+    replication `source` and `target` parameters.
+
+.. note::
     CouchDB supports the option ``"create_target":true`` placed in the JSON
     POSTed to the :ref:`_replicate <api/server/replicate>` URL. It implicitly
     creates the target database if it doesn't exist.
