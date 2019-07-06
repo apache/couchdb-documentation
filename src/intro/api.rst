@@ -605,7 +605,7 @@ easy to make)::
 Now we can use the database `albums-replica` as a replication target::
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
-         -d '{"source":"albums","target":"albums-replica"}' \
+         -d '{"source":"http://127.0.0.1:5984/albums","target":"http://127.0.0.1:5984/albums-replica"}' \
          -H "Content-Type: application/json"
 
 .. note::
@@ -664,7 +664,7 @@ HTML) and so far we've seen links relative to the server we're working on
 (hence local). You can also specify a remote database as the target::
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
-         -d '{"source":"albums","target":"http://example.org:5984/albums-replica"}' \
+         -d '{"source":"http://127.0.0.1:5984/albums","target":"http://example.org:5984/albums-replica"}' \
          -H "Content-Type:application/json"
 
 Using a *local source* and a *remote target* database is called *push
@@ -683,7 +683,7 @@ replication*. This is great for getting the latest changes from a server that
 is used by others::
 
     curl -vX POST http://127.0.0.1:5984/_replicate \
-         -d '{"source":"http://example.org:5984/albums-replica","target":"albums"}' \
+         -d '{"source":"http://example.org:5984/albums-replica","target":"http://127.0.0.1:5984/albums"}' \
          -H "Content-Type:application/json"
 
 Finally, you can run remote replication, which is mostly useful for management
