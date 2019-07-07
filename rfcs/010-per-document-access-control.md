@@ -56,7 +56,7 @@ Non-goals for now:
 
 * per-access views
 * differentiation between read and write access for documents
-* sharing infividual documents between multitple users or groups.
+* sharing individual documents between multiple users or groups.
 
 However, the design of this iteration aims to allow turning these
 non-goals into actual goals later.
