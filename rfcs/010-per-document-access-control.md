@@ -383,6 +383,25 @@ None
 This is a significant change to the CouchDB security model. All of the
 above are security considerations.
 
+Specifically these two issues are worth highlighting however:
+
+1. If a doc ever gets a new username written to `_access` (only admins
+can do this), that new user then has access to **all** previous
+revisions of this document. If compaction hasn’t run yet, they will be
+able to access full revision bodies. After compaction, they only get
+revision hashes. Since revision hashes are content addressible, they
+could try and brute-force a document body that matches an earlier rev
+id. This is not a downside of this proposal, it is just something that
+implementors have to have in mind.
+
+2. If two users write the same, perviously unexisting document `A` with
+differnt values for `_access`, they create a conflict. Since doc
+contents may contain sensitive information, CouchDB can’t allow access
+to either version. Similar to how conflicting _user docs result in a
+user no longer being able to log-in, an admin has to resolve this doc
+conflict before the doc can be used again.
+
+
 # References
 
 https://lists.apache.org/thread.html/6aa77dd8e5974a3a540758c6902ccb509ab5a2e4802ecf4fd724a5e4@%3Cdev.couchdb.apache.org%3E
