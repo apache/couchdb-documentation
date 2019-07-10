@@ -42,8 +42,8 @@
         with a field name and a value. The search matches only documents containing the
         value that was provided in the named field. It differs from using
         ``"fieldname:value"`` in the ``q`` parameter only in that the values are not
-        analyzed. :ref:`Faceting <ddoc/search/faceting>` must be enabled for this parameter
-        to function.
+        analyzed. :ref:`Faceting <ddoc/search/faceting>` must be enabled for this
+        parameter to function.
     :query string group_field: Field by which to group search matches. :query number
         group_limit: Maximum group count. This field can be used only if ``group_field``
         is specified.

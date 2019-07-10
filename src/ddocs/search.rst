@@ -573,8 +573,8 @@ POSTing search queries
 
 Instead of using the ``GET`` HTTP method, you can also use ``POST``. The main advantage of
 ``POST`` queries is that they can have a request body, so you can specify the request as a
-JSON object. Each parameter in the query string of a ``GET`` request corresponds to a field
-in the JSON object in the request body.
+JSON object. Each parameter in the query string of a ``GET`` request corresponds to a
+field in the JSON object in the request body.
 
 *Example of using HTTP to POST a search request:*
 
@@ -1034,4 +1034,3 @@ highlighting enabled:*
             ]
         }
     }
-
