@@ -1517,6 +1517,49 @@ containing only the requested individual statistic.
 
     :code 200: Request completed successfully
 
+.. _api/server/search_analyze:
+
+==========================================
+``/_search_analyze``
+==========================================
+
+.. versionadded:: 3.0
+
+.. http:post:: /_search_analyze
+    :synopsis: Tests the results of analyzer tokenization
+
+    Tests the results of Lucene analyzer tokenization on sample text.
+
+    :param field: Type of analyzer
+    :param text:  Analyzer token you want to test
+    :code 200: Request completed successfully
+    :code 400: Request body is wrong (malformed or missing one of the mandatory fields)
+    :code 500: A server error (or other kind of error) occurred
+
+**Request**:
+
+.. code-block:: http
+
+    POST /_search_analyze HTTP/1.1
+    Host: localhost:5984
+    Content-Type: application/json
+
+    {"analyzer":"english", "text":"running"}
+
+**Response**:
+
+.. code-block:: javascript
+
+    {
+        "tokens": [
+            "run"
+        ]
+    }
+
+.. warning::
+    Requests to this endpoint will fail unless the CouchDB server is connected to a
+    functioning Clouseau instance.
+
 .. _api/server/utils:
 
 ===========
