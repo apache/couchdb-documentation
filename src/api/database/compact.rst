@@ -22,15 +22,15 @@
     Request compaction of the specified database. Compaction compresses the
     disk database file by performing the following operations:
 
-    - Writes a new, optimised, version of the database file, removing any
+    - Writes a new, optimized, version of the database file, removing any
       unused sections from the new version during write. Because a new file is
       temporarily created for this purpose, you may require up to twice the
       current storage space of the specified database in order for the
       compaction routine to complete.
-
-    - Removes old revisions of documents from the database, up to the
-      per-database limit specified by the ``_revs_limit`` database
-      parameter.
+    - Removes the bodies of any old, non-leaf revisions of documents from the
+      database.
+    - Removes old revision history beyond the limit specified by the
+      ``_revs_limit`` database parameter.
 
     Compaction can only be requested on an individual database; you cannot
     compact all the databases for a CouchDB instance. The compaction process
