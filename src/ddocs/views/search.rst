@@ -10,7 +10,7 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-.. _views/search:
+.. _ddoc/views/search:
 
 ======
 Search
@@ -144,12 +144,12 @@ The third, optional, parameter is a JavaScript object with the following fields:
   indexed without a boost value. Content with a boost value less than one is not so
   relevant. Value is a positive floating point number. Default is 1 (no boosting).
 
-* **facet** - Creates a faceted index. See :ref:`Faceting <ddoc/view/faceting>`.
+* **facet** - Creates a faceted index. See :ref:`Faceting <ddoc/views/faceting>`.
   Values are ``true`` or ``false``. Default is ``false``.
 
 * **index** - Whether the data is indexed, and if so, how. If set to ``false``, the data
   cannot be used for searches, but can still be retrieved from the index if ``store`` is
-  set to ``true``. See :ref:`Analyzers <ddoc/view/analyzers>`.
+  set to ``true``. See :ref:`Analyzers <ddoc/views/analyzers>`.
   Values are ``true`` or ``false``. Default is ``true``
 
 * **store** - If ``true``, the value is returned in the search result; otherwise,
@@ -180,7 +180,7 @@ The third, optional, parameter is a JavaScript object with the following fields:
         }
     }
 
-.. _api/ddoc/view/index_guard_clauses:
+.. _ddoc/views/index_guard_clauses:
 
 Index guard clauses
 -------------------
@@ -239,14 +239,14 @@ field is defined.
         ...
     }
 
-.. _api/ddoc/view/analyzers:
+.. _ddoc/views/analyzers:
 
 Analyzers
 =========
 
 Analyzers are settings that define how to recognize terms within text.
 Analyzers can be helpful if you need to
-:ref:`index multiple languages <ddoc/view/language-specific-analyzers>`.
+:ref:`index multiple languages <ddoc/views/language-specific-analyzers>`.
 
 Here's the list of generic analyzers, and their descriptions, that are
 supported by search:
@@ -274,7 +274,7 @@ supported by search:
         }
     }
 
-.. _api/ddoc/view/language-specific-analyzers:
+.. _ddoc/views/language-specific-analyzers:
 
 Language-specific analyzers
 ---------------------------
@@ -367,10 +367,10 @@ The name of the language is also the name of the analyzer.
     Language-specific analyzers are optimized for the specified language. You
     cannot combine a generic analyzer with a language-specific analyzer.
     Instead, you might use a
-    :ref:`per field analyzer <ddoc/view/per-field-analyzers>` to
+    :ref:`per field analyzer <ddoc/views/per-field-analyzers>` to
     select different analyzers for different fields within the documents.
 
-.. _api/ddoc/view/per-field-analyzers:
+.. _ddoc/views/per-field-analyzers:
 
 Per-field analyzers
 -------------------
@@ -535,12 +535,12 @@ Specify your search by using the ``query`` parameter.
     curl https://$HOST:5984/$DATABASE/_design/$DDOC/_search/$INDEX_NAME?
     include_docs=true\&query="*:*"\&limit=1 \
 
-.. _api/ddoc/view/query_parameters:
+.. _ddoc/views/query_parameters:
 
 Query Parameters
 ----------------
 
-You must enable :ref:`faceting <ddoc/view/faceting>` before you can use the
+You must enable :ref:`faceting <ddoc/views/faceting>` before you can use the
 following parameters:
 
 - ``counts``
@@ -561,7 +561,7 @@ Here's the list of arguments and their descriptions:
 * **counts** - This field defines an array of names of string fields, for which counts
   are requested. The response contains counts for each unique value of this field
   name among the documents that match the search query.
-  :ref:`Faceting <ddoc/view/faceting>` must be enabled for this parameter
+  :ref:`Faceting <ddoc/views/faceting>` must be enabled for this parameter
   to function.
 
     * Optional = yes
@@ -573,7 +573,7 @@ Here's the list of arguments and their descriptions:
   with a field name and a value. The search matches only documents containing the
   value that was provided in the named field. It differs from using
   ``"fieldname:value"`` in the ``q`` parameter only in that the values are not
-  analyzed. :ref:`Faceting <api/ddoc/view/faceting>` must be enabled for this
+  analyzed. :ref:`Faceting <ddoc/views/faceting>` must be enabled for this
   parameter to function.
 
     * Optional = no
@@ -893,7 +893,7 @@ Use ``*:*`` to return all results.
 Result sets from searches are limited to 200 rows,
 and return 25 rows by default.
 The number of rows that are returned can be changed
-by using the :ref:`limit parameter <api/ddoc/view/query_parameters>`.
+by using the :ref:`limit parameter <ddoc/views/query_parameters>`.
 
 If the search query does *not* specify the ``"group_field"`` argument,
 the response contains a bookmark.
@@ -904,7 +904,7 @@ making it quick and easy to get the next set of results.
 .. note::
     The response never includes a bookmark if the ``"group_field"``
     parameter is included in the search query.
-    See :ref:`group_field parameter <api/ddoc/view/query_parameters>`.
+    See :ref:`group_field parameter <ddoc/views/query_parameters>`.
 
 .. note::
     The ``group_field``, ``group_limit``, and ``group_sort`` options
@@ -923,12 +923,12 @@ The response to a search query contains an ``order`` field
 for each of the results.
 The ``order`` field is an array where the first element is
 the field or fields that are specified
-in the ``sort`` parameter. See the :ref:`sort parameter <api/ddoc/view/query_parameters>`.
+in the ``sort`` parameter. See the :ref:`sort parameter <ddoc/views/query_parameters>`.
 If no ``sort`` parameter is included in the query,
 then the ``order`` field contains the
 `Lucene relevance score <https://lucene.apache.org/core/3_6_0/scoring.html>`_.
 If you use the 'sort by distance' feature as described
-in :ref:`geographical searches <api/ddoc/view/geographical_searches>`,
+in :ref:`geographical searches <ddoc/views/geographical_searches>`,
 then the first element is the distance from a point.
 The distance is measured by using either kilometers or miles.
 
@@ -936,7 +936,7 @@ The distance is measured by using either kilometers or miles.
     The second element in the order array can be ignored.
     It is used for troubleshooting purposes only.
 
-.. _api/ddoc/view/faceting:
+.. _ddoc/views/faceting:
 
 Faceting
 --------
@@ -1084,7 +1084,7 @@ Exclusive range queries are denoted by curly brackets (``{``, ``}``).
         }
     }
 
-.. _api/ddoc/view/geographical_searches:
+.. _ddoc/views/geographical_searches:
 
 Geographical searches
 =====================
