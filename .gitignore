@@ -2,6 +2,8 @@ ext/*.pyc
 ext/__pycache__/
 build/
 venv
+.venv
+.DS_Store
 *~
 *.swp
 *.bak
