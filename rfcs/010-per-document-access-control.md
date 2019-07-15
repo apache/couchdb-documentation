@@ -20,7 +20,7 @@ server admins as well.
 
 ## Abstract
 
-This lead to CouchDB developers making use of a pattern called
+This led to CouchDB developers making use of a pattern called
 db-per-user, where all documents belonging to one user are kept in a
 separate database. This is a decent enough workaround, but has the
 following downsides:
