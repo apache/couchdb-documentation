@@ -271,7 +271,9 @@ Language-specific analyzers
 
 These analyzers omit common words in the specific language,
 and many also `remove prefixes and suffixes <http://en.wikipedia.org/wiki/Stemming>`_.
-The name of the language is also the name of the analyzer.
+The name of the language is also the name of the analyzer. See
+`package org.apache.lucene.analysis <https://lucene.apache.org/core/4_6_1/core/org/apache/lucene/analysis/package-summary.html>`_
+for more information.
 
 +----------------+----------------------------------------------------------+
 | Language       | Analyzer                                                 |
