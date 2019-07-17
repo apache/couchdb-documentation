@@ -270,11 +270,9 @@ issues. These include:
 - Create the view definition (and associated design documents) on your database
   before allowing insertion or updates to the documents. If this is allowed
   while the view is being accessed, the index can be updated incrementally.
-
 - Manually force a view request from the database. You can do this either
   before users are allowed to use the view, or you can access the view manually
   after documents are added or updated.
-
 - Use the :ref:`changes feed <api/db/changes>` to monitor for changes to the
   database and then access the view to force the corresponding view index to be
   updated.
@@ -320,17 +318,25 @@ sequence exposed in the database information (returned by :get:`/{db}`).
 Sorting Returned Rows
 =====================
 
-Each element within the returned array is sorted using native UTF-8 sorting
-according to the contents of the key portion of the emitted content. The basic
+Each element within the returned array is sorted using
+native UTF-8 sorting
+according to the contents of the key portion of the
+emitted content. The basic
 order of output is as follows:
 
--  ``null``
--  ``false``
--  ``true``
--  Numbers
--  Text (case sensitive, lowercase first)
--  Arrays (according to the values of each element, in order)
--  Objects (according to the values of keys, in key order)
+- ``null``
+
+- ``false``
+
+- ``true``
+
+- Numbers
+
+- Text (case sensitive, lowercase first)
+
+- Arrays (according to the values of each element, in order)
+
+- Objects (according to the values of keys, in key order)
 
 **Request**:
 
@@ -455,8 +461,8 @@ order of output is as follows:
         "total_rows": 17
     }
 
-You can reverse the order of the returned view information by using the
-``descending`` query value set to true:
+You can reverse the order of the returned view information
+by using the ``descending`` query value set to true:
 
 **Request**:
 
