@@ -34,13 +34,15 @@ nitpicky = True
 
 # should be over-written using rebar-inherited settings
 version = "2.3"
-release = "2.3.0"
+release = "2.3.1"
 
 project = u"Apache CouchDB\u00ae"
 
-copyright = u"%d, %s" % (datetime.datetime.now().year, \
-        u"Apache Software Foundation. CouchDB\u00ae is a registered trademark of the " + \
-        u"Apache Software Foundation")
+copyright = u"%d, %s" % (
+    datetime.datetime.now().year,
+    u"Apache Software Foundation. CouchDB\u00ae is a registered trademark of the "
+    + u"Apache Software Foundation",
+)
 
 primary_domain = "http"
 

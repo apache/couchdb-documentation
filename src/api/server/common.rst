@@ -1340,7 +1340,7 @@ error.
     self-describing.
 
     The literal string ``_local`` serves as an alias for the local node name, so
-    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
@@ -1467,7 +1467,7 @@ containing only the requested individual statistic.
     each statistic is self-describing.
 
     The literal string ``_local`` serves as an alias for the local node name, so
-    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
@@ -1516,6 +1516,49 @@ containing only the requested individual statistic.
     it is not meant to be used in production
 
     :code 200: Request completed successfully
+
+.. _api/server/search_analyze:
+
+==========================================
+``/_search_analyze``
+==========================================
+
+.. versionadded:: 3.0
+
+.. http:post:: /_search_analyze
+    :synopsis: Tests the results of analyzer tokenization
+
+    Tests the results of Lucene analyzer tokenization on sample text.
+
+    :param field: Type of analyzer
+    :param text:  Analyzer token you want to test
+    :code 200: Request completed successfully
+    :code 400: Request body is wrong (malformed or missing one of the mandatory fields)
+    :code 500: A server error (or other kind of error) occurred
+
+**Request**:
+
+.. code-block:: http
+
+    POST /_search_analyze HTTP/1.1
+    Host: localhost:5984
+    Content-Type: application/json
+
+    {"analyzer":"english", "text":"running"}
+
+**Response**:
+
+.. code-block:: javascript
+
+    {
+        "tokens": [
+            "run"
+        ]
+    }
+
+.. warning::
+    Requests to this endpoint will fail unless the CouchDB server is connected to a
+    functioning Clouseau instance.
 
 .. _api/server/utils:
 
@@ -1675,3 +1718,480 @@ You can verify the change by obtaining a list of UUIDs:
     :>header Content-Type: :mimetype:`image/x-icon`
     :code 200: Request completed successfully
     :code 404: The requested content could not be found
+
+.. _api/server/reshard:
+
+=============
+``/_reshard``
+=============
+
+.. versionadded:: 2.4
+
+.. http:get:: /_reshard
+    :synopsis: Retrieve summary information about resharding on the cluster
+
+    Returns a count of completed, failed, running, stopped, and total jobs
+    along with the state of resharding on the cluster.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json string state: ``stopped`` or ``running``
+    :>json string state_reason: ``null`` or string describing additional
+                                information or reason associated with the state
+    :>json number completed: Count of completed resharding jobs
+    :>json number failed: Count of failed resharding jobs
+    :>json number running: Count of running resharding jobs
+    :>json number stopped: Count of stopped resharding jobs
+    :>json number total: Total count of resharding jobs
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "completed": 21,
+            "failed": 0,
+            "running": 3,
+            "state": "running",
+            "state_reason": null,
+            "stopped": 0,
+            "total": 24
+        }
+
+.. http:get:: /_reshard/state
+    :synopsis: Retrieve the state of resharding on the cluster
+
+    Returns the resharding state and optional information about the state.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json string state: ``stopped`` or ``running``
+    :>json string state_reason: Additional  information  or  reason  associated
+                                with the state
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "reason": null,
+            "state": "running"
+        }
+
+.. http:put:: /_reshard/state
+    :synopsis: Change resharding state on the cluster
+
+    Change the resharding state on the cluster. The states are
+    ``stopped`` or ``running``. This starts and stops global resharding on all
+    the nodes of the cluster. If there are any running jobs, they
+    will be stopped when the state changes to ``stopped``. When the state
+    changes back to ``running`` those job will continue running.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string state: ``stopped`` or ``running``
+    :<json string state_reason: Optional string describing additional
+                                information or reason associated with the state
+
+    :>json boolean ok: ``true``
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request. Could be a bad or missing state name.
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        PUT /_reshard/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+        {
+            "state": "stopped",
+            "reason": "Rebalancing in progress"
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "ok": true
+        }
+
+.. http:get:: /_reshard/jobs
+    :synopsis: Retrieve information about all the resharding jobs on the cluster
+
+    .. note:: The shape of the response and the ``total_rows`` and ``offset``
+              field in particular are meant to be consistent with the
+              ``_scheduler/jobs`` endpoint.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json list jobs: Array of json objects, one for each resharding job. For
+                      the fields of each job see the /_reshard/job/{jobid}
+                      endpoint.
+    :>json number offset: Offset in the list of jobs object. Currently
+                          hard-coded at ``0``.
+    :>json number total_rows: Total number of resharding jobs on the cluster.
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/jobs HTTP/1.1
+        Accept: application/json
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "jobs": [
+                {
+                    "history": [
+                        {
+                            "detail": null,
+                            "timestamp": "2019-03-28T15:28:02Z",
+                            "type": "new"
+                        },
+                        {
+                            "detail": "initial_copy",
+                            "timestamp": "2019-03-28T15:28:02Z",
+                            "type": "running"
+                        },
+                        ...
+                    ],
+                    "id": "001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a",
+                    "job_state": "completed",
+                    "node": "node1@127.0.0.1",
+                    "source": "shards/00000000-1fffffff/d1.1553786862",
+                    "split_state": "completed",
+                    "start_time": "2019-03-28T15:28:02Z",
+                    "state_info": {},
+                    "target": [
+                        "shards/00000000-0fffffff/d1.1553786862",
+                        "shards/10000000-1fffffff/d1.1553786862"
+                    ],
+                    "type": "split",
+                    "update_time": "2019-03-28T15:28:08Z"
+                },
+                ...
+            ],
+            "offset": 0,
+            "total_rows": 24
+        }
+
+.. http:get:: /_reshard/jobs/{jobid}
+    :synopsis: Retrieve information about a particular resharding job
+
+    Get information about the resharding job identified by ``jobid``.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json string id: Job ID.
+    :>json string type: Currently only ``split`` is implemented.
+    :>json string job_state: The running state of the job. Could be one of
+                             ``new``, ``running``, ``stopped``, ``completed``
+                             or ``failed``.
+    :>json string split_state: State detail specific to shard splitting. It
+                               indicates how far has shard splitting
+                               progressed, and can be one of ``new``,
+                               ``initial_copy``, ``topoff1``,
+                               ``build_indices``, ``topoff2``,
+                               ``copy_local_docs``, ``update_shardmap``,
+                               ``wait_source_close``, ``topoff3``,
+                               ``source_delete`` or ``completed``.
+    :>json object state_info: Optional additional info associated with the
+                              current state.
+    :>json string source: For ``split`` jobs this will be the source shard.
+    :>json list target: For ``split`` jobs this will be a list of two or more
+                        target shards.
+    :>json list history: List of json objects recording a job's state
+                         transition history.
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/jobs/001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a HTTP/1.1
+        Accept: application/json
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+
+            "id": "001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a",
+            "job_state": "completed",
+            "node": "node1@127.0.0.1",
+            "source": "shards/00000000-1fffffff/d1.1553786862",
+            "split_state": "completed",
+            "start_time": "2019-03-28T15:28:02Z",
+            "state_info": {},
+            "target": [
+                "shards/00000000-0fffffff/d1.1553786862",
+                "shards/10000000-1fffffff/d1.1553786862"
+            ],
+            "type": "split",
+            "update_time": "2019-03-28T15:28:08Z",
+            "history": [
+                {
+                    "detail": null,
+                    "timestamp": "2019-03-28T15:28:02Z",
+                    "type": "new"
+                },
+                {
+                    "detail": "initial_copy",
+                    "timestamp": "2019-03-28T15:28:02Z",
+                    "type": "running"
+                },
+                ...
+            ]
+        }
+
+.. http:post:: /_reshard/jobs/{jobid}
+    :synopsis: Create one or more resharding jobs
+
+    Depending on what fields are specified in the request, one or more
+    resharding jobs will be created. The response is a json array of results.
+    Each result object represents a single resharding job for a particular node
+    and range. Some of the responses could be successful and some could fail.
+    Successful results will have the ``"ok": true`` key and and value, and
+    failed jobs will have the ``"error": "{error_message}"`` key and value.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string type: Type of job. Currently only ``"split"`` is accepted.
+
+    :<json string db: Database to split. This is mutually exclusive with the
+                      ``"shard``" field.
+
+    :<json string node: Split shards on a particular node. This is an optional
+                        parameter. The value should be one of the nodes
+                        returned from the ``_membership`` endpoint.
+
+    :<json string range: Split shards copies in the given range. The range
+                         format is ``hhhhhhhh-hhhhhhhh`` where ``h`` is a
+                         hexadecimal digit. This format is used since this is
+                         how the ranges are represented in the file system.
+                         This is parameter is optional and is mutually
+                         exclusive with the ``"shard"`` field.
+
+    :<json string shard: Split a particular shard. The shard should be
+                         specified as ``"shards/{range}/{db}.{suffix}"``. Where
+                         ``range`` has the ``hhhhhhhh-hhhhhhhh`` format, ``db``
+                         is the database name, and ``suffix`` is the shard
+                         (timestamp) creation suffix.
+
+    :>json boolean ok: ``true`` if job created successfully.
+
+    :<json string error: Error message if a job could be not be created.
+
+    :<json string node: Cluster node where the job was created and is running.
+
+    :code 201: One or more jobs were successfully created
+    :code 400: Invalid request. Parameter validation might have failed.
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: Db, node, range or shard was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_reshard/jobs HTTP/1.1
+        Accept: application/json
+        Content-Type: application/json
+
+       {
+           "db": "db3",
+           "range": "80000000-ffffffff",
+           "type": "split"
+       }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 201 Created
+        Content-Type: application/json
+
+        [
+            {
+                "id": "001-30d7848a6feeb826d5e3ea5bb7773d672af226fd34fd84a8fb1ca736285df557",
+                "node": "node1@127.0.0.1",
+                "ok": true,
+                "shard": "shards/80000000-ffffffff/db3.1554148353"
+            },
+            {
+                "id": "001-c2d734360b4cb3ff8b3feaccb2d787bf81ce2e773489eddd985ddd01d9de8e01",
+                "node": "node2@127.0.0.1",
+                "ok": true,
+                "shard": "shards/80000000-ffffffff/db3.1554148353"
+            }
+        ]
+
+.. http:delete:: /_reshard/jobs/{jobid}
+    :synopsis: Remove a resharding job
+
+    If the job is running, stop the job and then remove it.
+
+    :>json boolean ok: ``true`` if the job was removed successfully.
+
+    :code 200: The job was removed successfully
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: The job was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        DELETE /_reshard/jobs/001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a HTTP/1.1
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "ok": true
+        }
+
+.. http:get:: /_reshard/jobs/{jobid}/state
+    :synopsis: Retrieve the state of a single resharding job
+
+    Returns the running state of a resharding job identified by ``jobid``.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string state: One of ``new``, ``running``, ``stopped``,
+                         ``completed`` or ``failed``.
+
+    :<json string state_reason: Additional information associated with the
+                                state
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: The job was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/jobs/001-b3da04f969bbd682faaab5a6c373705cbcca23f732c386bb1a608cfbcfe9faff/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "reason": null,
+            "state": "running"
+        }
+
+.. http:put:: /_reshard/jobs/{jobid}/state
+    :synopsis: Change the state of a resharding job
+
+    Change the state of a particular resharding job identified by ``jobid``.
+    The state can be changed from ``stopped`` to ``running`` or from
+    ``running`` to ``stopped``. If an individual job is ``stopped`` via this
+    API it will stay ``stopped`` even after the global resharding state is
+    toggled from ``stopped`` to ``running``. If the job is already
+    ``completed`` its state will stay ``completed``.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string state: ``stopped`` or ``running``
+    :<json string state_reason: Optional string describing additional
+                                information or reason associated with the state
+
+    :>json boolean ok: ``true``
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request. Could be a bad state name, for example.
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: The job was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        PUT /_reshard/state/001-b3da04f969bbd682faaab5a6c373705cbcca23f732c386bb1a608cfbcfe9faff/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+        {
+            "state": "stopped",
+            "reason": "Rebalancing in progress"
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+       {
+            "ok": true
+       }
