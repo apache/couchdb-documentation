@@ -1419,11 +1419,6 @@ upload of changed Documents. This case is applied when Documents contain a
 lot of attached files or the files are too big to be efficiently encoded with
 Base64.
 
-.. note::
-    CouchDB defines a limit of ``8`` attachments per Document and each attached
-    file size should not be greater than ``64 KiB``. While this is a RECOMMENDED
-    limitation, other Replicator implementations MAY have their own values.
-
 For this case the Replicator issues a :put:`/{db}/{docid}?new_edits=false
 </{db}/{docid}>` request with :mimetype:`multipart/related` content type. Such
 a request allows one to easily stream the Document and all its attachments
