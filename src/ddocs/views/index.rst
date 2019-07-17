@@ -27,4 +27,3 @@ applications with CouchDB
     joins
     nosql
     pagination
-    search
