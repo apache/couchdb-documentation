@@ -177,7 +177,7 @@ An access-enabled database behaves like this:
      docs have been created/updated/deleted in between two of their
      docs.
 
-      * this includes all the user’s docs PLUS all non-`_access` design
+    * this includes all the user’s docs PLUS all non-`_access` design
         docs, so apps can centrally control design docs going down to
         satellites.
 
