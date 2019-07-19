@@ -86,8 +86,8 @@
     :>json string update_seq: An opaque string that describes the state
       of the database. Do not rely on this string for counting the number
       of updates.
-    :>json boolean props.partitioned: (optional) If present and true this
-      indicates the the database is partitioned.
+    :>json boolean props.partitioned: (optional) If present and true, this
+      indicates that the database is partitioned.
     :code 200: Request completed successfully
     :code 404: Requested database not found
 
