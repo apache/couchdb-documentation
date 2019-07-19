@@ -65,7 +65,6 @@ See the guide for
           }
         }
 
-
 ``/db/_partition/partition/_all_docs``
 ======================================
 
@@ -77,7 +76,7 @@ See the guide for
 
     This endpoint is a convenience endpoint for automatically setting
     bounds on the provided partition range. Similar results can be had
-    by using the global ``/db/_all_docs`` end point with appropriately
+    by using the global ``/db/_all_docs`` endpoint with appropriately
     configured values for ``start_key`` and ``end_key``.
 
     Refer to the :ref:`view endpoint <api/ddoc/view>` documentation for
@@ -118,8 +117,6 @@ See the guide for
           "total_rows": 1
         }
 
-
-
 ``/db/_partition/partition/_design/design-doc/_view/view-name``
 ===============================================================
 
@@ -156,7 +153,6 @@ See the guide for
         ETag: "2FOLSBSW4O6WB798XU4AQYA9B"
         Server: CouchDB (Erlang/OTP)
         Transfer-Encoding: chunked
-
 
         {
           "offset": 0,
