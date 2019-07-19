@@ -141,7 +141,7 @@ An access-enabled database behaves like this:
   work around this and potentially prefix docs with the username before
   writing/replicating them in.
 
-* _security members are allowed to write design docs, but the have to
+* _security members are allowed to write design docs, but they have to
   have an `_access` field and those design docs with an `_access` field
   are ignored on the server side. Db-admin ddocs get indexes built as
   normal.
