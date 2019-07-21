@@ -179,16 +179,16 @@ An access-enabled database behaves like this:
      docs have been created/updated/deleted in between two of their
      docs.
 
-    * this includes all the user’s docs PLUS all non-`_access` design
-        docs, so apps can centrally control design docs going down to
-        satellites.
+   * this includes all the user’s docs PLUS all design docs with
+     `_access: ["_users"]`, so apps can centrally control design docs
+     going down to satellites.
 
 * accessing `_all_docs` gives users the subset of docs they own in `_id`
   order.
 
-   * this includes all the user’s docs PLUS all non-`_access` design
-     docs, so apps can centrally control design docs going down to
-     satellites.
+   * this includes all the user’s docs PLUS all design docs with
+     `_access: ["_users"]`, so apps can centrally control design docs
+     going down to satellites.
 
 * Replication check-points / local docs
 
