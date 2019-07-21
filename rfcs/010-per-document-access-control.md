@@ -163,7 +163,9 @@ An access-enabled database behaves like this:
    * if compaction hasn’t run yet, they get access to all previous
      revision bodies that still exist.
 
-   * all conflicted versions will also be visible to the new user, unless there are conflicting usernames in conflict’s `_access` property.
+   * all conflicted versions will also be visible to the new user,
+     unless there are conflicting usernames in conflict’s `_access`
+     property.
 
    * regardless of compaction, they get access to the full list of
      revision ids for the document. Extremely crafty people could try
