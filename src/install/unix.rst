@@ -53,23 +53,25 @@ Enabling the Apache CouchDB package repository
 
 **Debian 9 (stretch)**: Run the following commands::
 
-    $ apt install -y --no-install-recommends apt-transport-https
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb stretch main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
 **Debian 10 (buster)**: Run the following commands::
 
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb buster main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 16.04 (Xenial)**: Run the following commands::
 
-    $ apt install -y --no-install-recommends apt-transport-https
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb xenial main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 18.04 (Bionic)**: Run the following commands::
 
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
@@ -109,13 +111,13 @@ Installing the Apache CouchDB packages
 
 **Debian/Ubuntu**: First, install the CouchDB repository key::
 
-    $ sudo apt install -y curl
-    $ curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc \
-        | sudo apt-key add -
+    $ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
+      8756C4F765C9AC3CB6B85D62379CE192D401AB61
 
 Then update the repository cache and install the package::
 
-    $ sudo apt update && sudo apt install -y couchdb
+    $ sudo apt update
+    $ sudo apt install -y couchdb
 
 Debian/Ubuntu installs from binaries can be pre-configured for single node or
 clustered installations. For clusters, multiple nodes will still need to be
