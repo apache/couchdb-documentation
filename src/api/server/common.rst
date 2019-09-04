@@ -278,14 +278,9 @@
                 "active": 1162451555
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 1713103872
-              },
               "doc_del_count": 0,
               "doc_count": 52224,
-              "disk_size": 1178613587,
               "disk_format_version": 6,
-              "data_size": 1162451555,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -307,14 +302,9 @@
                 "active": 67475
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 2339
-              },
               "doc_del_count": 0,
               "doc_count": 11,
-              "disk_size": 3872387,
               "disk_format_version": 6,
-              "data_size": 67475,
               "compact_running": false,
               "cluster": {
                 "q": 8,

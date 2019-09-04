@@ -97,14 +97,17 @@ information about it via :ref:`database information resource <api/db>`::
     {
         "committed_update_seq": 76215,
         "compact_running": true,
-        "data_size": 3787996,
         "db_name": "my_db",
         "disk_format_version": 6,
-        "disk_size": 17703025,
         "doc_count": 5091,
         "doc_del_count": 0,
         "instance_start_time": "0",
         "purge_seq": 0,
+        "sizes": {
+          "active": 3787996,
+          "disk": 17703025,
+          "external": 4763321
+        },
         "update_seq": 76215
     }
 
