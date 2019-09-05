@@ -67,9 +67,9 @@ Compaction Daemon Rules
 
       .. code-block:: none
 
-          (sizes.disk - sizes.active) / sizes.disk * 100
+          (sizes.file - sizes.active) / sizes.file * 100
 
-      The sizes.active and sizes.disk values can be obtained when
+      The sizes.active and sizes.file values can be obtained when
       querying :http:get:`/{db}`.
 
     - ``view_fragmentation``: If the ratio of legacy data, including metadata,
@@ -80,9 +80,9 @@ Compaction Daemon Rules
 
       .. code-block:: none
 
-          (sizes.disk - sizes.active) / sizes.disk * 100
+          (sizes.file - sizes.active) / sizes.file * 100
 
-      The sizes.active and sizes.disk values can be obtained when querying a
+      The sizes.active and sizes.file values can be obtained when querying a
       :ref:`view group's information URI <api/ddoc/info>`.
 
     - ``from`` and ``to``: The period for which a database (and its view group)
