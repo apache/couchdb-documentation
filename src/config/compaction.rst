@@ -39,153 +39,9 @@ Database Compaction Options
             [database_compaction]
             checkpoint_after = 5242880
 
-.. _config/compactions:
-
-Compaction Daemon Rules
-=======================
-
-.. config:section:: compactions :: Compaction Daemon Rules
-
-    A list of rules to determine when to run automatic compaction. The
-    :option:`daemons/compaction_daemon` compacts databases and their respective
-    view groups when all the condition parameters are satisfied. Configuration
-    can be per-database or global, and it has the following format::
-
-        [compactions]
-        database_name = [ {ParamName, ParamValue}, {ParamName, ParamValue}, ... ]
-        _default = [ {ParamName, ParamValue}, {ParamName, ParamValue}, ... ]
-
-    For example::
-
-      [compactions]
-      _default = [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "23:00"}, {to, "04:00"}]
-
-    - ``db_fragmentation``: If the ratio of legacy data, including metadata, to
-      current data in the database file size is equal to or greater than this
-      value, this condition is satisfied. The percentage is expressed as an
-      integer percentage. This value is computed as:
-
-      .. code-block:: none
-
-          (sizes.disk - sizes.active) / sizes.disk * 100
-
-      The sizes.active and sizes.disk values can be obtained when
-      querying :http:get:`/{db}`.
-
-    - ``view_fragmentation``: If the ratio of legacy data, including metadata,
-      to current data in a view index file size is equal to or greater then
-      this value, this database compaction condition is satisfied. The
-      percentage is expressed as an integer percentage. This value is computed
-      as:
-
-      .. code-block:: none
-
-          (sizes.disk - sizes.active) / sizes.disk * 100
-
-      The sizes.active and sizes.disk values can be obtained when querying a
-      :ref:`view group's information URI <api/ddoc/info>`.
-
-    - ``from`` and ``to``: The period for which a database (and its view group)
-      compaction is allowed. The value for these parameters must obey the
-      format:
-
-      .. code-block:: none
-
-          HH:MM - HH:MM  (HH in [0..23], MM in [0..59])
-
-    - ``strict_window``: If a compaction is still running after the end of the
-      allowed period, it will be canceled if this parameter is set to `true`.
-      It defaults to `false` and is meaningful only if the *period* parameter
-      is also specified.
-
-    - ``parallel_view_compaction``: If set to `true`, the database and its
-      views are compacted in parallel. This is only useful on certain setups,
-      like for example when the database and view index directories point to
-      different disks. It defaults to `false`.
-
-    Before a compaction is triggered, an estimation of how much free disk space
-    is needed is computed. This estimation corresponds to two times the data
-    size of the database or view index. When there's not enough free disk space
-    to compact a particular database or view index, a warning message is
-    logged.
-
-    Examples:
-
-    #.
-        ::
-
-            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}]
-
-       The `foo` database is compacted if its fragmentation is 70% or more. Any
-       view index of this database is compacted only if its fragmentation is
-       60% or more.
-
-    #.
-        ::
-
-            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}]
-
-       Similar to the preceding example but a compaction (database or view
-       index) is only triggered if the current time is between midnight and 4
-       AM.
-
-    #.
-        ::
-
-            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}, {strict_window, true}]
-
-       Similar to the preceding example - a compaction (database or view index)
-       is only triggered if the current time is between midnight and 4 AM. If
-       at 4 AM the database or one of its views is still compacting, the
-       compaction process will be canceled.
-
-    #.
-        ::
-
-            [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {from, "00:00"}, {to, "04:00"}, {strict_window, true}, {parallel_view_compaction, true}]
-
-       Similar to the preceding example, but a database and its views can be
-       compacted in parallel.
-
-.. _config/compaction_daemon:
-
-Configuration of Compaction Daemon
-==================================
-
-.. config:section:: compaction_daemon :: Configuration of Compaction Daemon
-
-    .. config:option:: check_interval
-
-        The delay, in seconds, between each check for which database and view
-        indexes need to be compacted. In other words, this delay will occur
-        after *all* databases and views are compacted (or at least checked)::
-
-            [compaction_daemon]
-            check_interval = 3600
-
-    .. config:option:: min_file_size
-
-        If a database or view index file is smaller than this value (in bytes),
-        compaction will not happen. Very small files always have high
-        fragmentation, so compacting them is inefficient. ::
-
-            [compaction_daemon]
-            min_file_size = 131072
-
-    .. config:option:: snooze_period_ms
-
-        With lots of databases and/or with lots of design docs in one or more
-        databases, the compaction_daemon can create significant CPU load when
-        checking whether databases and view indexes need compacting. The
-        ``snooze_period_ms`` setting ensures a smoother CPU load. Defaults to
-        3000 milliseconds wait.
-
-            [compaction_daemon]
-            snooze_period_ms = 3000
-
 .. _config/view_compaction:
 
-Views Compaction Options
+View Compaction Options
 ========================
 
 .. config:section:: view_compaction :: Views Compaction Options
@@ -196,3 +52,116 @@ Views Compaction Options
 
             [view_compaction]
             keyvalue_buffer_size = 2097152
+
+.. _config/compactions:
+
+Compaction Daemon
+=================
+
+CouchDB ships with an automated, event-driven daemon that continuously
+re-prioritizes the database and secondary index files on each node and
+automatically compacts the files that will recover the most free space according
+to the following parameters.
+
+.. config:section:: smoosh :: Compaction Daemon Rules
+
+    .. config:option:: db_channels :: Active database channels
+
+        A comma-delimited list of channels that are sent the names of database
+        files when those files are updated. Each channel can choose whether to
+        enqueue the database for compaction; once a channel has enqueued the
+        database, no additional channel in the list will be given the
+        opportunity to do so.
+
+    .. config:option:: view_channels :: Active secondary index channels
+
+        A comma-delimited list of channels that are sent the names of secondary
+        index files when those files are updated. Each channel can choose
+        whether to enqueue the index for compaction; once a channel has enqueued
+        the index, no additional channel in the list will be given the
+        opportunity to do so.
+
+    .. config:option:: staleness :: Minimum time between priority calculations
+
+        The number of minutes that the (expensive) priority calculation on an
+        individual can be stale for before it is recalculated. Defaults to 5.
+
+    .. config:option:: cleanup_index_files :: Automatically delete orphaned index files
+
+        If set to true, the compaction daemon will delete the files for indexes
+        that are no longer associated with any design document. Defaults to
+        `false` and probably shouldn't be changed unless the node is running low
+        on disk space, and only after considering the ramifications.
+
+    .. config:option:: wait_secs :: Warmup period before triggering first compaction
+
+        The time a channel waits before starting compactions to allow time to
+        observe the system and make a smarter decision about what to compact
+        first. Hardly ever changed from the default of 30 (seconds).
+
+.. config:section:: smoosh.<channel> :: Per-channel configuration
+
+The following settings control the resource allocation for a given compaction
+channel.
+
+    .. config:option:: capacity
+
+        The maximum number of items the channel can hold (lowest priority item
+        is removed to make room for new items). Defaults to 9999.
+
+    .. config:option:: concurrency
+
+        The maximum number of jobs that can run concurrently in this channel.
+        Defaults to 1.
+
+    .. config: option:: from
+
+    .. config: option:: to
+
+        The time period during which this channel is allowed to execute
+        compactions. The value for each of these parameters must obey the format
+        `HH:MM` with HH in [0..23] and MM in [0..59]. Each channel listed in the
+        top-level daemon configuration continuously builds its priority queue
+        regardless of the period defined here. The default is to allow the
+        channel to execute compactions all the time.
+
+    .. config: option:: strict_window
+
+        If set to `true`, any compaction that is still running after the end of
+        the allowed perio will be suspended, and then resumed during the next
+        window. It defaults to `false`, in which case any running compactions
+        will be allowed to finish, but no new ones will be started.
+
+There are also several settings that collectively control whether a channel will
+enqueue a file for compaction and how it prioritizes files within its queue:
+
+    .. config:option:: max_priority
+
+        Each item must have a priority lower than this to be enqueued. Defaults
+        to infinity.
+
+    .. config:option:: max_size
+
+        The item must be no larger than this many bytes in length to be
+        enqueued. Defaults to infinity.
+
+    .. config:option:: min_priority
+
+        The item must have a priority at least this high to be enqueued.
+        Defaults to 5.0 for ratio and 16 MB for slack.
+
+    .. config:option:: min_changes
+
+        The minimum number of changes since last compaction before the item will
+        be enqueued. Defaults to 0. Currently only works for databases.
+
+    .. config:option:: min_size
+
+        The item must be at least this many bytes in length to be enqueued.
+        Defaults to 1mb (1048576 bytes).
+
+    .. config:option:: priority
+
+        The method used to calculate priority. Can be ratio (calculated as
+        `sizes.file/sizes.active`) or slack (calculated as `sizes.file -
+        sizes.active`). Defaults to ratio.
