@@ -155,16 +155,11 @@ information:
         "w": 2
       },
       "compact_running": false,
-      "data_size": 0,
       "db_name": "my_new_db",
       "disk_format_version": 7,
-      "disk_size": 66784,
       "doc_count": 0,
       "doc_del_count": 0,
       "instance_start_time": "0",
-      "other": {
-        "data_size": 0
-      },
       "props": {
         "partitioned": true
       },

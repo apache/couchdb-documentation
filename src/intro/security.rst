@@ -554,8 +554,8 @@ write normal documents::
 .. code-block:: javascript
 
     {"db_name":"mydatabase","doc_count":1,"doc_del_count":0,"update_seq":3,"purge_seq":0,
-    "compact_running":false,"disk_size":12376,"data_size":272,"instance_start_time":"0",
-    "disk_format_version":6,"committed_update_seq":3}
+    "compact_running":false,"sizes":{"active":272,"disk":12376,"external":350},
+    "instance_start_time":"0","disk_format_version":6,"committed_update_seq":3}
 
 If Jan attempted to create a design doc, however, CouchDB would return a
 401 Unauthorized error because the username "jan" is not in the list of
