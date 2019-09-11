@@ -42,9 +42,9 @@ Database Compaction Options
 .. _config/view_compaction:
 
 View Compaction Options
-========================
+=======================
 
-.. config:section:: view_compaction :: Views Compaction Options
+.. config:section:: view_compaction :: View Compaction Options
 
     .. config:option:: keyvalue_buffer_size :: Key-Values buffer size
 
