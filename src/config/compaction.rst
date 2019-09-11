@@ -13,9 +13,9 @@
 .. default-domain:: config
 .. highlight:: ini
 
-========================
-Compaction Configuration
-========================
+==========
+Compaction
+==========
 
 .. _config/database_compaction:
 
