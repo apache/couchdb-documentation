@@ -58,10 +58,10 @@ View Compaction Options
 Compaction Daemon
 =================
 
-CouchDB ships with an automated, event-driven daemon that continuously
-re-prioritizes the database and secondary index files on each node and
-automatically compacts the files that will recover the most free space according
-to the following parameters.
+CouchDB ships with an automated, event-driven daemon internally known as "smoosh" that
+continuously re-prioritizes the database and secondary index files on each node and
+automatically compacts the files that will recover the most free space according to the
+following parameters.
 
 .. config:section:: smoosh :: Compaction Daemon Rules
 
