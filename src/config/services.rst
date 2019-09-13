@@ -32,13 +32,6 @@ CouchDB Daemonized Mini Apps
             [daemons]
             auth_cache={couch_auth_cache, start_link, []}
 
-    .. config:option:: compaction_daemon
-
-        :ref:`Automatic compaction <config/compactions>` daemon::
-
-            [daemons]
-            compaction_daemon={couch_compaction_daemon, start_link, []}
-
     .. config:option:: external_manager
 
         `External` processes manager::
