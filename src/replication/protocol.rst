@@ -397,14 +397,17 @@ Get Source Information
         {
             "committed_update_seq": 61772,
             "compact_running": false,
-            "data_size": 70781613961,
             "db_name": "source",
             "disk_format_version": 6,
-            "disk_size": 79132913799,
             "doc_count": 41961,
             "doc_del_count": 3807,
             "instance_start_time": "0",
             "purge_seq": 0,
+            "sizes": {
+              "active": 70781613961,
+              "disk": 79132913799,
+              "external": 72345632950
+            },
             "update_seq": 61772
         }
 
@@ -434,14 +437,15 @@ Get Target Information
             "compact_running": false,
             "db_name": "target",
             "disk_format_version": 5,
-            "disk_size": 77001455,
             "doc_count": 1832,
             "doc_del_count": 1,
             "instance_start_time": "0",
-            "other": {
-                "data_size": 50829452
-            },
             "purge_seq": 0,
+            "sizes": {
+              "active": 50829452,
+              "disk": 77001455,
+              "external": 60326450
+            },
             "update_seq": "1841-g1AAAADveJzLYWBgYMlgTmGQT0lKzi9KdUhJMtbLSs1LLUst0k"
         }
 
@@ -1418,11 +1422,6 @@ There is a special optimization case when then Replicator WILL NOT use bulk
 upload of changed Documents. This case is applied when Documents contain a
 lot of attached files or the files are too big to be efficiently encoded with
 Base64.
-
-.. note::
-    CouchDB defines a limit of ``8`` attachments per Document and each attached
-    file size should not be greater than ``64 KiB``. While this is a RECOMMENDED
-    limitation, other Replicator implementations MAY have their own values.
 
 For this case the Replicator issues a :put:`/{db}/{docid}?new_edits=false
 </{db}/{docid}>` request with :mimetype:`multipart/related` content type. Such

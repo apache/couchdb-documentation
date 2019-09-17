@@ -66,14 +66,11 @@
     :>json string db_name: The name of the database.
     :>json number disk_format_version: The version of the physical format used
       for the data when it is stored on disk.
-    :>json number data_size: *Deprecated.* Use ``sizes.active`` instead.
-    :>json number disk_size: *Deprecated.* Use ``sizes.file`` instead.
     :>json number doc_count: A count of the documents in the specified
       database.
     :>json number doc_del_count: Number of deleted documents
     :>json string instance_start_time: Always ``"0"``. (Returned for legacy
       reasons.)
-    :>json object other: Used by Cloudant. *Deprecated.*
     :>json string purge_seq: An opaque string that describes the purge state
       of the database. Do not rely on this string for counting the number
       of purge operations.
@@ -86,6 +83,8 @@
     :>json string update_seq: An opaque string that describes the state
       of the database. Do not rely on this string for counting the number
       of updates.
+    :>json boolean props.partitioned: (optional) If present and true, this
+      indicates that the database is partitioned.
     :code 200: Request completed successfully
     :code 404: Requested database not found
 
@@ -116,16 +115,12 @@
                 "w": 2
             },
             "compact_running": false,
-            "data_size": 65031503,
             "db_name": "receipts",
             "disk_format_version": 6,
-            "disk_size": 137433211,
             "doc_count": 6146,
             "doc_del_count": 64637,
             "instance_start_time": "0",
-            "other": {
-                "data_size": 66982448
-            },
+            "props": {},
             "purge_seq": 0,
             "sizes": {
                 "active": 65031503,
@@ -159,6 +154,8 @@
     :query integer n: Replicas. The number of copies of the database in the
       cluster. The default is 3, unless overridden in the
       :config:option:`cluster config <cluster/n>` .
+    :query boolean partitioned: Whether to create a partitioned database.
+      Default is false.
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
