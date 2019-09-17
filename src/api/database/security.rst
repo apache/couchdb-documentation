@@ -64,7 +64,7 @@
 
         Also note, that security objects are not regular versioned documents
         (that is, they are not under MVCC rules). This is a design choice to
-        speedup authorization checks (avoids traversing a database`s documents
+        speed up authorization checks (avoids traversing a database's documents
         B-Tree).
 
     :param db: Database name

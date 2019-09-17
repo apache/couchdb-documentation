@@ -187,3 +187,43 @@ Native Erlang Query Server
 
     Additional examples are on the `users@couchdb.apache.org mailing list
     <https://lists.apache.org/thread.html/9b5f2837bd32189385bb82eee44aec243f2ecacc6e907ffe0e1e03d3@1360091211@%3Cuser.couchdb.apache.org%3E>`_.
+
+Search
+======
+
+CouchDB's search subsystem can be configured via the ``dreyfus`` configuration section.
+
+.. config:section:: dreyfus :: Search Subsystem Configuration
+
+    .. config:option:: name :: Clouseau JVM node name and location
+
+        The name and location of the Clouseau Java service required to enable Search
+        functionality. Defaults to ``clouseau@127.0.0.1``.
+
+    .. config:option:: retry_limit :: Maximum number of connection retries
+
+        CouchDB will try to reconnect to Clouseau using a bounded exponential backoff with
+        the following number of iterations. Defaults to ``5``.
+
+    .. config:option:: limit :: Default result set limit for global search
+
+        The number of results returned from a global search query if no limit is
+        specified. Defaults to ``25``.
+
+    .. config:option:: limit_partitions :: Default result set limit for partitioned DBs
+
+        The number of results returned from a search on a partition of a database if no
+        limit is specified. Defaults to ``2000``.
+
+    .. config:option:: max_limit :: Maximum result set for global search
+
+        The maximum number of results that can be returned from a global search query (or
+        any search query on a database without user-defined partitions). Attempts to set
+        ``?limit=N higher`` than this value will be rejected. Defaults to ``200``.
+
+    .. config:option:: max_limit_partitions :: Maximum result set for partitioned search
+
+        The maximum number of results that can be returned when searching a partition of a
+        database. Attempts to set ``?limit=N`` higher than this value will be rejected. If
+        this config setting is not defined, CouchDB will use the value of ``max_limit``
+        instead. If neither is defined, the default is ``2000``.
