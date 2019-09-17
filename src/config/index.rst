@@ -26,8 +26,10 @@ Configuration
     http
     auth
     compaction
+    indexbuilds
     logging
     replicator
     query-servers
     services
     misc
+    resharding

@@ -358,8 +358,11 @@ Couchdb sends::
                     "update_seq": 105,
                     "purge_seq": 0,
                     "compact_running": false,
-                    "disk_size": 15818856,
-                    "data_size": 1535048,
+                    "sizes": {
+                      "active": 1535048,
+                      "disk": 15818856,
+                      "external": 15515850
+                    },
                     "instance_start_time": "1359952188595857",
                     "disk_format_version": 6,
                     "committed_update_seq": 105
@@ -606,8 +609,11 @@ CouchDB sends::
                     "update_seq": 16,
                     "purge_seq": 0,
                     "compact_running": false,
-                    "disk_size": 8044648,
-                    "data_size": 7979601,
+                    "sizes": {
+                      "active": 7979745,
+                      "disk": 8056936,
+                      "external": 8024930
+                    },
                     "instance_start_time": "1374612186131612",
                     "disk_format_version": 6,
                     "committed_update_seq": 16
@@ -731,8 +737,11 @@ CouchDB sends::
                     "update_seq": 19,
                     "purge_seq": 0,
                     "compact_running": false,
-                    "disk_size": 8056936,
-                    "data_size": 7979745,
+                    "sizes": {
+                      "active": 7979745,
+                      "disk": 8056936,
+                      "external": 8024930
+                    },
                     "instance_start_time": "1374612186131612",
                     "disk_format_version": 6,
                     "committed_update_seq": 19
