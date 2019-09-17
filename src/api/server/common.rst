@@ -278,14 +278,9 @@
                 "active": 1162451555
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 1713103872
-              },
               "doc_del_count": 0,
               "doc_count": 52224,
-              "disk_size": 1178613587,
               "disk_format_version": 6,
-              "data_size": 1162451555,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -307,14 +302,9 @@
                 "active": 67475
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 2339
-              },
               "doc_del_count": 0,
               "doc_count": 11,
-              "disk_size": 3872387,
               "disk_format_version": 6,
-              "data_size": 67475,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -1516,6 +1506,49 @@ containing only the requested individual statistic.
     it is not meant to be used in production
 
     :code 200: Request completed successfully
+
+.. _api/server/search_analyze:
+
+==========================================
+``/_search_analyze``
+==========================================
+
+.. versionadded:: 3.0
+
+.. http:post:: /_search_analyze
+    :synopsis: Tests the results of analyzer tokenization
+
+    Tests the results of Lucene analyzer tokenization on sample text.
+
+    :param field: Type of analyzer
+    :param text:  Analyzer token you want to test
+    :code 200: Request completed successfully
+    :code 400: Request body is wrong (malformed or missing one of the mandatory fields)
+    :code 500: A server error (or other kind of error) occurred
+
+**Request**:
+
+.. code-block:: http
+
+    POST /_search_analyze HTTP/1.1
+    Host: localhost:5984
+    Content-Type: application/json
+
+    {"analyzer":"english", "text":"running"}
+
+**Response**:
+
+.. code-block:: javascript
+
+    {
+        "tokens": [
+            "run"
+        ]
+    }
+
+.. warning::
+    Requests to this endpoint will fail unless the CouchDB server is connected to a
+    functioning Clouseau instance.
 
 .. _api/server/utils:
 

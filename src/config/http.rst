@@ -86,7 +86,7 @@ HTTP Server Options
             authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
         - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
-        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
+        - ``{chttpd_auth, proxy_authentication_handler}``: used for Proxy auth;
         - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
         - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
           Everlasting `Admin Party`!
