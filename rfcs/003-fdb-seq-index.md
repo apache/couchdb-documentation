@@ -39,14 +39,16 @@ committed version of the database. The next 2 bytes are monotonic in the
 serialization order for transactions. The final 2 bytes are user-defined and can
 be used to create multiple versionstamps in a single transaction.
 
-`Incarnation`: a single byte, monotonically increasing value specified for each
-CouchDB database. The `Incarnation` starts at `\x00` when a database is created
-and is incremented by one whenever a database is relocated to a different
-FoundationDB cluster.
+`Incarnation`: a monotonically increasing Integer value specified for each
+CouchDB database. The `Incarnation` starts at zero (i.e. `\x14` in the tuple
+layer encoding) when a database is created and is incremented by one whenever a
+database is relocated to a different FoundationDB cluster. Thus the majority of
+the time an Incarnation fits into a single byte, or two bytes if the database
+has been moved around a small number of times.
 
-`Sequence`: a 13 byte value formed by combining the current `Incarnation` of the
-database and the `Versionstamp` of the transaction. Sequences are monotonically
-increasing even when a database is relocated across FoundationDB clusters.
+`Sequence`: the combinination of the current `Incarnation` for the database and
+the `Versionstamp` of the transaction. Sequences are monotonically increasing
+even when a database is relocated across FoundationDB clusters.
 
 `style=all_docs`: An optional query parameter to the `_changes` feed which
 requests that all leaf revision ids are included in the response. The replicator
