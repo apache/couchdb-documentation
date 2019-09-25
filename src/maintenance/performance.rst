@@ -99,13 +99,6 @@ will be continuously replicating.
 Erlang
 ------
 
-Even if you've increased the maximum connections CouchDB will allow,
-the Erlang runtime system will not allow more than 1024 connections by
-default. Adding the following directive to ``(prefix)/etc/default/couchdb`` (or
-equivalent) will increase this limit (in this case to 4096)::
-
-    export ERL_MAX_PORTS=4096
-
 CouchDB versions up to 1.1.x also create Erlang Term Storage (`ETS`_) tables for
 each replication. If you are using a version of CouchDB older than 1.2 and
 must support many replications, also set the ``ERL_MAX_ETS_TABLES`` variable.
