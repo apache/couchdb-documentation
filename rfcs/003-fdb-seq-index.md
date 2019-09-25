@@ -107,12 +107,12 @@ and the `BranchCount` is 1 we can avoid making an extra request to the
 
 ## Index Maintenance
 
-As discussed in [RFC 001]() (link TBD), an update attempt always retrieves the
-metadata KV for the current winning branch from the "revisions" subspace. This
-metadata entry includes the sequence of the last edit to the document, which
-serves as the key into the index in our "changes" subspace. The writer will use
-that information to clear the existing KV from the `_changes` subspace as part
-of the transaction.
+As discussed in [RFC 001](001-fdb-revision-metadata-model.md), an update attempt
+always retrieves the metadata KV for the current winning branch from the
+"revisions" subspace. This metadata entry includes the sequence of the last edit
+to the document, which serves as the key into the index in our "changes"
+subspace. The writer will use that information to clear the existing KV from the
+`_changes` subspace as part of the transaction.
 
 The writer also knows in all cases what the `RevPosition`, `RevHash`,
 `BranchCount`, and `NotDeleted` will be following the edit, and can use the
