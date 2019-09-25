@@ -201,9 +201,10 @@ but the short answer is that you should decrease ``ulimit -n`` or define
 
 erlang stack trace contains ``system_limit``, ``open_port``
 -----------------------------------------------------------
-Erlang has a default limit of 1024 ports, where each FD, tcp connection, and
-linked-in driver uses one port. You seem to have exceeded this. You can
-change it at runtime using the ``ERL_MAX_PORTS`` env variable.
+Erlang has a default limit of 1024 Erlang ports, where some internal
+components uses one Erlang port (the ICU driver, Javascript
+evaluation). You seem to have exceeded this. You can change it at
+runtime using the ``ERL_MAX_PORTS`` env variable.
 
 function raised exception (Cannot encode 'undefined' value as JSON)
 -------------------------------------------------------------------
