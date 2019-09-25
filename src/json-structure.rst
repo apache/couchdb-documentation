@@ -397,14 +397,17 @@ Request object
         "info": {
             "committed_update_seq": 2701412,
             "compact_running": false,
-            "data_size": 7580843252,
             "db_name": "mailbox",
             "disk_format_version": 6,
-            "disk_size": 14325313673,
             "doc_count": 2262757,
             "doc_del_count": 560,
             "instance_start_time": "1347601025628957",
             "purge_seq": 0,
+            "sizes": {
+              "active": 7580843252,
+              "disk": 14325313673,
+              "external": 7803423459
+            },
             "update_seq": 2701412
         },
         "method": "GET",

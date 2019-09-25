@@ -84,6 +84,7 @@ Let's do another walk through the API using `curl` to see how CouchDB behaves
 when you add admin users. ::
 
     > HOST="http://127.0.0.1:5984"
+    > NODENAME="_local"
     > curl -X PUT $HOST/database
     {"ok":true}
 
@@ -98,6 +99,13 @@ value for the :ref:`configuration API <api/config>`::
 As per the :ref:`_config <api/config>` API's behavior, we're getting
 the previous value for the config item we just wrote. Since our admin user
 didn't exist, we get an empty string.
+
+Please note that ``_local`` serves as an  alias for the local node name, so
+for all configuration URLs, ``NODENAME`` may be set to ``_local``, to interact
+with the local node’s configuration.
+
+.. seealso::
+    :ref:`Node Management <cluster/nodes>`
 
 Hashing Passwords
 ^^^^^^^^^^^^^^^^^
@@ -546,8 +554,8 @@ write normal documents::
 .. code-block:: javascript
 
     {"db_name":"mydatabase","doc_count":1,"doc_del_count":0,"update_seq":3,"purge_seq":0,
-    "compact_running":false,"disk_size":12376,"data_size":272,"instance_start_time":"0",
-    "disk_format_version":6,"committed_update_seq":3}
+    "compact_running":false,"sizes":{"active":272,"disk":12376,"external":350},
+    "instance_start_time":"0","disk_format_version":6,"committed_update_seq":3}
 
 If Jan attempted to create a design doc, however, CouchDB would return a
 401 Unauthorized error because the username "jan" is not in the list of
