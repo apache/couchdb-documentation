@@ -58,24 +58,23 @@ requests that all leaf revision ids are included in the response. The replicator
 
 # Detailed Description
 
-The `_changes` feed provides a list of the documents in a given database, in
+The `_changes` feed provides a list of the documents in a given database, in the
 order in which they were most recently updated. Each document shows up exactly
 once in a normal response to the `_changes` feed.
 
-In CouchDB 2.x the database sequence is a composition of sequence numbers from
-individual database shards. In the API this sequence is encoded as a long Base64
-string. The response to the `_changes` feed is not totally ordered; the only
-guarantee is that a client can resume the feed from a given sequence and be
-guaranteed not to miss any updates.
+In CouchDB 2.x and 3.x the database sequence is a composition of sequence
+numbers from individual database shards. In the API this sequence is encoded as
+a long Base64 string. The response to the `_changes` feed is not totally
+ordered; the only guarantee is that a client can resume the feed from a given
+sequence and be guaranteed not to miss any updates.
 
-In a future release of CouchDB based on FoundationDB we will be able to offer
-stronger guarantees. The `Sequence` defined in the Terminology section above is
-totally ordered across the entire cluster, and repeated calls to `_changes` on a
+Future releases of CouchDB based on FoundationDB will be able to offer stronger
+guarantees. The `Sequence` defined in the Terminology section above is totally
+ordered across the entire cluster, and repeated calls to `_changes` on a
 quiescent database will retrieve the same results in the same order. The
-`Sequence` will still be encoded as a string, but as it's a more compact 13 byte
-value we propose to encode it in hexademical notation (so a 26 character
-string). These strings will sort correctly, something that has not always been
-true in CouchDB 2.x.
+`Sequence` will still be encoded as a string, but as it's a more compact value
+we propose to encode it in hexademical notation. These strings will sort
+correctly, something that has not always been true in CouchDB 2.x.
 
 ## Data Model
 
@@ -117,10 +116,7 @@ subspace. The writer will use that information to clear the existing KV from the
 The writer also knows in all cases what the `RevPosition`, `RevHash`,
 `BranchCount`, and `NotDeleted` will be following the edit, and can use the
 `set_versionstamped_key` API to write a new KV with the correct new sequence of
-the transaction into the "changes" subspace. Knowledge of `NotDeleted` is
-slightly subtle; it relies on the sorting of the Keys in the "revisions"
-subspace to ensure that if any live edit branch exists it will be the winner
-(and the system always reads the winning branch on any edit).
+the transaction into the "changes" subspace.
 
 In short, the operations in this subspace are
 - doc insert: 0 read, 0 clear, 1 insert
