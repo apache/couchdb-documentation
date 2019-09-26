@@ -129,57 +129,21 @@ particular care to the degraded mode when FoundationDB responds to a transaction
 commit with `commit_unknown_result`. Versionstamped keys are not idempotent, and
 so a naïve retry approach could result in duplicate entries in the "changes"
 subspace. The index maintenance in this subspace is "blind" (i.e. no reads in
-this subspace are performed), and so this would seem to be a valid concern;
-fortunately, the transaction that updates the "changes" subpsace will also
-update the "revisions" subspace with a specific KV corresponding to this
-document update.
+this subspace are performed), so the risk for duplicate entries is indeed a
+valid concern.
 
-### Option 1: Transaction IDs with Every Revision
-
-When retrying a transaction with an unknown result, the CouchDB layer will again
-try to read the base revision against which the update is being attempted. The
-logic flow looks like this:
-
-![option1](images/003-option1.png)
-
-The flow above refers to a "transaction ID"; this is an extension of the
-revision metadata to uniquely identify each transaction attempt. A versionstamp
-would work here, if the storage overhead is acceptable. Alternatively some
-smaller number of random bytes could be used to provide a probabilistic
-solution.
-
-### Option 2: Store last transaction ID for each branch
-
-Another compromise option would be to store the transaction ID only for the
-latest edit to each branch, instead of for each of the last 1000 (by default)
-edits. This would allow the layer to detect a concurrent attempt to apply an
-identical edit, but would leave open the possibility that a transaction which
-starts after the transaction with `commit_unknown_result`, but completes before
-the retry, could leave us unable to determine the success of the previous
-transaction. That flow would look like this:
-
-![option2](images/003-option2.png)
-
-Landing on the ¯\\_(ツ)_/¯ case would require all of the following:
-- Txn A with `commit_unknown_result`
-- Txn A succeeding, or racing with Txn B applying an identical edit
-- Txn C starting after A/B , modifying the same edit branch, and committing
-  before the retry of Txn A gets a read version
-
-### Option 3: Store all transaction IDs, cleanup async
-
-Rather than storing the transaction IDs with the revision IDs, one could write a
-separate blind KV into a dedicated transaction ID space. After a successful
-transaction commit, the CouchDB layer could delete the transaction ID
-asynchronously. For example, each process could dump the transaction ID of a
-successful commit into a local ets table (shared by all databases), and a
-process could scan that table once every few seconds and clear the associated
-entries from FDB in a single transaction. The flow for this design in the case
-of `commit_unknown_result` is dramatically simpler:
-
-![option3](images/003-option3.png)
-
-Leaving this section available for comments and suggestions on how to proceed.
+We can guard against creating duplicates in the "changes" subspace by having the
+transaction that updates that subpsace also insert a KV into a dedicated
+"transaction ID" subspace specifically corresponding to this document update. If
+the CouchDB layer receives a `commit_unknown_result` it can simply check for the
+presence of the transaction ID in FoundationDB to determine whether the previous
+transaction succeeded or failed. If the transaction ID is not present, CouchDB
+can safely retry with the same transaction ID. After a successful transaction
+commit, the CouchDB layer can delete the transaction ID KV asynchronously. For
+example, each process could dump the transaction ID of a successful commit into
+a local ets table (shared by all databases), and a process could scan that table
+once every few seconds and clear the associated entries from FDB in a single
+transaction.
 
 ## Access Patterns
 
