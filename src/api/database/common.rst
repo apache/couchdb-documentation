@@ -312,9 +312,6 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*.
 
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
@@ -427,9 +424,6 @@ To use batch mode, append the ``batch=ok`` query argument to the URL of a
 :post:`/{db}`, :put:`/{db}/{docid}`, or :delete:`/{db}/{docid}` request. The
 CouchDB server will respond with an HTTP :statuscode:`202` response code
 immediately.
-
-Documents in the batch may be manually flushed by using the
-:post:`/{db}/_ensure_full_commit` endpoint.
 
 .. note::
     Creating or updating documents with batch mode doesn't guarantee that all

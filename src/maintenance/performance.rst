@@ -69,16 +69,6 @@ what the default configuration will support.
 CouchDB Configuration Options
 -----------------------------
 
-delayed_commits
-^^^^^^^^^^^^^^^
-
-The :config:option:`delayed commits <couchdb/delayed_commits>` allows to
-achieve better write performance for some workloads while sacrificing a small
-amount of durability. The setting causes CouchDB to wait up to a full second
-before committing new data after an update. If the server crashes before
-the header is written then any writes since the last commit are lost. Keep this
-option enabled on your own risk.
-
 max_dbs_open
 ^^^^^^^^^^^^
 
