@@ -32,7 +32,7 @@ a few reasons:
   stored under duplicate ``_id``\ s. This could easily happen with intermediary
   proxies and cache systems that may not inform developers that the failed
   transaction is being retried.
-- ``_id``\ s are are the only unique enforced value within CouchDB so you might
+- ``_id``\ s are the only unique enforced value within CouchDB so you might
   as well make use of this. CouchDB stores its documents in a B+ tree. Each
   additional or updated document is stored as a leaf node, and may require
   re-writing intermediary and parent nodes. You may be able to take advantage of
