@@ -146,15 +146,13 @@
 ===========================
 
 .. http:post:: /{db}/_ensure_full_commit
-    :synopsis: Makes sure all uncommitted changes are written and synchronized
-               to the disk
+    :synopsis: Deprecated endpoint to support CouchDB versions < 3.0
+               replicators.
 
-    Commits any recent changes to the specified database to disk. You should
-    call this if you want to ensure that recent changes have been flushed.
-    This function is likely not required, assuming you have the recommended
-    configuration setting of ``delayed_commits=false``, which requires CouchDB
-    to ensure changes are written to disk before a 200 or similar result is
-    returned.
+    Before 3.0 this was used to commit recent changes to the database in case
+    the ``delayed_commits=true`` option was set. That option is always
+    ``false`` now, so commits are never delayed. However, this endpoint is kept
+    for compatibility with older replicators.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`

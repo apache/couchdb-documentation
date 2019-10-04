@@ -631,9 +631,7 @@ Sending multiple queries to a database
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
+
     :<json array docs: List of documents objects
     :<json boolean new_edits: If ``false``, prevents the database from
       assigning them new revision IDs. Default is ``true``. *Optional*
