@@ -1303,10 +1303,9 @@ with the following mandatory fields:
   Documents with the specified Revision (field ``_rev``) value as-is without
   generating a new revision. Always ``false``
 
-The request also MAY contain :header:`X-Couch-Full-Commit` that controls
-CouchDB :config:option:`commit policy <couchdb/delayed_commits>`. Other Peers
-MAY ignore this header or use it to control similar local
-feature.
+The request also MAY contain :header:`X-Couch-Full-Commit` that used to control
+CouchDB <3.0 behavior when delayed commits were enabled. Other Peers MAY ignore
+this header or use it to control similar local feature.
 
     **Request**:
 

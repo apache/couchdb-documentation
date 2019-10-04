@@ -70,7 +70,6 @@ interact with the local node's configuration.
             "couchdb": {
                 "users_db_suffix": "_users",
                 "database_dir": "/var/lib/couchdb",
-                "delayed_commits": "true",
                 "max_attachment_chunk_size": "4294967296",
                 "max_dbs_open": "100",
                 "os_process_timeout": "5000",
