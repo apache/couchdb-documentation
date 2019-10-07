@@ -111,7 +111,7 @@ Installing the Apache CouchDB packages
 
 **Debian/Ubuntu**: First, install the CouchDB repository key::
 
-    $ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
+    $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
       8756C4F765C9AC3CB6B85D62379CE192D401AB61
 
 Then update the repository cache and install the package::
