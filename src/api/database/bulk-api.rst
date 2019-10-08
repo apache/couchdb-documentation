@@ -644,6 +644,7 @@ Sending multiple queries to a database
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
+    :code 404: Requested database not found
 
     **Request**:
 
