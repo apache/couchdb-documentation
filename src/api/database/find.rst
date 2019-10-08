@@ -80,6 +80,7 @@
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
+    :code 404: Requested database not found
     :code 500: Query execution error
 
 The ``limit`` and ``skip`` values are exactly as you would expect. While
