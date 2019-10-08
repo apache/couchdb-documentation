@@ -27,6 +27,10 @@
     data.
 
     :param db: Database name
+    :<header Content-Type: :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -104,6 +108,7 @@
       *Optional*
     :>header Content-Type: - :mimetype:`application/json`
     :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
