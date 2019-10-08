@@ -213,6 +213,7 @@
       that this is not the number of rows returned in the actual query.
     :>json number update_seq: Current update sequence for the database
     :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
