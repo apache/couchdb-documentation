@@ -27,6 +27,10 @@
     data.
 
     :param db: Database name
+    :<header Content-Type: :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -104,6 +108,7 @@
       *Optional*
     :>header Content-Type: - :mimetype:`application/json`
     :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -208,6 +213,7 @@
       that this is not the number of rows returned in the actual query.
     :>json number update_seq: Current update sequence for the database
     :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -644,6 +650,7 @@ Sending multiple queries to a database
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
+    :code 404: Requested database not found
 
     **Request**:
 
