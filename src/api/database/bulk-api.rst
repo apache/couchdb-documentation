@@ -631,9 +631,7 @@ Sending multiple queries to a database
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
+
     :<json array docs: List of documents objects
     :<json boolean new_edits: If ``false``, prevents the database from
       assigning them new revision IDs. Default is ``true``. *Optional*
@@ -646,8 +644,6 @@ Sending multiple queries to a database
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
-    :code 417: Occurs when at least one document was rejected by a
-     :ref:`validation function <vdufun>`
 
     **Request**:
 
@@ -955,16 +951,17 @@ following type:
 
    .. code-block:: http
 
-       HTTP/1.1 417 Expectation Failed
+       HTTP/1.1 201 Created
        Cache-Control: must-revalidate
-       Content-Length: 120
+       Content-Length: 80
        Content-Type: application/json
        Date: Sat, 26 Oct 2013 00:05:17 GMT
        Server: CouchDB (Erlang OTP)
 
-       {
-           "error": "forbidden",
-           "id": "LambStew",
-           "reason": "invalid recipe ingredient",
-           "rev": "1-34c318924a8f327223eed702ddfdc66d"
-       }
+       [
+           {
+               "id": "LambStew",
+               "error": "forbidden",
+               "reason": "invalid recipe ingredient"
+           }
+       ]
