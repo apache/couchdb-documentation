@@ -596,8 +596,12 @@
       Required administrator's privileges on target server.
     :<json array doc_ids: Array of document IDs to be synchronized
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
-    :<json string proxy: Address of a proxy server through which replication
-      should occur (protocol can be "http" or "socks5")
+    :<json string source_proxy: Address of a proxy server through which
+      replication from the source should occur (protocol can be "http" or
+      "socks5")
+    :<json string target_proxy: Address of a proxy server through which
+      replication to the target should occur (protocol can be "http" or
+      "socks5")
     :<json string/object source: Source database name or URL or an object
       which contains the full URL of the source database with additional
       parameters like headers. Eg: 'source_db_name' or
@@ -1105,7 +1109,8 @@ error.
                     "info": null,
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1119,7 +1124,8 @@ error.
                     "info": null,
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node1@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1219,7 +1225,8 @@ error.
                     "info": null,
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1307,7 +1314,8 @@ error.
             "info": null,
             "last_updated": "2017-04-29T05:01:37Z",
             "node": "node2@127.0.0.1",
-            "proxy": null,
+            "source_proxy": null,
+            "target_proxy": null,
             "source": "http://myserver.com/foo",
             "start_time": "2017-04-29T05:01:37Z",
             "state": "running",

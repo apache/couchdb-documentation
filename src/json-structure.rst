@@ -261,8 +261,11 @@ Replication Settings
 | filter (optional)              | name of the filter function in the form of  |
 |                                | ``ddoc/myfilter``.                          |
 +--------------------------------+---------------------------------------------+
-| proxy (optional)               | Address of a proxy server through which     |
-|                                | replication should occur.                   |
+| source_proxy (optional)        | Address of a proxy server through which     |
+|                                | replication from the source should occur.   |
++--------------------------------+---------------------------------------------+
+| target_proxy (optional)        | Address of a proxy server through which     |
+|                                | replication to the target should occur.     |
 +--------------------------------+---------------------------------------------+
 | query_params (optional)        | Query parameter that are passed to the      |
 |                                | filter function; the value should be a      |
