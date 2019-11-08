@@ -77,7 +77,17 @@ Replication state of this document can then be queried from
          "doc_id": "my_rep",
          "error_count": 0,
          "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
-         "info": null,
+         "info": {
+             "revisions_checked": 113,
+             "missing_revisions_found": 113,
+             "docs_read": 113,
+             "docs_written": 113,
+             "changes_pending": 0,
+             "doc_write_failures": 0,
+             "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+             "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+             "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+         },
          "last_updated": "2017-04-05T19:18:15Z",
          "node": "node1@127.0.0.1",
          "source_proxy": null,
@@ -115,6 +125,17 @@ The replication job will also appear in
                       }
                   ],
                   "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
+                  "info": {
+                      "changes_pending": 0,
+                      "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                      "doc_write_failures": 0,
+                      "docs_read": 113,
+                      "docs_written": 113,
+                      "missing_revisions_found": 113,
+                      "revisions_checked": 113,
+                      "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                      "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+                  },
                   "node": "node1@127.0.0.1",
                   "pid": "<0.1174.0>",
                   "source": "http://myserver.com/foo/",
