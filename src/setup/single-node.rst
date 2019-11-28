@@ -37,15 +37,15 @@ username and password and creates the three system databases ``_users``,
 Alternatively, if you don't want to use the Setup Wizard, and run 2.x as a
 single node with a server administrator already configured via
 :ref:`config file<config/admins>`, make sure to
-create the three system databases manually on startup:
+create the three system databases manually on startup (using port 5986, the administrative port of single-node instances):
 
 .. code-block:: sh
 
-    curl -X PUT http://127.0.0.1:5984/_users
+    curl -X PUT http://127.0.0.1:5986/_users
 
-    curl -X PUT http://127.0.0.1:5984/_replicator
+    curl -X PUT http://127.0.0.1:5986/_replicator
 
-    curl -X PUT http://127.0.0.1:5984/_global_changes
+    curl -X PUT http://127.0.0.1:5986/_global_changes
 
 Note that the last of these is not necessary if you do not expect to be
 using the global changes feed. Feel free to delete this database if you
