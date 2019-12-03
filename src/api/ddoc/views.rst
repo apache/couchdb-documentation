@@ -160,8 +160,10 @@
     :synopsis: Returns results for the specified stored view
 
     Executes the specified view function from the specified design document.
-    :method:`POST` view functionality is identical to the
-    :get:`/{db}/_design/{ddoc}/_view/{view}` API.
+    :method:`POST` view functionality supports identical parameters and behavior
+    as specified in :get:`/{db}/_design/{ddoc}/_view/{view}` API but allows for the
+    query string parameters to be supplied as keys in JSON object in the body
+    of the `POST` request.
 
     **Request**:
 
