@@ -157,7 +157,7 @@
     transfer size for attachments.
 
 .. http:post:: /{db}/_design/{ddoc}/_view/{view}
-    :synopsis: Returns results for the specified stored view
+    :synopsis: Returns results for the specified view
 
     Executes the specified view function from the specified design document.
     :method:`POST` view functionality supports identical parameters and behavior
