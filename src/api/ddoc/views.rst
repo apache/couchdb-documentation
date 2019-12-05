@@ -157,14 +157,13 @@
     transfer size for attachments.
 
 .. http:post:: /{db}/_design/{ddoc}/_view/{view}
-    :synopsis: Returns certain rows for the specified stored view
+    :synopsis: Returns results for the specified view
 
     Executes the specified view function from the specified design document.
-    Unlike :get:`/{db}/_design/{ddoc}/_view/{view}` for accessing views, the
-    :method:`POST` method supports the specification
-    of explicit keys to be retrieved from the view results. The remainder of
-    the :method:`POST` view functionality is identical to the
-    :get:`/{db}/_design/{ddoc}/_view/{view}` API.
+    :method:`POST` view functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_design/{ddoc}/_view/{view}` API but allows for the
+    query string parameters to be supplied as keys in a JSON object in the body
+    of the `POST` request.
 
     **Request**:
 
