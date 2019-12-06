@@ -177,7 +177,7 @@ A list of the available methods and URL paths are provided below:
       in this database
 
     :method:`POST` `_local_docs` functionality supports identical parameters and behavior
-    as specified in the :get:`/{db}/_design_docs` API but allows for the query string
+    as specified in the :get:`/{db}/_local_docs` API but allows for the query string
     parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
     **Request**:
