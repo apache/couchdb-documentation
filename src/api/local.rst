@@ -176,7 +176,7 @@ A list of the available methods and URL paths are provided below:
     :synopsis: Returns a built-in view of all local (non-replicating) documents
       in this database
 
-    :method:`POST` `_design_docs` functionality supports identical parameters and behavior
+    :method:`POST` `_local_docs` functionality supports identical parameters and behavior
     as specified in the :get:`/{db}/_design_docs` API but allows for the query string
     parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
