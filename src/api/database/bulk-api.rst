@@ -98,8 +98,8 @@
     :synopsis: Returns a built-in view of all documents in this database
 
     :method:`POST` `_all_docs` functionality supports identical parameters and behavior
-    as specified in the :get:`/{db}/_all_docs` API but allows for the query string parameters
-    to be supplied as keys in a JSON object in the body of the `POST` request.
+    as specified in the :get:`/{db}/_all_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
     **Request**:
 
@@ -272,8 +272,8 @@
     :synopsis: Returns a built-in view of all design documents in this database
 
     :method:`POST` `_all_docs` functionality supports identical parameters and behavior
-    as specified in the :get:`/{db}/_design_docs` API but allows for the query string parameters
-    to be supplied as keys in a JSON object in the body of the `POST` request.
+    as specified in the :get:`/{db}/_design_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
     **Request**:
 
