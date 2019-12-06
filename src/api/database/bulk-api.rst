@@ -158,7 +158,7 @@
     database. The information is returned as a JSON structure containing meta
     information about the return structure, including a list of all design
     documents and basic contents, consisting the ID, revision and key. The key
-    is from the design document's ``_id``.
+    is the design document's ``_id``.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
