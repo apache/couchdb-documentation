@@ -72,23 +72,23 @@ A list of the available methods and URL paths are provided below:
                      - :mimetype:`text/plain`
     :query boolean conflicts: Includes `conflicts` information in response.
       Ignored if `include_docs` isn't ``true``. Default is ``false``.
-    :query boolean descending: Return the design documents in descending by
+    :query boolean descending: Return the local documents in descending by
       key order. Default is ``false``.
     :query string endkey: Stop returning records when the specified key is
       reached. *Optional*.
     :query string end_key: Alias for `endkey` param.
     :query string endkey_docid: Stop returning records when the specified
-        design document ID is reached. *Optional*.
+        local document ID is reached. *Optional*.
     :query string end_key_doc_id: Alias for `endkey_docid` param.
-    :query boolean include_docs: Include the full content of the design
+    :query boolean include_docs: Include the full content of the local
       documents in the return. Default is ``false``.
     :query boolean inclusive_end: Specifies whether the specified end key
       should be included in the result. Default is ``true``.
-    :query string key: Return only design documents that match the specified
+    :query string key: Return only local documents that match the specified
       key. *Optional*.
-    :query string keys: Return only design documents that match the specified
+    :query string keys: Return only local documents that match the specified
       keys. *Optional*.
-    :query number limit: Limit the number of the returned design documents to
+    :query number limit: Limit the number of the returned local documents to
       the specified number. *Optional*.
     :query number skip: Skip this number of records before starting to return
       the results. Default is ``0``.
@@ -96,17 +96,17 @@ A list of the available methods and URL paths are provided below:
       *Optional*.
     :query string start_key: Alias for `startkey` param.
     :query string startkey_docid: Return records starting with the specified
-      design document ID. *Optional*.
+      local document ID. *Optional*.
     :query string start_key_doc_id: Alias for `startkey_docid` param.
     :query boolean update_seq: Response includes an ``update_seq`` value
       indicating which sequence id of the underlying database the view
       reflects. Default is ``false``.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
-    :>json number offset: Offset where the design document list started
+    :>json number offset: Offset where the local document list started
     :>json array rows: Array of view row objects. By default the information
-      returned contains only the design document ID and revision.
-    :>json number total_rows: Number of design documents in the database. Note
+      returned contains only the local document ID and revision.
+    :>json number total_rows: Number of local documents in the database. Note
       that this is not the number of rows returned in the actual query.
     :>json number update_seq: Current update sequence for the database
     :code 200: Request completed successfully
@@ -173,16 +173,14 @@ A list of the available methods and URL paths are provided below:
         }
 
 .. http:post:: /{db}/_local_docs
-    :synopsis: Returns certain rows from the built-in view of all local
-      documents
+    :synopsis: Returns a built-in view of all local (non-replicating) documents
+      in this database
 
-    The ``POST`` to ``_local_docs`` allows to specify multiple keys to be
-    selected from the database. This enables you to request multiple
-    local documents in a single request, in place of multiple
-    :get:`/{db}/_local/{docid}` requests.
+    :method:`POST` `_design_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_design_docs` API but allows for the query string parameters
+    to be supplied as keys in a JSON object in the body of the `POST` request.
 
-    The request body should contain a list of the keys to be returned as an
-    array to a ``keys`` object. For example:
+    **Request**:
 
     .. code-block:: http
 
