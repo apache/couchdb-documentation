@@ -95,20 +95,11 @@
         }
 
 .. http:post:: /{db}/_all_docs
-    :synopsis: Returns certain rows from the built-in view of all documents
+    :synopsis: Returns a built-in view of all documents in this database
 
-    The ``POST`` to ``_all_docs`` allows to specify multiple keys to be
-    selected from the database. This enables you to request multiple
-    documents in a single request, in place of multiple :get:`/{db}/{docid}`
-    requests.
-
-    :param db: Database name
-    :<header Content-Type: :mimetype:`application/json`
-    :<json array keys: Return only documents that match the specified keys.
-      *Optional*
-    :>header Content-Type: - :mimetype:`application/json`
-    :code 200: Request completed successfully
-    :code 404: Requested database not found
+    :method:`POST` `_all_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_all_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
     **Request**:
 
@@ -167,7 +158,7 @@
     database. The information is returned as a JSON structure containing meta
     information about the return structure, including a list of all design
     documents and basic contents, consisting the ID, revision and key. The key
-    is the from the design document's ``_id``.
+    is the design document's ``_id``.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
@@ -278,16 +269,13 @@
         }
 
 .. http:post:: /{db}/_design_docs
-    :synopsis: Returns certain rows from the built-in view of all design
-      documents
+    :synopsis: Returns a built-in view of all design documents in this database
 
-    The ``POST`` to ``_design_docs`` allows to specify multiple keys to be
-    selected from the database. This enables you to request multiple
-    design documents in a single request, in place of multiple
-    :get:`/{db}/{docid}` requests.
+    :method:`POST` `_design_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_design_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
-    The request body should contain a list of the keys to be returned as an
-    array to a ``keys`` object. For example:
+    **Request**:
 
     .. code-block:: http
 
