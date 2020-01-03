@@ -756,7 +756,9 @@ the database performs a full scan of the primary index:
     in production.
 
 Most selector expressions work exactly as you would expect for the given
-operator.
+operator. But it is not always the case: for example, comparison of strings is
+done with ICU and can can give surprising results if you were expecting ASCII
+ordering. See :ref:`views/collation` for more details.
 
 .. _find/sort:
 

@@ -207,7 +207,9 @@ crashes with an increasingly larger interval. The ``history`` list from
           "doc_id": "my_rep_crashing",
           "error_count": 6,
           "id": "cb78391640ed34e9578e638d9bb00e44+create_target",
-          "info": "db_not_found: could not open http://adm:*****@localhost:5984/missing/",
+          "info": {
+               "error": "db_not_found: could not open http://adm:*****@localhost:5984/missing/"
+          },
           "last_updated": "2017-04-05T20:55:10Z",
           "node": "node1@127.0.0.1",
           "source_proxy": null,
@@ -263,7 +265,9 @@ exactly why it failed:
             "doc_id": "my_rep_dup",
             "error_count": 1,
             "id": null,
-            "info": "Replication `a81a78e822837e66df423d54279c15fe+continuous+create_target` specified by document `my_rep_dup` already started, triggered by document `my_rep` from db `_replicator`",
+            "info": {
+                "error": "Replication `a81a78e822837e66df423d54279c15fe+continuous+create_target` specified by document `my_rep_dup` already started, triggered by document `my_rep` from db `_replicator`"
+            },
             "last_updated": "2017-04-05T21:41:51Z",
             "source": "http://myserver.com/foo/",
             "start_time": "2017-04-05T21:41:51Z",
