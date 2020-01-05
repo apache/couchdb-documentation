@@ -27,6 +27,7 @@ Configuration
     auth
     compaction
     indexbuilds
+    ioq
     logging
     replicator
     query-servers

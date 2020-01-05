@@ -1045,6 +1045,9 @@ error.
                     documents and ``_active_tasks`` to get a complete state
                     summary
 
+.. versionchanged:: 3.0.0 In error states the `"info"` field switched
+                    from being a string to being an object
+
 .. http:get:: /_scheduler/docs
     :synopsis: Retrieve information about replication documents from the
                ``_replicator`` database.
@@ -1074,9 +1077,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1210,9 +1214,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1311,9 +1316,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
