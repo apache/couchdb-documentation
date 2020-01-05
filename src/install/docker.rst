@@ -19,13 +19,13 @@ Installation via Docker
 Apache CouchDB provides 'convenience binary' Docker images through
 Docker Hub at ``apache/couchdb``. The following tags are available:
 
-* ``latest``, ``2.1.0``: CouchDB 2.1, single node
-* ``1``, ``1.6``, ``1.6.1``: CouchDB 1.6.1
-* ``1-couchperuser``, ``1.6-couchperuser``, ``1.6.1-couchperuser``: CouchDB
-  1.6.1 with couchperuser plugin
-* ``2.0.0``: CouchDB 2.0, single node
+* ``latest``, ``2``, ``2.3``, ``2.3.1``: CouchDB 2.3.1, single node
+* ``1``, ``1.7``, ``1.7.2``: CouchDB 1.7.2
+* ``1-couchperuser``, ``1.7-couchperuser``, ``1.7.2-couchperuser``: CouchDB
+  1.7.2 with couchperuser plugin
+* ``2.3.0``: CouchDB 2.3.0, single node
 
-These images are built using Debian 8 (jessie), expose CouchDB on port
+These images are built using Debian 9 (stretch), expose CouchDB on port
 ``5984`` of the container, run everything as user ``couchdb``, and support
 use of a Docker volume for data at ``/opt/couchdb/data``.
 

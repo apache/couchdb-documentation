@@ -66,14 +66,11 @@
     :>json string db_name: The name of the database.
     :>json number disk_format_version: The version of the physical format used
       for the data when it is stored on disk.
-    :>json number data_size: *Deprecated.* Use ``sizes.active`` instead.
-    :>json number disk_size: *Deprecated.* Use ``sizes.file`` instead.
     :>json number doc_count: A count of the documents in the specified
       database.
     :>json number doc_del_count: Number of deleted documents
     :>json string instance_start_time: Always ``"0"``. (Returned for legacy
       reasons.)
-    :>json object other: Used by Cloudant. *Deprecated.*
     :>json string purge_seq: An opaque string that describes the purge state
       of the database. Do not rely on this string for counting the number
       of purge operations.
@@ -118,16 +115,11 @@
                 "w": 2
             },
             "compact_running": false,
-            "data_size": 65031503,
             "db_name": "receipts",
             "disk_format_version": 6,
-            "disk_size": 137433211,
             "doc_count": 6146,
             "doc_del_count": 64637,
             "instance_start_time": "0",
-            "other": {
-                "data_size": 66982448
-            },
             "props": {},
             "purge_seq": 0,
             "sizes": {
@@ -320,9 +312,6 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*.
 
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
@@ -435,9 +424,6 @@ To use batch mode, append the ``batch=ok`` query argument to the URL of a
 :post:`/{db}`, :put:`/{db}/{docid}`, or :delete:`/{db}/{docid}` request. The
 CouchDB server will respond with an HTTP :statuscode:`202` response code
 immediately.
-
-Documents in the batch may be manually flushed by using the
-:post:`/{db}/_ensure_full_commit` endpoint.
 
 .. note::
     Creating or updating documents with batch mode doesn't guarantee that all

@@ -397,14 +397,17 @@ Get Source Information
         {
             "committed_update_seq": 61772,
             "compact_running": false,
-            "data_size": 70781613961,
             "db_name": "source",
             "disk_format_version": 6,
-            "disk_size": 79132913799,
             "doc_count": 41961,
             "doc_del_count": 3807,
             "instance_start_time": "0",
             "purge_seq": 0,
+            "sizes": {
+              "active": 70781613961,
+              "disk": 79132913799,
+              "external": 72345632950
+            },
             "update_seq": 61772
         }
 
@@ -434,14 +437,15 @@ Get Target Information
             "compact_running": false,
             "db_name": "target",
             "disk_format_version": 5,
-            "disk_size": 77001455,
             "doc_count": 1832,
             "doc_del_count": 1,
             "instance_start_time": "0",
-            "other": {
-                "data_size": 50829452
-            },
             "purge_seq": 0,
+            "sizes": {
+              "active": 50829452,
+              "disk": 77001455,
+              "external": 60326450
+            },
             "update_seq": "1841-g1AAAADveJzLYWBgYMlgTmGQT0lKzi9KdUhJMtbLSs1LLUst0k"
         }
 
@@ -1299,10 +1303,9 @@ with the following mandatory fields:
   Documents with the specified Revision (field ``_rev``) value as-is without
   generating a new revision. Always ``false``
 
-The request also MAY contain :header:`X-Couch-Full-Commit` that controls
-CouchDB :config:option:`commit policy <couchdb/delayed_commits>`. Other Peers
-MAY ignore this header or use it to control similar local
-feature.
+The request also MAY contain :header:`X-Couch-Full-Commit` that used to control
+CouchDB <3.0 behavior when delayed commits were enabled. Other Peers MAY ignore
+this header or use it to control similar local feature.
 
     **Request**:
 

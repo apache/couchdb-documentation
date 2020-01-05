@@ -50,25 +50,6 @@ Base CouchDB Options
             [couchdb]
             default_security = admin_local
 
-    .. config:option:: delayed_commits :: Delayed commits
-
-        When this config value is ``false`` the CouchDB provides a guarantee
-        that `fsync` will be called before returning a :http:statuscode:`201`
-        response on each document save. Setting this config value to ``true``
-        may improve performance, at cost of some durability. For production use
-        disabling this is strongly recommended::
-
-            [couchdb]
-            delayed_commits = false
-
-        .. warning::
-            Delayed commits are a feature of CouchDB that allows it to achieve
-            better write performance for some workloads while sacrificing a
-            small amount of durability. The setting causes CouchDB to wait up
-            to a full second before committing new data after an update. If the
-            server crashes before the header is written then any writes since
-            the last commit are lost.
-
     .. config:option:: file_compression :: Compression method for documents
 
         .. versionchanged:: 1.2 Added `Google Snappy`_ compression algorithm.
@@ -89,15 +70,6 @@ Base CouchDB Options
             file_compression = snappy
 
         .. _Google Snappy: http://code.google.com/p/snappy/
-
-    .. config:option:: fsync_options :: Fsync options
-
-        Specifies when to make `fsync` calls. `fsync` makes sure that the
-        contents of any file system buffers kept by the operating system are
-        flushed to disk. There is generally no need to modify this parameter. ::
-
-            [couchdb]
-            fsync_options = [before_header, after_header, on_file_open]
 
     .. config:option:: max_dbs_open :: Limit of simultaneously opened databases
 

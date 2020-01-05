@@ -26,20 +26,19 @@ to install CouchDB is to use the convenience binary packages:
 
 * CentOS/RHEL 6
 * CentOS/RHEL 7
-* Debian 8 (jessie)
 * Debian 9 (stretch)
-* Ubuntu 14.04 (trusty)
+* Debian 10 (buster)
 * Ubuntu 16.04 (xenial)
 * Ubuntu 18.04 (bionic)
 
-The RedHat-style rpm packages and Debian-style deb packages will install
-CouchDB at ``/opt/couchdb`` and ensure CouchDB is run at system startup by the
-appropriate init subsystem (SysV-style initd, upstart, systemd).
+These RedHat-style rpm packages and Debian-style deb packages will install CouchDB at
+``/opt/couchdb`` and ensure CouchDB is run at system startup by the appropriate init
+subsystem (SysV-style initd or systemd).
 
-The Debian-style deb packages *also* pre-configure CouchDB as a standalone or
-clustered node, prompt for the address to which it will bind, and a password
-for the admin user. Responses to these prompts may be pre-seeded using standard
-debconf tools. Further details are in the `README.Debian`_ file.
+The Debian-style deb packages *also* pre-configure CouchDB as a standalone or clustered
+node, prompt for the address to which it will bind, and a password for the admin user.
+Responses to these prompts may be pre-seeded using standard ``debconf`` tools. Further
+details are in the `README.Debian`_ file.
 
 .. _README.Debian: https://github.com/apache/couchdb-pkg/blob/master/debian/README.Debian
 
@@ -49,6 +48,32 @@ disappear or become unreliable.
 
 Enabling the Apache CouchDB package repository
 ----------------------------------------------
+
+.. highlight:: sh
+
+**Debian 9 (stretch)**: Run the following commands::
+
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ echo "deb https://apache.bintray.com/couchdb-deb stretch main" \
+        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+
+**Debian 10 (buster)**: Run the following commands::
+
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ echo "deb https://apache.bintray.com/couchdb-deb buster main" \
+        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+
+**Ubuntu 16.04 (Xenial)**: Run the following commands::
+
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ echo "deb https://apache.bintray.com/couchdb-deb xenial main" \
+        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+
+**Ubuntu 18.04 (Bionic)**: Run the following commands::
+
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
+        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
 .. highlight:: ini
 
@@ -61,7 +86,16 @@ Enabling the Apache CouchDB package repository
     repo_gpgcheck=0
     enabled=1
 
-**RedHat/RHEL**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``. Be sure to replace the ``7`` below with ``6`` if you are on a EL6 distribution::
+**RedHat 6**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
+
+    [bintray--apache-couchdb-rpm]
+    name=bintray--apache-couchdb-rpm
+    baseurl=http://apache.bintray.com/couchdb-rpm/el6/$basearch/
+    gpgcheck=0
+    repo_gpgcheck=0
+    enabled=1
+
+**RedHat 7**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
 
     [bintray--apache-couchdb-rpm]
     name=bintray--apache-couchdb-rpm
@@ -70,47 +104,32 @@ Enabling the Apache CouchDB package repository
     repo_gpgcheck=0
     enabled=1
 
-.. highlight:: sh
-
-**Debian/Ubuntu**: Run the command::
-
-    $ echo "deb https://apache.bintray.com/couchdb-deb {distribution} main" \
-        | sudo tee -a /etc/apt/sources.list
-
-and replace ``{distribution}`` with the appropriate choice for your OS
-version:
-
-* Debian 8: ``jessie``
-* Debian 9: ``stretch``
-* Ubuntu 14.04: ``trusty``
-* Ubuntu 16.04: ``xenial``
-* Ubuntu 18.04: ``bionic``
-
 Installing the Apache CouchDB packages
 --------------------------------------
 
 .. highlight:: sh
 
-**RedHat/CentOS**: Run the command::
+**Debian/Ubuntu**: First, install the CouchDB repository key::
 
-    $ sudo yum -y install epel-release && yum install couchdb
-
-**Your installation is not complete. Be sure to complete the**
-:ref:`Setup <setup>` **steps for a single node or clustered installation.**
-
-**Debian/Ubuntu**: First, install the repository key::
-
-    $ curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc \
-        | sudo apt-key add -
+    $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
+      8756C4F765C9AC3CB6B85D62379CE192D401AB61
 
 Then update the repository cache and install the package::
 
-    $ sudo apt-get update && sudo apt-get install couchdb
+    $ sudo apt update
+    $ sudo apt install -y couchdb
 
-Debian/Ubuntu installs from binaries will be pre-configured for single node or
+Debian/Ubuntu installs from binaries can be pre-configured for single node or
 clustered installations. For clusters, multiple nodes will still need to be
 joined together and configured consistently across all machines; **follow the**
 :ref:`Cluster Setup <setup/cluster>` **walkthrough** to complete the process.
+
+**RedHat/CentOS**: Run the command::
+
+    $ sudo yum -y install epel-release && sudo yum -y install couchdb
+
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 Relax! CouchDB is installed and running.
 

@@ -278,14 +278,9 @@
                 "active": 1162451555
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 1713103872
-              },
               "doc_del_count": 0,
               "doc_count": 52224,
-              "disk_size": 1178613587,
               "disk_format_version": 6,
-              "data_size": 1162451555,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -307,14 +302,9 @@
                 "active": 67475
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 2339
-              },
               "doc_del_count": 0,
               "doc_count": 11,
-              "disk_size": 3872387,
               "disk_format_version": 6,
-              "data_size": 67475,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -606,8 +596,12 @@
       Required administrator's privileges on target server.
     :<json array doc_ids: Array of document IDs to be synchronized
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
-    :<json string proxy: Address of a proxy server through which replication
-      should occur (protocol can be "http" or "socks5")
+    :<json string source_proxy: Address of a proxy server through which
+      replication from the source should occur (protocol can be "http" or
+      "socks5")
+    :<json string target_proxy: Address of a proxy server through which
+      replication to the target should occur (protocol can be "http" or
+      "socks5")
     :<json string/object source: Source database name or URL or an object
       which contains the full URL of the source database with additional
       parameters like headers. Eg: 'source_db_name' or
@@ -985,6 +979,17 @@ error.
                         }
                     ],
                     "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
+                    "info": {
+                        "changes_pending": 0,
+                        "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                        "doc_write_failures": 0,
+                        "docs_read": 113,
+                        "docs_written": 113,
+                        "missing_revisions_found": 113,
+                        "revisions_checked": 113,
+                        "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                        "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+                    },
                     "node": "node1@127.0.0.1",
                     "pid": "<0.1850.0>",
                     "source": "http://myserver.com/foo",
@@ -1006,6 +1011,17 @@ error.
                         }
                     ],
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+                    "info": {
+                        "changes_pending": null,
+                        "checkpointed_source_seq": 0,
+                        "doc_write_failures": 0,
+                        "docs_read": 12,
+                        "docs_written": 12,
+                        "missing_revisions_found": 12,
+                        "revisions_checked": 12,
+                        "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
+                        "through_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg"
+                    },
                     "node": "node2@127.0.0.1",
                     "pid": "<0.1757.0>",
                     "source": "http://myserver.com/foo",
@@ -1028,6 +1044,9 @@ error.
                     document-based replications. Previously needed to poll both
                     documents and ``_active_tasks`` to get a complete state
                     summary
+
+.. versionchanged:: 3.0.0 In error states the `"info"` field switched
+                    from being a string to being an object
 
 .. http:get:: /_scheduler/docs
     :synopsis: Retrieve information about replication documents from the
@@ -1058,9 +1077,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1112,10 +1132,21 @@ error.
                     "doc_id": "cdyno-0000001-0000002",
                     "error_count": 0,
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": 15,
+                        "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                        "doc_write_failures": 0,
+                        "docs_read": 67,
+                        "docs_written": 67,
+                        "missing_revisions_found": 67,
+                        "revisions_checked": 67,
+                        "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                        "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1126,10 +1157,21 @@ error.
                     "doc_id": "cdyno-0000001-0000003",
                     "error_count": 0,
                     "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": null,
+                        "checkpointed_source_seq": 0,
+                        "doc_write_failures": 0,
+                        "docs_read": 12,
+                        "docs_written": 12,
+                        "missing_revisions_found": 12,
+                        "revisions_checked": 12,
+                        "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
+                        "through_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node1@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1172,9 +1214,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1226,10 +1269,21 @@ error.
                     "doc_id": "cdyno-0000001-0000002",
                     "error_count": 0,
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": 0,
+                        "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                        "doc_write_failures": 0,
+                        "docs_read": 67,
+                        "docs_written": 67,
+                        "missing_revisions_found": 67,
+                        "revisions_checked": 67,
+                        "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                        "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1262,9 +1316,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1314,10 +1369,21 @@ error.
             "doc_id": "cdyno-0000001-0000002",
             "error_count": 0,
             "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-            "info": null,
+            "info": {
+                "changes_pending": 0,
+                "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                "doc_write_failures": 0,
+                "docs_read": 67,
+                "docs_written": 67,
+                "missing_revisions_found": 67,
+                "revisions_checked": 67,
+                "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+            },
             "last_updated": "2017-04-29T05:01:37Z",
             "node": "node2@127.0.0.1",
-            "proxy": null,
+            "source_proxy": null,
+            "target_proxy": null,
             "source": "http://myserver.com/foo",
             "start_time": "2017-04-29T05:01:37Z",
             "state": "running",
