@@ -30,5 +30,6 @@ from your database.
 .. toctree::
     common
     views
+    search
     render
     rewrites

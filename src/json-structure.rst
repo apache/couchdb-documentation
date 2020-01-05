@@ -261,8 +261,11 @@ Replication Settings
 | filter (optional)              | name of the filter function in the form of  |
 |                                | ``ddoc/myfilter``.                          |
 +--------------------------------+---------------------------------------------+
-| proxy (optional)               | Address of a proxy server through which     |
-|                                | replication should occur.                   |
+| source_proxy (optional)        | Address of a proxy server through which     |
+|                                | replication from the source should occur.   |
++--------------------------------+---------------------------------------------+
+| target_proxy (optional)        | Address of a proxy server through which     |
+|                                | replication to the target should occur.     |
 +--------------------------------+---------------------------------------------+
 | query_params (optional)        | Query parameter that are passed to the      |
 |                                | filter function; the value should be a      |
@@ -397,14 +400,17 @@ Request object
         "info": {
             "committed_update_seq": 2701412,
             "compact_running": false,
-            "data_size": 7580843252,
             "db_name": "mailbox",
             "disk_format_version": 6,
-            "disk_size": 14325313673,
             "doc_count": 2262757,
             "doc_del_count": 560,
             "instance_start_time": "1347601025628957",
             "purge_seq": 0,
+            "sizes": {
+              "active": 7580843252,
+              "disk": 14325313673,
+              "external": 7803423459
+            },
             "update_seq": 2701412
         },
         "method": "GET",

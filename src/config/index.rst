@@ -12,9 +12,9 @@
 
 .. _config:
 
-===================
-Configuring CouchDB
-===================
+=============
+Configuration
+=============
 
 .. toctree::
     :maxdepth: 2
@@ -26,8 +26,11 @@ Configuring CouchDB
     http
     auth
     compaction
+    indexbuilds
+    ioq
     logging
     replicator
     query-servers
     services
     misc
+    resharding

@@ -304,6 +304,24 @@ Because CouchDB does not make use of MD5 hashes for cryptographic purposes, this
 workaround does not defeat the purpose of "FIPS mode," provided that the system
 owner is aware of and consents to its use.
 
+Debugging startup
+-----------------
+If you've compiled from scratch and are having problems getting CouchDB to even
+start up, you may want to see more detail. Start by enabling logging at the debug
+level:
+
+.. code-block:: ini
+
+    [log]
+    level = debug
+
+You can then pass the ``-init_debug +W i +v +V -emu_args`` flags in the ``ERL_FLAGS``
+environment variable to turn on additional debugging information that CouchDB
+developers can use to help you.
+
+Then, reach out to the CouchDB development team using the links provided on the
+`CouchDB home page <https://couchdb.apache.org/>`_ for assistance.
+
 macOS Known Issues
 ====================
 undefined error, exit_status 134

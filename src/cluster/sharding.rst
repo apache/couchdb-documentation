@@ -16,7 +16,7 @@
 Shard Management
 ================
 
-.. _cluster/sharding/scaling-out:
+.. _cluster/sharding/intro:
 
 Introduction
 ------------
@@ -105,13 +105,13 @@ have responded:
 
 .. code-block:: bash
 
-    $ curl "$COUCH_URL:5984/<doc>?r=2"
+    $ curl "$COUCH_URL:5984/<db>/<doc>?r=2"
 
 Here is a similar example for writing a document:
 
 .. code-block:: bash
 
-    $ curl -X PUT "$COUCH_URL:5984/<doc>?w=2" -d '{...}'
+    $ curl -X PUT "$COUCH_URL:5984/<db>/<doc>?w=2" -d '{...}'
 
 Setting ``r`` or ``w`` to be equal to ``n`` (the number of replicas)
 means you will only receive a response once all nodes with relevant
@@ -121,10 +121,135 @@ guarantee `ACIDic consistency
 ``w`` to 1 means you will receive a response after only one relevant
 node has responded.
 
+.. _cluster/sharding/examine:
+
+Examining database shards
+-------------------------
+
+There are a few API endpoints that help you understand how a database
+is sharded. Let's start by making a new database on a cluster, and putting
+a couple of documents into it:
+
+.. code-block:: bash
+
+    $ curl -X PUT $COUCH_URL:5984/mydb
+    {"ok":true}
+    $ curl -X PUT $COUCH_URL:5984/mydb/joan -d '{"loves":"cats"}'
+    {"ok":true,"id":"joan","rev":"1-cc240d66a894a7ee7ad3160e69f9051f"}
+    $ curl -X PUT $COUCH_URL:5984/mydb/robert -d '{"loves":"dogs"}'
+    {"ok":true,"id":"robert","rev":"1-4032b428c7574a85bc04f1f271be446e"}
+
+First, the top level :ref:`api/db` endpoint will tell you what the sharding parameters
+are for your database:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/db | jq .
+    {
+      "db_name": "mydb",
+    ...
+      "cluster": {
+        "q": 8,
+        "n": 3,
+        "w": 2,
+        "r": 2
+      },
+    ...
+    }
+
+So we know this database was created with 8 shards (``q=8``), and each
+shard has 3 replicas (``n=3``) for a total of 24 shard replicas across
+the nodes in the cluster.
+
+Now, let's see how those shard replicas are placed on the cluster with
+the :ref:`api/db/shards` endpoint:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/mydb/_shards | jq .
+    {
+      "shards": {
+        "00000000-1fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "20000000-3fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "40000000-5fffffff": [
+          "node2@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "60000000-7fffffff": [
+          "node1@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "80000000-9fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "a0000000-bfffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "c0000000-dfffffff": [
+          "node2@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ],
+        "e0000000-ffffffff": [
+          "node1@127.0.0.1",
+          "node3@127.0.0.1",
+          "node4@127.0.0.1"
+        ]
+      }
+    }
+
+Now we see that there are actually 4 nodes in this cluster, and CouchDB
+has spread those 24 shard replicas evenly across all 4 nodes.
+
+We can also see exactly which shard contains a given document with
+the :ref:`api/db/shards/doc` endpoint:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/mydb/_shards/joan | jq .
+    {
+      "range": "e0000000-ffffffff",
+      "nodes": [
+        "node1@127.0.0.1",
+        "node3@127.0.0.1",
+        "node4@127.0.0.1"
+      ]
+    }
+    $ curl -s $COUCH_URL:5984/mydb/_shards/robert | jq .
+    {
+      "range": "60000000-7fffffff",
+      "nodes": [
+        "node1@127.0.0.1",
+        "node3@127.0.0.1",
+        "node4@127.0.0.1"
+      ]
+    }
+
+CouchDB shows us the specific shard into which each of the two sample
+documents is mapped.
+
 .. _cluster/sharding/move:
 
 Moving a shard
 --------------
+
+When moving shards or performing other shard manipulations on the cluster, it
+is advisable to stop all resharding jobs on the cluster. See
+:ref:`cluster/sharding/stop_resharding` for more details.
 
 This section describes how to manually place and replace shards. These
 activities are critical steps when you determine your cluster is too big
@@ -249,7 +374,7 @@ up-to-date before allowing it to participate in end-user requests.
 
 To enable maintenance mode:
 
-.. code-block::bash
+.. code-block:: bash
 
     $ curl -X PUT -H "Content-type: application/json" \
         $COUCH_URL:5984/_node/<nodename>/_config/couchdb/maintenance_mode \
@@ -258,7 +383,7 @@ To enable maintenance mode:
 Then, verify that the node is in maintenance mode by performing a ``GET
 /_up`` on that node's individual endpoint:
 
-.. code-block::bash
+.. code-block:: bash
 
     $ curl -v $COUCH_URL/_up
     …
@@ -401,23 +526,46 @@ Now you can ``PUT`` this new metadata:
 
     $ curl -X PUT http://localhost:5986/_dbs/{name} -d '{...}'
 
+.. _cluster/sharding/sync:
+
+Forcing synchronization of the shard(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4.0
+
+Whether you pre-copied shards to your new node or not, you can force
+CouchDB to synchronize all replicas of all shards in a database with the
+:ref:`api/db/sync_shards` endpoint:
+
+.. code-block:: bash
+
+    $ curl -X POST $COUCH_URL:5984/{dbname}/_sync_shards
+    {"ok":true}
+
+This starts the synchronization process. Note that this will put
+additional load onto your cluster, which may affect performance.
+
+It is also possible to force synchronization on a per-shard basis by
+writing to a document that is stored within that shard.
+
+.. note::
+
+    Admins may want to bump their ``[mem3] sync_concurrency`` value to a
+    larger figure for the duration of the shards sync.
+
 .. _cluster/sharding/verify:
 
 Monitor internal replication to ensure up-to-date shard(s)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After you complete the previous step, as soon as CouchDB receives a
-write request for a shard on the target node, CouchDB will check if the
-target node's shard(s) are up to date. If it finds they are not up to
-date, it will trigger an internal replication job to complete this task.
-You can observe this happening by triggering a write to the database
-(update a document, or create a new one), while monitoring the
-``/_node/<nodename>/_system`` endpoint, which includes the
+After you complete the previous step, CouchDB will have started
+synchronizing the shards. You can observe this happening by monitoring
+the ``/_node/<nodename>/_system`` endpoint, which includes the
 ``internal_replication_jobs`` metric.
 
-Once this metric has returned to the baseline from before you wrote the
-document, or is ``0``, the shard replica is ready to serve data and we
-can bring the node out of maintenance mode.
+Once this metric has returned to the baseline from before you started
+the shard sync, or is ``0``, the shard replica is ready to serve data
+and we can bring the node out of maintenance mode.
 
 .. _cluster/sharding/mm-2:
 
@@ -453,7 +601,7 @@ Remove the shard and secondary index files from the source node
 Finally, you can remove the source shard replica by deleting its file from the
 command line on the source host, along with any view shard replicas:
 
-.. code-block::bash
+.. code-block:: bash
 
     $ rm <couch-dir>/data/shards/<range>/<dbname>.<datecode>.couch
     $ rm -r <couch-dir>/data/.shards/<range>/<dbname>.<datecode>*
@@ -467,6 +615,11 @@ Specifying database placement
 
 You can configure CouchDB to put shard replicas on certain nodes at
 database creation time using placement rules.
+
+.. warning::
+
+    Use of the ``placement`` option will **override** the ``n`` option,
+    both in the ``.ini`` file as well as when specified in a ``URL``.
 
 First, each node must be labeled with a zone attribute. This defines
 which zone each node is in. You do this by editing the node’s document
@@ -509,30 +662,215 @@ when the database is created, using the same syntax as the ini file:
 
     curl -X PUT $COUCH_URL:5984/<dbname>?zone=<zone>
 
+The ``placement`` argument may also be specified. Note that this *will*
+override the logic that determines the number of created replicas!
+
 Note that you can also use this system to ensure certain nodes in the
 cluster do not host any replicas for newly created databases, by giving
 them a zone attribute that does not appear in the ``[cluster]``
 placement string.
 
-Resharding a database to a new q value
---------------------------------------
+.. _cluster/sharding/splitting_shards:
 
-The ``q`` value for a database can only be set when the database is
-created, precluding live resharding. Instead, to reshard a database, it
-must be regenerated. Here are the steps:
+Splitting Shards
+----------------
 
-1. Create a temporary database with the desired shard settings, by
+The :ref:`api/server/reshard` is an HTTP API for shard manipulation. Currently
+it only supports shard splitting. To perform shard merging, refer to the manual
+process outlined in the :ref:`cluster/sharding/merging_shards` section.
+
+The main way to interact with :ref:`api/server/reshard` is to create resharding
+jobs, monitor those jobs, wait until they complete, remove them, post new jobs,
+and so on. What follows are a few steps one might take to use this API to split
+shards.
+
+At first, it's a good idea to call ``GET /_reshard`` to see a summary of
+resharding on the cluster.
+
+.. code-block:: bash
+
+   $ curl -s $COUCH_URL:5984/_reshard | jq .
+   {
+     "state": "running",
+     "state_reason": null,
+     "completed": 3,
+     "failed": 0,
+     "running": 0,
+     "stopped": 0,
+     "total": 3
+   }
+
+Two important things to pay attention to are the total number of jobs and the state.
+
+The ``state`` field indicates the state of resharding on the cluster. Normally
+it would be ``running``, however, another user could have disabled resharding
+temporarily. Then, the state would be ``stopped`` and hopefully, there would be
+a reason or a comment in the value of the ``state_reason`` field. See
+:ref:`cluster/sharding/stop_resharding` for more details.
+
+The ``total`` number of jobs is important to keep an eye on because there is a
+maximum number of resharding jobs per node, and creating new jobs after the
+limit has been reached will result in an error. Before staring new jobs it's a
+good idea to remove already completed jobs. See :ref:`reshard configuration
+section <config/reshard>` for the default value of ``max_jobs`` parameter and
+how to adjust if needed.
+
+For example, if the jobs have completed, to remove all the jobs run:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/_reshard/jobs | jq -r '.jobs[].id' |\
+      while read -r jobid; do\
+          curl -s -XDELETE $COUCH_URL:5984/_reshard/jobs/$jobid\
+      done
+
+Then it's a good idea to see what the db shard map looks like.
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/db1/_shards | jq '.'
+    {
+      "shards": {
+        "00000000-7fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "80000000-ffffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ]
+      }
+    }
+
+In this example we'll split all the copies of the ``00000000-7fffffff`` range.
+The API allows a combination of parameters such as: splitting all
+the ranges on all the nodes, all the ranges on just one node, or one particular
+range on one particular node. These are specified via the ``db``,
+``node`` and ``range`` job parameters.
+
+To split all the copies of ``00000000-7fffffff`` we issue a request like this:
+
+.. code-block:: bash
+
+    $ curl -s -H "Content-type: application/json" -XPOST $COUCH_URL:5984/_reshard/jobs \
+      -d '{"type": "split", "db":"db1", "range":"00000000-7fffffff"}' | jq '.'
+    [
+      {
+        "ok": true,
+        "id": "001-ef512cfb502a1c6079fe17e9dfd5d6a2befcc694a146de468b1ba5339ba1d134",
+        "node": "node1@127.0.0.1",
+        "shard": "shards/00000000-7fffffff/db1.1554242778"
+      },
+      {
+        "ok": true,
+        "id": "001-cec63704a7b33c6da8263211db9a5c74a1cb585d1b1a24eb946483e2075739ca",
+        "node": "node2@127.0.0.1",
+        "shard": "shards/00000000-7fffffff/db1.1554242778"
+      },
+      {
+        "ok": true,
+        "id": "001-fc72090c006d9b059d4acd99e3be9bb73e986d60ca3edede3cb74cc01ccd1456",
+        "node": "node3@127.0.0.1",
+        "shard": "shards/00000000-7fffffff/db1.1554242778"
+      }
+    ]
+
+The request returned three jobs, one job for each of the three copies.
+
+To check progress of these jobs use ``GET /_reshard/jobs`` or ``GET
+/_reshard/jobs/{jobid}``.
+
+Eventually, these jobs should complete and the shard map should look like this:
+
+.. code-block:: bash
+
+    $ curl -s $COUCH_URL:5984/db1/_shards | jq '.'
+    {
+      "shards": {
+        "00000000-3fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "40000000-7fffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ],
+        "80000000-ffffffff": [
+          "node1@127.0.0.1",
+          "node2@127.0.0.1",
+          "node3@127.0.0.1"
+        ]
+      }
+    }
+
+.. _cluster/sharding/stop_resharding:
+
+Stopping Resharding Jobs
+------------------------
+
+Resharding at the cluster level could be stopped and then restarted. This can
+be helpful to allow external tools which manipulate the shard map to avoid
+interfering with resharding jobs. To stop all resharding jobs on a cluster
+issue a ``PUT`` to ``/_reshard/state`` endpoint with the ``"state": "stopped"``
+key and value. You can also specify an optional note or reason for stopping.
+
+For example:
+
+.. code-block:: bash
+
+    $ curl -s -H "Content-type: application/json" \
+      -XPUT $COUCH_URL:5984/_reshard/state \
+      -d '{"state": "stopped", "reason":"Moving some shards"}'
+    {"ok": true}
+
+This state will then be reflected in the global summary:
+
+.. code-block:: bash
+
+   $ curl -s $COUCH_URL:5984/_reshard | jq .
+   {
+     "state": "stopped",
+     "state_reason": "Moving some shards",
+     "completed": 74,
+     "failed": 0,
+     "running": 0,
+     "stopped": 0,
+     "total": 74
+   }
+
+To restart, issue a ``PUT`` request like above with ``running`` as the state.
+That should resume all the shard splitting jobs since their last checkpoint.
+
+See the API reference for more details: :ref:`api/server/reshard`.
+
+.. _cluster/sharding/merging_shards:
+
+Merging Shards
+--------------
+
+The ``q`` value for a database can be set when the database is created or it
+can be increased later by splitting some of the shards
+:ref:`cluster/sharding/splitting_shards`. In order to decrease ``q`` and merge
+some shards together, the database must be regenerated. Here are the steps:
+
+1. If there are running shard splitting jobs on the cluster, stop them via the
+   HTTP API :ref:`cluster/sharding/stop_resharding`.
+2. Create a temporary database with the desired shard settings, by
    specifying the q value as a query parameter during the PUT
    operation.
-2. Stop clients accessing the database.
-3. Replicate the primary database to the temporary one. Multiple
+3. Stop clients accessing the database.
+4. Replicate the primary database to the temporary one. Multiple
    replications may be required if the primary database is under
    active use.
-4. Delete the primary database. **Make sure nobody is using it!**
-5. Recreate the primary database with the desired shard settings.
-6. Clients can now access the database again.
-7. Replicate the temporary back to the primary.
-8. Delete the temporary database.
+5. Delete the primary database. **Make sure nobody is using it!**
+6. Recreate the primary database with the desired shard settings.
+7. Clients can now access the database again.
+8. Replicate the temporary back to the primary.
+9. Delete the temporary database.
 
 Once all steps have completed, the database can be used again. The
 cluster will create and distribute its shards according to placement

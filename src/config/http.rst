@@ -86,7 +86,7 @@ HTTP Server Options
             authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
         - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
-        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
+        - ``{chttpd_auth, proxy_authentication_handler}``: used for Proxy auth;
         - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
         - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
           Everlasting `Admin Party`!
@@ -568,6 +568,14 @@ Cross-Origin Resource Sharing
             [cors]
             methods = GET,POST
 
+    .. config:option:: max_age
+
+        Sets the ``Access-Control-Max-Age`` header in seconds. Use it to
+        avoid repeated ``OPTIONS`` requests.
+
+            [cors]
+            max_age = 3600
+
     .. seealso::
         Original JIRA `implementation ticket <https://issues.apache.org/jira/browse/COUCHDB-431>`_
 
@@ -605,6 +613,10 @@ with the vhost name prefixed by ``cors:``. Example case for the vhost
     headers = X-CouchDB-Header
     ; List of accepted methods
     methods = HEAD, GET
+
+A video from 2010 on vhost and rewrite configuration `is available
+<https://vimeo.com/20773112>`_, but is not guaranteed to match current syntax
+or behaviour.
 
 .. _config/vhosts:
 

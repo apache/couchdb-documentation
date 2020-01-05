@@ -27,6 +27,10 @@
     data.
 
     :param db: Database name
+    :<header Content-Type: :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -91,19 +95,11 @@
         }
 
 .. http:post:: /{db}/_all_docs
-    :synopsis: Returns certain rows from the built-in view of all documents
+    :synopsis: Returns a built-in view of all documents in this database
 
-    The ``POST`` to ``_all_docs`` allows to specify multiple keys to be
-    selected from the database. This enables you to request multiple
-    documents in a single request, in place of multiple :get:`/{db}/{docid}`
-    requests.
-
-    :param db: Database name
-    :<header Content-Type: :mimetype:`application/json`
-    :<json array keys: Return only documents that match the specified keys.
-      *Optional*
-    :>header Content-Type: - :mimetype:`application/json`
-    :code 200: Request completed successfully
+    :method:`POST` `_all_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_all_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
     **Request**:
 
@@ -162,7 +158,7 @@
     database. The information is returned as a JSON structure containing meta
     information about the return structure, including a list of all design
     documents and basic contents, consisting the ID, revision and key. The key
-    is the from the design document's ``_id``.
+    is the design document's ``_id``.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
@@ -208,6 +204,7 @@
       that this is not the number of rows returned in the actual query.
     :>json number update_seq: Current update sequence for the database
     :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -272,16 +269,13 @@
         }
 
 .. http:post:: /{db}/_design_docs
-    :synopsis: Returns certain rows from the built-in view of all design
-      documents
+    :synopsis: Returns a built-in view of all design documents in this database
 
-    The ``POST`` to ``_design_docs`` allows to specify multiple keys to be
-    selected from the database. This enables you to request multiple
-    design documents in a single request, in place of multiple
-    :get:`/{db}/{docid}` requests.
+    :method:`POST` `_design_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_design_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
-    The request body should contain a list of the keys to be returned as an
-    array to a ``keys`` object. For example:
+    **Request**:
 
     .. code-block:: http
 
@@ -471,13 +465,19 @@ Sending multiple queries to a database
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`multipart/related`
+                     - :mimetype:`multipart/mixed`
     :<header Content-Type: :mimetype:`application/json`
     :query boolean revs: Give the revisions history
-    :<json array docs: List of document objects, with ``id``, and optionnaly
+    :<json array docs: List of document objects, with ``id``, and optionally
       ``rev`` and ``atts_since``
     :>header Content-Type: - :mimetype:`application/json`
-    :>json object results: the documents, with the additionnal ``_revisions``
-      property that lists the parent revisions if ``revs=true``
+    :>json object results: an array of results for each requested document/rev
+      pair. ``id`` key lists the requested document ID, ``docs`` contains a
+      single-item array of objects, each of which has either an ``error`` key and
+      value describing the error, or ``ok`` key and associated value of the
+      requested document, with the additional ``_revisions`` property that lists
+      the parent revisions if ``revs=true``.
     :code 200: Request completed successfully
     :code 400: The request provided invalid JSON data or invalid query parameter
     :code 401: Read permission required
@@ -506,6 +506,9 @@ Sending multiple queries to a database
                 {
                     "id": "bar",
                 }
+                {
+                    "id": "baz",
+                }
             ]
         }
 
@@ -526,7 +529,7 @@ Sending multiple queries to a database
               "docs": [
                 {
                   "ok": {
-                    "_id": "bbb",
+                    "_id": "foo",
                     "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
                     "value": "this is foo",
                     "_revisions": {
@@ -547,7 +550,7 @@ Sending multiple queries to a database
               "docs": [
                 {
                   "ok": {
-                    "_id": "bbb",
+                    "_id": "foo",
                     "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
                     "value": "this is the first revision of foo",
                     "_revisions": {
@@ -575,6 +578,19 @@ Sending multiple queries to a database
                         "309651b95df56d52658650fb64257b97"
                       ]
                     }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "baz",
+              "docs": [
+                {
+                  "error": {
+                    "id": "baz",
+                    "rev": "undefined",
+                    "error": "not_found",
+                    "reason": "missing"
                   }
                 }
               ]
@@ -609,9 +625,7 @@ Sending multiple queries to a database
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
+
     :<json array docs: List of documents objects
     :<json boolean new_edits: If ``false``, prevents the database from
       assigning them new revision IDs. Default is ``true``. *Optional*
@@ -624,8 +638,7 @@ Sending multiple queries to a database
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
-    :code 417: Occurs when at least one document was rejected by a
-     :ref:`validation function <vdufun>`
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -933,16 +946,17 @@ following type:
 
    .. code-block:: http
 
-       HTTP/1.1 417 Expectation Failed
+       HTTP/1.1 201 Created
        Cache-Control: must-revalidate
-       Content-Length: 120
+       Content-Length: 80
        Content-Type: application/json
        Date: Sat, 26 Oct 2013 00:05:17 GMT
        Server: CouchDB (Erlang OTP)
 
-       {
-           "error": "forbidden",
-           "id": "LambStew",
-           "reason": "invalid recipe ingredient",
-           "rev": "1-34c318924a8f327223eed702ddfdc66d"
-       }
+       [
+           {
+               "id": "LambStew",
+               "error": "forbidden",
+               "reason": "invalid recipe ingredient"
+           }
+       ]

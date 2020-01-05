@@ -38,4 +38,5 @@ This reference is structured according to the URL structure, as below.
     database/index
     document/index
     ddoc/index
+    partitioned-dbs
     local

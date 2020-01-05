@@ -71,7 +71,7 @@ all nodes are connected to all other nodes, in a mesh network configuration.
 Every Erlang application running on that machine (such as CouchDB) then uses
 automatically assigned ports for communciation with other nodes. Yes, this
 means random ports. This will obviously not work with a firewall, but it is
-possible to force an Erlang application to use a specific port rage.
+possible to force an Erlang application to use a specific port range.
 
 This documentation will use the range TCP ``9100-9200``, but this range is
 unnecessarily broad. If you only have a single Erlang application running on a
@@ -86,7 +86,7 @@ Configure and Test the Communication with Erlang
 Make CouchDB use correct IP|FQDN and the open ports
 ----------------------------------------------------
 
-In file ``etc/vm.args`` change the line ``-name couchdb@127.0.0.1`` to
+In file ``etc/vm.args`` change the line ``-name couchdb@127.0.0.1`` to
 ``-name couchdb@<reachable-ip-address|fully-qualified-domain-name>`` which defines
 the name of the node. Each node must have an identifier that allows remote
 systems to talk to it. The node name is of the form
@@ -101,6 +101,12 @@ can access this node -- either the node's fully qualified domain name (FQDN) or
 the node's IP address. The FQDN is preferred so that you can renumber the node's
 IP address without disruption to the cluster. (This is common in cloud-hosted
 environments.)
+
+.. warning::
+
+    Tricks with ``/etc/hosts`` and ``libresolv`` don't work with Erlang.
+    Either properly set up DNS and use fully-qualified domain names, or
+    use IP addresses. DNS and FQDNs are preferred.
 
 Open ``etc/vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
 and ``-kernel inet_dist_listen_max 9200`` like below:
@@ -120,15 +126,16 @@ Confirming connectivity between nodes
 -------------------------------------
 
 For this test, you need 2 servers with working hostnames. Let us call them
-server1 and server2.
+server1.test.com and server2.test.com. They reside at ``192.168.0.1`` and
+``192.168.0.2``, respectively.
 
-On server1:
+On server1.test.com:
 
 .. code-block:: bash
 
     erl -name bus@192.168.0.1 -setcookie 'brumbrum' -kernel inet_dist_listen_min 9100 -kernel inet_dist_listen_max 9200
 
-Then on server2:
+Then on server2.test.com:
 
 .. code-block:: bash
 
@@ -139,8 +146,8 @@ An explanation to the commands:
     * ``-name bus@192.168.0.1`` the name of the Erlang node and its IP address or FQDN.
     * ``-setcookie 'brumbrum'`` the "password" used when nodes connect to each
       other.
-    * ``-kernel inet_dist_listen_min 9100`` the lowest port in the rage.
-    * ``-kernel inet_dist_listen_max 9200`` the highest port in the rage.
+    * ``-kernel inet_dist_listen_min 9100`` the lowest port in the range.
+    * ``-kernel inet_dist_listen_max 9200`` the highest port in the range.
 
 This gives us 2 Erlang shells. shell1 on server1, shell2 on server2.
 Time to connect them. Enter the following, being sure to end the line with a
@@ -150,9 +157,10 @@ In shell1:
 
 .. code-block:: erlang
 
-    net_kernel:connect_node(car@server2).
+    net_kernel:connect_node(car@192.168.0.2).
 
-This will connect to the node called ``car`` on the server called ``server2``.
+This will connect to the node called ``car`` on the server called
+``192.168.0.2``.
 
 If that returns true, then you have an Erlang cluster, and the firewalls are
 open. This means that 2 CouchDB nodes on these two servers will be able to
@@ -260,14 +268,14 @@ should show all of the nodes in your cluster:
 
     {
       "all_nodes": [
-        "couchdb@server1",
-        "couchdb@server2",
-        "couchdb@server3"
+        "couchdb@server1.test.com",
+        "couchdb@server2.test.com",
+        "couchdb@server3.test.com"
       ],
       "cluster_nodes": [
-        "couchdb@server1",
-        "couchdb@server2",
-        "couchdb@server3"
+        "couchdb@server1.test.com",
+        "couchdb@server2.test.com",
+        "couchdb@server3.test.com"
       ]
     }
 
@@ -278,10 +286,10 @@ Now your cluster is ready and available! You can send requests to any one of
 the nodes, and all three will respond as if you are working with a single
 CouchDB cluster.
 
-For a proper production setup, you'd now set up an HTTP proxy in front of the
-node that does load balancing and SSL termination, if desired. We recommend
-`HAProxy`_. See our `example configuration for HAProxy`_. All you need is to
-adjust the IP addresses or hostnames and ports.
+For a proper production setup, you'd now set up an HTTP reverse proxy in front
+of the cluster, for load balancing and SSL termination. We recommend
+`HAProxy`_, but others can be used. Sample configurations are available in the
+:ref:`best-practices` section.
 
 .. _cluster/setup/api:
 
@@ -345,14 +353,14 @@ Response:
 
     {
         "all_nodes": [
-            "couchdb@couch1",
-            "couchdb@couch2",
-            "couchdb@couch3",
+            "couchdb@couch1.test.com",
+            "couchdb@couch2.test.com",
+            "couchdb@couch3.test.com",
         ],
         "cluster_nodes": [
-            "couchdb@couch1",
-            "couchdb@couch2",
-            "couchdb@couch3",
+            "couchdb@couch1.test.com",
+            "couchdb@couch2.test.com",
+            "couchdb@couch3.test.com",
         ]
     }
 

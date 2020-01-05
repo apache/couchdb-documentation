@@ -189,9 +189,6 @@
                            - :mimetype:`multipart/related`
     :<header If-Match: Document's revision. Alternative to `rev` query
       parameter or document key. *Optional*
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
 
     :query string rev: Document's revision if updating an existing document.
       Alternative to `If-Match` header or document key. *Optional*
@@ -284,9 +281,7 @@
                      - :mimetype:`text/plain`
     :<header If-Match: Document's revision. Alternative to `rev` query
       parameter
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
+
     :query string rev: Actual document's revision
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
@@ -339,6 +334,8 @@
             "rev": "2-056f5f44046ecafc08a2bc2b9c229e20"
         }
 
+.. _api/doc/copy:
+
 .. http:copy:: /{db}/{docid}
     :synopsis: Copies the document within the same database
 
@@ -360,9 +357,6 @@
       <copy_to_existing_document>`.
     :<header If-Match: Source document's revision. Alternative to `rev` query
       parameter
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
     :query string rev: Revision to copy from. *Optional*
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*

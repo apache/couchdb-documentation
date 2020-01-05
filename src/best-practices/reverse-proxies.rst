@@ -16,15 +16,54 @@
 Reverse Proxies
 ========================
 
+Reverse proxying with HAProxy
+=============================
+
 CouchDB recommends the use of `HAProxy`_ as a load balancer and reverse proxy.
 The team's experience with using it in production has shown it to be superior
 for configuration and montioring capabilities, as well as overall performance.
 
 CouchDB's sample haproxy configuration is present in the `code repository`_ and
-release tarball as ``rel/haproxy.cfg``.
+release tarball as ``rel/haproxy.cfg``. It is included below. This example
+is for a 3 node CouchDB cluster:
 
-However, there are suitable alternatives. Below are examples for
-configuring nginx and Caddy web-servers appropriately.
+.. code-block:: text
+
+    global
+        maxconn 512
+        spread-checks 5
+
+    defaults
+        mode http
+        log global
+        monitor-uri /_haproxy_health_check
+        option log-health-checks
+        option httplog
+        balance roundrobin
+        option forwardfor
+        option redispatch
+        retries 4
+        option http-server-close
+        timeout client 150000
+        timeout server 3600000
+        timeout connect 500
+
+        stats enable
+        stats uri /_haproxy_stats
+        # stats auth admin:admin # Uncomment for basic auth
+
+    frontend http-in
+         # This requires HAProxy 1.5.x
+         # bind *:$HAPROXY_PORT
+         bind *:5984
+         default_backend couchdbs
+
+    backend couchdbs
+        option httpchk GET /_up
+        http-check disable-on-404
+        server couchdb1 x.x.x.x:5984 check inter 5s
+        server couchdb2 x.x.x.x:5984 check inter 5s
+        server couchdb2 x.x.x.x:5984 check inter 5s
 
 .. _HAProxy: http://haproxy.org/
 .. _code repository: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg
@@ -67,6 +106,18 @@ as ``http://domain.com/couchdb/db1/doc1`` are proxied to
     location /couchdb {
         rewrite /couchdb/(.*) /$1 break;
         proxy_pass http://localhost:5984;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+Session based replication is default functionality since CouchDB 2.3.0. To enable session based replication with reverse proxied CouchDB in a subdirectory.
+
+.. code-block:: text
+
+    location /_session {
+        proxy_pass http://localhost:5984/_session;
         proxy_redirect off;
         proxy_buffering off;
         proxy_set_header Host $host;
@@ -267,3 +318,45 @@ Certificates are issued by the LetsEncrypt certificate authority.
 The ``x-forwarded-ssl`` header tells CouchDB that it should use the ``https``
 scheme instead of the ``http`` scheme. Otherwise, all CouchDB-generated
 redirects will fail.
+
+Reverse Proxying with Apache HTTP Server
+========================================
+
+.. warning::
+    As of this writing, there is no way to fully disable the buffering between
+    Apache HTTPD Server and CouchDB. This may present problems with continuous
+    replication. The Apache CouchDB team strongly recommend the use of an
+    alternative reverse proxy such as ``haproxy`` or ``nginx``, as described
+    earlier in this section.
+
+Basic Configuration
+-------------------
+
+Here's a basic excerpt for using a ``VirtualHost`` block config to use Apache
+as a reverse proxy for CouchDB. You need at least to configure Apache with the
+``--enable-proxy --enable-proxy-http`` options and use a version equal to or
+higher than Apache 2.2.7 in order to use the ``nocanon`` option in the
+``ProxyPass`` directive. The ``ProxyPass`` directive adds the ``X-Forwarded-For``
+header needed by CouchDB, and the ``ProxyPreserveHost`` directive ensures the
+original client ``Host`` header is preserved.
+
+.. code-block:: apacheconf
+
+    <VirtualHost *:80>
+       ServerAdmin webmaster@dummy-host.example.com
+       DocumentRoot "/opt/websites/web/www/dummy"
+       ServerName couchdb.localhost
+       AllowEncodedSlashes On
+       ProxyRequests Off
+       KeepAlive Off
+       <Proxy *>
+          Order deny,allow
+          Deny from all
+          Allow from 127.0.0.1
+       </Proxy>
+       ProxyPass / http://localhost:5984 nocanon
+       ProxyPassReverse / http://localhost:5984
+       ProxyPreserveHost On
+       ErrorLog "logs/couchdb.localhost-error_log"
+       CustomLog "logs/couchdb.localhost-access_log" common
+    </VirtualHost>

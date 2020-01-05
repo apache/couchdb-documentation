@@ -40,7 +40,7 @@ Cluster Options
     creation time.
 
     .. seealso::
-        httpdomain:put:`PUT /{db} </{db}>`
+        :http:put:`PUT /{db} </{db}>`
 
     .. config:option:: n
 
@@ -55,6 +55,11 @@ Cluster Options
         n = 3
 
     .. config:option:: placement
+
+    .. warning::
+
+        Use of this option will **override** the ``n`` option for replica
+        cardinality. Use with care.
 
     Sets the cluster-wide replica placement policy when creating new
     databases. The value must be a comma-delimited list of strings of the

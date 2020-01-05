@@ -80,6 +80,7 @@
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
+    :code 404: Requested database not found
     :code 500: Query execution error
 
 The ``limit`` and ``skip`` values are exactly as you would expect. While
@@ -755,7 +756,9 @@ the database performs a full scan of the primary index:
     in production.
 
 Most selector expressions work exactly as you would expect for the given
-operator.
+operator. But it is not always the case: for example, comparison of strings is
+done with ICU and can can give surprising results if you were expecting ASCII
+ordering. See :ref:`views/collation` for more details.
 
 .. _find/sort:
 
