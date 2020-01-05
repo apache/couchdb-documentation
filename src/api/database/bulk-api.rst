@@ -598,6 +598,58 @@ Sending multiple queries to a database
           ]
         }
 
+    Example response with a conflicted document:
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_bulk_get HTTP/1.1
+        Accept: application/json
+        Content-Type:application/json
+        Host: localhost:5984
+
+        {
+            "docs": [
+                {
+                    "id": "a"
+                }
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Mon, 19 Mar 2018 15:27:34 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "results": [
+            {
+              "id": "a",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "a",
+                    "_rev": "1-23202479633c2b380f79507a776743d5",
+                    "a": 1
+                  }
+                },
+                {
+                  "ok": {
+                    "_id": "a",
+                    "_rev": "1-967a00dff5e02add41819138abb3284d"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
 .. _api/db/bulk_docs:
 
 ==================
