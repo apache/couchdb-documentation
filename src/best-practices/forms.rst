@@ -79,7 +79,7 @@ returns a JSON success response back to the browser.
             return [doc, toJSON({"error": "request already filed"})]
         }
 
-        if !(request.form && request.form.email) {
+        if !(req.form && req.form.email) {
             return [null, toJSON({"error": "incomplete form"})]
         }
 
