@@ -49,20 +49,12 @@ Statistic Calculation
 
 .. config:section:: stats :: Statistic Calculation
 
-    .. config:option:: rate
+    .. config:option:: interval
 
-        Rate of statistics gathering in milliseconds::
-
-            [stats]
-            rate = 1000
-
-    .. config:option:: samples
-
-        Samples are used to track the mean and standard value deviation within
-        specified intervals (in seconds)::
+        Interval between gathering statistics in seconds::
 
             [stats]
-            samples = [0, 60, 300, 900]
+            interval = 10
 
 .. _config/uuids:
 

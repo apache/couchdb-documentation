@@ -108,8 +108,7 @@ interact with the local node's configuration.
                 "max_http_sessions": "10"
             },
             "stats": {
-                "rate": "1000",
-                "samples": "[0, 60, 300, 900]"
+                "interval": "10"
             },
             "uuids": {
                 "algorithm": "utc_random"
