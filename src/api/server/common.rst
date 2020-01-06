@@ -1405,6 +1405,12 @@ error.
     statistic being easily identified, and the content of each statistic is
     self-describing.
 
+    Statistics are sampled internally on a :ref:`configurable interval
+    <config/stats>`. When monitoring the ``_stats`` endpoint, you need to use
+    a polling frequency of at least twice this to observe accurate results.
+    For example, if the :ref:`interval <config/stats>` is 10 seconds,
+    poll ``_stats`` at least every 5 seconds.
+
     The literal string ``_local`` serves as an alias for the local node name, so
     for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
@@ -1504,7 +1510,8 @@ The type of the statistic is included in the ``type`` field, and is one of
 the following:
 
 - ``counter``: Monotonically increasing counter, resets on restart
-- ``histogram``: Binned set of values with meaningful subdivisions
+- ``histogram``: Binned set of values with meaningful subdivisions.
+  Scoped to the current :ref:`collection interval <config/stats>`.
 - ``gauge``: Single numerical value that can go up and down
 
 You can also access individual statistics by quoting the statistics sections
