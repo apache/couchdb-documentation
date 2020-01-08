@@ -1,0 +1,81 @@
+.. Licensed under the Apache License, Version 2.0 (the "License"); you may not
+.. use this file except in compliance with the License. You may obtain a copy of
+.. the License at
+..
+..   http://www.apache.org/licenses/LICENSE-2.0
+..
+.. Unless required by applicable law or agreed to in writing, software
+.. distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+.. WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+.. License for the specific language governing permissions and limitations under
+.. the License.
+
+.. _release/3.0.x:
+
+============
+3.0.x Branch
+============
+
+.. contents::
+    :depth: 1
+    :local:
+
+.. _release/3.0.x/upgrade:
+
+Upgrade Notes
+=============
+
+.. rst-class:: open
+
+* :ghissue:`9999`: Description here.
+
+.. _release/3.0.0:
+
+Version 3.0.0
+=============
+
+Features
+--------
+
+.. rst-class:: open
+
+* :ghissue:`9999`: Description here.
+
+Performance
+-----------
+
+.. rst-class:: open
+
+* :ghissue:`9999`: Description here.
+
+Bugfixes
+--------
+
+.. rst-class:: open
+
+* :ghissue:`9999`: Description here.
+
+Mango
+-----
+
+.. rst-class:: open
+
+* :ghissue:`9999`: Description here.
+
+Other
+-----
+
+The 3.0.0 release also includes the following minor improvements:
+
+.. rst-class:: open
+
+* Fauxton:
+
+  * XXX
+
+* Improved test cases:
+
+  * XXX
+
+* :ghissue:`9999`: Description here.
+* A llama! OK, no, not really. If you got this far...thank you for reading.
