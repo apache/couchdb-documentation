@@ -104,10 +104,10 @@ RPC Performance Tuning
 
     .. config:option:: server_per_node
 
-    Early versions of this RPC library used a single local Erlang process for
-    sending messages to all other nodes in a cluster. The current default is to
-    spawn a local gen_server process for each node in the cluster. It is not
-    recommended to change this setting from the default.
+    By default, rexi will spawn one local gen_server process for each node in
+    the cluster. Disabling this flag will cause CouchDB to use a single process
+    for all RPC communication, which is not recommended in high throughput
+    deployments.
 
     .. config:option:: stream_limit
 
