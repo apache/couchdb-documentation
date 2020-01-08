@@ -85,3 +85,39 @@ Cluster Options
 
         [cluster]
         seedlist = couchdb@node1.example.com,couchdb@node2.example.com
+
+RPC Performance Tuning
+======================
+
+.. config:section:: rexi :: Internal RPC Tuning
+
+    CouchDB uses distributed Erlang to communicate between nodes in a cluster.
+    The ``rexi`` library provides an optimized RPC mechanism over this
+    communication channel. There are a few configuration knobs for this system,
+    although in general the defaults work well.
+
+    .. config:option:: buffer_count
+
+    The local RPC server will buffer messages if a remote node goes unavailable.
+    This flag determines how many messages will be buffered before the local
+    server starts dropping messages. Default value is ``2000``.
+
+    .. config:option:: server_per_node
+
+    By default, rexi will spawn one local gen_server process for each node in
+    the cluster. Disabling this flag will cause CouchDB to use a single process
+    for all RPC communication, which is not recommended in high throughput
+    deployments.
+
+    .. config:option:: stream_limit
+
+        .. versionadded:: 3.0
+
+    This flag comes into play during streaming operations like views and change
+    feeds. It controls how many messages a remote worker process can send to a
+    coordinator without waiting for an acknowledgement from the coordinator
+    process. If this value is too large the coordinator can become overwhelmed
+    by messages from the worker processes and actually deliver lower overall
+    throughput to the client. In CouchDB 2.x this value was hard-coded to
+    ``10``. In the 3.x series it is configurable and defaults to ``5``.
+    Databases with a high ``q`` value are especially sensitive to this setting.
