@@ -140,9 +140,9 @@ With the consistency guarantee’s CouchDB will get from FDB, `stable = true` wi
 
 ### Size limits
 
-- The sum of all keys emitted for a document cannot exceed 100 KB
-- Emitted keys will not be able to exceed 10 KB
-- Values cannot exceed 100 KB
+- The sum of all keys emitted for a document cannot exceed 64 KB
+- Emitted keys will not be able to exceed 8 KB
+- Values cannot exceed 64 KB
 - There could be rare cases where the number of key-value pairs emitted for a map function could lead to a transaction either exceeding 10 MB in size which isn’t allowed or exceeding 5 MB which impacts the performance of the cluster. In this situation, CouchDB will send an error.
 
 These limits are the hard limits imposed by FoundationDB. We will have to set the user imposed limits to lower than that as we store more information than just the user keys and values.
