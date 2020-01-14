@@ -144,6 +144,16 @@ Authentication Configuration
             [couch_httpd_auth]
             cookie_domain = example.com
 
+    .. config:option:: same_site :: SameSite
+
+        .. versionadded:: 3.0.0
+
+        When this option is set to a non-empty value, a ``SameSite`` attribute is added to
+        the ``AuthSession`` cookie. Valid values are ``none``, ``lax`` or ``strict``.::
+
+            [couch_httpd_auth]
+            same_site = strict
+
     .. config:option:: auth_cache_size :: Authentication cache
 
         Number of :ref:`userctx_object` to cache in memory, to reduce disk
