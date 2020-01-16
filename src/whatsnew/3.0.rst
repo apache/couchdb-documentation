@@ -37,9 +37,9 @@ Upgrade Notes
   default. This, combined with automated database resharding (see below), is a better
   starting place for new CouchDB databases. As in CouchDB 2.x, specify ``?q=##`` to
   change the value upon database creation if desired. The default can be changed
-  via the config ``[cluster] q`` setting. 
+  via the config ``[cluster] q`` setting.
 * :ghissue:`1523`, :ghissue:`2092`, :ghissue:`2336`: The "node-local" HTTP interface,
-  by default exposed on port 5986, has been removed. All functionality previously 
+  by default exposed on port 5986, has been removed. All functionality previously
   available at that port is now available on the main, clustered interface (by default,
   port 5984). Examples:
 
@@ -61,7 +61,7 @@ Upgrade Notes
 * :ghissue:`2339`: All databases are now created by default as admin-only. That is, the
   default new database ``_security`` object is now:
 
-.. code-block:: javascript
+  .. code-block:: javascript
 
     {
       "members" : { "roles" : [ "_admin" ] },
