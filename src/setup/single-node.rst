@@ -34,10 +34,14 @@ installation private by binding only to 127.0.0.1 (localhost). Binding to
 username and password and creates the three system databases ``_users``,
 ``_replicator`` and ``_global_changes`` for you.
 
-Alternatively, if you don't want to use the Setup Wizard, and run 2.x as a
-single node with a server administrator already configured via
-:ref:`config file<config/admins>`, make sure to
-create the three system databases manually on startup:
+Another option is to set the configuration parameter ``[couchdb] single_node=true``
+in your ``local.ini`` file. When doing this, CouchDB will create the system
+database for you on restart.
+
+Alternatively, if you don't want to use the Setup Wizard or set that value, and
+run 3.x as a single node with a server administrator already configured via
+:ref:`config file<config/admins>`, make sure to create the three system
+databases manually on startup:
 
 .. code-block:: sh
 
