@@ -41,7 +41,7 @@ if "%1" == "help" (
 	echo.  pseudoxml  to make pseudoxml-XML files for display purposes
 	echo.  linkcheck  to check all external links for integrity
 	echo.  doctest    to run all doctests embedded in the documentation if enabled
-    echo.  check      to run the Python based linter
+	echo.  check      to run the Python based linter
 	goto end
 )
 

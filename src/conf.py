@@ -18,7 +18,7 @@ import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath("../ext"))
 
-needs_sphinx = "1.2"
+needs_sphinx = "1.5"
 
 extensions = [
     "sphinx.ext.todo",
@@ -33,8 +33,8 @@ source_suffix = ".rst"
 nitpicky = True
 
 # should be over-written using rebar-inherited settings
-version = "2.3"
-release = "2.3.1"
+version = "3.0"
+release = "3.0.0"
 
 project = u"Apache CouchDB\u00ae"
 
