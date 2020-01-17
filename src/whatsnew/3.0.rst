@@ -65,7 +65,7 @@ Upgrade Notes
   :align: center
   :alt: Dizzy the cat with a Santa hat.
 
-  CC-BY-NC 2.0: `hehaden @ Flickr<https://www.flickr.com/photos/hellie55/23379351593/>`_
+  CC-BY-NC 2.0: `hehaden @ Flickr <https://www.flickr.com/photos/hellie55/23379351593/>`_
 
 * :ghissue:`2339`: All databases are now created by default as admin-only. That is, the
   default new database ``_security`` object is now:
@@ -208,7 +208,8 @@ Features and Enhancements
 
 * :ghissue:`2282`, :ghissue:`2272`, :ghissue:`2290`: CouchDB now supports specifying
   separate proxies for both the ``source`` and ``target`` in a replication via
-  ``source_proxy`` and ``target_proxy`` keys.
+  ``source_proxy`` and ``target_proxy`` keys. The :ref:`API documentation
+  <api/server/replicate>` has been updated.
 
 * :ghissue:`2240`: Headers are now returned from the ``/{db}/_changes`` feed
   immediately, even when there are no changes available. This avoids client
