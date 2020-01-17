@@ -611,11 +611,19 @@
     :<json string/object source: Fully qualified source database URL or an
       object which contains the full URL of the source database with additional
       parameters like headers. Eg: 'http://example.com/source_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
     :<json string/object target: Fully qualified target database URL or an
       object which contains the full URL of the target database with additional
       parameters like headers. Eg: 'http://example.com/target_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json array history: Replication history (see below)
