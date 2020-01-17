@@ -128,7 +128,8 @@ Authentication Configuration
 
     .. config:option:: allow_persistent_cookies :: Persistent cookies
 
-        Makes cookies persistent if ``true``. ::
+        When set to ``true``, CouchDB will refresh the session cookie whenever
+        the session is nearing expiration. ::
 
             [couch_httpd_auth]
             allow_persistent_cookies = false
@@ -142,6 +143,16 @@ Authentication Configuration
 
             [couch_httpd_auth]
             cookie_domain = example.com
+
+    .. config:option:: same_site :: SameSite
+
+        .. versionadded:: 3.0.0
+
+        When this option is set to a non-empty value, a ``SameSite`` attribute is added to
+        the ``AuthSession`` cookie. Valid values are ``none``, ``lax`` or ``strict``.::
+
+            [couch_httpd_auth]
+            same_site = strict
 
     .. config:option:: auth_cache_size :: Authentication cache
 

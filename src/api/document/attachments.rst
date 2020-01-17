@@ -133,9 +133,6 @@
 
     :<header Content-Type: Attachment MIME type. *Required*
     :<header If-Match: Document revision. Alternative to `rev` query parameter
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
 
     :query string rev: Document revision. *Optional*
 
@@ -203,9 +200,7 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header If-Match: Document revision. Alternative to `rev` query parameter
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
+
     :query string rev: Document revision. *Required*
     :query string batch: Store changes in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*

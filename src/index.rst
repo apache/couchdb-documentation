@@ -47,6 +47,7 @@ Apache CouchDB
     api/index
     json-structure
     query-server/index
+    partitioned-dbs/index
 
 .. toctree::
     :caption: Other

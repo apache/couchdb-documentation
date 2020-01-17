@@ -57,6 +57,8 @@
     * **validate_doc_update** (*string*): :ref:`Validate document update
       <vdufun>` function source
     * **views** (*object*): :ref:`View functions <viewfun>` definition.
+    * **autoupdate** (*boolean*): Indicates whether to automatically build
+      indexes defined in this design document. Default is `true`.
 
     Note, that for ``filters``, ``lists``, ``shows`` and ``updates`` fields
     objects are mapping of function name to string function source code. For
@@ -82,7 +84,7 @@
     The :method:`COPY` (which is non-standard HTTP) copies an existing design
     document to a new or existing one.
 
-    Given that view indexes on disk are named after their MD5 hash of the
+    Given that view indexes on disk are named after their MD5 hash of the
     view definition, and that a `COPY` operation won't actually change
     that definition, the copied views won't have to be reconstructed.
     Both views will be served from the same index on disk.
@@ -178,11 +180,14 @@
             "name": "recipe",
             "view_index": {
                 "compact_running": false,
-                "data_size": 926691,
-                "disk_size": 1982704,
                 "language": "python",
                 "purge_seq": 0,
                 "signature": "a59a1bb13fdf8a8a584bc477919c97ac",
+                "sizes": {
+                  "active": 926691,
+                  "disk": 1982704,
+                  "external": 1535701
+                },
                 "update_seq": 12397,
                 "updater_running": false,
                 "waiting_clients": 0,
@@ -200,8 +205,9 @@ The response from :get:`/{db}/_design/{ddoc}/_info` contains
 
 * **compact_running** (*boolean*):  Indicates whether a compaction routine
   is currently running on the view
-* **data_size** (*number*): Actual size in bytes of the view
-* **disk_size** (*number*): Size in bytes of the view as stored on disk
+* **sizes.active** (*number*): The size of live data inside the view, in bytes
+* **sizes.external** (*number*): The uncompressed size of view contents in bytes
+* **sizes.file** (*number*): Size in bytes of the view as stored on disk
 * **language** (*string*): Language for the defined views
 * **purge_seq** (*number*): The purge sequence that has been processed
 * **signature** (*string*): MD5 signature of the views for the design document
