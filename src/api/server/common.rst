@@ -1086,7 +1086,7 @@ error.
     :>json string source: Replication source
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
-    :>json string last_update: Timestamp of last state update
+    :>json string last_updated: Timestamp of last state update
     :>json object info: Will contain additional information about the
                         state. For errors, this will be an object with
                         an `"error"` field and string value. For
