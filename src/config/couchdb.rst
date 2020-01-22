@@ -194,3 +194,16 @@ Base CouchDB Options
            parameter was defined: :config:option:`httpd/max_http_request_size`,
            which can be used to limit maximum http request sizes. After upgrade,
            it is advisable to review those settings and adjust them accordingly.
+
+    .. config:option:: enable_database_recovery :: Enable database recovery
+
+        Enable this to only "soft-delete" databases when
+        :ref:`DELETE /{db} <api/db>` DELETE  requests are made. This will place
+        a ``.recovery`` directory in your data directory and move deleted
+        databases/shards there instead. You can then manually delete these
+        files later, as desired.
+
+        Default is ``false``. ::
+
+            [couchdb]
+            enable_database_recovery = false
