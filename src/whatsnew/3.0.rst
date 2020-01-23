@@ -257,8 +257,10 @@ Bugfixes
 
 .. rst-class:: open
 
-* :ghissue:`1752`, :ghissue:`2398`: The cluster setup wizard now ensures a consistent
-  UUID and http secret across all nodes in a cluster.
+* :ghissue:`1752`, :ghissue:`2398`, :ghissue:`1803`: The cluster setup wizard now ensures
+  a consistent UUID and http secret across all nodes in a cluster. CouchDB admin passwords
+  are also synced when the cluster setup wizard is used. This prevents being logged out
+  when using Fauxton as a server admin user through a load balancer.
 
 * :ghissue:`2388`: A compatibility change has been made to support replication with
   future databases containing per-document access control fields.
@@ -310,18 +312,15 @@ Bugfixes
 * :ghissue:`2019`: If a database is deleted and re-created while internal cluster
   replication is still active, CouchDB will no longer retry to delete it continuously.
 
-* :ghissue:`2003`: CouchDB will no longer automatically reset an index file if any
-  attempt to read its header fails (such as when the couch_file process terminates
-  unexpectedly).
+* :ghissue:`2003`, :ghissue:`2438`: CouchDB will no longer automatically reset an index
+  file if any attempt to read its header fails (such as when the couch_file process
+  terminates unexpectedly).  CouchDB now also handles the case when a view file lacks a
+  proper header.
 
 * :ghissue:`1983`: Improve database "external" size calcuation to be more precise.
 
 * :ghissue:`1971`: Correctly compare ETags using weak comparison methods to support
   `W/` prefix added by some load balancer configurations.
-
-* :ghissue:`1803`: CouchDB admin passwords are now synced when the cluster setup wizard
-  is used. This prevents being logged out when using Fauxton as a server admin user
-  through a load balancer.
 
 * :ghissue:`1901`: Invalid revision specified for a document update will no longer result
   in a ``badarg`` crash.
@@ -345,8 +344,6 @@ Bugfixes
 
 * :ghissue:`2426`, :ghissue:`2415`: The replicator now better handles the situation where
   design document writes to the target fail when replicating with non-admin credentials.
-
-* :ghissue:`2438`: CouchDB now handles the case when a view file lacks a proper header.
 
 * :ghissue:`2444`, :ghissue:`2413`: Replicator error messages are now significantly
   improved, reducing ``function_clause`` responses.
