@@ -196,6 +196,9 @@ are:
    is used in calculating and evaluating cookie and proxy authentication, and should
    be set consistently to avoid unnecessary repeated session cookie requests.
 
+As of CouchDB 3.0, steps 4 and 5 above are automatically performed for you when
+using the setup API endpoints described below.
+
 If you use a configuration management tool, such as Chef, Ansible, Puppet, etc.,
 then you can place these settings in a ``.ini`` file and distribute them to all
 nodes ahead of time. Be sure to pre-encrypt the password (cutting and pasting
@@ -225,6 +228,7 @@ locally on each node; if so, replace ``<server-IP|FQDN>`` below with ``127.0.0.1
     # Now, bind the clustered interface to all IP addresses availble on this machine
     curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/chttpd/bind_address -d '"0.0.0.0"'
 
+    # If not using the setup wizard / API endpoint, the following 2 steps are required:
     # Set the UUID of the node to the first UUID you previously obtained:
     curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/couchdb/uuid -d '"FIRST-UUID-GOES-HERE"'
 

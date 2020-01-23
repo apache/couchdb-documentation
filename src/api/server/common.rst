@@ -602,16 +602,22 @@
     :<json string target_proxy: Address of a proxy server through which
       replication to the target should occur (protocol can be "http" or
       "socks5")
-    :<json string/object source: Source database name or URL or an object
-      which contains the full URL of the source database with additional
-      parameters like headers. Eg: 'source_db_name' or
-      'http://example.com/source_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
-    :<json string/object target: Target database name or URL or an object
-      which contains the full URL of the target database with additional
-      parameters like headers. Eg: 'target_db_name' or
-      'http://example.com/target_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
+    :<json string/object source: Fully qualified source database URL or an
+      object which contains the full URL of the source database with additional
+      parameters like headers. Eg: 'http://example.com/source_db_name' or
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
+    :<json string/object target: Fully qualified target database URL or an
+      object which contains the full URL of the target database with additional
+      parameters like headers. Eg: 'http://example.com/target_db_name' or
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json array history: Replication history (see below)
@@ -648,19 +654,23 @@
     :json string start_time:  Date/Time replication operation started in
       :rfc:`2822` format
 
+.. note::
+    As of CouchDB 2.0.0, fully qualified URLs are required for both the
+    replication `source` and `target` parameters.
+
     **Request**
 
     .. code-block:: http
 
         POST /_replicate HTTP/1.1
         Accept: application/json
-        Content-Length: 36
+        Content-Length: 80
         Content-Type: application/json
         Host: localhost:5984
 
         {
-            "source": "db_a",
-            "target": "db_b"
+            "source": "http://127.0.0.1:5984/db_a",
+            "target": "http://127.0.0.1:5984/db_b"
         }
 
     **Response**
@@ -1076,7 +1086,7 @@ error.
     :>json string source: Replication source
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
-    :>json string last_update: Timestamp of last state update
+    :>json string last_updated: Timestamp of last state update
     :>json object info: Will contain additional information about the
                         state. For errors, this will be an object with
                         an `"error"` field and string value. For
