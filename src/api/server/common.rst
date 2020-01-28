@@ -1400,6 +1400,50 @@ error.
             "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
         }
 
+.. _api/server/name:
+
+======================
+``/_node/{node-name}``
+======================
+
+.. http:get:: /_node/{node-name}
+    :synopsis: Returns node name
+
+    The ``/_node/{node-name}`` endpoint can be used to confirm the Erlang
+    node name of the server that processes the request. This is most useful
+    when accessing ``/_node/_local`` to retrieve this information. Repeatedly
+    retrieving this information for a CouchDB endpoint can be useful to determine
+    if a CouchDB cluster is correctly proxied through a reverse load balancer.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+      HTTP/1.1 200 OK
+      Cache-Control: must-revalidate
+      Content-Length: 27
+      Content-Type: application/json
+      Date: Tue, 28 Jan 2020 19:25:51 GMT
+      Server: CouchDB (Erlang OTP)
+      X-Couch-Request-ID: 5b8db6c677
+      X-CouchDB-Body-Time: 0
+
+      {"name":"node1@127.0.0.1"}
+
 .. _api/server/stats:
 
 =============================
