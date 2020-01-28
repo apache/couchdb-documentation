@@ -75,5 +75,6 @@ If you are running a CouchDB cluster:
 Upgrading from CouchDB 1.x
 ==========================
 
-To upgrade from CouchDB 1.x, first upgrade to a version of CouchDB 2.x.
-See the Upgrade Notes there for instructions.
+To upgrade from CouchDB 1.x, first upgrade to a version of CouchDB 2.x.  You
+will need to convert all databases to CouchDB 2.x format first; see the Upgrade
+Notes there for instructions. Then, upgrade to CouchDB 3.x.
