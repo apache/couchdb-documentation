@@ -20,6 +20,7 @@ Release Notes
     :glob:
     :maxdepth: 2
 
+    3.0
     2.3
     2.2
     2.1

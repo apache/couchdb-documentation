@@ -108,8 +108,7 @@ interact with the local node's configuration.
                 "max_http_sessions": "10"
             },
             "stats": {
-                "rate": "1000",
-                "samples": "[0, 60, 300, 900]"
+                "interval": "10"
             },
             "uuids": {
                 "algorithm": "utc_random"
@@ -294,3 +293,37 @@ interact with the local node's configuration.
         Server: CouchDB (Erlang/OTP)
 
         "info"
+
+.. _api/config/reload:
+
+``_node/{node-name}/_config/_reload``
+=====================================
+
+.. versionadded:: 3.0
+
+.. http:post:: /_node/{node-name}/_config/_reload
+    :synopsis: Reload the configuration from disk
+
+    Reloads the configuration from disk. This has a side effect of
+    flushing any in-memory configuration changes that have not been
+    committed to disk.
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_node/nonode@nohost/_config/_reload HTTP/1.1
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 12
+        Content-Type: application/json
+        Date: Tues, 21 Jan 2020 11:09:35
+        Server: CouchDB/3.0.0 (Erlang OTP)
+
+        {"ok":true}

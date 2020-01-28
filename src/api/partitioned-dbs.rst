@@ -117,6 +117,8 @@ See the guide for
           "total_rows": 1
         }
 
+.. _api/partitioned/views:
+
 ``/db/_partition/partition/_design/design-doc/_view/view-name``
 ===============================================================
 

@@ -188,6 +188,8 @@ Native Erlang Query Server
     Additional examples are on the `users@couchdb.apache.org mailing list
     <https://lists.apache.org/thread.html/9b5f2837bd32189385bb82eee44aec243f2ecacc6e907ffe0e1e03d3@1360091211@%3Cuser.couchdb.apache.org%3E>`_.
 
+.. _config/search:
+
 Search
 ======
 
@@ -227,3 +229,44 @@ CouchDB's search subsystem can be configured via the ``dreyfus`` configuration s
         database. Attempts to set ``?limit=N`` higher than this value will be rejected. If
         this config setting is not defined, CouchDB will use the value of ``max_limit``
         instead. If neither is defined, the default is ``2000``.
+
+.. _config/mango:
+
+Mango
+=====
+
+Mango is the Query Engine that services the :ref:`_find <api/db/_find>`, endpoint.
+
+.. config:section:: mango :: Mango Configuration
+
+    .. config:option:: index_all_disabled :: Disable "index all fields" behaviour
+
+        Set to ``true`` to disable the "index all fields" text index. This can lead
+        to out of memory issues when there are documents with nested array fields.
+        Defaults to ``false``.
+
+            [mango]
+            index_all_disabled = false
+
+    .. config:option:: default_limit :: Default limit value for Mango queries.
+
+        Sets the default number of results that will be returned in a
+        :ref:`_find <api/db/_find>` response. Individual requests can override this
+        by setting ``limit`` directly in the query parameters.
+        Defaults to ``25``.
+
+            [mango]
+            default_limit = 25
+
+    .. config:option:: index_scan_warning_threshold :: Ratio threshold that generates an
+       index scan warning
+
+        This sets the ratio between documents scanned and results matched that
+        will generate a warning in the _find response. For example, if a query
+        requires reading 100 documents to return 10 rows, a warning will be
+        generated if this value is ``10``.
+
+        Defaults to ``10``. Setting the value to ``0`` disables the warning.
+
+            [mango]
+            index_scan_warning_threshold = 10
