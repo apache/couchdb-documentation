@@ -27,14 +27,14 @@ Cluster Options
     .. config:option:: q
 
     Sets the default number of shards for newly created databases. The
-    default value, ``8``, splits a database into 8 separate partitions. ::
+    default value, ``2``, splits a database into 2 separate partitions. ::
 
         [cluster]
-        q = 8
+        q = 2
 
-    For systems with lots of small, infrequently accessed databases, or
-    for servers with fewer CPU cores, consider reducing this value to
-    ``1`` or ``2``.
+    For systems with only a few, heavily accessed, large databases, or
+    for servers with many CPU cores, consider increasing this value to
+    ``4`` or ``8``.
 
     The value of ``q`` can also be overridden on a per-DB basis, at DB
     creation time.

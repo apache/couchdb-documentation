@@ -44,33 +44,35 @@ level, or on a per-database basis. The relevant parameters are ``q`` and
 
 *q* is the number of database shards to maintain. *n* is the number of
 copies of each document to distribute. The default value for ``n`` is ``3``,
-and for ``q`` is ``8``. With ``q=8``, the database is split into 8 shards. With
+and for ``q`` is ``2``. With ``q=2``, the database is split into 2 shards. With
 ``n=3``, the cluster distributes three replicas of each shard. Altogether,
-that's 24 shard replicas for a single database. In a default 3-node cluster,
-each node would receive 8 shards. In a 4-node cluster, each node would
-receive 6 shards. We recommend in the general case that the number of
-nodes in your cluster should be a multiple of ``n``, so that shards are
-distributed evenly.
+that's 6 shard replicas for a single database.
 
-CouchDB nodes have a ``etc/local.ini`` file with a section named
+In a 3-node cluster with ``q=8``, each node would receive 8 shards. In a 4-node
+cluster, each node would receive 6 shards. We recommend in the general case
+that the number of nodes in your cluster should be a multiple of ``n``, so that
+shards are distributed evenly.
+
+CouchDB nodes have a ``etc/default.ini`` file with a section named
 `cluster <../config/cluster.html>`__ which looks like this:
 
 ::
 
     [cluster]
-    q=8
+    q=2
     n=3
 
-These settings can be modified to set sharding defaults for all
-databases, or they can be set on a per-database basis by specifying the
-``q`` and ``n`` query parameters when the database is created. For
-example:
+These settings specify the default sharding parameters for newly created
+databases. These can be overridden in the ``etc/local.ini`` file by copying the
+text above, and replacing the values with your new defaults.  The values can
+also be set on a per-database basis by specifying the ``q`` and ``n`` query
+parameters when the database is created. For example:
 
 .. code-block:: bash
 
     $ curl -X PUT "$COUCH_URL:5984/database-name?q=4&n=2"
 
-That creates a database that is split into 4 shards and 2 replicas,
+This creates a database that is split into 4 shards and 2 replicas,
 yielding 8 shard replicas distributed throughout the cluster.
 
 Quorum

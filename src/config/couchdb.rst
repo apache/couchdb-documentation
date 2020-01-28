@@ -45,10 +45,16 @@ Base CouchDB Options
 
     .. config:option:: default_security :: Default security
 
-        Default security object for databases if not explicitly set. When set to ``everyone``, anyone can performs reads and writes. When set to ``admin_only``, only admins can read and write. When set to ``admin_local``, sharded databases can be read and written by anyone but the shards can only be read and written by admins.
+        .. versionchanged:: 3.0 ``admin_only`` is now the default.
+
+        Default security object for databases if not explicitly set. When set
+        to ``everyone``, anyone can performs reads and writes. When set to
+        ``admin_only``, only admins can read and write. When set to
+        ``admin_local``, sharded databases can be read and written by anyone
+        but the shards can only be read and written by admins.
 
             [couchdb]
-            default_security = admin_local
+            default_security = admin_only
 
     .. config:option:: file_compression :: Compression method for documents
 
@@ -169,7 +175,7 @@ Base CouchDB Options
 
     .. config:option:: max_document_size :: Limit maximum document body size
 
-        .. versionchanged:: 2.1.0
+        .. versionchanged:: 3.0.0
 
         Limit maximum document body size. Size is calculated based on the
         serialized Erlang representation of the JSON document body, because
@@ -184,7 +190,7 @@ Base CouchDB Options
         transformation and right before being inserted into the database. ::
 
             [couchdb]
-            max_document_size = 4294967296 ; 4 GB
+            max_document_size = 8000000 ; bytes
 
         .. warning::
            Before version 2.1.0 this setting was implemented by simply checking
@@ -194,3 +200,19 @@ Base CouchDB Options
            parameter was defined: :config:option:`httpd/max_http_request_size`,
            which can be used to limit maximum http request sizes. After upgrade,
            it is advisable to review those settings and adjust them accordingly.
+
+    .. config:option:: single_node :: Start in single node mode.
+
+        .. versionadded:: 3.0.0
+
+        When this configuration setting is set to ``true``, automatically
+        create the system databases on startup. Must be set ``false`` for a
+        clustered CouchDB installation.
+
+    .. config:option:: users_db_security_editable :: Protect ``_users`` DB security obj
+        .. versionadded:: 3.0.0
+
+        When this configuration setting is set to ``false``, reject any attempts
+        to modify the ``_users`` database security object. Modification of this
+        object is deprecated in 3.x and will be completely disallowed in CouchDB
+        4.x.

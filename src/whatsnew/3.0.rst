@@ -99,6 +99,9 @@ Upgrade Notes
   the ``query_limit`` and ``partition_query_limit`` values in the ini file
   ``[query_server_config]`` section.
 
+* After upgrading all nodes in a cluster to 3.0, add ``[rexi] use_kill_all = true`` to
+  ``local.ini`` to save some intra-cluster network bandwidth.
+
 Deprecated feature removal
 --------------------------
 
