@@ -124,6 +124,15 @@ Authentication Configuration
             To make the same change for the node-local port (5986 by default),
             set the ``[couch_httpd_auth]`` setting of the same name.
 
+    .. config:option:: require_valid_user_except_for_up :: Force user auth (mostly)
+
+        When this option is set to ``true``, no requests are allowed from
+        anonymous users, *except* for the ``/_up`` endpoint. Everyone else must
+        be authenticated. ::
+
+            [chttpd]
+            require_valid_user_except_for_up = false
+
 .. config:section:: couch_httpd_auth :: Authentication Configuration
 
     .. config:option:: allow_persistent_cookies :: Persistent cookies
@@ -132,7 +141,7 @@ Authentication Configuration
         the session is nearing expiration. ::
 
             [couch_httpd_auth]
-            allow_persistent_cookies = false
+            allow_persistent_cookies = true
 
     .. config:option:: cookie_domain :: Cookie Domain
 

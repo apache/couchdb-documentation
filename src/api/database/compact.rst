@@ -149,6 +149,8 @@
     :synopsis: Deprecated endpoint to support CouchDB versions < 3.0
                replicators.
 
+    .. versionchanged:: 3.0.0 Deprecated; endpoint is a no-op.
+
     Before 3.0 this was used to commit recent changes to the database in case
     the ``delayed_commits=true`` option was set. That option is always
     ``false`` now, so commits are never delayed. However, this endpoint is kept
