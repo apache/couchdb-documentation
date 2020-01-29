@@ -262,8 +262,7 @@ special security-related constraints applied. Below is a list of how the
   (:get:`GET /_users/_all_docs </{db}/_all_docs>`)
 - Only administrators may listen to :ref:`changes feed
   <changes>` (:get:`GET /_users/_changes </{db}/_changes>`)
-- Only administrators may execute design functions like :ref:`views <viewfun>`,
-  :ref:`shows <showfun>` and :ref:`others <ddocs>`
+- Only administrators may execute design functions like :ref:`views <viewfun>`.
 - There is a special design document ``_auth`` that cannot be modified
 - Every document except the `design documents` represent registered
   CouchDB users and belong to them

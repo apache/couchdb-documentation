@@ -16,6 +16,10 @@
 ``/db/_design/design-doc/_show/show-name``
 ==========================================
 
+.. warning::
+
+    Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 .. http:get:: /{db}/_design/{ddoc}/_show/{func}
     :synopsis: Executes a show function against null document
 
@@ -75,6 +79,10 @@
 =================================================
 ``/db/_design/design-doc/_show/show-name/doc-id``
 =================================================
+
+.. warning::
+
+    Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. http:get:: /{db}/_design/{ddoc}/_show/{func}/{docid}
     :synopsis: Executes a show function against the specified document
@@ -136,6 +144,10 @@
 ====================================================
 ``/db/_design/design-doc/_list/list-name/view-name``
 ====================================================
+
+.. warning::
+
+    List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. http:get:: /{db}/_design/{ddoc}/_list/{func}/{view}
     :synopsis: Executes a list function against the view from the same
@@ -203,6 +215,10 @@
 ===============================================================
 ``/db/_design/design-doc/_list/list-name/other-ddoc/view-name``
 ===============================================================
+
+.. warning::
+
+    List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. http:get:: /{db}/_design/{ddoc}/_list/{func}/{other-ddoc}/{view}
     :synopsis: Executes a list function against the view from other

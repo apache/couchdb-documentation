@@ -526,6 +526,10 @@ Cross-Origin Resource Sharing
 Per Virtual Host Configuration
 ------------------------------
 
+.. warning::
+
+    Virtual Hosts are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 To set the options for a :section:`vhosts`, you will need to create a section
 with the vhost name prefixed by ``cors:``. Example case for the vhost
 `example.com`::
@@ -547,6 +551,10 @@ or behaviour.
 
 Virtual Hosts
 =============
+
+.. warning::
+
+    Virtual Hosts are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. config:section:: vhosts :: Virtual Hosts
 

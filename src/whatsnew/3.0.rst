@@ -139,6 +139,19 @@ CouchDB 3.0:
   default. A setting exists in the configuration file to revert this behaviour. The
   ability to override the disable setting is expected to be removed in CouchDB 4.0.
 
+Deprecated feature warnings
+---------------------------
+
+The following features are deprecated in CouchDB 3.0 and will be removed in CouchDB 4.0:
+
+* Show functions (``/{db}/{ddoc}/_show``)
+
+* List functions (``/{db}/{ddoc}/_list``)
+
+* Virtual hosts and ini-file rewrites
+
+* Rewrite functions (``/{db}/{ddoc}/_rewrite``)
+
 .. _release/3.0.0:
 
 Version 3.0.0

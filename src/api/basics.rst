@@ -92,10 +92,6 @@ listing the supported HTTP methods. For example:
         "reason":"Only GET,HEAD allowed"
     }
 
-The CouchDB design document API and the functions when returning HTML (for
-example as part of a show or list) enables you to include custom HTTP headers
-through the ``headers`` block of the return object.
-
 HTTP Headers
 ============
 
