@@ -161,6 +161,14 @@ Base CouchDB Options
             [couchdb]
             os_process_timeout = 5000 ; 5 sec
 
+    .. config:option:: single_node :: Start in single node mode.
+
+        .. versionadded:: 3.0.0
+
+        When this configuration setting is set to ``true``, automatically
+        create the system databases on startup. Must be set ``false`` for a
+        clustered CouchDB installation.
+
     .. config:option:: uri_file :: Discovery CouchDB help file
 
         This file contains the full `URI`_ that can be used to access this
@@ -173,6 +181,15 @@ Base CouchDB Options
             uri_file = /var/run/couchdb/couchdb.uri
 
         .. _URI: http://en.wikipedia.org/wiki/URI
+
+    .. config:option:: users_db_security_editable :: Protect ``_users`` DB security obj
+
+        .. versionadded:: 3.0.0
+
+        When this configuration setting is set to ``false``, reject any attempts
+        to modify the ``_users`` database security object. Modification of this
+        object is deprecated in 3.x and will be completely disallowed in CouchDB
+        4.x.
 
     .. config:option:: users_db_suffix :: Users database suffix
 
@@ -213,20 +230,3 @@ Base CouchDB Options
 
             [couchdb]
             view_index_dir = /var/lib/couchdb
-
-    .. config:option:: single_node :: Start in single node mode.
-
-        .. versionadded:: 3.0.0
-
-        When this configuration setting is set to ``true``, automatically
-        create the system databases on startup. Must be set ``false`` for a
-        clustered CouchDB installation.
-
-    .. config:option:: users_db_security_editable :: Protect ``_users`` DB security obj
-
-        .. versionadded:: 3.0.0
-
-        When this configuration setting is set to ``false``, reject any attempts
-        to modify the ``_users`` database security object. Modification of this
-        object is deprecated in 3.x and will be completely disallowed in CouchDB
-        4.x.
