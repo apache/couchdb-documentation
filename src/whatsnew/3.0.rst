@@ -219,7 +219,7 @@ Features and Enhancements
   blocking.
 
 * :ghissue:`2005`, :ghissue:`2006`: The name of any node can now be retrieved through
-  the new API endpoint ``GET /_node/_local``.
+  the :ref:`new API endpoint <api/server/name>` ``GET /_node/{node-name}``.
 
 * :ghissue:`1766`: Timeouts for requests, ``all_docs``, attachments, views, and
   partitioned view requests can all be specified separately in the ini file under
