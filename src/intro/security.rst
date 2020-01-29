@@ -136,7 +136,7 @@ Instead of creating the admin user as we showed previously, you could have
 stopped CouchDB, opened your ``local.ini``, added ``anna = secret`` to the
 :config:section:`admins`, and restarted CouchDB. Upon reading the new line from
 ``local.ini``, CouchDB would run the hashing algorithm and write back the hash
-to ``local.ini``, replacing the plain-text password - just as it did for our
+to ``local.ini``, replacing the plain-text password — just as it did for our
 original ``admin`` user. To make sure CouchDB only hashes plain-text passwords
 and not an existing hash a second time, it prefixes the hash with ``-pbkdf2-``,
 to distinguish between plain-text passwords and `PBKDF2`_ hashed passwords. This
