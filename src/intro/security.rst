@@ -129,7 +129,7 @@ the hash.
 When CouchDB starts up, it reads a set of ``.ini`` files with config settings. It
 loads these settings into an internal data store (not a database). The config
 API lets you read the current configuration as well as change it and create new
-entries. CouchDB is writing any changes back to the ``.ini`` files.
+entries. CouchDB writes any changes back to the ``.ini`` files.
 
 The ``.ini`` files can also be edited by hand when CouchDB is not running.
 Instead of creating the admin user as we showed previously, you could have
