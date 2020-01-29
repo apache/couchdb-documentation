@@ -223,6 +223,7 @@ Base CouchDB Options
         clustered CouchDB installation.
 
     .. config:option:: users_db_security_editable :: Protect ``_users`` DB security obj
+
         .. versionadded:: 3.0.0
 
         When this configuration setting is set to ``false``, reject any attempts
