@@ -47,16 +47,18 @@ Upgrade Notes
 
     GET /_node/{nodename}/_stats
     GET /_node/{nodename}/_system
-    GET /_node/{nodename}/_restart
     GET /_node/{nodename}/_all_dbs
     GET /_node/{nodename}/_uuids
     GET /_node/{nodename}/_config
     GET /_node/{nodename}/_config/couchdb/uuid
     GET /_node/{nodename}/_nodes/_changes?include_docs=true
-    GET /_node/{nodename}/{db}/{ddoc}/_info
     PUT /_node/{nodename}/_dbs/{dbname}
+    POST /_node/{nodename}/_restart
+    GET /_node/{nodename}/{db-shard}
+    GET /_node/{nodename}/{db-shard}/{doc}
+    GET /_node/{nodename}/{db-shard}/{ddoc}/_info
 
-  ...and so on. Documentation has been updated to reflect this change. **[TODO]**
+  ...and so on. Documentation has been updated to reflect this change.
 
 * :ghissue:`2389`: CouchDB 3.0 now requires a server admin user to be defined at
   startup, or will print an error message and exit. (The Admin Party is now over.)

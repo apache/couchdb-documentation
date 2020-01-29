@@ -31,10 +31,6 @@ CouchDB uses the following ports:
 |             |          | default ``localhost`` | port for all HTTP    |
 |             |          |                       | API requests         |
 +-------------+----------+-----------------------+----------------------+
-| 5986        | tcp      | ``localhost`` or      | Administrative tasks |
-|             |          | private network       | such as node and     |
-|             |          | **ONLY**              | shard management     |
-+-------------+----------+-----------------------+----------------------+
 | 4369        | tcp      | All interfaces        | Erlang port mapper   |
 |             |          | by default            | daemon (epmd)        |
 +-------------+----------+-----------------------+----------------------+
@@ -44,17 +40,10 @@ CouchDB uses the following ports:
 +-------------+----------+-----------------------+----------------------+
 
 CouchDB in clustered mode uses the port ``5984``, just as in a standalone
-configuration, but it also uses ``5986`` for node-local APIs. These APIs are
-administrative tools only, such as node and shard management. Do not use
-port ``5986`` for any other reason. The port is slated to be deprecated in a
-future CouchDB release.
-
-.. warning::
-    **Never expose the node-local port to the public Internet.**
-
-    By default, CouchDB only exposes port ``5986`` **only** on localhost.
-    If you have a secondary network connection on nodes for management purposes
-    only, it is acceptable to expose the port on that network as well.
+configuration. Port ``5986``, previously used in CouchDB 2.x, has been removed
+in CouchDB 3.0. All endpoints previously accessible at that port are now
+available under the ``/_node/{node-name}/...`` hierarchy via the primary ``5984``
+port.
 
 CouchDB uses Erlang-native clustering functionality to achieve a clustered
 installation.  Erlang uses TCP port ``4369`` (EPMD) to find other nodes, so all

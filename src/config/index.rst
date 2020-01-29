@@ -31,6 +31,5 @@ Configuration
     logging
     replicator
     query-servers
-    services
     misc
     resharding

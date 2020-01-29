@@ -56,9 +56,10 @@ placement rules.
     Use of the ``placement`` argument will **override** the standard
     logic for shard replica cardinality (specified by ``[cluster] n``.)
 
-First, each node must be labeled with a zone attribute. This defines which
-zone each node is in. You do this by editing the node's document in the
-``/nodes`` database, which is accessed through the "back-door" (5986) port.
+First, each node must be labeled with a zone attribute. This defines which zone each node
+is in. You do this by editing the node's document in the system ``_nodes`` database, which
+is accessed node-local via the ``GET /_node/_local/_nodes/{node-name}`` endpoint.
+
 Add a key value pair of the form:
 
 .. code-block:: text
