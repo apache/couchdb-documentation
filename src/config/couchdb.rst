@@ -106,7 +106,7 @@ Base CouchDB Options
 
         .. _URI: http://en.wikipedia.org/wiki/URI
 
-   .. config:option:: users_db_suffix :: Users database suffix
+    .. config:option:: users_db_suffix :: Users database suffix
 
         Specifies the suffix (last component of a name) of the system database
         for storing CouchDB users. ::
