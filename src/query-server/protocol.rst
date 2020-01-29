@@ -325,6 +325,10 @@ second phase.
 ``shows``
 ---------
 
+.. warning::
+
+    Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 :Command: ``ddoc``
 :SubCommand: ``shows``
 :Arguments:
@@ -420,6 +424,10 @@ The Query Server sends::
 
 ``lists``
 ---------
+
+.. warning::
+
+    List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 :Command: ``ddoc``
 :SubCommand: ``lists``
