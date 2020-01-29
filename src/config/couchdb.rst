@@ -124,7 +124,7 @@ Base CouchDB Options
 
     .. config:option:: max_document_size :: Limit maximum document body size
 
-        .. versionchanged:: 2.1.0
+        .. versionchanged:: 3.0.0
 
         Limit maximum document body size. Size is calculated based on the
         serialized Erlang representation of the JSON document body, because
@@ -139,7 +139,7 @@ Base CouchDB Options
         transformation and right before being inserted into the database. ::
 
             [couchdb]
-            max_document_size = 4294967296 ; 4 GB
+            max_document_size = 8000000 ; bytes
 
         .. warning::
            Before version 2.1.0 this setting was implemented by simply checking
