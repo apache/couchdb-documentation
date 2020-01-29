@@ -16,43 +16,16 @@
 Security
 ========
 
-In this document, we'll look at the basic security mechanisms in CouchDB: the
-`Admin Party`, `Basic Authentication`, `Cookie Authentication`; how CouchDB
+In this document, we'll look at the basic security mechanisms in CouchDB:
+`Basic Authentication` and `Cookie Authentication`. This is how CouchDB
 handles users and protects their credentials.
 
 Authentication
 ==============
 
-.. _intro/security/admin_party:
-
-The Admin Party
----------------
-
-When you start out fresh, CouchDB allows any request to be made by anyone.
-Create a database? No problem, here you go. Delete some documents? Same deal.
-CouchDB calls this the `Admin Party`. Everybody has privileges to do anything.
-Neat.
-
-While it is incredibly easy to get started with CouchDB that way,
-it should be obvious that putting a default installation into the wild is
-adventurous. Any rogue client could come along and delete a database.
-
-A note of relief: by default, CouchDB will listen only on your loopback
-network interface (``127.0.0.1`` or ``localhost``) and thus only you will be
-able to make requests to CouchDB, nobody else. But when you start to open up
-your CouchDB to the public (that is, by telling it to bind to your machine's
-public IP address), you will want to think about restricting access so that
-the next bad guy doesn't ruin your admin party.
-
-In our previous discussions, we dropped some keywords about how things
-without the `Admin Party` work. First, there's *admin* itself, which implies
-some sort of super user. Then there are *privileges*. Let's explore these terms
-a little more.
-
 CouchDB has the idea of an *admin user* (e.g. an administrator, a super user,
 or root) that is allowed to do anything to a CouchDB installation. By default,
-everybody is an admin. If you don't like that, you can create specific admin
-users with a username and password as their credentials.
+one admin user **must** be created for CouchDB to start up successfully.
 
 CouchDB also defines a set of requests that only admin users are allowed to
 do. If you have defined one or more specific admin users, CouchDB will ask for
@@ -77,32 +50,52 @@ identification for certain requests:
 - Updating the active configuration
   (:put:`PUT /_node/{node-name}/_config/section/key </_config/{section}/{key}>`)
 
-Creating New Admin User
-^^^^^^^^^^^^^^^^^^^^^^^
+Creating a New Admin User
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Let's do another walk through the API using `curl` to see how CouchDB behaves
-when you add admin users. ::
+If your installation process did not set up an admin user, you will have to add
+one to the configuration file by hand and restart CouchDB first. For the purposes of
+this example, we'll create a default ``admin`` user with the password ``password``.
 
-    > HOST="http://127.0.0.1:5984"
+.. warning::
+    Don't just type in the following without thinking! Pick a good name for your
+    administrator user that isn't easily guessable, and pick a secure password.
+
+To the end of your ``etc/local.ini`` file, after the ``[admins]`` line, add the text
+``admin = password``, so it looks like this:
+
+.. code-block:: ini
+
+    [admins]
+    admin = password
+
+(Don't worry about the password being in plain text; we'll come back to this.)
+
+Now, restart CouchDB using the method appropriate for your operating system.
+You should now be able to access CouchDB using your new administrator account::
+
+    > curl http://admin:password@127.0.0.1:5984/_up
+    {"status":"ok","seeds":{}}
+
+Great!
+
+Let's create an admin user through the HTTP API. We'll call her ``anna``, and
+her password is ``secret``.  Note the double quotes in the following code; they
+are needed to denote a string value for the :ref:`configuration API
+<api/config>`::
+
+    > HOST="http://admin:password@127.0.0.1:5984"
     > NODENAME="_local"
-    > curl -X PUT $HOST/database
-    {"ok":true}
-
-When starting out fresh, we can add a database. Nothing unexpected. Now let's
-create an admin user. We'll call her ``anna``, and her password is ``secret``.
-Note the double quotes in the following code; they are needed to denote a string
-value for the :ref:`configuration API <api/config>`::
-
     > curl -X PUT $HOST/_node/$NODENAME/_config/admins/anna -d '"secret"'
     ""
 
-As per the :ref:`_config <api/config>` API's behavior, we're getting
-the previous value for the config item we just wrote. Since our admin user
-didn't exist, we get an empty string.
+As per the :ref:`_config <api/config>` API's behavior, we're getting the previous value
+for the config item we just wrote. Since our admin user didn't exist, we get an empty
+string.
 
-Please note that ``_local`` serves as an  alias for the local node name, so
-for all configuration URLs, ``NODENAME`` may be set to ``_local``, to interact
-with the local node’s configuration.
+Please note that ``_local`` serves as an  alias for the local node name, so for all
+configuration URLs, ``NODENAME`` may be set to ``_local``, to interact with the local
+node’s configuration.
 
 .. seealso::
     :ref:`Node Management <cluster/nodes>`
@@ -111,17 +104,20 @@ Hashing Passwords
 ^^^^^^^^^^^^^^^^^
 
 Seeing the plain-text password is scary, isn't it? No worries, CouchDB doesn't
-show the plain-text password anywhere. It gets hashed right away. The hash
-is that big, ugly, long string that starts out with ``-hashed-``.
-How does that work?
+show the plain-text password anywhere. It gets hashed right away. Go ahead and
+look at your ``local.ini`` file now. You'll see that CouchDB has rewritten the
+plain text passwords so they are hashed:
 
-#. Creates a new 128-bit UUID. This is our *salt*.
-#. Creates a sha1 hash of the concatenation of the bytes of the plain-text
-   password and the salt ``(sha1(password + salt))``.
-#. Prefixes the result with ``-hashed-`` and appends ``,salt``.
+.. code-block:: ini
+
+    [admins]
+    admin = -pbkdf2-71c01cb429088ac1a1e95f3482202622dc1e53fe,226701bece4ae0fc9a373a5e02bf5d07,10
+    anna = -pbkdf2-2d86831c82b440b8887169bd2eebb356821d621b,5e11b9a9228414ab92541beeeacbf125,10
+
+The hash is that big, ugly, long string that starts out with ``-pbkdf2-``.
 
 To compare a plain-text password during authentication with the stored hash,
-the same procedure is run and the resulting hash is compared to the stored
+the hashing algorithm is run and the resulting hash is compared to the stored
 hash. The probability of two identical hashes for different passwords is too
 insignificant to mention (c.f. `Bruce Schneier`_). Should the stored hash fall
 into the hands of an attacker, it is, by current standards, way too inconvenient
@@ -130,38 +126,34 @@ the hash.
 
 .. _Bruce Schneier: http://en.wikipedia.org/wiki/Bruce_Schneier
 
-But what's with the ``-hashed-`` prefix? When CouchDB starts up, it reads a set
-of `.ini` files with config settings. It loads these settings into an internal
-data store (not a database). The config API lets you read the current
-configuration as well as change it and create new entries. CouchDB is writing
-any changes back to the `.ini` files.
+When CouchDB starts up, it reads a set of ``.ini`` files with config settings. It
+loads these settings into an internal data store (not a database). The config
+API lets you read the current configuration as well as change it and create new
+entries. CouchDB is writing any changes back to the ``.ini`` files.
 
-The `.ini` files can also be edited by hand when CouchDB is not running.
+The ``.ini`` files can also be edited by hand when CouchDB is not running.
 Instead of creating the admin user as we showed previously, you could have
-stopped CouchDB, opened your `local.ini`, added ``anna = secret`` to the
+stopped CouchDB, opened your ``local.ini``, added ``anna = secret`` to the
 :config:section:`admins`, and restarted CouchDB. Upon reading the new line from
-`local.ini`, CouchDB would run the hashing algorithm and write back the hash to
-`local.ini`, replacing the plain-text password. To make sure CouchDB only hashes
-plain-text passwords and not an existing hash a second time, it prefixes
-the hash with ``-hashed-``, to distinguish between plain-text passwords and
-hashed passwords. This means your plain-text password can't start with the
-characters ``-hashed-``, but that's pretty unlikely to begin with.
+``local.ini``, CouchDB would run the hashing algorithm and write back the hash
+to ``local.ini``, replacing the plain-text password - just as it did for our
+original ``admin`` user. To make sure CouchDB only hashes plain-text passwords
+and not an existing hash a second time, it prefixes the hash with ``-pbkdf2-``,
+to distinguish between plain-text passwords and `PBKDF2`_ hashed passwords. This
+means your plain-text password can't start with the characters ``-pbkdf2-``,
+but that's pretty unlikely to begin with.
 
-.. note::
-    Since :ref:`1.3.0 release <release/1.3.0>` CouchDB uses ``-pbkdf2-`` prefix
-    by default to sign about using `PBKDF2`_ hashing algorithm instead of
-    `SHA1`.
-
-    .. _PBKDF2: http://en.wikipedia.org/wiki/PBKDF2
+.. _PBKDF2: http://en.wikipedia.org/wiki/PBKDF2
 
 .. _intro/security/basicauth:
 
 Basic Authentication
 --------------------
 
-Now that we have defined an admin, CouchDB will not allow us to create new
-databases unless we give the correct admin user credentials. Let's verify::
+CouchDB will not allow us to create new databases unless we give the correct admin user
+credentials. Let's verify::
 
+    > HOST="http://127.0.0.1:5984"
     > curl -X PUT $HOST/somedatabase
     {"error":"unauthorized","reason":"You are not a server admin."}
 

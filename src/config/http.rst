@@ -90,8 +90,7 @@ HTTP Server Options
         - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
         - ``{chttpd_auth, proxy_authentication_handler}``: used for Proxy auth;
         - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
-        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
-          Everlasting `Admin Party`!
+        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth, breaks CouchDB.
 
 .. config:section:: httpd :: HTTP Server Options
 
