@@ -13,6 +13,8 @@
 .. default-domain:: config
 .. highlight:: ini
 
+.. _config/index_builds:
+
 ===================
 Background Indexing
 ===================
@@ -22,8 +24,6 @@ avoid high latencies when reading indexes following a large block of writes, Cou
 automatically kicks off background jobs to keep secondary indexes "warm". The daemon
 responsible for this process is internally known as "ken" and can be configured using the
 following settings.
-
-.. _config/index_builds:
 
 .. config:section:: ken :: Background Index Builds
 
