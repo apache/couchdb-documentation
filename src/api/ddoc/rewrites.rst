@@ -16,6 +16,10 @@
 ``/db/_design/design-doc/_rewrite/path``
 ========================================
 
+.. warning::
+
+    Rewrites are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 .. http:any:: /{db}/_design/{ddoc}/_rewrite/{path}
     :synopsis: Rewrites HTTP request for the specified path by using stored
                array of routing rules or JavaScript function
