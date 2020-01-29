@@ -162,8 +162,7 @@ interact with the local node's configuration.
             "default_handler": "{couch_httpd_db, handle_request}",
             "enable_cors": "false",
             "port": "5984",
-            "secure_rewrites": "true",
-            "vhost_global_handlers": "_utils, _uuids, _session, _users"
+            "secure_rewrites": "true"
         }
 
 .. _api/config/section/key:
