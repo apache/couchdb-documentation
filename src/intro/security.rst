@@ -51,7 +51,7 @@ identification for certain requests:
   (:put:`PUT /_node/{node-name}/_config/section/key </_config/{section}/{key}>`)
 
 Creating a New Admin User
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 If your installation process did not set up an admin user, you will have to add
 one to the configuration file by hand and restart CouchDB first. For the purposes of
@@ -492,7 +492,7 @@ needing to be an administrator*. Keep in mind, though, not to publish sensitive
 information, especially without user's consent!
 
 Authorization
-==============
+=============
 
 Now that you have a few users who can log in, you probably want to set up some
 restrictions on what actions they can perform based on their identity and their

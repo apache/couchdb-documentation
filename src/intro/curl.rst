@@ -17,8 +17,7 @@ cURL: Your Command Line Friend
 ==============================
 
 The ``curl`` utility is a command line tool available on Unix, Linux, Mac OS X,
-Windows, and many other platforms.
-and Windows and many other platforms. ``curl`` provides easy access to the HTTP
+Windows, and many other platforms. ``curl`` provides easy access to the HTTP
 protocol (among others) directly from the command line and is therefore an
 ideal way of interacting with CouchDB over the HTTP REST API.
 
