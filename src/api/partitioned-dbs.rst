@@ -200,7 +200,7 @@ See the guide for
 =====================================
 
 .. http:get:: /{db}/_partition/{partition_id}/_find
-    :synopsis: Find a partition query by ID
+    :synopsis: Query the partition specified by ``partition_id``
 
     :param db: Database name
     :param partition id: Name of the partition to query
