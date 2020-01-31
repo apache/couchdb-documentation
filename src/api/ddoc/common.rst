@@ -50,9 +50,9 @@
       to process design document functions
     * **options** (*object*): View's default options
     * **filters** (*object*): :ref:`Filter functions <filterfun>` definition
-    * **lists** (*object*): :ref:`List functions <listfun>` definition
-    * **rewrites** (*array* or *string*): Rewrite rules definition
-    * **shows** (*object*): :ref:`Show functions <showfun>` definition
+    * **lists** (*object*): :ref:`List functions <listfun>` definition. *Deprecated.*
+    * **rewrites** (*array* or *string*): Rewrite rules definition. *Deprecated.*
+    * **shows** (*object*): :ref:`Show functions <showfun>` definition. *Deprecated.*
     * **updates** (*object*): :ref:`Update functions <updatefun>` definition
     * **validate_doc_update** (*string*): :ref:`Validate document update
       <vdufun>` function source

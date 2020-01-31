@@ -25,16 +25,18 @@ Server Administrators
 
 .. config:section:: admins :: Server Administrators
 
-    A default CouchDB install provides admin-level access to all connecting
-    users. This configuration is known as `Admin Party`, and is not recommended
-    for in-production usage. You can crash the party simply by creating the
-    first admin account. CouchDB server administrators and passwords are not
-    stored in the ``_users`` database, but in the last ``[admins]`` section
-    that CouchDB finds when loading its ini files. See :config:intro for
-    details on config file order and behaviour. This file (which could be
-    something like ``etc/local.ini`` or ``etc/local.d/10-admins.ini`` on a
-    Debian/Ubuntu system installed from packages) should be appropriately
-    secured and readable only by system administrators::
+.. versionchanged:: 3.0.0
+
+    CouchDB requires an admin account to start. If an admin account has not
+    been created, CouchDB will print an error message and terminate.
+
+    CouchDB server administrators and passwords are not stored in the
+    ``_users`` database, but in the last ``[admins]`` section that CouchDB
+    finds when loading its ini files. See :config:intro for details on config
+    file order and behaviour. This file (which could be something like
+    ``etc/local.ini`` or ``etc/local.d/10-admins.ini`` on a Debian/Ubuntu
+    system installed from packages) should be appropriately secured and
+    readable only by system administrators::
 
         [admins]
         ;admin = mysecretpassword

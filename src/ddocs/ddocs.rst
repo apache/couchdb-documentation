@@ -328,6 +328,10 @@ objects.
 Show Functions
 ==============
 
+.. warning::
+
+    Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 .. function:: showfun(doc, req)
 
     :param doc: The document that is being processed; may be omitted.
@@ -449,6 +453,10 @@ correctly, and keys with invalid characters, but you've got the idea!
 
 List Functions
 ==============
+
+.. warning::
+
+    List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. function:: listfun(head, req)
 
