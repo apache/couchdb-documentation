@@ -943,6 +943,12 @@ built using MapReduce Views.
     :query json partial_filter_selector: A :ref:`selector <find/selectors>`
         to apply to documents at indexing time, creating a
         :ref:`partial index <find/partial_indexes>`. *Optional*
+    :query boolean partitioned: Determines whether a JSON index is partitioned
+        or global. To create a partitioned index, set the ``"partitioned"`` field
+        to ``true``. To create a global index on a partitioned database, specify 
+        ``false`` for the ``"partitioned"`` field. If you specify ``true``
+        for the  ``"partitioned"`` field on an unpartitioned database, an
+        error occurs.
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
