@@ -38,10 +38,10 @@ Upgrade Notes
   change the value upon database creation if desired. The default can be changed
   via the config ``[cluster] q`` setting.
 
-* :ghissue:`1523`, :ghissue:`2092`, :ghissue:`2336`: The "node-local" HTTP interface,
-  by default exposed on port 5986, has been removed. All functionality previously
-  available at that port is now available on the main, clustered interface (by default,
-  port 5984). Examples:
+* :ghissue:`1523`, :ghissue:`2092`, :ghissue:`2336`, :ghissue:`2475`: The "node-local"
+  HTTP interface, by default exposed on port 5986, has been removed. All functionality
+  previously available at that port is now available on the main, clustered interface (by
+  default, port 5984). Examples:
 
   .. code-block:: javascript
 
@@ -51,6 +51,7 @@ Upgrade Notes
     GET /_node/{nodename}/_uuids
     GET /_node/{nodename}/_config
     GET /_node/{nodename}/_config/couchdb/uuid
+    POST /_node/{nodename}_config/_reload
     GET /_node/{nodename}/_nodes/_changes?include_docs=true
     PUT /_node/{nodename}/_dbs/{dbname}
     POST /_node/{nodename}/_restart
@@ -165,8 +166,9 @@ Features and Enhancements
 * :ghissue:`1789`: :ref:`User-defined partitioned databases <partitioned-dbs>`.
 
   These special databases support user-driven placement of documents into the same
-  shard range. :ref:`JavaScript views <api/partitioned/views>` and **[TODO LINK]** Mango
-  indexes have specific optimizations for partitioned databases as well.
+  shard range. :ref:`JavaScript views <api/partitioned/views>` and :ref:`Mango
+  indexes <api/partitioned/find>` have specific optimizations for partitioned databases
+  as well.
 
   Two tweakable configuration parameters exist:
 
@@ -193,6 +195,27 @@ Features and Enhancements
 
 * :ghissue:`1889`, :ghissue:`2408`: New IO Queue subsystem implementation.
   This is :ref:`highly configurable and well-documented <config/ioq>`.
+
+* :ghissue:`2436`, :ghissue:`2455`: CouchDB now regression tests against, and officially
+  supports, running on the ``arm64v8`` (``aarch64``) and ``ppc64le`` (``ppc64el``)
+  machine architectures. Convenience binaries are generated on these architectures for
+  Debian 10.x ("buster") packages, and for the Docker containers.
+
+* :ghissue:`1875`, :ghissue:`2437`, :ghissue:`2423`: CouchDB now supports linking against
+  SpiderMonkey 60 or SpiderMonkey 1.8.5. SpiderMonkey 60 provides enhanced support for
+  ES5, ES6, and ES2016+. Full compatibility information is available at the `ECMAScript
+  compatibility table`_: click on "Show obsolete platforms," then look for "FF 60 ESR"
+  in the list of engine types.
+
+  However, it was discovered that on ARM 64-bit platforms, SM 60 segfaults frequently.
+  Also, at the time of writing, of the set of platforms supported for convenience
+  binaries, only Debian 10.x ("buster") ships precompiled SM 60 binaries.
+
+  As a result, CouchDB's convenience binaries **only link against SM 60 on debian buster
+  ``x86_64`` and ``ppc64le`` architectures**. This includes the Docker image for these
+  architectures. All other packages and Docker images link against SM 1.8.5, as in CouchDB
+  2.x. As OSes update to include binaries for SM 60, the convenience binaries will be
+  updated accordingly.
 
 * :ghissue:`2037`: Dreyfus, the CouchDB side of the Lucene-powered search solution, is now
   shipped with CouchDB. When one or more Clouseau Java nodes are joined to the cluster,
@@ -243,11 +266,10 @@ Features and Enhancements
 * :ghissue:`1963`: Metrics are now kept on the number of partition and global view
   queries, along with the number of timeouts that occur.
 
-* :ghissue:`2452`: A new configuration field ``[couch_httpd_auth] same_site`` has
-  been added to set the value of the CouchDB auth cookie's ``SameSite`` attribute.
-  It may be necessary to set this to ``strict`` for compatibility with future
-  versions of Google Chrome. If CouchDB CORS support is enabled, set this to
-  ``None``.
+* :ghissue:`2452`, :ghissue:`2221`: A new configuration field ``[couch_httpd_auth]
+  same_site`` has been added to set the value of the CouchDB auth cookie's ``SameSite``
+  attribute.  It may be necessary to set this to ``strict`` for compatibility with future
+  versions of Google Chrome. If CouchDB CORS support is enabled, set this to ``None``.
 
 Performance
 -----------
@@ -269,6 +291,10 @@ Performance
   unnecessary function calls.
 
 * :ghissue:`1795`: Avoid calling ``fabric:update_docs`` with empty doc lists.
+
+* :ghissue:`2497`: The setup wizard no longer automatically creates the
+  ``_global_changes`` database, as the majority of users do not need this
+  functionality. This reduces overall CouchDB load.
 
 Bugfixes
 --------
@@ -372,12 +398,24 @@ Bugfixes
 * :ghissue:`2458`: Partitioned queries and dreyfus search functions no longer fail
   if there is a single failed node or rexi worker error.
 
+* :ghissue:`1783`: Mango text indexes no longer error when given an empty selector or
+  operators with empty arrays.
+
+* :ghissue:`2466`: Mango text indexes no longer error if the indexed document revision
+  no longer exists in the primary index.
+
+* :ghissue:`2486`: The ``$lt``, ``$lte``, ``$gt``, and ``$gte`` Mango operators are
+  correctly quoted internally when used in conjunction with a text index search.
+
 Other
 -----
 
 The 3.0.0 release also includes the following minor improvements:
 
 .. rst-class:: open
+
+* :ghissue:`2472`: CouchDB now logs the correct, clustered URI at startup (by default:
+  port ``5984``.)
 
 * :ghissue:`2034`,:ghissue:`2416`: The path to the Fauxton installation can now be
   specified via the ``COUCHDB_FAUXTON_DOCROOT`` environment variable.
@@ -389,8 +427,8 @@ The 3.0.0 release also includes the following minor improvements:
   use, including counts of unindexed queries, invalid index queries, docs examined that
   do and don't meet cluster quorum, query time, etc.
 
-* :ghissue:`2152`: CouchDB can now be started via a symlink to the binary on UNIX-based
-  platforms.
+* :ghissue:`2152`, :ghissue:`2504`: CouchDB can now be started via a symlink to the
+  binary on UNIX-based platforms.
 
 * :ghissue:`1844`: A new internal API has been added to write custom Erlang
   request-level metrics reporting plugins.
@@ -467,9 +505,18 @@ The 3.0.0 release also includes the following minor improvements:
 
 * :ghissue:`1786`: ``dev/run``: do not create needless ``dev/data/`` directory.
 
+* :ghissue:`2482`: A redundant ``get_ring_opts`` call has been removed from
+  ``dreyfus_fabric_search``.
+
+* :ghissue:`2506`: CouchDB's release candidates no longer propagate the RC tags
+  into each Erlang application's version string.
+
+* :ghissue:`2511`: `recon`_, the Erlang diagnostic toolkit, has been added to
+  CouchDB's build process and ships in the release + convenience binaries.
+
 * Fauxton updated to v1.2.2, which includes:
 
-  * TODO
+  * **[TODO]**
 
 * Improved test cases:
 
@@ -489,6 +536,7 @@ The 3.0.0 release also includes the following minor improvements:
     * ``erlang_views`` (:ghissue:`2237`)
     * ``auth_cache``, ``cookie_auth``, ``lorem*``, ``multiple_rows``, ``users_db``,
       ``utf8`` (:ghissue:`2394`)
+    * ``etags_head`` (:ghissue:`2464`, :ghissue:`2469`)
 
   * :ghissue:`2431`: ``chttpd_purge_tests`` have been improved in light of CI failures.
 
@@ -532,6 +580,9 @@ The 3.0.0 release also includes the following minor improvements:
 
   * :ghissue:`1785`: Use ``devclean`` on elixir target for consistency of Makefile.
 
+  * :ghissue:`2476`: For testing, ``Triq`` has been replaced with ``PropEr`` as an
+    optional dependency.
+
 * External dependency updates:
 
   * :ghissue:`1870`: Mochiweb has been updated to 2.19.0.
@@ -540,7 +591,11 @@ The 3.0.0 release also includes the following minor improvements:
 
   * :ghissue:`2001`: ibrowse has been updated to 4.0.1-1.
 
+  * :ghissue:`2400`: jiffy has been updated to 1.0.1.
+
 * A llama! OK, no, not really. If you got this far...thank you for reading.
 
 .. _Python black: https://github.com/ambv/black
 .. _hehaden: https://www.flickr.com/photos/hellie55/23379351593/
+.. _ECMAScript compatibility table: https://kangax.github.io/compat-table/
+.. _recon: https://github.com/ferd/recon
