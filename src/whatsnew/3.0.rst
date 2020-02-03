@@ -514,9 +514,19 @@ The 3.0.0 release also includes the following minor improvements:
 * :ghissue:`2511`: `recon`_, the Erlang diagnostic toolkit, has been added to
   CouchDB's build process and ships in the release + convenience binaries.
 
-* Fauxton updated to v1.2.2, which includes:
+* Fauxton updated to v1.2.3, which includes:
 
-  * **[TODO]**
+  * Support multiple server-generated warnings when running queries
+
+  * Partitioned database support
+
+  * Search index support
+
+  * Remove references to deprecated dbinfo fields
+
+  * Improve accessibility for screen readers
+
+  * Numerous CSS fixes
 
 * Improved test cases:
 
