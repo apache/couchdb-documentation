@@ -26,5 +26,6 @@ Installation
     docker
     snap
     kubernetes
+    search
     upgrading
     troubleshooting
