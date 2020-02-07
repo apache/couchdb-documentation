@@ -1650,6 +1650,10 @@ containing only the requested individual statistic.
 ``/_search_analyze``
 ==========================================
 
+.. warning::
+    Search endpoints require a running search plugin connected to each cluster
+    node. See :ref:`Search Plugin Installation <install/search>` for details.
+
 .. versionadded:: 3.0
 
 .. http:post:: /_search_analyze
@@ -1682,10 +1686,6 @@ containing only the requested individual statistic.
             "run"
         ]
     }
-
-.. warning::
-    Requests to this endpoint will fail unless the CouchDB server is connected to a
-    functioning Clouseau instance.
 
 .. _api/server/utils:
 

@@ -24,7 +24,8 @@ groups, facets, or geographical searches.
 
 .. warning::
     Search cannot function unless it has a functioning, cluster-connected
-    Clouseau instance.
+    Clouseau instance. See :ref:`Search Plugin Installation <install/search>`
+    for details.
 
 To create a search index, you add a JavaScript function to a design document in the
 database. An index builds after processing one search request or after the server detects
