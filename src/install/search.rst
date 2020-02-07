@@ -31,11 +31,11 @@ release from source requires JDK 6.
 Installation of Binary Packages
 ===============================
 
-Binary packages that bundle all the necessary dependencies of the search plugin are available on `GitHub`_.
-The files in each release should be unpacked into a
-directory on the Java classpath. The service expects to find a couple of
-configuration files conventionally called ``clouseau.ini`` and
-``log4j.properties`` with the following content:
+Binary packages that bundle all the necessary dependencies of the search plugin are
+available on `GitHub`_.  The files in each release should be unpacked into a directory on
+the Java classpath. The service expects to find a couple of configuration files
+conventionally called ``clouseau.ini`` and ``log4j.properties`` with the following
+content:
 
 **clouseau.ini**::
 
