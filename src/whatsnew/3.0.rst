@@ -222,7 +222,7 @@ Features and Enhancements
   text-based indexes can be enabled in CouchDB. It is recommended to have as many Clouseau
   nodes as you have CouchDB nodes. Search is advertised in the feature list present at
   ``GET /`` if configured correctly (:ghissue:`2206`).  :ref:`Configuration
-  <config/search>` and **[TODO]** installation documentation is available.
+  <config/search>` and :ref:`installation documentation is available <install/search>`.
 
 * :ghissue:`2411`: The ``/_up`` endpoint no longer requires authentication, even when
   ``require_valid_user`` is ``true``.
@@ -406,6 +406,9 @@ Bugfixes
 
 * :ghissue:`2486`: The ``$lt``, ``$lte``, ``$gt``, and ``$gte`` Mango operators are
   correctly quoted internally when used in conjunction with a text index search.
+
+* :ghissue:`2493`: The ``couch_auth_cache`` no longer has a runaway condition in which
+  it creates millions of monitors on the ``_users`` database.
 
 Other
 -----
