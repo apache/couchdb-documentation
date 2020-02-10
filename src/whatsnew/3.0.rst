@@ -420,7 +420,7 @@ The 3.0.0 release also includes the following minor improvements:
 * :ghissue:`2472`: CouchDB now logs the correct, clustered URI at startup (by default:
   port ``5984``.)
 
-* :ghissue:`2034`,:ghissue:`2416`: The path to the Fauxton installation can now be
+* :ghissue:`2034`, :ghissue:`2416`: The path to the Fauxton installation can now be
   specified via the ``COUCHDB_FAUXTON_DOCROOT`` environment variable.
 
 * :ghissue:`2447`: Replication stats are both persisted when jobs are re-created, as well
