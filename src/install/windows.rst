@@ -23,6 +23,10 @@ Installation from binaries
 
 This is the simplest way to go.
 
+.. warning::
+    Windows 10 requires the .NET Framwork v3.5 to be installed. You can install
+    this via the `Control Panel`_.
+
 #. Get `the latest Windows binaries`_ from the `CouchDB web site`_.
    Old releases are available at `archive`_.
 
@@ -57,6 +61,41 @@ This is the simplest way to go.
 .. _CouchDB web site: http://couchdb.org/
 .. _archive: http://archive.apache.org/dist/couchdb/binary/win/
 .. _the latest Windows binaries: http://couchdb.org/#download
+.. _Control Panel: https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10
+
+.. _install/windows/silent:
+
+Silent Install
+--------------
+
+The Windows installer supports silent installs. Here are some sample commands, supporting
+the new features of the 3.0 installer.
+
+Install CouchDB without a service, but with an admin user:password of ``admin:hunter2``:
+
+.. code-block:: batch
+
+    msiexec /i apache-couchdb-3.0.0.msi /quiet ADMINUSER=admin ADMINPASSWORD=hunter2 /norestart
+
+The same as above, but also install and launch CouchDB as a service:
+
+.. code-block:: batch
+
+    msiexec /i apache-couchdb-3.0.0.msi /quiet INSTALLSERVICE=1 ADMINUSER=admin ADMINPASSWORD=hunter2 /norestart
+
+Unattended uninstall of CouchDB:
+
+.. code-block:: batch
+
+    msiexec /x apache-couchdb-3.0.0.msi /quiet /norestart
+
+Unattended uninstall if the installer file is unavailable:
+
+.. code-block:: batch
+
+    msiexec /x {4CD776E0-FADF-4831-AF56-E80E39F34CFC} /quiet /norestart
+
+Add ``/l* log.txt`` to any of the above to generate a useful logfile for debugging.
 
 Installation from sources
 =========================
