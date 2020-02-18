@@ -217,6 +217,17 @@ Features and Enhancements
   2.x. As OSes update to include binaries for SM 60, the convenience binaries will be
   updated accordingly.
 
+* The Windows installer has many improvements, including:
+
+  * Prompts for an admin user/password as CouchDB 3.0 requires
+    * Will not overwrite existing credentials if in place
+  * No longer remove user-modified config files, closing :ghissue:`1989`
+    * Also will not overwrite them on install.
+  * Checkbox to disable installation of the Windows service
+  * :ref:`Silent install support <install/windows/silent>`.
+  * Friendly link to these online release notes in the exit dialog
+  * Higher resolution icon for HiDPI (500x500)
+
 * :ghissue:`2037`: Dreyfus, the CouchDB side of the Lucene-powered search solution, is now
   shipped with CouchDB. When one or more Clouseau Java nodes are joined to the cluster,
   text-based indexes can be enabled in CouchDB. It is recommended to have as many Clouseau
