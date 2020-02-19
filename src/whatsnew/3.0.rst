@@ -70,6 +70,9 @@ Upgrade Notes
 
   CC-BY-NC 2.0: `hehaden @ Flickr <https://www.flickr.com/photos/hellie55/23379351593/>`_
 
+* :ghissue:`2576`: CouchDB 3.0 now requires admin-level access for the ``/_all_dbs``
+  endpoint.
+
 * :ghissue:`2339`: All databases are now created by default as admin-only. That is, the
   default new database ``_security`` object is now:
 
