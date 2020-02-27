@@ -39,7 +39,7 @@ See the guide for
 
     .. code-block:: http
 
-        GET /db/_partition/foo HTTP/1.1
+        GET /db/_partition/sensor-260 HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
