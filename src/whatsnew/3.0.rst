@@ -87,7 +87,7 @@ Upgrade Notes
 
 * Due to code changes in :ghissue:`2324`, it is not possible to upgrade transparently from
   CouchDB 1.x to 3.x. In addition, the ``couchup`` utility has been removed from CouchDB
-  3.0 by :ghissue:`2399`:. If you are upgrading from CouchDB 1.x, you must first upgrade
+  3.0 by :ghissue:`2399`. If you are upgrading from CouchDB 1.x, you must first upgrade
   to CouchDB 2.3.1 to convert your database and indexes, using ``couchup`` if desired.
   You can then upgrade to CouchDB 3.0. Or, you can start a new CouchDB 3.0 installation
   and replicate directly from 1.x to 3.0.
@@ -210,15 +210,27 @@ Features and Enhancements
   compatibility table`_: click on "Show obsolete platforms," then look for "FF 60 ESR"
   in the list of engine types.
 
-  However, it was discovered that on ARM 64-bit platforms, SM 60 segfaults frequently.
-  Also, at the time of writing, of the set of platforms supported for convenience
-  binaries, only Debian 10.x ("buster") ships precompiled SM 60 binaries.
+  However, it was discovered that on some ARM 64-bit distributions, SM 60 segfaults
+  frequently, including the SM 60 packages on CentOS 8 and Debian 10.
 
-  As a result, CouchDB's convenience binaries **only link against SM 60 on debian buster
+  As a result, CouchDB's convenience binaries **only link against SM 60 on the
   ``x86_64`` and ``ppc64le`` architectures**. This includes the Docker image for these
-  architectures. All other packages and Docker images link against SM 1.8.5, as in CouchDB
-  2.x. As OSes update to include binaries for SM 60, the convenience binaries will be
-  updated accordingly.
+  architectures.
+
+  At present, CouchDB ships with SM 60 linked in on the following binary distributions:
+
+  * Debian buster (10.x)
+  * CentOS / RedHat 8.x
+  * macOS (10.10+)
+  * Windows (7+)
+  * Docker (3.0.0)
+  * FreeBSD (CURRENT)
+
+  We expect to add SM 60 support to Ubuntu with Focal Fossa (20.04 LTS) when it ships in
+  April 2020.
+
+  It is unlikely we will backport SM 60 packages to older versions of Debian, CentOS,
+  RedHat, or Ubuntu.
 
 * The Windows installer has many improvements, including:
 
@@ -230,6 +242,9 @@ Features and Enhancements
   * :ref:`Silent install support <install/windows/silent>`.
   * Friendly link to these online release notes in the exit dialog
   * Higher resolution icon for HiDPI (500x500)
+
+.. warning::
+    Windows 8, 8.1, and 10 require the `.NET Framework v3.5`_ to be installed.
 
 * :ghissue:`2037`: Dreyfus, the CouchDB side of the Lucene-powered search solution, is now
   shipped with CouchDB. When one or more Clouseau Java nodes are joined to the cluster,
@@ -626,3 +641,4 @@ The 3.0.0 release also includes the following minor improvements:
 .. _hehaden: https://www.flickr.com/photos/hellie55/23379351593/
 .. _ECMAScript compatibility table: https://kangax.github.io/compat-table/
 .. _recon: https://github.com/ferd/recon
+.. _.NET Framework v3.5: https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10

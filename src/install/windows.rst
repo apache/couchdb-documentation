@@ -24,8 +24,7 @@ Installation from binaries
 This is the simplest way to go.
 
 .. warning::
-    Windows 10 requires the .NET Framwork v3.5 to be installed. You can install
-    this via the `Control Panel`_.
+    Windows 8, 8.1, and 10 require the `.NET Framework v3.5`_ to be installed.
 
 #. Get `the latest Windows binaries`_ from the `CouchDB web site`_.
    Old releases are available at `archive`_.
@@ -61,7 +60,7 @@ This is the simplest way to go.
 .. _CouchDB web site: http://couchdb.org/
 .. _archive: http://archive.apache.org/dist/couchdb/binary/win/
 .. _the latest Windows binaries: http://couchdb.org/#download
-.. _Control Panel: https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10
+.. _.NET Framework v3.5: https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10
 
 .. _install/windows/silent:
 
