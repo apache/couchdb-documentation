@@ -21,7 +21,7 @@ Reverse proxying with HAProxy
 
 CouchDB recommends the use of `HAProxy`_ as a load balancer and reverse proxy.
 The team's experience with using it in production has shown it to be superior
-for configuration and montioring capabilities, as well as overall performance.
+for configuration and monitoring capabilities, as well as overall performance.
 
 CouchDB's sample haproxy configuration is present in the `code repository`_ and
 release tarball as ``rel/haproxy.cfg``. It is included below. This example
