@@ -119,7 +119,7 @@ interact with the local node's configuration.
 
 .. _api/config/section:
 
-``_node/{node-name}/_config/section``
+``/_node/{node-name}/_config/{section}``
 =====================================
 
 .. http:get:: /_node/{node-name}/_config/{section}
@@ -166,7 +166,7 @@ interact with the local node's configuration.
 
 .. _api/config/section/key:
 
-``/_node/node/_config/section/key``
+``/_node/{node-name}/_config/{section}/{key}``
 ===================================
 
 .. http:get:: /_node/{node-name}/_config/{section}/{key}
@@ -294,7 +294,7 @@ interact with the local node's configuration.
 
 .. _api/config/reload:
 
-``_node/{node-name}/_config/_reload``
+``/_node/{node-name}/_config/_reload``
 =====================================
 
 .. versionadded:: 3.0
