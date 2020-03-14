@@ -92,7 +92,6 @@ interact with the local node's configuration.
                 "max_connections": "2048",
                 "port": "5984",
                 "secure_rewrites": "true"
-            }
             },
             "log": {
                 "writer": "file",
