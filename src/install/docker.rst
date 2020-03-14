@@ -19,8 +19,8 @@ Installation via Docker
 Apache CouchDB provides 'convenience binary' Docker images through
 Docker Hub at ``apache/couchdb``. The following tags are available:
 
-* ``latest``, ``3``, ``3.0``, ``3.0.0``: CouchDB 3.0.0, single node (capable of running in a cluster)
-* ``2``, ``2.3``, ``2.3.1``: CouchDB 2.3.1, single node (capable of running in a cluster)
+* ``latest``, ``3``, ``3.0``, ``3.0.0``: CouchDB 3.0.0, single node 
+* ``2``, ``2.3``, ``2.3.1``: CouchDB 2.3.1, single node
 * ``1``, ``1.7``, ``1.7.2``: CouchDB 1.7.2
 * ``1-couchperuser``, ``1.7-couchperuser``, ``1.7.2-couchperuser``: CouchDB
   1.7.2 with couchperuser plugin
