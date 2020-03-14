@@ -2127,7 +2127,7 @@ You can verify the change by obtaining a list of UUIDs:
             ]
         }
 
-.. http:post:: /_reshard/jobs/{jobid}
+.. http:post:: /_reshard/jobs
     :synopsis: Create one or more resharding jobs
 
     Depending on what fields are specified in the request, one or more
