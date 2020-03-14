@@ -120,7 +120,7 @@ interact with the local node's configuration.
 .. _api/config/section:
 
 ``/_node/{node-name}/_config/{section}``
-=====================================
+========================================
 
 .. http:get:: /_node/{node-name}/_config/{section}
     :synopsis: Returns all the configuration values for the specified section
@@ -167,7 +167,7 @@ interact with the local node's configuration.
 .. _api/config/section/key:
 
 ``/_node/{node-name}/_config/{section}/{key}``
-===================================
+==============================================
 
 .. http:get:: /_node/{node-name}/_config/{section}/{key}
     :synopsis: Returns a specific section/configuration value
@@ -295,7 +295,7 @@ interact with the local node's configuration.
 .. _api/config/reload:
 
 ``/_node/{node-name}/_config/_reload``
-=====================================
+======================================
 
 .. versionadded:: 3.0
 
