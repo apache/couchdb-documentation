@@ -12,9 +12,9 @@
 
 .. _api/db/all_docs:
 
-=================
-``/db/_all_docs``
-=================
+===================
+``/{db}/_all_docs``
+===================
 
 .. http:get:: /{db}/_all_docs
     :synopsis: Returns a built-in view of all documents in this database
@@ -145,9 +145,9 @@
 
 .. _api/db/design_docs:
 
-====================
-``/db/_design_docs``
-====================
+======================
+``/{db}/_design_docs``
+======================
 
 .. versionadded:: 2.2
 
@@ -452,9 +452,9 @@ Sending multiple queries to a database
 
 .. _api/db/bulk_get:
 
-==================
-``/db/_bulk_get``
-==================
+===================
+``/{db}/_bulk_get``
+===================
 
 .. http:post:: /{db}/_bulk_get
     :synopsis: Fetches several documents at the given revisions
@@ -652,9 +652,9 @@ Sending multiple queries to a database
 
 .. _api/db/bulk_docs:
 
-==================
-``/db/_bulk_docs``
-==================
+====================
+``/{db}/_bulk_docs``
+====================
 
 .. http:post:: /{db}/_bulk_docs
     :synopsis: Inserts or updates multiple documents in to the database in
