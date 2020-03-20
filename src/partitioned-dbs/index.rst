@@ -105,14 +105,20 @@ sensor readings from an IoT field monitoring service. In this particular
 use case, it's quite logical to group all documents by their ``sensor_id``
 field. In this case, we would call the ``sensor_id`` the partition.
 
+A partition offers two benefits. Firstly, it allows you to simplify the
+workload on the query engine, by allowing the engine to only query shards
+that it needs to query. Secondly, it allows the database to scale in more
+predictable ways.
+
 A good partition has two basic properties. First, it should have a high
 cardinality. That is, a large partitioned database should have many more
-partitions than documents in any single partition. A database that has
-a single partition would be an anti-pattern for this feature. Secondly,
-the amount of data per partition should be "small". The general
-recommendation is to limit individual partitions to less than ten
-gigabytes (10 GB) of data. Which, for the example of sensor documents,
-equates to roughly 60,000 years of data.
+partitions than documents, compared to an unpartitioned database. A database
+that has a single partition would be an anti-pattern for this feature, as
+one of the major bonuses of partitioning is that it allows index lookups to
+iterate over a smaller B-Tree. Secondly, the amount of data per partition
+should be "small". The general recommendation is to limit individual
+partitions to less than ten gigabytes (10 GB) of data. Which, for the example
+of sensor documents, equates to roughly 60,000 years of data.
 
 Why use partitions?
 ===================
@@ -129,6 +135,34 @@ given shard range when executing a query instead of executing
 the query across all ``q`` shards in the database. This mean that you do
 not have to wait for all ``q`` shards to respond, which is both
 efficient and faster.
+
+In other words, you can use partitions to help pre-process views. As another
+example, you may be recording traffic to various websites, and 95% of your
+queries are based around 'what happened in relation to website example.com'.
+By partitioning your database with the key ``example.com:uuid``, and using
+the ``/dbname/_partition/example.com`` query, you are significantly simplifying
+the work the query engine has to do.
+
+When to NOT use partitions?
+===========================
+
+If you can not split your data using a common partition, or you end up with
+a small number of partitions, it is more efficient to use seperate databases.
+Following on with the example above, if you are only monitoring 10 websites,
+it is far more efficient to have 10 databases, rather than 1 database with
+10 partitions, with 10,000,000 entries in one partition, 500 in another, and
+10,000 in all the others.
+
+As partitioning relates to which shard the data is placed into, you want to
+roughly balance the amount of data in each partition, but you should think
+of that as a design guideline when you are thinking about what to partition
+your data on.
+
+Additinally, if you are not using the ``/dbname/_partition/...`` endpoint
+for a majority of your queries, you are also potentially losing performance,
+because you won't get the automatic load-balancing of documents over shards
+that a non partitioned database gives you.
+
 
 Partitions By Example
 =====================
