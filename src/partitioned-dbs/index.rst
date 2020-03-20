@@ -163,7 +163,6 @@ for a majority of your queries, you are also potentially losing performance,
 because you won't get the automatic load-balancing of documents over shards
 that a non partitioned database gives you.
 
-
 Partitions By Example
 =====================
 
