@@ -5,7 +5,7 @@ You can view the latest rendered build of this content at:
 
     http://docs.couchdb.org/en/latest
 
-# Building the Repo
+# Building this repo
 
 Install Python3 and pip. Then:
 
