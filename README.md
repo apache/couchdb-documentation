@@ -5,17 +5,34 @@ You can view the latest rendered build of this content at:
 
     http://docs.couchdb.org/en/latest
 
-# Building this repo
+# Getting Started
 
-Install Python 2.7+ and pip. Then:
+## Prerequisites
+
+- Python 3.x
+- Pip
+
+### Preparing Prerequisites using [asdf](https://asdf-vm.com/#/)
 
 ```sh
-$ virtualenv venv
-$ . ./venv/bin/activate
+$ asdf plugin add python
+$ asdf install python 3.8.2
+$ pip pip install -r requirements.txt
+$ asdf reshim python
+```
+### Preparing Prerequisites having Python/Pip already installed
+
+```sh
 $ pip install -r requirements.txt
+```
+
+## Building the Repo
+
+```sh
 $ make html # builds the docs
 $ make check # syntax checks the docs
 ```
+
 # Feedback, Issues, Contributing
 
 General feedback is welcome at our [user][1] or [developer][2] mailing lists.
