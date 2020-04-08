@@ -396,18 +396,13 @@ Sending multiple queries to a database
             {
                 "rows": [
                     {
-                        "id": "SpaghettiWithMeatballs",
+                        "id": "meatballs",
                         "key": "meatballs",
                         "value": 1
                     },
                     {
-                        "id": "SpaghettiWithMeatballs",
+                        "id": "spaghetti",
                         "key": "spaghetti",
-                        "value": 1
-                    },
-                    {
-                        "id": "SpaghettiWithMeatballs",
-                        "key": "tomato sauce",
                         "value": 1
                     }
                 ],
