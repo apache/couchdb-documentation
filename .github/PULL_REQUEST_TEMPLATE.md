@@ -36,6 +36,4 @@
 
 ## Checklist
 
-- [ ] Documentation is written and is accurate;
-- [ ] `make check` passes with no errors
 - [ ] Update [rebar.config.script](https://github.com/apache/couchdb/blob/master/rebar.config.script) with the commit hash once this PR is rebased and merged
