@@ -62,4 +62,6 @@ over specific database shard files. The key must be the exact name of the shard 
 
     .. note::
         In case when you'd like to skip all views from a ddoc, you may add
-        ``autoupdate: false`` to the doc using :put:`/{db}/_design/{ddoc}`.
+        ``autoupdate: false`` to the ddoc. All views of that ddoc will then be skipped.
+
+        More at :http:put:`/{db}/_design/{ddoc}`.
