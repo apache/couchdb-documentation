@@ -131,7 +131,7 @@
     :param docid: Document ID
     :param attname: Attachment name
 
-    :<header Content-Type: Attachment MIME type. *Required*
+    :<header Content-Type: Attachment MIME type. Default: :mimetype:`application/octet-stream` *Optional*
     :<header If-Match: Document revision. Alternative to `rev` query parameter
 
     :query string rev: Document revision. *Optional*
