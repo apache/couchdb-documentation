@@ -345,3 +345,124 @@ headers to CouchDB with related requests:
 
 Note that you don't need to request :ref:`session <api/auth/session>`
 to be authenticated by this method if all required HTTP headers are provided.
+
+.. _api/auth/jwt:
+
+JWT Authentication
+====================
+
+.. note::
+    To use this authentication method make sure that the
+    ``{chttpd_auth, jwt_authentication_handler}`` value in added to the
+    list of the active :config:option:`chttpd/authentication_handlers`:
+
+    .. code-block:: ini
+
+        [chttpd]
+        authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, jwt_authentication_handler}, {chttpd_auth, default_authentication_handler}
+
+`JWT authentication` enables CouchDB to use externally generated JWT tokens
+instead of defining users or roles in the _users database.
+
+The JWT authentication handler requires that all JWT tokens are signed by a key that
+CouchDB has been configured to trust (there is no support for JWT's "NONE" algorithm).
+
+Additionally, CouchDB can be configured to reject JWT tokens that are missing a
+configurable set of claims (e.g, a CouchDB administrator could insist on the exp claim).
+
+All claims presented in a JWT token are validated if presented, regardless of whether they
+are required.
+
+Two new sections of config have been introduced to configure JWT authentication;
+
+.. code-block:: ini
+
+    ;[jwt_auth]
+    ; List of claims to validate
+    ; required_claims =
+
+The `required_claims` config setting is a comma-separate list of additional mandatory
+JWT claims that much be present in any presented JWT token. A 400 Bad Request is sent
+if any are missing.
+
+The `alg` claim is mandatory as it used to lookup the correct key for verifying the
+signature.
+
+The `sub` claim is mandatory and is used as the CouchDB user's name if the JWT token
+is valid.
+
+A private claim called `_couchdb.roles` is optional. If presented, it is a JSON
+array of strings, as is used as the CouchDB user's roles list if the JWT token
+is valid.
+
+.. code-block:: ini
+
+    ; [jwt_keys]
+    ; Configure at least one key here if using the JWT auth handler.
+    ; If your JWT tokens do not include a "kid" attribute, use "_default"
+    ; as the config key, otherwise use the kid as the config key.
+    ; Examples
+    ; hmac:_default = aGVsbG8=
+    ; hmac:foo = aGVsbG8=
+    ; The config values can represent symmetric and asymmetrics keys.
+    ; For symmetrics keys, the value is base64 encoded;
+    ; hmac:_default = aGVsbG8= # base64-encoded form of "hello"
+    ; For asymmetric keys, the value is the PEM encoding of the public
+    ; key with newlines replaced with the escape sequence \n.
+    ; rsa:foo = -----BEGIN PUBLIC KEY-----\nMIIBIjAN...IDAQAB\n-----END PUBLIC KEY-----\n
+    ; ec:bar = -----BEGIN PUBLIC KEY-----\nMHYwEAYHK...AzztRs\n-----END PUBLIC KEY-----\n
+
+The `jwt_key` section lists all the keys that this CouchDB server trusts. You
+should ensure that all nodes of your cluster has the same list.
+
+JWT tokens that do not include a `kid` claim will be validated against the
+`$alg:_default` key.
+
+It is mandatory to specify the algorithm associated with every key for security
+reasons (notably presenting a HMAC signed token using a RSA or EC public key
+that the server trusts:
+https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/).
+
+**Request**:
+
+.. code-block:: http
+
+    GET /_session HTTP/1.1
+    Host: localhost:5984
+    Accept: application/json
+    Content-Type: application/json; charset=utf-8
+    Authorization: Bearer <JWT token>
+
+**Response**:
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Length: 188
+    Content-Type: application/json
+    Date: Sun, 19 Apir 2020 08:29:15 GMT
+    Server: CouchDB (Erlang/OTP)
+
+    {
+        "info": {
+            "authenticated": "jwt",
+            "authentication_db": "_users",
+            "authentication_handlers": [
+                "cookie",
+                "proxy",
+                "default"
+            ]
+        },
+        "ok": true,
+        "userCtx": {
+            "name": "foo",
+            "roles": [
+                "users",
+                "blogger"
+            ]
+        }
+    }
+
+Note that you don't need to request :ref:`session <api/auth/session>`
+to be authenticated by this method if the required HTTP header is provided.
