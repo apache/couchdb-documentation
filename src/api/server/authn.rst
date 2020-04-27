@@ -368,7 +368,8 @@ The JWT authentication handler requires that all JWT tokens are signed by a key 
 CouchDB has been configured to trust (there is no support for JWT's "NONE" algorithm).
 
 Additionally, CouchDB can be configured to reject JWT tokens that are missing a
-configurable set of claims (e.g, a CouchDB administrator could insist on the ``exp`` claim).
+configurable set of claims (e.g, a CouchDB administrator could insist on the ``exp``
+claim).
 
 All claims presented in a JWT token are validated if presented, regardless of whether they
 are required.
