@@ -352,7 +352,7 @@ JWT Authentication
 ====================
 
 .. note::
-    To use this authentication method make sure that the
+    To use this authentication method, make sure that the
     ``{chttpd_auth, jwt_authentication_handler}`` value is added to the
     list of the active :config:option:`chttpd/authentication_handlers`:
 
@@ -361,7 +361,7 @@ JWT Authentication
         [chttpd]
         authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, jwt_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
-``JWT authentication`` enables CouchDB to use externally generated JWT tokens
+``JWT authentication`` enables CouchDB to use externally-generated JWT tokens
 instead of defining users or roles in the ``_users`` database.
 
 The JWT authentication handler requires that all JWT tokens are signed by a key that
