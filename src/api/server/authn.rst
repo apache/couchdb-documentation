@@ -381,9 +381,10 @@ Two sections of config exist to configure JWT authentication;
     ; List of claims to validate
     ; required_claims =
 
-The `required_claims` config setting is a comma-separated list of additional mandatory
-JWT claims that must be present in any presented JWT token. A `:code 400:Bad Request` is sent
-if any are missing.
+The :config:option:`required_claims <jwt_auth/required_claims>` config
+setting is a comma-separated list of additional mandatory JWT claims
+that must be present in any presented JWT token. A `:code 400:Bad
+Request` is sent if any are missing.
 
 The ``alg`` claim is mandatory as it used to lookup the correct key for verifying the
 signature.
@@ -391,9 +392,9 @@ signature.
 The ``sub`` claim is mandatory and is used as the CouchDB user's name if the JWT token
 is valid.
 
-A private claim called ``_couchdb.roles`` is optional. If presented, it is a JSON
-array of strings, as is used as the CouchDB user's roles list if the JWT token
-is valid.
+A private claim called ``_couchdb.roles`` is optional. If presented,
+it is a JSON array of strings, it is used as the CouchDB user's roles
+list as long as the JWT token is valid.
 
 .. code-block:: ini
 
