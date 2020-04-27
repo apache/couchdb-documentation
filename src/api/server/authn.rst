@@ -376,12 +376,6 @@ are required.
 
 Two sections of config exist to configure JWT authentication;
 
-.. code-block:: ini
-
-    ;[jwt_auth]
-    ; List of claims to validate
-    ; required_claims =
-
 The :config:option:`required_claims <jwt_auth/required_claims>` config
 setting is a comma-separated list of additional mandatory JWT claims
 that must be present in any presented JWT token. A `:code 400:Bad
