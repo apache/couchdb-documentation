@@ -362,18 +362,18 @@ JWT Authentication
         authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, jwt_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
 `JWT authentication` enables CouchDB to use externally generated JWT tokens
-instead of defining users or roles in the _users database.
+instead of defining users or roles in the ``_users`` database.
 
 The JWT authentication handler requires that all JWT tokens are signed by a key that
 CouchDB has been configured to trust (there is no support for JWT's "NONE" algorithm).
 
 Additionally, CouchDB can be configured to reject JWT tokens that are missing a
-configurable set of claims (e.g, a CouchDB administrator could insist on the exp claim).
+configurable set of claims (e.g, a CouchDB administrator could insist on the ``exp`` claim).
 
 All claims presented in a JWT token are validated if presented, regardless of whether they
 are required.
 
-Two new sections of config have been introduced to configure JWT authentication;
+Two sections of config exist to configure JWT authentication;
 
 .. code-block:: ini
 
@@ -381,11 +381,11 @@ Two new sections of config have been introduced to configure JWT authentication;
     ; List of claims to validate
     ; required_claims =
 
-The `required_claims` config setting is a comma-separate list of additional mandatory
-JWT claims that much be present in any presented JWT token. A 400 Bad Request is sent
+The `required_claims` config setting is a comma-separated list of additional mandatory
+JWT claims that must be present in any presented JWT token. A ``400 Bad Request`` is sent
 if any are missing.
 
-The `alg` claim is mandatory as it used to lookup the correct key for verifying the
+The ``alg`` claim is mandatory as it used to lookup the correct key for verifying the
 signature.
 
 The `sub` claim is mandatory and is used as the CouchDB user's name if the JWT token
@@ -413,13 +413,13 @@ is valid.
     ; ec:bar = -----BEGIN PUBLIC KEY-----\nMHYwEAYHK...AzztRs\n-----END PUBLIC KEY-----\n
 
 The `jwt_key` section lists all the keys that this CouchDB server trusts. You
-should ensure that all nodes of your cluster has the same list.
+should ensure that all nodes of your cluster have the same list.
 
 JWT tokens that do not include a `kid` claim will be validated against the
 `$alg:_default` key.
 
 It is mandatory to specify the algorithm associated with every key for security
-reasons (notably presenting a HMAC signed token using a RSA or EC public key
+reasons (notably presenting a HMAC-signed token using an RSA or EC public key
 that the server trusts:
 https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/).
 
