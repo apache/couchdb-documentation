@@ -300,3 +300,14 @@ Authentication Configuration
 
             [couch_httpd_auth]
             x_auth_username = X-Auth-CouchDB-UserName
+
+.. config:section:: jwt_auth :: JWT Authentication
+
+    .. config:option:: required_claims :: Mandatory claims in JWT tokens
+
+        This parameter is a comma-separated list of additional mandatory JWT claims
+        that must be present in any presented JWT token. A
+        `:code 400:Bad Request` is sent if any are missing. ::
+
+            [jwt_auth]
+                required_claims = exp,iat
