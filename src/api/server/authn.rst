@@ -361,7 +361,7 @@ JWT Authentication
         [chttpd]
         authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, jwt_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
-`JWT authentication` enables CouchDB to use externally generated JWT tokens
+``JWT authentication`` enables CouchDB to use externally generated JWT tokens
 instead of defining users or roles in the ``_users`` database.
 
 The JWT authentication handler requires that all JWT tokens are signed by a key that
@@ -382,16 +382,16 @@ Two sections of config exist to configure JWT authentication;
     ; required_claims =
 
 The `required_claims` config setting is a comma-separated list of additional mandatory
-JWT claims that must be present in any presented JWT token. A ``400 Bad Request`` is sent
+JWT claims that must be present in any presented JWT token. A `:code 400:Bad Request` is sent
 if any are missing.
 
 The ``alg`` claim is mandatory as it used to lookup the correct key for verifying the
 signature.
 
-The `sub` claim is mandatory and is used as the CouchDB user's name if the JWT token
+The ``sub`` claim is mandatory and is used as the CouchDB user's name if the JWT token
 is valid.
 
-A private claim called `_couchdb.roles` is optional. If presented, it is a JSON
+A private claim called ``_couchdb.roles`` is optional. If presented, it is a JSON
 array of strings, as is used as the CouchDB user's roles list if the JWT token
 is valid.
 
@@ -412,11 +412,11 @@ is valid.
     ; rsa:foo = -----BEGIN PUBLIC KEY-----\nMIIBIjAN...IDAQAB\n-----END PUBLIC KEY-----\n
     ; ec:bar = -----BEGIN PUBLIC KEY-----\nMHYwEAYHK...AzztRs\n-----END PUBLIC KEY-----\n
 
-The `jwt_key` section lists all the keys that this CouchDB server trusts. You
+The ``jwt_key`` section lists all the keys that this CouchDB server trusts. You
 should ensure that all nodes of your cluster have the same list.
 
-JWT tokens that do not include a `kid` claim will be validated against the
-`$alg:_default` key.
+JWT tokens that do not include a ``kid`` claim will be validated against the
+``$alg:_default`` key.
 
 It is mandatory to specify the algorithm associated with every key for security
 reasons (notably presenting a HMAC-signed token using an RSA or EC public key
@@ -441,7 +441,7 @@ https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/).
     Cache-Control: must-revalidate
     Content-Length: 188
     Content-Type: application/json
-    Date: Sun, 19 Apir 2020 08:29:15 GMT
+    Date: Sun, 19 Apr 2020 08:29:15 GMT
     Server: CouchDB (Erlang/OTP)
 
     {
