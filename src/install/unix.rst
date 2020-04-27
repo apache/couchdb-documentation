@@ -128,6 +128,15 @@ joined together and configured consistently across all machines; **follow the**
 
     $ sudo yum -y install epel-release && sudo yum -y install couchdb
 
+Once installed, change the password and uncomment the following line in your ``/opt/couchdb/etc/local.ini`` configuration file::
+
+.. code-block:: ini
+
+    [admins]
+    admin = password
+
+You can now start the service.
+
 **Your installation is not complete. Be sure to complete the**
 :ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
