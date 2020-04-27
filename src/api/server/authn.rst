@@ -393,7 +393,7 @@ The ``sub`` claim is mandatory and is used as the CouchDB user's name if the JWT
 is valid.
 
 A private claim called ``_couchdb.roles`` is optional. If presented,
-it is a JSON array of strings, it is used as the CouchDB user's roles
+as a JSON array of strings, it is used as the CouchDB user's roles
 list as long as the JWT token is valid.
 
 .. code-block:: ini
