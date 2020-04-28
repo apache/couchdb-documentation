@@ -21,7 +21,8 @@ Installation via Snap
 Apache CouchDB provides 'convenience binary' Snap builds through the
 Ubuntu snapcraft repository under the name ``couchdb``. Only snaps built
 from official stable CouchDB releases (``2.0``, ``2.1``, etc.) are available
-through this channel.
+through this channel. There are separate snap channels for each major
+release stream, e.g. ``2.x``, ``3.x``, as well as a ``latest`` stream.
 
 After `installing snapd`_, the CouchDB snap can be installed via::
 
