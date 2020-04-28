@@ -26,6 +26,10 @@ Installation from ports
 
 This will install CouchDB from the ports collection.
 
+.. note::
+   Be sure to :ref:`create an admin user<config/admins>` before starting
+   CouchDB for the first time!
+
 Start script
 ------------
 
