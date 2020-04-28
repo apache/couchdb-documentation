@@ -16,6 +16,11 @@
 Installation on Unix-like systems
 =================================
 
+.. warning::
+    CouchDB 3.0+ will not run without an admin user being created first.
+    Be sure to :ref:`create an admin user<config/admins>` before starting
+    CouchDB!
+
 .. _install/unix/binary:
 
 Installation using the Apache CouchDB convenience binary packages
@@ -128,12 +133,8 @@ joined together and configured consistently across all machines; **follow the**
 
     $ sudo yum -y install epel-release && sudo yum -y install couchdb
 
-Once installed, change the password and uncomment the following line in your ``/opt/couchdb/etc/local.ini`` configuration file::
-
-.. code-block:: ini
-
-    [admins]
-    admin = password
+Once installed, :ref:`create an admin user<config/admins>` by hand before
+starting CouchDB, if your installer didn't do this for you already.
 
 You can now start the service.
 
@@ -340,6 +341,10 @@ Update the permissions for your ini files::
 
 First Run
 =========
+
+.. note::
+    Be sure to :ref:`create an admin user<config/admins>` before trying to
+    start CouchDB!
 
 You can start the CouchDB server by running::
 

@@ -62,7 +62,8 @@ Upgrade Notes
   ...and so on. Documentation has been updated to reflect this change.
 
 * :ghissue:`2389`: CouchDB 3.0 now requires a server admin user to be defined at
-  startup, or will print an error message and exit. (The Admin Party is now over.)
+  startup, or will print an error message and exit. If you do not have one, be sure
+  to :ref:`create an admin user<config/admins>`. (The Admin Party is now over.)
 
 .. figure:: ../../images/23379351593_0c480537de_q.jpg
   :align: center

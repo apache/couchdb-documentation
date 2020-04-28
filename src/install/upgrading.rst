@@ -42,6 +42,9 @@ If you are running a standalone (single) CouchDB node:
    and merge any changes desired into your own local settings file(s).
 #. Stop CouchDB.
 #. Upgrade CouchDB in place.
+#. Be sure to :ref:`create an admin user<config/admins>` if you do not have
+   one. CouchDB 3.0+ **require** an admin user to start (the admin party has
+   ended).
 #. Start CouchDB.
 #. Relax! You're done.
 
