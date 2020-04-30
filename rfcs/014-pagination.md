@@ -88,8 +88,17 @@ document are to be interpreted as described in
     "next": "/myddb/_all_docs?bookmark=12343tyekf3"
   ```
 
+## Limitations
+
+- The `first`/`next`/`last` keys in the response are represented as path which
+  includes the bookmark query key. This means the bookmark token size contributes
+  to total URI length and is subject to a max URL lenght (around 2000 characters).
+  This means storing `keys` in a bookmark is not an option. For that reason
+  `POST` method is not supported when pagination is enabled
+
 ## Semantics of the implementation
 
+- Only GET method would have pagination support
 - The bookmark would include information needed to ensure proper pagination
   without the need to repeat initial parameters of the request.
 - Don't use delayed responses when `bookmark` field is provided
