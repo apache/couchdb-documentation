@@ -38,7 +38,7 @@ set the classpath location for Clouseau, then add the line::
 
 -classpath '/path/to/clouseau/*'
 
-to the server command below. If clouseau is installed in /opt/clouseau the line would be::
+to the server command below. If clouseau is installed in ``/opt/clouseau`` the line would be::
 
 -classpath '/opt/clouseau'
 
