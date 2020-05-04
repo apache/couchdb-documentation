@@ -36,11 +36,11 @@ available on `GitHub`_.  The files in each release should be unpacked into a dir
 the Java classpath. If you do not have a classpath already set, or you wish to explicitly
 set the classpath location for Clouseau, then add the line::
 
--classpath '/path/to/clouseau/*'
+    -classpath '/path/to/clouseau/*'
 
 to the server command below. If clouseau is installed in ``/opt/clouseau`` the line would be::
 
--classpath '/opt/clouseau'
+    -classpath '/opt/clouseau/*'
 
 The service expects to find a couple of configuration files
 conventionally called ``clouseau.ini`` and ``log4j.properties`` with the following
