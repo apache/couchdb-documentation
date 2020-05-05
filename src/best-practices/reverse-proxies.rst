@@ -255,7 +255,7 @@ CouchDB in the ``/couchdb`` subdirectory:
      }
      
      reverse_proxy /couchdb/* localhost:5984
-    
+ 
    }
 
 This setup leans entirely on nginx performing authorization, and forwarding
