@@ -197,7 +197,6 @@ requests from ``http(s)://domain.com/...`` to ``http://localhost:5984/...``
 
     }
 
-
 Reverse proxying CouchDB in a subdirectory with Caddy 2
 -------------------------------------------------------
 
@@ -215,7 +214,6 @@ as ``http(s)://domain.com/couchdb/db1/doc1`` are proxied to
       reverse_proxy /couchdb/* localhost:5984
 
    }
-
 
 Reverse proxying + load balancing for CouchDB clusters
 ------------------------------------------------------
@@ -241,7 +239,6 @@ comes back online.
      }
 
    }
-
 
 Authentication with Caddy 2 as a reverse proxy
 ----------------------------------------------
