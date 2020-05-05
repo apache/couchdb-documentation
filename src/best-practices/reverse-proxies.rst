@@ -209,11 +209,11 @@ as ``http(s)://domain.com/couchdb/db1/doc1`` are proxied to
 
 .. code-block:: text
 
-   domain.com {
+    domain.com {
 
-      reverse_proxy /couchdb/* localhost:5984
+        reverse_proxy /couchdb/* localhost:5984
 
-   }
+    }
 
 Reverse proxying + load balancing for CouchDB clusters
 ------------------------------------------------------
@@ -229,16 +229,16 @@ comes back online.
 
 .. code-block:: text
 
-   domain.com {
+    domain.com {
 
-     reverse_proxy http://localhost:15984 http://localhost:25984 http://localhost:35984 {
-       lb_policy round_robin
-       lb_try_interval 500ms
+        reverse_proxy http://localhost:15984 http://localhost:25984 http://localhost:35984 {
+        lb_policy round_robin
+        lb_try_interval 500ms
 
-       health_interval 5s
-     }
+        health_interval 5s
+        }
 
-   }
+    }
 
 Authentication with Caddy 2 as a reverse proxy
 ----------------------------------------------
@@ -248,15 +248,15 @@ CouchDB in the ``/couchdb`` subdirectory:
 
 .. code-block:: text
 
-   domain.com {
+    domain.com {
 
-     basicauth /couchdb/* {
-     couch_username couchdb_hashed_password_base64
-     }
-     
-     reverse_proxy /couchdb/* localhost:5984
- 
-   }
+        basicauth /couchdb/* {
+            couch_username couchdb_hashed_password_base64
+        }
+
+        reverse_proxy /couchdb/* localhost:5984
+
+    }
 
 This setup leans entirely on nginx performing authorization, and forwarding
 requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
