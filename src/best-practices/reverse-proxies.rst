@@ -182,7 +182,9 @@ redirects will fail.
 Reverse Proxying with Caddy 2
 =============================
 
-Caddy is ``https-by-default``, and will automatically acquire, install, activate and, when necessary, renew a trusted SSL certificate for you - all in the background. Certificates are issued by the **Let's Encrypt** certificate authority.
+Caddy is ``https-by-default``, and will automatically acquire, install,
+activate and, when necessary, renew a trusted SSL certificate for you - all in the background. 
+Certificates are issued by the **Let's Encrypt** certificate authority.
 
 Basic configuration
 -------------------
