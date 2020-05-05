@@ -33,7 +33,16 @@ Installation of Binary Packages
 
 Binary packages that bundle all the necessary dependencies of the search plugin are
 available on `GitHub`_.  The files in each release should be unpacked into a directory on
-the Java classpath. The service expects to find a couple of configuration files
+the Java classpath. If you do not have a classpath already set, or you wish to explicitly
+set the classpath location for Clouseau, then add the line::
+
+    -classpath '/path/to/clouseau/*'
+
+to the server command below. If clouseau is installed in ``/opt/clouseau`` the line would be::
+
+    -classpath '/opt/clouseau/*'
+
+The service expects to find a couple of configuration files
 conventionally called ``clouseau.ini`` and ``log4j.properties`` with the following
 content:
 
