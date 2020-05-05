@@ -35,6 +35,7 @@ to install CouchDB is to use the convenience binary packages:
 * Debian 10 (buster)
 * Ubuntu 16.04 (xenial)
 * Ubuntu 18.04 (bionic)
+* Ubuntu 20.04 (focal)
 
 These RedHat-style rpm packages and Debian-style deb packages will install CouchDB at
 ``/opt/couchdb`` and ensure CouchDB is run at system startup by the appropriate init
@@ -78,6 +79,12 @@ Enabling the Apache CouchDB package repository
 
     $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
+        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+
+**Ubuntu 20.04 (Focal)**: Run the following commands::
+
+    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ echo "deb https://apache.bintray.com/couchdb-deb focal main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
 .. highlight:: ini
