@@ -122,6 +122,27 @@ document are to be interpreted as described in
   value configured in `request_limit` whatever is less
 - Once the underlying call to FoundationDB returns less than `page_size`
   the response will not have a "next" bookmark
+- When `page_size` is used with `_all_docs/queries` or `{db}/_design/{ddoc}/_view/{view}/queries`
+  the specified limit applies to number of queries provided in the request.
+- For `_all_docs/queries` and `{db}/_design/{ddoc}/_view/{view}/queries` the total
+  number of rows returned shouldn't exceed provided `page_size` or configured
+  max limit (whatever is less)
+- Paginated requests are subject to FDB transaction timeout. This is implemented
+  via lack of `{restart_tx, true}` option for FDB calls.
+- The request to `_all_docs/queries` and `{db}/_design/{ddoc}/_view/{view}/queries`
+  can include bookmarks:
+  ```
+  {"queries": [
+    {"bookmark": "bookmarkForQuery1PageL"},
+    {"bookmark": "bookmarkForQuery2PageM"},
+    {"bookmark": "bookmarkForQuery3PageN"}
+    ]
+  }
+  ```
+- Every bookmark returned by `_all_docs/queries` and `{db}/_design/{ddoc}/_view/{view}/queries`
+  can be submited via separate request to `_all_docs` and `{db}/_design/{ddoc}/_view/{view}`
+  correspondly.
+
 
 ## Configuration
 
