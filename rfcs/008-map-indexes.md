@@ -16,9 +16,9 @@ This document describes the data model and index management for building and que
 
 ## Abstract
 
-Map indexes will have their data model stored in FoundationDB. Each index is grouped via its design doc's view signature. An index will have the index key/value pairs stored, along with the last sequence number from the changes feed used to update the index.
+Map indexes will have their data model stored in FoundationDB. Each index is grouped via its design doc's view signature. An index will store the index's key/values, size of the index and the last sequence number from the changes feed used to update the index.
 
-Indexes will be build using the background jobs api, `couch_jobs`, and will use the changes feed. There will be new size limitations on keys (10KB) and values (100KB) that are emitted from a map function.
+Indexes will be built using the background jobs api, `couch_jobs`, and will use the changes feed. There will be new size limitations on keys (10KB) and values (100KB) that are emitted from a map function.
 
 ## Requirements Language
 
@@ -34,14 +34,14 @@ document are to be interpreted as described in
 `Sequence`: a 13-byte value formed by combining the current `Incarnation` of the database and the `Versionstamp` of the transaction. Sequences are monotonically increasing even when a database is relocated across FoundationDB clusters. See (RFC002)[LINK TBD] for a full explanation.
 
 `View Signature`: A md5 hash of the views, options, view language defined in a design document.
+`Interactive view`: A view updated in the same transaction that the document is added/updated to the database.
 
 ---
 
 ## Detailed Description
 
 CouchDB views are used to create secondary indexes in a database. An index is defined by creating map/reduce functions in a design document. This document describes building the map indexes on top of FoundationDB (FDB).
-
-An example map function is shown below:
+There are two ways to build a secondary index: via a background job or via in the same transaction that the document is added to the database. Building the index via the background job is the default way that a map index will be build. An example map function to do this is shown below:
 
 ```json
 {
@@ -56,29 +56,58 @@ An example map function is shown below:
 }
 ```
 
+Adding `interactive: true` to the option field of an index will configure the index to be updated in the same transaction that the document is added to the database. This functionality has primarily been added to support Mango indexes but can work with map indexes. And example of a map index configured is shown below:
+
+```json
+{
+  "_id": "_design/design-doc-id",
+  "_rev": "1-8d361a23b4cb8e213f0868ea3d2742c2",
+  "views": {
+    "map-view": {
+      "map": "function (doc) {\n  emit(doc._id, 1);\n}"
+    }
+  },
+  "language": "javascript",
+  "options": [{"interactive":  true}]
+}
+```
+
+Interactive views have two step process to being built. When an index is added to the database, a background job is created for the index to be built up to the change sequence, creation versionstamp, that the index was added at. Any new documents added after the index was added will be indexed in the transaction that the document is added to the database. If a query for an interative view is received before the background job is complete, CouchDB will wait until the background job is complete before serving the request.  
+
+
 ### Data model
 
 The data model for a map indexed is:
 
 ```
-(<database>, ?DB_VIEWS, <view_signature>, ?VIEW_UPDATE_SEQ) = Sequence
-{<database>, ?DB_VIEWS, <view_signature>, ?VIEW_ID_INFO, view_id, ?VIEW_ROW_COUNT} = <row_count>
-{<database>, ?DB_VIEWS, <view_signature>, ?VIEW_ID_INFO, view_id, ?VIEW_KV_SIZE} = <kv_size>
-(<database>, ?DB_VIEWS, <view_signature>, ?VIEW_ID_RANGE, <_id>, <view_id>) = [total_keys, total_size, unique_keys]
-(<database>, ?DB_VIEWS, <view_signature>, ?VIEW_MAP_RANGE, <view_id>, <key>, <_id>, ?ROW_KEYS <count>) = <emitted_keys>
-(<database>, ?DB_VIEWS, <view_signature>, ?VIEW_MAP_RANGE, <view_id>, {<key>, <_id>}, <count>, ?ROW_VALUE) = <emitted_value>
+% View build sequence - The change sequence that the index has been updated to.
+(<database>, ?DB_VIEWS, ?VIEW_INFO, ?VIEW_UPDATE_SEQ, <view_signature>) = Sequence
+
+% Interactive View Creation Versionstamp
+(<database>, ?DB_VIEWS, ?VIEW_INFO, ?VIEW_CREATION_VS, <signature>) = Versionstamp
+% Interactive View Build Status
+(<database>, ?DB_VIEWS, ?VIEW_INFO, ?VIEW_BUILD_STATUS, <signature>) = INDEX_BUILDING | INDEX_READY
+
+% Number of rows in the index
+{<database>, ?DB_VIEWS, ?VIEW_INFO, ?VIEW_ROW_COUNT, ?VIEW_ID_INFO, <view_id>, <view_signature> } = <row_count>
+% Key/Value size of index
+{<database>, ?DB_VIEWS, ?VIEW_INFO, ?VIEW_KV_SIZE, <view_signature>, <view_id>} = <kv_size>
+
+% Id index, used to track record what keys are in the index for each document
+(<database>, ?DB_VIEWS, ?VIEW_DATA, <view_signature>, ?VIEW_ID_RANGE, <_id>, <view_id>) = [total_keys, total_size, unique_keys]
+% The key/values for the index
+(<database>, ?DB_VIEWS, ?VIEW_DATA, <view_signature>, ?VIEW_MAP_RANGE, <view_id>, {<key>, <_id>}, <dupe_id>) = {<emitted_key>, <emitted_value>}
 ```
 
 Each field is defined as:
 
-- `<database>` is the specific database namespace
+- `database` is the specific database namespace
 - `?DB_VIEWS` is the views namespace.
-- `view_signature` is the design documents `View Signature`
+- `<view_signature>` is the design documents `View Signature`
+- `?VIEW_INFO` is the view information namespace
 - `?VIEW_UPDATE_SEQ` is the change sequence namespace
 - `?VIEW_ID_RANGE` is the map id index namespace
 - `?VIEW_MAP_RANGE` is the map namespace
-- `?ROW_KEYS` is the namespace for a row where the value is the emitted keys from a map function
-- `?ROW_VALUE` is the namespace for a row where the value is the emitted value from a map function
 - `_id` is the document id
 - `view_id` id of a view defined in the design document
 - `key` is the encoded emitted row key from a map function
@@ -86,41 +115,57 @@ Each field is defined as:
 - `emitted_key` is the emitted key from the map function
 - `emitted_value` is the emitted value from the map function
 - `row_count` number of rows in the index
-- `kv_size>` size of the index
+- `kv_size` size of the index
 - `total_keys` is the number of keys emitted by a document
 - `total_size` is the size of the key/values emitted by the document
 - `unique_keys` is the unique keys emitted by the document
+- `dupe_id` the duplication id to allow mutiple documents to emit a key/value
 
-The `?VIEW_UPDATE_SEQ` row is used to keep track of what sequence in the database changes feed that the index has been indexed up to. It is not possible to update a map index in the same transaction that a document is updated, so the `VIEW_ID_RANGE` namespace is used to keep track of the emitted keys for a document for each map function in a design document. The ?VIEW_MAP_RANGE is the namespace storing the actual emitted keys and values from a map function for a document. For every emitted key/value from a map function, there are two rows in FoundationDB. The first row contains the emitted keys and the second row contains the emitted value from the map function, the `?ROW_KEYS` and `?ROW_VALUE` is added to the key so that emitted keys are always ordered before the value. When the emitted keys are encoded to binary to create the FDB key for a row, strings are converted to sort strings and all numbers are converted to doubles. It is not possible to convert either of those encoded values back to the original value. The `count` value is kept to allow for duplicates. Each emitted key/value pair for a document for a map function is given a `count`. 
-
-The `?VIEW_ROW_COUNT` is used to store the number of rows in the index and `?VIEW_KV_SIZE` keeps track of the size of this index. The size calculation is done using `erlang:external_size`.
-
-The process flow for a document to be indexed is as follows:
+The process flow for a document to be indexed in the background is as follows:
 
 1. FDB Transaction is started
 1. Read the document from the changes read (The number of documents to read at one type is configurable, the default is 100)
 1. The document is passed to the javascript query server and run through all the map functions defined in the design document
 1. The view's sequence number is updated to the sequence the document is in the changes feed.
+1. If the document was deleted and was previously in the view, the previous keys for the document are read from `?VIEW_ID_RANGE` and then cleared from the `?VIEW_MAP_RANGE`. The Row count and size count are also decreased.
+1. If the document is being updated and was previously added to the index, then he previous keys for the document are read from `?VIEW_ID_RANGE` and then cleared from the `?VIEW_MAP_RANGE` and then the index is updated with the latest emitted keys and value.
 1. The emitted keys are stored in the `?VIEW_ID_RANGE`
 1. The emitted keys are encoded then added to the `?VIEW_MAP_RANGE` with the emitted keys and value stored
 1. The `?VIEW_ROW_COUNT` is incremented
 1. The `?VIEW_KV_SIZE` is increased
-1. If the document was deleted and was previously in the view, the previous keys for the document are read from `?VIEW_ID_RANGE` and then cleared from the `?VIEW_MAP_RANGE`. The Row count and size count are also decreased.
-1. If the document is being updated and was previously added to the index, then he previous keys for the document are read from `?VIEW_ID_RANGE` and then cleared from the `?VIEW_MAP_RANGE` and then the index is updated with the latest emitted keys and value.
+
+
+### Emitted Keys and Values limites
+
+If we have a design document like the following:
+
+```js
+{
+  "_id": "_design/design-doc-id",
+  "_rev": "1-8d361a23b4cb8e213f0868ea3d2742c2",
+  "views": {
+    "map-view": {
+      "map": "function (doc) {
+          emit(doc._id, doc.location);
+          emit([doc._id, doc.value], doc.name);
+        }",
+    }
+  },
+  "language": "javascript",
+  "options": [{"interactive":  true}]
+}
+```
+
+Each emit would be a new key/value row in the map index. Each key row cannot exceed 8KB and and each value row cannot exceed 64KB.
+If a document is emitted as a value, that document is not allowed to exceeed 64KB.
+
 
 ### Key ordering
 
 FoundationDB orders key by byte value which is not how CouchDB orders keys. To maintain CouchDB's view collation, a type value will need to be prepended to each key so that the correct sort order of null < boolean < numbers < strings < arrays < objects is maintained.
 
-In CouchDB 2.x, strings are compared via ICU. The way to do this with FoundationDB is that for every string an ICU sort string will be generated upfront and added to the key.
+In CouchDB 2.x, strings are compared via ICU. The way to do this with FoundationDB is that for every string an ICU sort string will be generated upfront and used for index ordering instead of the original string.
 
-### Emitting document
-
-In a map function, it is possible to emit the full document as the value, this will cause an issue if the document size is larger than FDB’s value limit of 100 KB. We can handle this in two possible ways. The first is to keep the hard limit of only allowing 100 KB value to be emitted, so if a document exceeds that CouchDB will return an error. This is the preferred option.
-
-The second option is to detect that a map function is emitting the full document and then add in a foreign key reference back to the document subspace. The issue here is that CouchDB would only be able to return the latest version of the document, which would cause consistency issues when combined with the `update=false` argument.
-
-A third option would be to split the document across multiple keys in FoundationDB. This will still be limited by the transaction size limit.
 
 ### Index building
 
