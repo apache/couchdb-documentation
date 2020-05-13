@@ -146,7 +146,7 @@ document are to be interpreted as described in
 
 ## Configuration
 
-The page size limits are configured in `default.ini` (or another ini file) in
+The page size limits are configured in `default.ini` (or another `ini` file) in
 `request_limit` section as follows:
 
 ```
@@ -164,7 +164,7 @@ The page size limits are configured in `default.ini` (or another ini file) in
 
 - initial implementation as described in this document
 - create API versioning proposal and implement the feature
-- create separate proposal for _changes endpoint
+- create separate proposal for `_changes` endpoint
 - implement pagination enabled version of `_all_dbs` and `_dbs_info` which would
   change response type to be object (using versioned API feature)
 
