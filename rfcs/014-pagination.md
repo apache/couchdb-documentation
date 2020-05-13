@@ -118,6 +118,8 @@ document are to be interpreted as described in
 - Set default value for `page_size` to the value configured in `request_limit`
   of `default.ini` for the given endpoint
 - Once the `limit` is reached the final response will not have a "next" bookmark
+- The maximum value for `skip` query parameter is limited to the same `page_size` or
+  value configured in `request_limit` whatever is less
 - Once the underlying call to FoundationDB returns less than `page_size`
   the response will not have a "next" bookmark
 
