@@ -84,9 +84,9 @@ document are to be interpreted as described in
  ```
 4) Add following additional fields into response:
   ```
-    "first": "/myddb/_all_docs?bookmark=12345678945621321689",
-    "previous": "/myddb/_all_docs?bookmark=983uiwfjkdsdf",
-    "next": "/myddb/_all_docs?bookmark=12343tyekf3"
+    "first": "12345678945621321689",
+    "previous": "983uiwfjkdsdf",
+    "next": "12343tyekf3"
   ```
 
 ## Limitations
