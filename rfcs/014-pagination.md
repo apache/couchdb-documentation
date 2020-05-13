@@ -22,15 +22,17 @@ to handle.
 
 ## Abstract
 
-The main addition is to add new bookmark based pagination scheme to all quiery like endpoints.
-As a first step we would keep _all_dbs and _changes out of scope for the following reasons:
+The main addition is to add new bookmark based pagination scheme to all quiery
+like endpoints. As a first step we would keep `_all_dbs`, `_dbs_info` and
+`_changes` out of scope for the following reasons:
 - _all_dbs - the endpoint returns a list instead of object as the rest of the endpoints
-- _changes - the endpoint contains too many different modes and it would require more careful consideration
+- _dbs_info - the endpoint returns a list instead of object as the rest of the endpoints
+- _changes - the endpoint contains too many different modes and it would require
+  more careful consideration
 
 The endpoints in scope are:
 - {db}/_all_docs
 - {db}/_all_docs/queries
-- _dbs_info
 - {db}/_design/{ddoc}/_view/{view}
 - {db}/_design/{ddoc}/_view/{view}/queries
 
@@ -62,7 +64,6 @@ document are to be interpreted as described in
 1) Add new optional query field called `bookmark` to following endpoints
   - {db}/_all_docs
   - {db}/_all_docs/queries
-  - _dbs_info
   - {db}/_design/{ddoc}/_view/{view}
   - {db}/_design/{ddoc}/_view/{view}/queries
 
@@ -140,8 +141,8 @@ The page size limits are configured in `default.ini` (or another ini file) in
 - initial implementation as described in this document
 - create API versioning proposal and implement the feature
 - create separate proposal for _changes endpoint
-- implement pagination enabled version of `_all_dbs` which would change response
-  type to be object (using versioned API feature)
+- implement pagination enabled version of `_all_dbs` and `_dbs_info` which would
+  change response type to be object (using versioned API feature)
 
 # Key Changes
 
