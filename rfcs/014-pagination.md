@@ -96,6 +96,9 @@ document are to be interpreted as described in
   to total URI length and is subject to a max URL lenght (around 2000 characters).
   This means storing `keys` in a bookmark is not an option. For that reason
   `POST` method is not supported when pagination is enabled
+- Ideally we would want to signal (return 400) when number of rows returned from
+  streaming version of the endpoint goes over limit configured in `request_limit`.
+  However with streaming we've aready sent a return code.
 
 ## Semantics of the implementation
 
@@ -108,8 +111,6 @@ document are to be interpreted as described in
 - Return 400 when `bookmark` field is set and other query fields are present
 - Return 400 when `page_size` query key is specified and it is greater than
   the max limit
-- Return 400 when we stream rows (`page_size` query key wasn't specified) and
-  reach max limit
 - The `previous`/`next`/`first` keys are optional and we omit them for the cases
   they don't make sense
 - Set default value for `page_size` to `limit` if provided `limit` is less than
