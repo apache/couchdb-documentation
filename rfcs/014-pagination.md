@@ -16,7 +16,7 @@ storage engine. FoundationDB imposes limits on transaction duration and size.
 Therefore we need to find way to restrict amount of data we return to customers.
 We could simply set the maximum `limit` which would cap amount of rows client can
 request. However this "solution" has a big disadvantage. Which is it would require
-clients to write pagination recepy in their code. Current pagination scheme
+clients to write pagination recipe in their code. Current pagination scheme
 requires complex logic on the client side. There are quite a few corner cases
 to handle.
 
