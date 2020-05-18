@@ -56,7 +56,7 @@ There are two ways to build a secondary index: via a background job or via in th
 }
 ```
 
-Adding `interactive: true` to the option field of an index will configure the index to be updated in the same transaction that the document is added to the database. This functionality has primarily been added to support Mango indexes but can work with map indexes. And example of a map index configured is shown below:
+Adding `interactive: true` to the option field of an index will configure the index to be updated in the same transaction that the document is added to the database. This functionality has primarily been added to support Mango indexes but can work with map indexes. An example of a map index configured is shown below:
 
 ```json
 {
@@ -68,12 +68,11 @@ Adding `interactive: true` to the option field of an index will configure the in
     }
   },
   "language": "javascript",
-  "options": [{"interactive":  true}]
+  "options": [{ "interactive": true }]
 }
 ```
 
-Interactive views have two step process to being built. When an index is added to the database, a background job is created for the index to be built up to the change sequence, creation versionstamp, that the index was added at. Any new documents added after the index was added will be indexed in the transaction that the document is added to the database. If a query for an interative view is received before the background job is complete, CouchDB will wait until the background job is complete before serving the request.  
-
+Interactive views have two step process to being built. When an index is added to the database, a background job is created for the index to be built up to the change sequence, creation versionstamp, that the index was added at. Any new documents added after the index was added will be indexed in the transaction that the document is added to the database. If a query for an interative view is received before the background job is complete, CouchDB will wait until the background job is complete before serving the request.
 
 ### Data model
 
@@ -134,7 +133,6 @@ The process flow for a document to be indexed in the background is as follows:
 1. The `?VIEW_ROW_COUNT` is incremented
 1. The `?VIEW_KV_SIZE` is increased
 
-
 ### Emitted Keys and Values limites
 
 If we have a design document like the following:
@@ -159,13 +157,11 @@ If we have a design document like the following:
 Each emit would be a new key/value row in the map index. Each key row cannot exceed 8KB and and each value row cannot exceed 64KB.
 If a document is emitted as a value, that document is not allowed to exceeed 64KB.
 
-
 ### Key ordering
 
 FoundationDB orders key by byte value which is not how CouchDB orders keys. To maintain CouchDB's view collation, a type value will need to be prepended to each key so that the correct sort order of null < boolean < numbers < strings < arrays < objects is maintained.
 
 In CouchDB 2.x, strings are compared via ICU. The way to do this with FoundationDB is that for every string an ICU sort string will be generated upfront and used for index ordering instead of the original string.
-
 
 ### Index building
 
@@ -175,7 +171,7 @@ Initially, the building of an index will be a single worker running through the 
 
 ### View clean up
 
-When a design document is changed, new indexes will be built and grouped under a new `View Signature`. The old map indexes will still be in FDB. To clean up will be supported via the existing [/db/_view_cleanup](https://docs.couchdb.org/en/latest/api/database/compact.html#db-view-cleanup) endpoint. 
+When a design document is changed, new indexes will be built and grouped under a new `View Signature`. The old map indexes will still be in FDB. To clean up will be supported via the existing [/db/\_view_cleanup](https://docs.couchdb.org/en/latest/api/database/compact.html#db-view-cleanup) endpoint.
 
 A future optimisation would be to automate this and have CouchDB to monitor design doc changes and then look to clean up old view indexes via a background worker.
 
