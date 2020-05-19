@@ -30,7 +30,7 @@ Description
 CouchDB version 3.0.0 shipped with a new configuration setting that
 governs access control to the entire database server called
 `require_valid_user_except_for_up`. It was meant as an extension to the
-long standing setting `require_valid_user`, which in turn requires that
+long-standing setting `require_valid_user`, which in turn requires that
 any and all requests to CouchDB will have to be made with valid
 credentials, effectively forbidding any anonymous requests.
 
