@@ -47,7 +47,7 @@ CouchDB versions :ref:`3.0.1 <release/3.0.1>` and :ref:`3.1.0
 Mitigation
 ==========
 
-Users that have not enabled `require_valid_user_except_for_up` are not
+Users who have not enabled `require_valid_user_except_for_up` are not
 affected.
 
 Users that have it enabled can either disable it again, or upgrade to
