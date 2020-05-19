@@ -13,7 +13,7 @@
 .. _cve/2020-1955:
 
 ===========================================================
-CVE-2020-1955: Apache CouchDB Remote Privilege Escalations
+CVE-2020-1955: Apache CouchDB Remote Privilege Escalation
 ===========================================================
 
 :Date: 19.05.2020
