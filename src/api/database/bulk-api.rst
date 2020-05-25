@@ -332,6 +332,9 @@ Sending multiple queries to a database
 
     :param db: Database name
 
+    :query number page_size: Specify the number of queries in the result.
+      Enables paginated reply for included queries.
+
     :<header Content-Type: - :mimetype:`application/json`
     :<header Accept: - :mimetype:`application/json`
 

@@ -28,6 +28,7 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
 
+    :query string bookmark: Specify a bookmark to get sepcific page of the results.
     :query boolean conflicts: Include `conflicts` information in response.
       Ignored if `include_docs` isn't ``true``. Default is ``false``.
     :query boolean descending: Return the documents in descending order by key.
@@ -60,6 +61,8 @@
       the keys specified in the array.
     :query number limit: Limit the number of the returned documents to the
       specified number.
+    :query number page_size: Specify the number of rows in the result.
+      Enables paginated reply.
     :query boolean reduce: Use the reduction function. Default is ``true`` when
       a reduce function is defined.
     :query number skip: Skip this number of records before starting to return
@@ -916,3 +919,45 @@ Sending multiple queries to a view
             }
         ]
     }
+
+.. _api/ddoc/view/pagination:
+
+Pagination
+==========
+
+.. versionadded:: 4.0
+
+There is a support for token based pagination. The token based pagination is an
+alternative to previously recomended :ref:`pagination recipe <views/pagination>`
+based on ``offset``, ``limit`` and ``skip``.
+
+The user can request paginated mode by setting ``page_size`` query parameter. When
+pagination is enabled the response would include ``next`` and ``previous`` tokens.
+Which can be used to retrieve next and previous page of the results.
+The maximum possible page size is configured via ``request_limits``
+section in one of the ``ini`` files.
+
+.. code-block:: ini
+
+    [request_limits]
+    _all_docs = 5000
+    _all_docs/queries = 5000
+    _all_dbs = 5000
+    _view = 2500
+    _view/queries = 2500
+
+
+Note that ``page_size`` for :ref:`Multiple queries <api/ddoc/view/multiple_queries>`
+endpoints limits number of queries the user can submit in the body of the request.
+
+Compatibility notes
+-------------------
+
+- ``page_size`` is forbidden in the query object passed in ``queries`` array \
+  submitted via :post:`/{db}/_design/{ddoc}/_view/{view}/queries` request.
+
+- ``keys`` propery is incompatible with ``page_size``.
+
+- value for ``skip`` property has to be in range of ``[0..<request_limit>]``.
+
+- ``bookmark`` is incompatible with any other query parameters
