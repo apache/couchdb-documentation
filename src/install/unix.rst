@@ -65,7 +65,7 @@ Enabling the Apache CouchDB package repository
 
 **Debian 10 (buster)**: Run the following commands::
 
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb buster main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
@@ -77,13 +77,13 @@ Enabling the Apache CouchDB package repository
 
 **Ubuntu 18.04 (Bionic)**: Run the following commands::
 
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 20.04 (Focal)**: Run the following commands::
 
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb focal main" \
         | sudo tee -a /etc/apt/sources.list.d/couchdb.list
 
