@@ -199,7 +199,7 @@ See the guide for
 ``/db/_partition/partition_id/_find``
 =====================================
 
-.. http:get:: /{db}/_partition/{partition_id}/_find
+.. http:post:: /{db}/_partition/{partition_id}/_find
     :synopsis: Query the partition specified by ``partition_id``
 
     :param db: Database name
@@ -218,7 +218,7 @@ See the guide for
 ``/db/_partition/partition_id/_explain``
 ========================================
 
-.. http:get:: /{db}/_partition/{partition_id}/_explain
+.. http:post:: /{db}/_partition/{partition_id}/_explain
     :synopsis: Find index that is used with a query
 
     :param db: Database name
