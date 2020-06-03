@@ -32,6 +32,19 @@ them extensively within each function:
 - :ref:`Database Security object <security_object>`
 - :ref:`Guide to JavaScript Query Server <query-server/js>`
 
+Creation
+========
+
+Design documents are denoted by an id field with the format ``_design/{name}``.
+
+**Example**:
+
+.. code-block:: json
+
+    {
+        "id": "_design/example",
+    }
+
 .. _viewfun:
 
 View Functions
@@ -84,7 +97,7 @@ Reduce and Rereduce Functions
 
 .. function:: redfun(keys, values[, rereduce])
 
-    :param keys: Array of pairs of docid-key for related map function results.
+    :param keys: Array of pairs of key-docid for related map function results.
                  Always ``null`` if rereduce is running (has ``true`` value).
     :param values: Array of map function result values.
     :param rereduce: Boolean flag to indicate a rereduce run.
@@ -116,17 +129,42 @@ single value - which could be an array or similar object.
 Built-in Reduce Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Additionally, CouchDB has three built-in reduce functions. These are implemented
-in Erlang and run inside CouchDB, so they are much faster than the equivalent
-JavaScript functions: ``_sum``, ``_count`` and ``_stats``. Their equivalents in
-JavaScript:
+Additionally, CouchDB has a set of built-in reduce functions. These are
+implemented in Erlang and run inside CouchDB, so they are much faster than the
+equivalent JavaScript functions.
+
+.. data:: _approx_count_distinct
+
+.. versionadded:: 2.2
+
+Aproximates the number of distinct keys in a view index using a variant of the
+`HyperLogLog`_ algorithm. This algorithm enables an efficient, parallelizable
+computation of cardinality using fixed memory resources. CouchDB has configured
+the underlying data structure to have a relative error of ~2%.
+
+.. _HyperLogLog: https://en.wikipedia.org/wiki/HyperLogLog
+
+As this reducer ignores the emitted values entirely, an invocation with
+``group=true`` will simply return a value of 1 for every distinct key in the
+view. In the case of array keys, querying the view with a ``group_level``
+specified will return the number of distinct keys that share the common group
+prefix in each row. The algorithm is also cognizant of the ``startkey`` and
+``endkey`` boundaries and will return the number of distinct keys within the
+specified key range.
+
+A final note regarding Unicode collation: this reduce function uses the binary
+representation of each key in the index directly as input to the HyperLogLog
+filter. As such, it will (incorrectly) consider keys that are not byte identical
+but that compare equal according to the Unicode collation rules to be distinct
+keys, and thus has the potential to overestimate the cardinality of the key
+space if a large number of such keys exist.
+
+.. data:: _count
+
+Counts the number of values in the index with a given key. This could be
+implemented in JavaScript as:
 
 .. code-block:: javascript
-
-    // could be replaced by _sum
-    function(keys, values) {
-        return sum(values);
-    }
 
     // could be replaced by _count
     function(keys, values, rereduce) {
@@ -136,6 +174,16 @@ JavaScript:
             return values.length;
         }
     }
+
+.. data:: _stats
+
+Computes the following quantities for numeric values associated with each key:
+``sum``, ``min``, ``max``, ``count``, and ``sumsqr``. The behavior of the
+``_stats`` function varies depending on the output of the map function. The
+simplest case is when the map phase emits a single numeric value for each key.
+In this case the ``_stats`` function is equivalent to the following JavaScript:
+
+.. code-block:: javascript
 
     // could be replaced by _stats
     function(keys, values, rereduce) {
@@ -165,6 +213,81 @@ JavaScript:
             }
         }
     }
+
+The ``_stats`` function will also work with "pre-aggregated" values from a map
+phase. A map function that emits an object containing ``sum``, ``min``, ``max``,
+``count``, and ``sumsqr`` keys and numeric values for each can use the
+``_stats`` function to combine these results with the data from other documents.
+The emitted object may contain other keys (these are ignored by the reducer),
+and it is also possible to mix raw numeric values and pre-aggregated objects
+in a single view and obtain the correct aggregated statistics.
+
+Finally, ``_stats`` can operate on key-value pairs where each value is an array
+comprised of numbers or pre-aggregated objects. In this case **every** value
+emitted from the map function must be an array, and the arrays must all be the
+same length, as ``_stats`` will compute the statistical quantities above
+*independently* for each element in the array. Users who want to compute
+statistics on multiple values from a single document should either ``emit`` each
+value into the index separately, or compute the statistics for the set of values
+using the JavaScript example above and emit a pre-aggregated object.
+
+.. data:: _sum
+
+In its simplest variation, ``_sum`` sums the numeric values associated with each
+key, as in the following JavaScript:
+
+.. code-block:: javascript
+
+    // could be replaced by _sum
+    function(keys, values) {
+        return sum(values);
+    }
+
+As with ``_stats``, the ``_sum`` function offers a number of extended
+capabilities. The ``_sum`` function requires that map values be numbers, arrays
+of numbers, or objects. When presented with array output from a map function,
+``_sum`` will compute the sum for every element of the array. A bare numeric
+value will be treated as an array with a single element, and arrays with fewer
+elements will be treated as if they contained zeroes for every additional
+element in the longest emitted array. As an example, consider the following map
+output:
+
+.. code-block:: javascript
+
+    {"total_rows":5, "offset":0, "rows": [
+        {"id":"id1", "key":"abc", "value": 2},
+        {"id":"id2", "key":"abc", "value": [3,5,7]},
+        {"id":"id2", "key":"def", "value": [0,0,0,42]},
+        {"id":"id2", "key":"ghi", "value": 1},
+        {"id":"id1", "key":"ghi", "value": 3}
+    ]}
+
+The ``_sum`` for this output without any grouping would be:
+
+.. code-block:: javascript
+
+    {"rows": [
+        {"key":null, "value": [9,5,7,42]}
+    ]}
+
+while the grouped output would be
+
+.. code-block:: javascript
+
+    {"rows": [
+        {"key":"abc", "value": [5,5,7]},
+        {"key":"def", "value": [0,0,0,42]},
+        {"key":"ghi", "value": 4
+    ]}
+
+This is in contrast to the behavior of the ``_stats`` function which requires
+that all emitted values be arrays of identical length if any array is emitted.
+
+It is also possible to have ``_sum`` recursively descend through an emitted
+object and compute the sums for every field in the object. Objects *cannot* be
+mixed with other data structures. Objects can be arbitrarily nested, provided
+that the values for all fields are themselves numbers, arrays of numbers, or
+objects.
 
 .. note::
     **Why don't reduce functions support CommonJS modules?**
@@ -204,6 +327,10 @@ JavaScript:
 
 Show Functions
 ==============
+
+.. warning::
+
+    Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. function:: showfun(doc, req)
 
@@ -319,10 +446,6 @@ the `xml` provider in our function needs more care to handle nested objects
 correctly, and keys with invalid characters, but you've got the idea!
 
 .. seealso::
-    CouchDB Wiki:
-        - `Showing Documents
-          <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Showing_Documents>`_
-
     CouchDB Guide:
         - `Show Functions <http://guide.couchdb.org/editions/1/en/show.html>`_
 
@@ -330,6 +453,10 @@ correctly, and keys with invalid characters, but you've got the idea!
 
 List Functions
 ==============
+
+.. warning::
+
+    List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. function:: listfun(head, req)
 
@@ -354,7 +481,7 @@ HTML page:
             }
         });
         send('<html><body><table>');
-        send('<tr><th>ID</th><th>Key</th><th>Value</th></tr>')
+        send('<tr><th>ID</th><th>Key</th><th>Value</th></tr>');
         while(row = getRow()){
             send(''.concat(
                 '<tr>',
@@ -376,10 +503,6 @@ be a string when used inside a list function, so you'll need to use
 returning it.
 
 .. seealso::
-    CouchDB Wiki:
-        - `Listing Views with CouchDB 0.10 and later
-          <http://wiki.apache.org/couchdb/Formatting_with_Show_and_List#Listing_Views_with_CouchDB_0.10_and_later>`_
-
     CouchDB Guide:
         - `Transforming Views with List Functions
           <http://guide.couchdb.org/draft/transforming.html>`_
@@ -430,11 +553,6 @@ A basic example that demonstrates all use-cases of update handlers:
         doc['edited_by'] = req['userCtx']['name']
         return [doc, 'Edited World!']
     }
-
-.. seealso::
-    CouchDB Wiki:
-        - `Document Update Handlers
-          <http://wiki.apache.org/couchdb/Document_Update_Handlers>`_
 
 .. _filterfun:
 
@@ -573,10 +691,6 @@ parameters to the :ref:`changes feed<changes>`::
     CouchDB Guide:
         - `Guide to filter change notification
           <http://guide.couchdb.org/draft/notifications.html#filters>`_
-
-    CouchDB Wiki:
-        - `Filtered replication
-          <http://wiki.apache.org/couchdb/Replication#Filtered_Replication>`_
 
 .. _vdufun:
 
@@ -761,7 +875,3 @@ modified by a user with the ``_admin`` role:
     CouchDB Guide:
         - `Validation Functions
           <http://guide.couchdb.org/editions/1/en/validation.html>`_
-
-    CouchDB Wiki:
-        - `Document Update Validation
-          <http://wiki.apache.org/couchdb/Document_Update_Validation>`_

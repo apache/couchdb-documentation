@@ -40,11 +40,20 @@ The reply should look something like:
 .. code-block:: javascript
 
     {
-        "couchdb": "Welcome",
-        "vendor": {
-            "name": "The Apache Software Foundation"
-        },
-        "version": "2.0.0"
+      "couchdb": "Welcome",
+      "version": "3.0.0",
+      "git_sha": "83bdcf693",
+      "uuid": "56f16e7c93ff4a2dc20eb6acc7000b71",
+      "features": [
+        "access-ready",
+        "partitioned",
+        "pluggable-storage-engines",
+        "reshard",
+        "scheduler"
+      ],
+      "vendor": {
+        "name": "The Apache Software Foundation"
+      }
     }
 
 Not all that spectacular. CouchDB is saying "hello" with the running version
@@ -52,16 +61,25 @@ number.
 
 Next, we can get a list of databases::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
-All we added to the previous request is the _all_dbs string.
+All we added to the previous request is the _all_dbs string, and our admin user
+name and password (set when installing CouchDB).
 
 The response should look like::
 
     ["_replicator","_users"]
 
-Oh, that's right, we didn't create any databases yet! All we see is an empty
-list.
+.. note::
+    In case this returns an empty Array for you, it means you haven't finished
+    installation correctly. Please refer to :ref:`setup` for further
+    information on this.
+
+    For the purposes of this example, we'll not be showing the system databases
+    past this point. In *your* installation, any time you ``GET /_all_dbs``,
+    you should see the system databases in the list, too.
+
+Oh, that's right, we didn't create any user databases yet!
 
 .. note::
     The curl command issues GET requests by default. You can issue POST requests
@@ -77,7 +95,7 @@ list.
 
 Let's create a database::
 
-    curl -X PUT http://127.0.0.1:5984/baseball
+    curl -X PUT http://admin:password@127.0.0.1:5984/baseball
 
 CouchDB will reply with::
 
@@ -85,7 +103,7 @@ CouchDB will reply with::
 
 Retrieving the list of databases again shows some useful results this time::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
 ::
 
@@ -105,7 +123,7 @@ Retrieving the list of databases again shows some useful results this time::
 
 Let's create another database::
 
-    curl -X PUT http://127.0.0.1:5984/baseball
+    curl -X PUT http://admin:password@127.0.0.1:5984/baseball
 
 CouchDB will reply with::
 
@@ -115,7 +133,7 @@ CouchDB will reply with::
 We already have a database with that name, so CouchDB will respond with an
 error. Let's try again with a different database name::
 
-    curl -X PUT http://127.0.0.1:5984/plankton
+    curl -X PUT http://admin:password@127.0.0.1:5984/plankton
 
 CouchDB will reply with::
 
@@ -123,7 +141,7 @@ CouchDB will reply with::
 
 Retrieving the list of databases yet again shows some useful results::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
 CouchDB will respond with::
 
@@ -131,7 +149,7 @@ CouchDB will respond with::
 
 To round things off, let's delete the second database::
 
-    curl -X DELETE http://127.0.0.1:5984/plankton
+    curl -X DELETE http://admin:password@127.0.0.1:5984/plankton
 
 CouchDB will reply with::
 
@@ -139,7 +157,7 @@ CouchDB will reply with::
 
 The list of databases is now the same as it was before::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
 CouchDB will respond with::
 
@@ -168,11 +186,13 @@ To load Fauxton in your browser, visit::
 
     http://127.0.0.1:5984/_utils/
 
-In later documents, we'll focus on using CouchDB from
-server-side languages such as Ruby and Python. As such, this document is a great
-opportunity to showcase an example of natively serving up a dynamic web
-application using nothing more than CouchDB's integrated web server, something
-you may wish to do with your own applications.
+and log in when prompted with your admin password.
+
+In later documents, we'll focus on using CouchDB from server-side languages
+such as Ruby and Python. As such, this document is a great opportunity to
+showcase an example of natively serving up a dynamic web application using
+nothing more than CouchDB's integrated web server, something you may wish to do
+with your own applications.
 
 The first thing we should do with a fresh installation of CouchDB is run the
 test suite to verify that everything is working properly. This assures us
@@ -335,7 +355,7 @@ Edit the map function, on the right, so that it looks like the following:
 This is a JavaScript function that CouchDB runs for each of our documents as
 it computes the view. We'll leave the reduce function blank for the time being.
 
-Click "Run" and you should see result rows,
+Click "Save Document and then Build Index" and you should see result rows,
 with the various items sorted by price. This map function could be even more
 useful if it grouped the items by type so that all the prices for bananas were
 next to each other in the result set. CouchDB's key sorting system allows any

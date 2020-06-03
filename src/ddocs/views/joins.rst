@@ -334,9 +334,9 @@ some use of that:
 
     function(doc) {
         if (doc.type == "post") {
-            emit([doc._id, 0], doc);
+            emit([doc._id, 0], null);
         } else if (doc.type == "comment") {
-            emit([doc.post, 1], doc);
+            emit([doc.post, 1], null);
         }
     }
 
@@ -349,7 +349,8 @@ and/or sort the results you get back from your views. When you “invoke” a vi
 you can say that you're only interested in a subset of the view rows by
 specifying a ``?key=foo`` query string parameter. Or you can specify
 ``?startkey=foo`` and/or ``?endkey=bar`` query string parameters to fetch rows
-over a range of keys.
+over a range of keys. Finally, by adding ``?include_docs=true`` to the query,
+the result will include the full body of each emitted document.
 
 It's also important to note that keys are always used for collating (i.e.
 sorting) the rows. CouchDB has well defined (but as of yet undocumented) rules
@@ -380,23 +381,23 @@ the following:
         "total_rows": 5, "offset": 0, "rows": [{
                 "id": "myslug",
                 "key": ["myslug", 0],
-                "value": {...}
+                "value": null
             }, {
                 "id": "ABCDEF",
                 "key": ["myslug", 1],
-                "value": {...}
+                "value": null
             }, {
                 "id": "DEFABC",
                 "key": ["myslug", 1],
-                "value": {...}
+                "value": null
             }, {
                 "id": "other_slug",
                 "key": ["other_slug", 0],
-                "value": {...}
+                "value": null
             }, {
                 "id": "CDEFAB",
                 "key": ["other_slug", 1],
-                "value": {...}
+                "value": null
             },
         ]
     }
@@ -408,11 +409,12 @@ the following:
 Now, to get a specific blog post and all associated comments, we'd invoke that
 view with the query string::
 
-    ?startkey=["myslug"]&endkey;=["myslug", 2]
+    ?startkey=["myslug"]&endkey=["myslug", 2]&include_docs=true
 
 We'd get back the first three rows, those that belong to the ``myslug`` post,
-but not the others. Et voila, we now have the data we need to display a post
-with all associated comments, retrieved via a single ``GET`` request.
+but not the others, along with the full bodies of each document. Et voila, we
+now have the data we need to display a post with all associated comments,
+retrieved via a single ``GET`` request.
 
 You may be asking what the 0 and 1 parts of the keys are for. They're simply
 to ensure that the post document is always sorted before the the associated
@@ -424,5 +426,6 @@ One remaining problem with this model is that comments are not ordered, but
 that's simply because we don't have date/time information associated with them.
 If we had, we'd add the timestamp as third element of the key array, probably
 as ISO date/time strings. Now we would continue using the query string
-``?startkey=["myslug"]&endkey=["myslug", 2]`` to fetch the blog post and all
-associated comments, only now they'd be in chronological order.
+``?startkey=["myslug"]&endkey=["myslug", 2]&include_docs=true`` to fetch the
+blog post and all associated comments, only now they'd be in chronological
+order.

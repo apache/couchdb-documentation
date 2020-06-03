@@ -49,20 +49,12 @@ Statistic Calculation
 
 .. config:section:: stats :: Statistic Calculation
 
-    .. config:option:: rate
+    .. config:option:: interval
 
-        Rate of statistics gathering in milliseconds::
-
-            [stats]
-            rate = 1000
-
-    .. config:option:: samples
-
-        Samples are used to track the mean and standard value deviation within
-        specified intervals (in seconds)::
+        Interval between gathering statistics in seconds::
 
             [stats]
-            samples = [0, 60, 300, 900]
+            interval = 10
 
 .. _config/uuids:
 
@@ -241,3 +233,39 @@ Content-Security-Policy
 
             [csp]
             header_value = default-src 'self'; img-src *; font-src *;
+
+.. _config/purge:
+
+Configuration of Database Purge
+===============================
+
+.. config:section:: purge :: Configuration of Database Purge
+
+    .. config:option:: max_document_id_number
+
+        .. versionadded:: 3.0
+
+        Sets the maximum number of documents allowed in a single purge request::
+
+            [purge]
+            max_document_id_number = 100
+
+    .. config:option:: max_revisions_number
+
+        .. versionadded:: 3.0
+
+        Sets the maximum number of accumulated revisions allowed in a single purge
+        request::
+
+            [purge]
+            max_revisions_number = 1000
+
+    .. config:option:: index_lag_warn_seconds
+
+        .. versionadded:: 3.0
+
+        Sets the allowed duration when index is not updated for local purge checkpoint
+        document. Default is 24 hours::
+
+            [purge]
+            index_lag_warn_seconds = 86400

@@ -43,7 +43,7 @@ resolution during replication. The number of stored revisions
 (and their `tombstones`) can be configured by using the :get:`_revs_limit
 </{db}/_revs_limit>` URL endpoint.
 
-Compaction is manually triggered operation per database and runs as a background
+Compaction can be manually triggered per database and runs as a background
 task. To start it for specific database there is need to send HTTP
 :post:`/{db}/_compact` sub-resource of the target database::
 
@@ -97,14 +97,17 @@ information about it via :ref:`database information resource <api/db>`::
     {
         "committed_update_seq": 76215,
         "compact_running": true,
-        "data_size": 3787996,
         "db_name": "my_db",
         "disk_format_version": 6,
-        "disk_size": 17703025,
         "doc_count": 5091,
         "doc_del_count": 0,
         "instance_start_time": "0",
         "purge_seq": 0,
+        "sizes": {
+          "active": 3787996,
+          "disk": 17703025,
+          "external": 4763321
+        },
         "update_seq": 76215
     }
 
@@ -177,13 +180,151 @@ exist anymore) you can trigger a :ref:`view cleanup <api/db/view_cleanup>`::
 Automatic Compaction
 ====================
 
-While both :ref:`database <compact/db>` and :ref:`views <compact/views>`
-compactions are required be manually triggered, it is also possible to configure
-automatic compaction, so that compaction of databases and views is automatically
-triggered based on various criteria. Automatic compaction is configured in
-CouchDB's :ref:`configuration files <config/intro>`.
+CouchDB's automatic compaction daemon, internally known as "smoosh", will
+trigger compaction jobs for both databases and views based on configurable
+thresholds for the sparseness of a file and the total amount of space that can
+be recovered.
 
-The :config:option:`daemons/compaction_daemon` is responsible for triggering
-the compaction. It is enabled by default and automatically started.
-The criteria for triggering the compactions is configured in the
-:config:section:`compactions` section.
+Channels
+--------
+
+Smoosh works using the concept of channels. A channel is essentially a queue of
+pending compactions. There are separate sets of active channels for databases
+and views. Each channel is assigned a configuration which defines whether a
+compaction ends up in the channel's queue and how compactions are prioritized
+within that queue.
+
+Smoosh takes each channel and works through the compactions queued in each in
+priority order. Each channel is processed concurrently, so the priority levels
+only matter within a given channel. Each channel has an assigned number of
+active compactions, which defines how many compactions happen for that channel
+in parallel. For example, a cluster with a lot of database churn but few views
+might require more active compactions in the database channel(s).
+
+It's important to remember that a channel is local to a CouchDB node; that is,
+each node maintains and processes an independent set of compactions. Channels
+are defined as either "ratio" channels or "slack" channels, depending on the
+type of algorithm used for prioritization:
+
+-   Ratio: uses the ratio of sizes.file / sizes.active as its driving
+    calculation. The result X must be greater than some configurable value Y for
+    a compaction to be added to the queue. Compactions are then prioritised for
+    higher values of X.
+
+-   Slack: uses the difference of sizes.file - sizes.active as its driving
+    calculation. The result X must be greater than some configurable value Y for
+    a compaction to be added to the queue. Compactions are prioritised for
+    higher values of X.
+
+In both cases, Y is set using the `min_priority` configuration variable. CouchDB
+ships with four channels pre-configured: one channel of each type for databases,
+and another one for views.
+
+Channel Configuration
+---------------------
+
+Channels are defined using `[smoosh.<channel_name>]` configuration blocks, and
+activated by naming the channel in the `db_channels` or `view_channels`
+configuration setting in the `[smoosh]` block. The default configuration is
+
+.. code-block:: ini
+
+    [smoosh]
+    db_channels = upgrade_dbs,ratio_dbs,slack_dbs
+    view_channels = upgrade_views,ratio_views,slack_views
+
+    [smoosh.ratio_dbs]
+    priority = ratio
+    min_priority = 2.0
+
+    [smoosh.ratio_views]
+    priority = ratio
+    min_priority = 2.0
+
+    [smoosh.slack_dbs]
+    priority = slack
+    min_priority = 16777216
+
+    [smoosh.slack_views]
+    priority = slack
+    min_priority = 16777216
+
+The "upgrade" channels are a special pair of channels that only check whether
+the `disk_format_version` for the file matches the current version, and enqueue
+the file for compaction (which has the side effect of upgrading the file format)
+if that's not the case. There are several additional properties that can be
+configured for each channel; these are documented in the :ref:`configuration API
+<config/compactions>`
+
+Scheduling Windows
+------------------
+
+Each compaction channel can be configured to run only during certain hours of
+the day. The channel-specific `from`, `to`, and `strict_window` configuration
+settings control this behavior. For example
+
+.. code-block:: ini
+
+    [smoosh.overnight_channel]
+    from = 20:00
+    to = 06:00
+    strict_window = true
+
+The `strict_window` setting will cause the compaction daemon to suspend all
+active compactions in this channel when exiting the window, and resume them when
+re-entering. If `strict_window` is left at its default of false, the active
+compactions will be allowed to complete but no new compactions will be started.
+
+Migration Guide
+---------------
+
+Previous versions of CouchDB shipped with a simpler compaction daemon. The
+configuration system for the new daemon is not backwards-compatible with the old
+one, so users with customized compaction configurations will need to port them
+to the new setup. The old daemon's compaction rules configuration looked like
+
+.. code-block:: ini
+
+    [compaction_daemon]
+    min_file_size = 131072
+    check_interval = 3600
+    snooze_period_ms = 3000
+
+    [compactions]
+    mydb = [{db_fragmentation, "70%"}, {view_fragmentation, "60%"}, {parallel_view_compaction, true}]
+    _default = [{db_fragmentation, "50%"}, {view_fragmentation, "55%"}, {from, "20:00"}, {to, "06:00"}, {strict_window, true}]
+
+Many of the elements of this configuration can be ported over to the new system.
+Examining each in detail:
+
+*   ``min_file_size`` is now configured on a per-channel basis using the
+    min_size config setting.
+
+*   ``db_fragmentation`` is equivalent to configuring a priority = ratio
+    channel with min_priority set to 1.0 / (1 - db_fragmentation/100)
+    and then listing that channel in the [smoosh] db_channels config
+    setting.
+
+*   ``view_fragmention`` is likewise equivalent to configuring a priority = ratio
+    channel with min_priority set to 1.0 / (1 - view_fragmentation/100)
+    and then listing that channel in the [smoosh] view_channels config
+    setting.
+
+*   ``from`` / ``to`` / ``strict_window``: each of these settings can be applied
+    on a per-channel basis in the new daemon. The one behavior change is that
+    the new daemon will suspend compactions upon exiting the allowed window
+    instead of canceling them outright, and resume them when re-entering.
+
+*   ``parallel_view_compaction``: each compaction channel has a concurrency
+    setting that controls how many compactions will execute in parallel in that
+    channel. The total parallelism is the sum of the concurrency settings of all
+    active channels. This is a departure from the previous behavior, in which
+    the daemon would only focus on one database and/or its views (depending on
+    the value of this flag) at a time.
+
+The ``check_interval`` and ``snooze_period_ms`` settings are obsolete in the
+event-driven design of the new daemon. The new daemon does not support setting
+database-specific thresholds as in the ``mydb`` setting above. Rather, channels
+can be configured to focus on specific classes of files: large databases, small
+view indexes, and so on. Most cases of named database compaction rules can be
+expressed using properties of those databases and/or their associated views.

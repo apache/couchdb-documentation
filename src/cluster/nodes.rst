@@ -44,7 +44,7 @@ To add a node simply do:
 
 .. code-block:: text
 
-    curl -X PUT "http://xxx.xxx.xxx.xxx:5986/_nodes/node2@yyy.yyy.yyy.yyy" -d {}
+    curl -X PUT "http://xxx.xxx.xxx.xxx/_node/_local/_nodes/node2@yyy.yyy.yyy.yyy" -d {}
 
 Now look at ``http://server1:5984/_membership`` again.
 
@@ -79,11 +79,11 @@ revision of the document that signifies that node’s existence:
 
 .. code-block:: text
 
-    curl "http://xxx.xxx.xxx.xxx:5986/_nodes/node2@yyy.yyy.yyy.yyy"
+    curl "http://xxx.xxx.xxx.xxx/_node/_local/_nodes/node2@yyy.yyy.yyy.yyy"
     {"_id":"node2@yyy.yyy.yyy.yyy","_rev":"1-967a00dff5e02add41820138abb3284d"}
 
 With that ``_rev``, you can now proceed to delete the node document:
 
 .. code-block:: text
 
-    curl -X DELETE "http://xxx.xxx.xxx.xxx:5986/_nodes/node2@yyy.yyy.yyy.yyy?rev=1-967a00dff5e02add41820138abb3284d"
+    curl -X DELETE "http://xxx.xxx.xxx.xxx/_node/_local/_nodes/node2@yyy.yyy.yyy.yyy?rev=1-967a00dff5e02add41820138abb3284d"

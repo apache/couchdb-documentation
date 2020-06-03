@@ -26,6 +26,10 @@ Installation from ports
 
 This will install CouchDB from the ports collection.
 
+.. note::
+   Be sure to :ref:`create an admin user<config/admins>` before starting
+   CouchDB for the first time!
+
 Start script
 ------------
 
@@ -52,8 +56,8 @@ Administrators should use ``default.ini`` as reference and only modify the
 
 Post install
 ------------
-**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
-a single node or clustered installation.**
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 In case the install script fails to install a non-interactive user "couchdb" to
 be used for the database, the user needs to be created manually:

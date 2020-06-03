@@ -12,9 +12,9 @@
 
 .. _api/db/all_docs:
 
-=================
-``/db/_all_docs``
-=================
+===================
+``/{db}/_all_docs``
+===================
 
 .. http:get:: /{db}/_all_docs
     :synopsis: Returns a built-in view of all documents in this database
@@ -27,6 +27,10 @@
     data.
 
     :param db: Database name
+    :<header Content-Type: :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -91,19 +95,11 @@
         }
 
 .. http:post:: /{db}/_all_docs
-    :synopsis: Returns certain rows from the built-in view of all documents
+    :synopsis: Returns a built-in view of all documents in this database
 
-    The ``POST`` to ``_all_docs`` allows to specify multiple keys to be
-    selected from the database. This enables you to request multiple
-    documents in a single request, in place of multiple :get:`/{db}/{docid}`
-    requests.
-
-    :param db: Database name
-    :<header Content-Type: :mimetype:`application/json`
-    :<json array keys: Return only documents that match the specified keys.
-      *Optional*
-    :>header Content-Type: - :mimetype:`application/json`
-    :code 200: Request completed successfully
+    :method:`POST` `_all_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_all_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
 
     **Request**:
 
@@ -147,11 +143,513 @@
             "offset" : 0
         }
 
+.. _api/db/design_docs:
+
+======================
+``/{db}/_design_docs``
+======================
+
+.. versionadded:: 2.2
+
+.. http:get:: /{db}/_design_docs
+    :synopsis: Returns a built-in view of all design documents in this database
+
+    Returns a JSON structure of all of the design documents in a given
+    database. The information is returned as a JSON structure containing meta
+    information about the return structure, including a list of all design
+    documents and basic contents, consisting the ID, revision and key. The key
+    is the design document's ``_id``.
+
+    :param db: Database name
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :query boolean conflicts: Includes `conflicts` information in response.
+      Ignored if `include_docs` isn't ``true``. Default is ``false``.
+    :query boolean descending: Return the design documents in descending by
+      key order. Default is ``false``.
+    :query string endkey: Stop returning records when the specified key is
+      reached. *Optional*.
+    :query string end_key: Alias for `endkey` param.
+    :query string endkey_docid: Stop returning records when the specified
+        design document ID is reached. *Optional*.
+    :query string end_key_doc_id: Alias for `endkey_docid` param.
+    :query boolean include_docs: Include the full content of the design
+      documents in the return. Default is ``false``.
+    :query boolean inclusive_end: Specifies whether the specified end key
+      should be included in the result. Default is ``true``.
+    :query string key: Return only design documents that match the specified
+      key. *Optional*.
+    :query string keys: Return only design documents that match the specified
+      keys. *Optional*.
+    :query number limit: Limit the number of the returned design documents to
+      the specified number. *Optional*.
+    :query number skip: Skip this number of records before starting to return
+      the results. Default is ``0``.
+    :query string startkey: Return records starting with the specified key.
+      *Optional*.
+    :query string start_key: Alias for `startkey` param.
+    :query string startkey_docid: Return records starting with the specified
+      design document ID. *Optional*.
+    :query string start_key_doc_id: Alias for `startkey_docid` param.
+    :query boolean update_seq: Response includes an ``update_seq`` value
+      indicating which sequence id of the underlying database the view
+      reflects. Default is ``false``.
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :>header ETag: Response signature
+    :>json number offset: Offset where the design document list started
+    :>json array rows: Array of view row objects. By default the information
+      returned contains only the design document ID and revision.
+    :>json number total_rows: Number of design documents in the database. Note
+      that this is not the number of rows returned in the actual query.
+    :>json number update_seq: Current update sequence for the database
+    :code 200: Request completed successfully
+    :code 404: Requested database not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /db/_design_docs HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Sat, 23 Dec 2017 16:22:56 GMT
+        ETag: "1W2DJUZFZSZD9K78UFA3GZWB4"
+        Server: CouchDB (Erlang/OTP)
+        Transfer-Encoding: chunked
+
+        {
+            "offset": 0,
+            "rows": [
+                {
+                    "id": "_design/ddoc01",
+                    "key": "_design/ddoc01",
+                    "value": {
+                        "rev": "1-7407569d54af5bc94c266e70cbf8a180"
+                    }
+                },
+                {
+                    "id": "_design/ddoc02",
+                    "key": "_design/ddoc02",
+                    "value": {
+                        "rev": "1-d942f0ce01647aa0f46518b213b5628e"
+                    }
+                },
+                {
+                    "id": "_design/ddoc03",
+                    "key": "_design/ddoc03",
+                    "value": {
+                        "rev": "1-721fead6e6c8d811a225d5a62d08dfd0"
+                    }
+                },
+                {
+                    "id": "_design/ddoc04",
+                    "key": "_design/ddoc04",
+                    "value": {
+                        "rev": "1-32c76b46ca61351c75a84fbcbceece2f"
+                    }
+                },
+                {
+                    "id": "_design/ddoc05",
+                    "key": "_design/ddoc05",
+                    "value": {
+                        "rev": "1-af856babf9cf746b48ae999645f9541e"
+                    }
+                }
+            ],
+            "total_rows": 5
+        }
+
+.. http:post:: /{db}/_design_docs
+    :synopsis: Returns a built-in view of all design documents in this database
+
+    :method:`POST` `_design_docs` functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_design_docs` API but allows for the query string
+    parameters to be supplied as keys in a JSON object in the body of the `POST` request.
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_all_docs HTTP/1.1
+        Accept: application/json
+        Content-Length: 70
+        Content-Type: application/json
+        Host: localhost:5984
+
+        {
+            "keys" : [
+                "_design/ddoc02",
+                "_design/ddoc05"
+            ]
+        }
+
+    The returned JSON is the all documents structure, but with only the
+    selected keys in the output:
+
+    .. code-block:: javascript
+
+        {
+            "total_rows" : 5,
+            "rows" : [
+                {
+                    "value" : {
+                        "rev" : "1-d942f0ce01647aa0f46518b213b5628e"
+                    },
+                    "id" : "_design/ddoc02",
+                    "key" : "_design/ddoc02"
+                },
+                {
+                    "value" : {
+                        "rev" : "1-af856babf9cf746b48ae999645f9541e"
+                    },
+                    "id" : "_design/ddoc05",
+                    "key" : "_design/ddoc05"
+                }
+            ],
+            "offset" : 0
+        }
+
+Sending multiple queries to a database
+======================================
+
+.. versionadded:: 2.2
+
+.. http:post:: /{db}/_all_docs/queries
+    :synopsis: Returns results for the specified queries
+
+    Executes multiple specified built-in view queries of all documents in this
+    database. This enables you to request multiple queries in a single
+    request, in place of multiple :post:`/{db}/_all_docs` requests.
+
+    :param db: Database name
+
+    :<header Content-Type: - :mimetype:`application/json`
+    :<header Accept: - :mimetype:`application/json`
+
+    :<json queries: An array of query objects with fields for the
+        parameters of each individual view query to be executed. The field names
+        and their meaning are the same as the query parameters of a
+        regular :ref:`_all_docs request <api/db/all_docs>`.
+
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :>header ETag: Response signature
+    :>header Transfer-Encoding: ``chunked``
+
+    :>json array results: An array of result objects - one for each query. Each
+        result object contains the same fields as the response to a regular
+        :ref:`_all_docs request <api/db/all_docs>`.
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request
+    :code 401: Read permission required
+    :code 404: Specified database is missing
+    :code 500: Query execution error
+
+**Request**:
+
+.. code-block:: http
+
+    POST /db/_all_docs/queries HTTP/1.1
+    Content-Type: application/json
+    Accept: application/json
+    Host: localhost:5984
+
+    {
+        "queries": [
+            {
+                "keys": [
+                    "meatballs",
+                    "spaghetti"
+                ]
+            },
+            {
+                "limit": 3,
+                "skip": 2
+            }
+        ]
+    }
+
+**Response**:
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Type: application/json
+    Date: Wed, 20 Dec 2017 11:17:07 GMT
+    ETag: "1H8RGBCK3ABY6ACDM7ZSC30QK"
+    Server: CouchDB (Erlang/OTP)
+    Transfer-Encoding: chunked
+
+    {
+        "results" : [
+            {
+                "rows": [
+                    {
+                        "id": "meatballs",
+                        "key": "meatballs",
+                        "value": 1
+                    },
+                    {
+                        "id": "spaghetti",
+                        "key": "spaghetti",
+                        "value": 1
+                    }
+                ],
+                "total_rows": 3
+            },
+            {
+                "offset" : 2,
+                "rows" : [
+                    {
+                        "id" : "Adukiandorangecasserole-microwave",
+                        "key" : "Aduki and orange casserole - microwave",
+                        "value" : [
+                            null,
+                            "Aduki and orange casserole - microwave"
+                        ]
+                    },
+                    {
+                        "id" : "Aioli-garlicmayonnaise",
+                        "key" : "Aioli - garlic mayonnaise",
+                        "value" : [
+                            null,
+                            "Aioli - garlic mayonnaise"
+                        ]
+                    },
+                    {
+                        "id" : "Alabamapeanutchicken",
+                        "key" : "Alabama peanut chicken",
+                        "value" : [
+                            null,
+                            "Alabama peanut chicken"
+                        ]
+                    }
+                ],
+                "total_rows" : 2667
+            }
+        ]
+    }
+
+.. Note::
+    The multiple queries are also supported in /db/_local_docs/queries and
+    /db/_design_docs/queries (similar to /db/_all_docs/queries).
+
+.. _api/db/bulk_get:
+
+===================
+``/{db}/_bulk_get``
+===================
+
+.. http:post:: /{db}/_bulk_get
+    :synopsis: Fetches several documents at the given revisions
+
+    This method can be called to query several documents in bulk. It is well
+    suited for fetching a specific revision of documents, as replicators do for
+    example, or for getting revision history.
+
+    :param db: Database name
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`multipart/related`
+                     - :mimetype:`multipart/mixed`
+    :<header Content-Type: :mimetype:`application/json`
+    :query boolean revs: Give the revisions history
+    :<json array docs: List of document objects, with ``id``, and optionally
+      ``rev`` and ``atts_since``
+    :>header Content-Type: - :mimetype:`application/json`
+    :>json object results: an array of results for each requested document/rev
+      pair. ``id`` key lists the requested document ID, ``docs`` contains a
+      single-item array of objects, each of which has either an ``error`` key and
+      value describing the error, or ``ok`` key and associated value of the
+      requested document, with the additional ``_revisions`` property that lists
+      the parent revisions if ``revs=true``.
+    :code 200: Request completed successfully
+    :code 400: The request provided invalid JSON data or invalid query parameter
+    :code 401: Read permission required
+    :code 404: Invalid database name
+    :code 415: Bad :header:`Content-Type` value
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_bulk_get HTTP/1.1
+        Accept: application/json
+        Content-Type:application/json
+        Host: localhost:5984
+
+        {
+            "docs": [
+                {
+                    "id": "foo"
+                    "rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                },
+                {
+                    "id": "foo"
+                    "rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                },
+                {
+                    "id": "bar",
+                }
+                {
+                    "id": "baz",
+                }
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Mon, 19 Mar 2018 15:27:34 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "results": [
+            {
+              "id": "foo",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "foo",
+                    "_rev": "4-753875d51501a6b1883a9d62b4d33f91",
+                    "value": "this is foo",
+                    "_revisions": {
+                      "start": 4,
+                      "ids": [
+                        "753875d51501a6b1883a9d62b4d33f91",
+                        "efc54218773c6acd910e2e97fea2a608",
+                        "2ee767305024673cfb3f5af037cd2729",
+                        "4a7e4ae49c4366eaed8edeaea8f784ad"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "foo",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "foo",
+                    "_rev": "1-4a7e4ae49c4366eaed8edeaea8f784ad",
+                    "value": "this is the first revision of foo",
+                    "_revisions": {
+                      "start": 1,
+                      "ids": [
+                        "4a7e4ae49c4366eaed8edeaea8f784ad"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "bar",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "bar",
+                    "_rev": "2-9b71d36dfdd9b4815388eb91cc8fb61d",
+                    "baz": true,
+                    "_revisions": {
+                      "start": 2,
+                      "ids": [
+                        "9b71d36dfdd9b4815388eb91cc8fb61d",
+                        "309651b95df56d52658650fb64257b97"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "baz",
+              "docs": [
+                {
+                  "error": {
+                    "id": "baz",
+                    "rev": "undefined",
+                    "error": "not_found",
+                    "reason": "missing"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
+    Example response with a conflicted document:
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_bulk_get HTTP/1.1
+        Accept: application/json
+        Content-Type:application/json
+        Host: localhost:5984
+
+        {
+            "docs": [
+                {
+                    "id": "a"
+                }
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Mon, 19 Mar 2018 15:27:34 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "results": [
+            {
+              "id": "a",
+              "docs": [
+                {
+                  "ok": {
+                    "_id": "a",
+                    "_rev": "1-23202479633c2b380f79507a776743d5",
+                    "a": 1
+                  }
+                },
+                {
+                  "ok": {
+                    "_id": "a",
+                    "_rev": "1-967a00dff5e02add41819138abb3284d"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
 .. _api/db/bulk_docs:
 
-==================
-``/db/_bulk_docs``
-==================
+====================
+``/{db}/_bulk_docs``
+====================
 
 .. http:post:: /{db}/_bulk_docs
     :synopsis: Inserts or updates multiple documents in to the database in
@@ -174,9 +672,7 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*
+
     :<json array docs: List of documents objects
     :<json boolean new_edits: If ``false``, prevents the database from
       assigning them new revision IDs. Default is ``true``. *Optional*
@@ -189,8 +685,7 @@
     :>jsonarr string reason: Error reason. *Optional*
     :code 201: Document(s) have been created or updated
     :code 400: The request provided invalid JSON data
-    :code 417: Occurs when at least one document was rejected by a
-     :ref:`validation function <vdufun>`
+    :code 404: Requested database not found
 
     **Request**:
 
@@ -498,16 +993,17 @@ following type:
 
    .. code-block:: http
 
-       HTTP/1.1 417 Expectation Failed
+       HTTP/1.1 201 Created
        Cache-Control: must-revalidate
-       Content-Length: 120
+       Content-Length: 80
        Content-Type: application/json
        Date: Sat, 26 Oct 2013 00:05:17 GMT
        Server: CouchDB (Erlang OTP)
 
-       {
-           "error": "forbidden",
-           "id": "LambStew",
-           "reason": "invalid recipe ingredient",
-           "rev": "1-34c318924a8f327223eed702ddfdc66d"
-       }
+       [
+           {
+               "id": "LambStew",
+               "error": "forbidden",
+               "reason": "invalid recipe ingredient"
+           }
+       ]

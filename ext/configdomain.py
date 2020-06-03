@@ -18,109 +18,95 @@ from sphinx.util.nodes import make_refnode
 
 
 class ConfigObject(ObjectDescription):
-
     def handle_signature(self, sig, signode):
-        if '::' in sig:
-            name, descr = map(lambda i: i.strip(), sig.split('::'))
+        if "::" in sig:
+            name, descr = map(lambda i: i.strip(), sig.split("::"))
         else:
-            name, descr = sig.strip(), ''
+            name, descr = sig.strip(), ""
 
-        signode['name'] = name
-        signode['descr'] = descr
+        signode["name"] = name
+        signode["descr"] = descr
 
-        domain, objtype = self.name.split(':')
-        if objtype == 'section':
-            self.env.temp_data['section'] = signode['name']
-            name = '[%s]' % signode['name']
+        domain, objtype = self.name.split(":")
+        if objtype == "section":
+            self.env.temp_data["section"] = signode["name"]
+            name = "[%s]" % signode["name"]
 
         signode += addnodes.desc_name(name, name)
 
-        return signode['name']
+        return signode["name"]
 
     def needs_arglist(self):
         return False
 
     def add_target_and_index(self, name, sig, signode):
-        section = self.env.temp_data['section']
-        domain, objtype = self.name.split(':')
+        section = self.env.temp_data["section"]
+        domain, objtype = self.name.split(":")
         data = self.env.domaindata[domain][objtype]
-        if objtype == 'section':
-            data[name] = (self.env.docname, signode['descr'])
-            signode['ids'].append(signode['name'])
-        elif objtype == 'option':
-            idx = '%s/%s' % (section, signode['name'])
-            data[idx] = (self.env.docname, signode['descr'])
-            signode['ids'].append(idx)
+        if objtype == "section":
+            data[name] = (self.env.docname, signode["descr"])
+            signode["ids"].append(signode["name"])
+        elif objtype == "option":
+            idx = "%s/%s" % (section, signode["name"])
+            data[idx] = (self.env.docname, signode["descr"])
+            signode["ids"].append(idx)
         else:
-            assert 'unknown object type %r' % objtype
+            assert "unknown object type %r" % objtype
 
 
 class ConfigIndex(Index):
 
-    name = 'ref'
-    localname = 'Configuration Reference'
-    shortname = 'Config Reference'
+    name = "ref"
+    localname = "Configuration Quick Reference"
+    shortname = "Config Quick Reference"
 
     def generate(self, docnames=None):
         content = dict(
-            (name, [(name, 1, info[0], name, '', '', info[1])])
-            for name, info in self.domain.data['section'].items()
+            (name, [(name, 1, info[0], name, "", "", info[1])])
+            for name, info in self.domain.data["section"].items()
         )
 
-        options = self.domain.data['option']
+        options = self.domain.data["option"]
         for idx, info in sorted(options.items()):
             path, descr = info
-            section, name = idx.split('/', 1)
-            content[section].append((
-                name, 2, path,
-                '%s/%s' % (section, name),
-                '', '', descr
-            ))
+            section, name = idx.split("/", 1)
+            content[section].append(
+                (name, 2, path, "%s/%s" % (section, name), "", "", descr)
+            )
 
         return (sorted(content.items()), False)
 
 
 class ConfigDomain(Domain):
 
-    name = 'config'
-    label = 'CONFIG'
+    name = "config"
+    label = "CONFIG"
 
     object_types = {
-        'section': ObjType('section', 'section', 'obj'),
-        'option': ObjType('option', 'option', 'obj'),
+        "section": ObjType("section", "section", "obj"),
+        "option": ObjType("option", "option", "obj"),
     }
 
-    directives = {
-        'section': ConfigObject,
-        'option': ConfigObject,
-    }
+    directives = {"section": ConfigObject, "option": ConfigObject}
 
-    roles = {
-        'section': XRefRole(),
-        'option': XRefRole(),
-    }
+    roles = {"section": XRefRole(), "option": XRefRole()}
 
-    initial_data = {
-        'section': {},
-        'option': {}
-    }
+    initial_data = {"section": {}, "option": {}}
 
     indices = [ConfigIndex]
 
-    def resolve_xref(self, env, fromdocname, builder, typ, target,
-                     node, contnode):
-        if typ == 'section':
+    def resolve_xref(self, env, fromdocname, builder, typ, target, node, contnode):
+        if typ == "section":
             info = self.data[typ][target]
-            title = '[%s]' % target
-        elif typ == 'option':
-            assert '/' in target, 'option without section: %r' % target
-            section, option = target.split('/', 1)
+            title = "[%s]" % target
+        elif typ == "option":
+            assert "/" in target, "option without section: %r" % target
+            section, option = target.split("/", 1)
             info = self.data[typ][target]
             title = option
         else:
-            assert 'unknown role %r for target %r' % (typ, target)
-        return make_refnode(builder, fromdocname, info[0], target, contnode,
-                            title)
+            assert "unknown role %r for target %r" % (typ, target)
+        return make_refnode(builder, fromdocname, info[0], target, contnode, title)
 
 
 def setup(app):

@@ -16,18 +16,17 @@
 cURL: Your Command Line Friend
 ==============================
 
-The ``curl`` utility is a command line tool available on Unix, Linux,
-Mac OS X and Windows and many other platforms. ``curl`` provides easy
-access to the HTTP protocol (among others) directly from the
-command-line and is therefore an ideal way of interacting with CouchDB
-over the HTTP REST API.
+The ``curl`` utility is a command line tool available on Unix, Linux, Mac OS X,
+Windows, and many other platforms. ``curl`` provides easy access to the HTTP
+protocol (among others) directly from the command line and is therefore an
+ideal way of interacting with CouchDB over the HTTP REST API.
 
-For simple ``GET`` requests you can supply the URL of the request. For
-example, to get the database information:
+For simple ``GET`` requests you can supply the URL of the request. For example,
+to get the database information:
 
 .. code-block:: bash
 
-    shell> curl http://127.0.0.1:5984
+    shell> curl http://admin:password@127.0.0.1:5984
 
 This returns the database information (formatted in the output below for
 clarity):
@@ -35,11 +34,20 @@ clarity):
 .. code-block:: json
 
     {
-        "couchdb": "Welcome",
-        "version": "2.0.0",
-        "vendor": {
-            "name": "The Apache Software Foundation"
-        }
+      "couchdb": "Welcome",
+      "version": "3.0.0",
+      "git_sha": "83bdcf693",
+      "uuid": "56f16e7c93ff4a2dc20eb6acc7000b71",
+      "features": [
+        "access-ready",
+        "partitioned",
+        "pluggable-storage-engines",
+        "reshard",
+        "scheduler"
+      ],
+      "vendor": {
+        "name": "The Apache Software Foundation"
+      }
     }
 
 .. note::
@@ -51,13 +59,31 @@ clarity):
 
         shell> curl 'http://couchdb:5984/_uuids?count=5'
 
+.. note::
+    On Microsoft Windows, use double-quotes anywhere you see single-quotes in
+    the following examples. Use doubled double-quotes ("") anywhere you see
+    single quotes. For example, if you see:
+
+    .. code-block:: bash
+
+        shell> curl -X PUT 'http:/127.0.0.1:5984/demo/doc' -d '{"motto": "I love gnomes"}'
+
+    you should replace it with:
+
+    .. code-blocK:: bash
+
+        shell> curl -X PUT "http://127.0.0.1:5984/demo/doc" -d "{""motto"": ""I love gnomes""}"
+
+    If you prefer, ``^"`` and ``\"`` may be used to escape the double-quote
+    character in quoted strings instead.
+
 You can explicitly set the HTTP command using the ``-X`` command line option.
 For example, when creating a database, you set the name of the database in the
 URL you send using a PUT request:
 
 .. code-block:: bash
 
-    shell> curl -X PUT http://127.0.0.1:5984/demo
+    shell> curl -X PUT http://user:pass@127.0.0.1:5984/demo
     {"ok":true}
 
 But to obtain the database information you use a ``GET`` request (with
@@ -65,7 +91,7 @@ the return information formatted for clarity):
 
 .. code-block:: bash
 
-    shell> curl -X GET http://127.0.0.1:5984/demo
+    shell> curl -X GET http://user:pass@127.0.0.1:5984/demo
     {
         "compact_running" : false,
         "doc_count" : 0,
@@ -95,7 +121,7 @@ submit a simple document to the ``demo`` database:
 .. code-block:: bash
 
     shell> curl -H 'Content-Type: application/json' \
-                -X POST http://127.0.0.1:5984/demo \
+                -X POST http://user:pass@127.0.0.1:5984/demo \
                 -d '{"company": "Example, Inc."}'
     {"ok":true,"id":"8843faaf0b831d364278331bc3001bd8",
      "rev":"1-33b9fbce46930280dab37d672bbc8bb9"}
@@ -108,7 +134,7 @@ that was returned:
 
 .. code-block:: bash
 
-    shell> curl -X GET http://127.0.0.1:5984/demo/8843faaf0b831d364278331bc3001bd8
+    shell> curl -X GET http://user:pass@127.0.0.1:5984/demo/8843faaf0b831d364278331bc3001bd8
     {"_id":"8843faaf0b831d364278331bc3001bd8",
      "_rev":"1-33b9fbce46930280dab37d672bbc8bb9",
      "company":"Example, Inc."}

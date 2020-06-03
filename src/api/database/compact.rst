@@ -27,10 +27,10 @@
       temporarily created for this purpose, you may require up to twice the
       current storage space of the specified database in order for the
       compaction routine to complete.
-
-    - Removes old revisions of documents from the database, up to the
-      per-database limit specified by the ``_revs_limit`` database
-      parameter.
+    - Removes the bodies of any non-leaf revisions of documents from the
+      database.
+    - Removes old revision history beyond the limit specified by the
+      ``_revs_limit`` database parameter.
 
     Compaction can only be requested on an individual database; you cannot
     compact all the databases for a CouchDB instance. The compaction process
@@ -146,15 +146,15 @@
 ===========================
 
 .. http:post:: /{db}/_ensure_full_commit
-    :synopsis: Makes sure all uncommitted changes are written and synchronized
-               to the disk
+    :synopsis: Deprecated endpoint to support CouchDB versions < 3.0
+               replicators.
 
-    Commits any recent changes to the specified database to disk. You should
-    call this if you want to ensure that recent changes have been flushed.
-    This function is likely not required, assuming you have the recommended
-    configuration setting of ``delayed_commits=false``, which requires CouchDB
-    to ensure changes are written to disk before a 200 or similar result is
-    returned.
+    .. versionchanged:: 3.0.0 Deprecated; endpoint is a no-op.
+
+    Before 3.0 this was used to commit recent changes to the database in case
+    the ``delayed_commits=true`` option was set. That option is always
+    ``false`` now, so commits are never delayed. However, this endpoint is kept
+    for compatibility with older replicators.
 
     :param db: Database name
     :<header Accept: - :mimetype:`application/json`

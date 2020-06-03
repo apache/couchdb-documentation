@@ -21,7 +21,8 @@ Installation via Snap
 Apache CouchDB provides 'convenience binary' Snap builds through the
 Ubuntu snapcraft repository under the name ``couchdb``. Only snaps built
 from official stable CouchDB releases (``2.0``, ``2.1``, etc.) are available
-through this channel.
+through this channel. There are separate snap channels for each major
+release stream, e.g. ``2.x``, ``3.x``, as well as a ``latest`` stream.
 
 After `installing snapd`_, the CouchDB snap can be installed via::
 
@@ -30,9 +31,17 @@ After `installing snapd`_, the CouchDB snap can be installed via::
 CouchDB will be installed at ``/snap/couchdb``. Data will be stored at
 ``/var/snap/couchdb/``.
 
-.. _installing snapd: https://snapcraft.io/docs/core/install
+Please note that all other file system paths are **relative to the snap
+`chroot`** instead of the system root. In addition, the exact path
+depends on your system. For example, when you normally want to
+reference `/opt/couchdb/etc/local.ini`, under snap, this could live at
+`/snap/couchdb/5/opt/couchdb/etc/local.ini`.
+
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 Further details on the snap build process are available in our
 `couchdb-pkg git repository`_.
 
+.. _installing snapd: https://snapcraft.io/docs/core/install
 .. _couchdb-pkg git repository: https://github.com/apache/couchdb-pkg

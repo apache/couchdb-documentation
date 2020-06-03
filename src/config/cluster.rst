@@ -27,20 +27,20 @@ Cluster Options
     .. config:option:: q
 
     Sets the default number of shards for newly created databases. The
-    default value, ``8``, splits a database into 8 separate partitions. ::
+    default value, ``2``, splits a database into 2 separate partitions. ::
 
         [cluster]
-        q = 8
+        q = 2
 
-    For systems with lots of small, infrequently accessed databases, or
-    for servers with fewer CPU cores, consider reducing this value to
-    ``1`` or ``2``.
+    For systems with only a few, heavily accessed, large databases, or
+    for servers with many CPU cores, consider increasing this value to
+    ``4`` or ``8``.
 
     The value of ``q`` can also be overridden on a per-DB basis, at DB
     creation time.
 
     .. seealso::
-        httpdomain:put:`PUT /{db} </{db}>`
+        :http:put:`PUT /{db} </{db}>`
 
     .. config:option:: n
 
@@ -56,6 +56,11 @@ Cluster Options
 
     .. config:option:: placement
 
+    .. warning::
+
+        Use of this option will **override** the ``n`` option for replica
+        cardinality. Use with care.
+
     Sets the cluster-wide replica placement policy when creating new
     databases. The value must be a comma-delimited list of strings of the
     format ``zone_name:#``, where ``zone_name`` is a zone as specified in
@@ -69,3 +74,50 @@ Cluster Options
 
     .. seealso::
         :ref:`cluster/databases/placement`
+
+    .. config:option:: seedlist
+
+    An optional, comma-delimited list of node names that this node should
+    contact in order to join a cluster. If a seedlist is configured the ``_up``
+    endpoint will return a 404 until the node has successfully contacted at
+    least one of the members of the seedlist and replicated an up-to-date copy
+    of the ``_nodes``, ``_dbs``, and ``_users`` system databases.
+
+        [cluster]
+        seedlist = couchdb@node1.example.com,couchdb@node2.example.com
+
+RPC Performance Tuning
+======================
+
+.. config:section:: rexi :: Internal RPC Tuning
+
+    CouchDB uses distributed Erlang to communicate between nodes in a cluster.
+    The ``rexi`` library provides an optimized RPC mechanism over this
+    communication channel. There are a few configuration knobs for this system,
+    although in general the defaults work well.
+
+    .. config:option:: buffer_count
+
+    The local RPC server will buffer messages if a remote node goes unavailable.
+    This flag determines how many messages will be buffered before the local
+    server starts dropping messages. Default value is ``2000``.
+
+    .. config:option:: server_per_node
+
+    By default, rexi will spawn one local gen_server process for each node in
+    the cluster. Disabling this flag will cause CouchDB to use a single process
+    for all RPC communication, which is not recommended in high throughput
+    deployments.
+
+    .. config:option:: stream_limit
+
+        .. versionadded:: 3.0
+
+    This flag comes into play during streaming operations like views and change
+    feeds. It controls how many messages a remote worker process can send to a
+    coordinator without waiting for an acknowledgement from the coordinator
+    process. If this value is too large the coordinator can become overwhelmed
+    by messages from the worker processes and actually deliver lower overall
+    throughput to the client. In CouchDB 2.x this value was hard-coded to
+    ``10``. In the 3.x series it is configurable and defaults to ``5``.
+    Databases with a high ``q`` value are especially sensitive to this setting.

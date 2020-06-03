@@ -16,10 +16,10 @@ specific language governing permissions and limitations under the License.
 {% extends "layout.html" %}
 {% set title = _('Overview') %}
 {% block body %}
-  <h1>{{ docstitle|e }}</h1>
+  <h1>Apache CouchDB<sup>&reg;</sup> {{ release|e }} Documentation</h1>
   <p>
     {{ _('Welcome! This is') }}
-    {% block description %}{{ _('the documentation for') }} {{ project|e }}
+    {% block description %}{{ _('the documentation for') }} Apache CouchDB<sup>&reg;</sup>
     {{ release|e }}{% if last_updated %}, {{ _('last updated') }} {{ last_updated|e }}{% endif %}{% endblock %}.
 </p>
 {% block tables %}
@@ -152,23 +152,14 @@ specific language governing permissions and limitations under the License.
         </span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("externals") }}">
-          External Processes
-        </a>
-        <br />
-        <span class="linkdescr">
-          adding even more functionality
-        </span>
-      </p>
-    </td>
-    <td width="50%" style="vertical-align: top;">
-      <p class="biglink">
         <a class="biglink" href="{{ pathto("config/index") }}">
           Configuration Reference
         </a>
         <br />
         <span class="linkdescr">tweak CouchDB to your liking</span>
       </p>
+    </td>
+    <td width="50%" style="vertical-align: top;">
       <p class="biglink">
         <a class="biglink" href="{{ pathto("maintenance/index") }}">
           Maintenance
@@ -176,6 +167,15 @@ specific language governing permissions and limitations under the License.
         <br />
         <span class="linkdescr">
           how to take care of your CouchDB
+        </span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("partitioned-dbs/index") }}">
+          Partitioned Databases
+        </a>
+        <br />
+        <span class="linkdescr">
+          how to use Partitioned Databases in CouchDB
         </span>
       </p>
     </td>

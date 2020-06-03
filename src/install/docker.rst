@@ -17,23 +17,25 @@ Installation via Docker
 =======================
 
 Apache CouchDB provides 'convenience binary' Docker images through
-Docker Hub at ``apache/couchdb``. The following tags are available:
+Docker Hub at ``apache/couchdb``. This is our upstream release; it
+is usually mirrored downstream at Docker's top-level ``couchdb``
+as well.
 
-* ``latest``, ``2.1.0``: CouchDB 2.1, single node
-* ``1``, ``1.6``, ``1.6.1``: CouchDB 1.6.1
-* ``1-couchperuser``, ``1.6-couchperuser``, ``1.6.1-couchperuser``: CouchDB
-  1.6.1 with couchperuser plugin
-* ``2.0.0``: CouchDB 2.0, single node
+At least these tags are always available on the image:
 
-These images are built using Debian 8 (jessie), expose CouchDB on port
-``5984`` of the container, run everything as user ``couchdb``, and support
-use of a Docker volume for data at ``/opt/couchdb/data``.
+* ``latest`` - always the latest
+* ``3``: always the latest 3.x version
+* ``2``: always the latest 2.x version
+* ``1``, ``1.7``, ``1.7.2``: CouchDB 1.7.2 (convenience only; no longer supported)
+* ``1-couchperuser``, ``1.7-couchperuser``, ``1.7.2-couchperuser``: CouchDB
+  1.7.2 with couchperuser plugin (convenience only; no longer supported)
 
-Note that you can also use the ``NODENAME`` environment variable to set the
-name of the CouchDB node inside the container.
+These images expose CouchDB on port ``5984`` of the container, run everything
+as user ``couchdb`` (uid ``5984``), and support use of a Docker volume for data
+at ``/opt/couchdb/data``.
 
-**Be sure to complete the** :ref:`First-time Setup <install/setup>` **steps for
-a single node or clustered installation.**
+**Your installation is not complete. Be sure to complete the**
+:ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
 Further details on the Docker configuration are available in our
 `couchdb-docker git repository`_.

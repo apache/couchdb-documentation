@@ -34,7 +34,7 @@ Upgrade Notes
   hand. The default has changed to meet new guidelines and to provide
   additional functionality in the future.
 
-  If you recieve errors in the logfile, such as
+  If you receive errors in the logfile, such as
   ``internal_server_error : No DB shards could be opened.`` or in Fauxton,
   such as ``This database failed to load.`` you need to make this change.
 
@@ -59,6 +59,11 @@ Upgrade Notes
   had been unfortunately misnamed, and has now been updated to behave as the
   name would suggest. Both are documented in the shipped ``default.ini`` file.
 
+  Note that the default for this new parameter is 64MB instead of 4GB. If you
+  get errors when trying to PUT or POST and see HTTP 413 return codes in couchdb
+  logs, this could be the culprit. This can affect couchup in-place upgrades as
+  well.
+
 * :ghissue:`914`: Certain critical config sections are blacklisted from being
   modified through the HTTP API. These sections can still be modified through
   the standard ``local.ini`` or ``local.d/*.ini`` files.
@@ -67,6 +72,15 @@ Upgrade Notes
   constructor by default. To restore the original behaviour, add the
   ``--eval`` flag to the definition of the javascript query server in your
   ``local.ini`` file.
+
+.. _release/2.1.2:
+
+Version 2.1.2
+=============
+
+Security
+--------
+* :ref:`CVE 2018-8007 <cve/2018-8007>`
 
 .. _release/2.1.1:
 

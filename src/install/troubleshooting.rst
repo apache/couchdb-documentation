@@ -141,7 +141,7 @@ Quick Build
 Having problems getting CouchDB to run for the first time? Follow this simple
 procedure and report back to the user mailing list or IRC with the output
 of each step. Please put the output of these steps into a paste service (such
-as https://paste.apache.org/) rather than including the output of your entire
+as https://paste.ee/) rather than including the output of your entire
 run in IRC or the mailing list directly.
 
 1. Note down the name and version of your operating system and your processor
@@ -183,7 +183,7 @@ run in IRC or the mailing list directly.
 Upgrading
 =========
 
-Are you upgrading from CouchDB 2.0? Install CouchDB into a fresh directory.
+Are you upgrading from CouchDB 1.x? Install CouchDB into a fresh directory.
 CouchDB's directory layout has changed and may be confused by libraries
 present from previous releases.
 
@@ -275,6 +275,52 @@ the relevant CouchDB and then compact prior to replicating.
 
 Alternatively, if the number of documents impacted is small, use filtered
 replication to exclude only those documents.
+
+FIPS mode
+---------
+
+Operating systems can be configured to disallow the use of OpenSSL MD5 hash
+functions in order to prevent use of MD5 for cryptographic purposes. CouchDB
+makes use of MD5 hashes for verifying the integrity of data (and not for
+cryptography) and will not run without the ability to use MD5 hashes.
+
+The message below indicates that the operating system is running in "FIPS mode,"
+which, among other restrictions, does not allow the use of OpenSSL's
+MD5 functions:
+
+.. code-block:: text
+
+    md5_dgst.c(82): OpenSSL internal error, assertion failed: Digest MD5 forbidden in FIPS mode!
+    [os_mon] memory supervisor port (memsup): Erlang has closed
+    [os_mon] cpu supervisor port (cpu_sup): Erlang has closed
+    Aborted
+
+A workaround for this is provided with the ``--erlang-md5`` compile flag. Use of
+the flag results in CouchDB substituting the OpenSSL MD5 function calls with
+equivalent calls to Erlang's built-in library ``erlang:md5.`` NOTE: there may be
+a performance penalty associated with this workaround.
+
+Because CouchDB does not make use of MD5 hashes for cryptographic purposes, this
+workaround does not defeat the purpose of "FIPS mode," provided that the system
+owner is aware of and consents to its use.
+
+Debugging startup
+-----------------
+If you've compiled from scratch and are having problems getting CouchDB to even
+start up, you may want to see more detail. Start by enabling logging at the debug
+level:
+
+.. code-block:: ini
+
+    [log]
+    level = debug
+
+You can then pass the ``-init_debug +W i +v +V -emu_args`` flags in the ``ERL_FLAGS``
+environment variable to turn on additional debugging information that CouchDB
+developers can use to help you.
+
+Then, reach out to the CouchDB development team using the links provided on the
+`CouchDB home page <https://couchdb.apache.org/>`_ for assistance.
 
 macOS Known Issues
 ====================

@@ -23,7 +23,7 @@ Accessing the local node's configuration
 ========================================
 
 The literal string ``_local`` serves as an alias for the local node name, so
-for all configuration URLs, ``{node-name}`` may be replaced ``_local``, to
+for all configuration URLs, ``{node-name}`` may be replaced with ``_local``, to
 interact with the local node's configuration.
 
 ``/_node/{node-name}/_config``
@@ -70,7 +70,6 @@ interact with the local node's configuration.
             "couchdb": {
                 "users_db_suffix": "_users",
                 "database_dir": "/var/lib/couchdb",
-                "delayed_commits": "true",
                 "max_attachment_chunk_size": "4294967296",
                 "max_dbs_open": "100",
                 "os_process_timeout": "5000",
@@ -81,59 +80,18 @@ interact with the local node's configuration.
             "chttpd": {
                 "backlog": "512",
                 "bind_address": "0.0.0.0",
-                "docroot": "./share/www",
                 "port": "5984",
                 "require_valid_user": "false",
-                "socket_options": "[{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]"
-            },
-            "daemons": {
-                "auth_cache": "{couch_auth_cache, start_link, []}",
-                "db_update_notifier": "{couch_db_update_notifier_sup, start_link, []}",
-                "external_manager": "{couch_external_manager, start_link, []}",
-                "httpd": "{couch_httpd, start_link, []}",
-                "query_servers": "{couch_query_servers, start_link, []}",
-                "stats_aggregator": "{couch_stats_aggregator, start, []}",
-                "stats_collector": "{couch_stats_collector, start, []}",
-                "uuids": "{couch_uuids, start, []}",
-                "view_manager": "{couch_view, start_link, []}"
+                "socket_options": "[{sndbuf, 262144}, {nodelay, true}]",
+                "server_options": "[{recbuf, undefined}]"
             },
             "httpd": {
                 "allow_jsonp": "false",
                 "authentication_handlers": "{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
                 "bind_address": "192.168.0.2",
-                "default_handler": "{couch_httpd_db, handle_request}",
                 "max_connections": "2048",
                 "port": "5984",
-                "secure_rewrites": "true",
-                "vhost_global_handlers": "_utils, _uuids, _session, _users"
-            },
-            "httpd_db_handlers": {
-                "_changes": "{couch_httpd_db, handle_changes_req}",
-                "_compact": "{couch_httpd_db, handle_compact_req}",
-                "_design": "{couch_httpd_db, handle_design_req}",
-                "_temp_view": "{couch_httpd_view, handle_temp_view_req}",
-                "_view_cleanup": "{couch_httpd_db, handle_view_cleanup_req}"
-            },
-            "httpd_design_handlers": {
-                "_info": "{couch_httpd_db,   handle_design_info_req}",
-                "_list": "{couch_httpd_show, handle_view_list_req}",
-                "_rewrite": "{couch_httpd_rewrite, handle_rewrite_req}",
-                "_show": "{couch_httpd_show, handle_doc_show_req}",
-                "_update": "{couch_httpd_show, handle_doc_update_req}",
-                "_view": "{couch_httpd_view, handle_view_req}"
-            },
-            "httpd_global_handlers": {
-                "/": "{couch_httpd_misc_handlers, handle_welcome_req, <<\"Welcome\">>}",
-                "_active_tasks": "{couch_httpd_misc_handlers, handle_task_status_req}",
-                "_all_dbs": "{couch_httpd_misc_handlers, handle_all_dbs_req}",
-                "_config": "{couch_httpd_misc_handlers, handle_config_req}",
-                "_replicate": "{couch_httpd_misc_handlers, handle_replicate_req}",
-                "_restart": "{couch_httpd_misc_handlers, handle_restart_req}",
-                "_session": "{couch_httpd_auth, handle_session_req}",
-                "_stats": "{couch_httpd_stats_handlers, handle_stats_req}",
-                "_utils": "{couch_httpd_misc_handlers, handle_utils_dir_req, \"/usr/share/couchdb/www\"}",
-                "_uuids": "{couch_httpd_misc_handlers, handle_uuids_req}",
-                "favicon.ico": "{couch_httpd_misc_handlers, handle_favicon_req, \"/usr/share/couchdb/www\"}"
+                "secure_rewrites": "true"
             },
             "log": {
                 "writer": "file",
@@ -144,16 +102,12 @@ interact with the local node's configuration.
             "query_server_config": {
                 "reduce_limit": "true"
             },
-            "query_servers": {
-                "javascript": "/usr/bin/couchjs /usr/share/couchdb/server/main.js"
-            },
             "replicator": {
                 "max_http_pipeline_size": "10",
                 "max_http_sessions": "10"
             },
             "stats": {
-                "rate": "1000",
-                "samples": "[0, 60, 300, 900]"
+                "interval": "10"
             },
             "uuids": {
                 "algorithm": "utc_random"
@@ -165,8 +119,8 @@ interact with the local node's configuration.
 
 .. _api/config/section:
 
-``_node/{node-name}/_config/section``
-=====================================
+``/_node/{node-name}/_config/{section}``
+========================================
 
 .. http:get:: /_node/{node-name}/_config/{section}
     :synopsis: Returns all the configuration values for the specified section
@@ -207,14 +161,13 @@ interact with the local node's configuration.
             "default_handler": "{couch_httpd_db, handle_request}",
             "enable_cors": "false",
             "port": "5984",
-            "secure_rewrites": "true",
-            "vhost_global_handlers": "_utils, _uuids, _session, _users"
+            "secure_rewrites": "true"
         }
 
 .. _api/config/section/key:
 
-``/_node/node/_config/section/key``
-===================================
+``/_node/{node-name}/_config/{section}/{key}``
+==============================================
 
 .. http:get:: /_node/{node-name}/_config/{section}/{key}
     :synopsis: Returns a specific section/configuration value
@@ -338,3 +291,37 @@ interact with the local node's configuration.
         Server: CouchDB (Erlang/OTP)
 
         "info"
+
+.. _api/config/reload:
+
+``/_node/{node-name}/_config/_reload``
+======================================
+
+.. versionadded:: 3.0
+
+.. http:post:: /_node/{node-name}/_config/_reload
+    :synopsis: Reload the configuration from disk
+
+    Reloads the configuration from disk. This has a side effect of
+    flushing any in-memory configuration changes that have not been
+    committed to disk.
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_node/nonode@nohost/_config/_reload HTTP/1.1
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 12
+        Content-Type: application/json
+        Date: Tues, 21 Jan 2020 11:09:35
+        Server: CouchDB/3.0.0 (Erlang OTP)
+
+        {"ok":true}

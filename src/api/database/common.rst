@@ -66,15 +66,14 @@
     :>json string db_name: The name of the database.
     :>json number disk_format_version: The version of the physical format used
       for the data when it is stored on disk.
-    :>json number data_size: *Deprecated.* Use ``sizes.active`` instead.
-    :>json number disk_size: *Deprecated.* Use ``sizes.file`` instead.
     :>json number doc_count: A count of the documents in the specified
       database.
     :>json number doc_del_count: Number of deleted documents
     :>json string instance_start_time: Always ``"0"``. (Returned for legacy
       reasons.)
-    :>json object other: Used by Cloudant. *Deprecated.*
-    :>json number purge_seq: The number of purge operations on the database.
+    :>json string purge_seq: An opaque string that describes the purge state
+      of the database. Do not rely on this string for counting the number
+      of purge operations.
     :>json number sizes.active: The size of live data inside the database, in
       bytes.
     :>json number sizes.external: The uncompressed size of database contents
@@ -84,6 +83,8 @@
     :>json string update_seq: An opaque string that describes the state
       of the database. Do not rely on this string for counting the number
       of updates.
+    :>json boolean props.partitioned: (optional) If present and true, this
+      indicates that the database is partitioned.
     :code 200: Request completed successfully
     :code 404: Requested database not found
 
@@ -114,16 +115,12 @@
                 "w": 2
             },
             "compact_running": false,
-            "data_size": 65031503,
             "db_name": "receipts",
             "disk_format_version": 6,
-            "disk_size": 137433211,
             "doc_count": 6146,
             "doc_del_count": 64637,
             "instance_start_time": "0",
-            "other": {
-                "data_size": 66982448
-            },
+            "props": {},
             "purge_seq": 0,
             "sizes": {
                 "active": 65031503,
@@ -154,6 +151,11 @@
     :param db: Database name
     :query integer q: Shards, aka the number of range partitions. Default is
       8, unless overridden in the :config:option:`cluster config <cluster/q>`.
+    :query integer n: Replicas. The number of copies of the database in the
+      cluster. The default is 3, unless overridden in the
+      :config:option:`cluster config <cluster/n>` .
+    :query boolean partitioned: Whether to create a partitioned database.
+      Default is false.
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :>header Content-Type: - :mimetype:`application/json`
@@ -163,7 +165,8 @@
     :>json string error: Error type. Available if response code is ``4xx``
     :>json string reason: Error description. Available if response code is
       ``4xx``
-    :code 201: Database created successfully
+    :code 201: Database created successfully (quorum is met)
+    :code 202: Accepted (at least by one node)
     :code 400: Invalid database name
     :code 401: CouchDB Server Administrator privileges required
     :code 412: Database already exists
@@ -264,10 +267,11 @@
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json boolean ok: Operation status
-    :code 200: Database removed successfully
+    :code 200: Database removed successfully (quorum is met and database is deleted by at least one node)
+    :code 202: Accepted (deleted by at least one of the nodes, quorum is not met yet)
     :code 400: Invalid database name or forgotten document id by accident
     :code 401: CouchDB Server Administrator privileges required
-    :code 404: Database doesn't exist
+    :code 404: Database doesn't exist or invalid database name
 
     **Request**:
 
@@ -308,9 +312,6 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :<header Content-Type: :mimetype:`application/json`
-    :<header X-Couch-Full-Commit: Overrides server's
-      :config:option:`commit policy <couchdb/delayed_commits>`. Possible values
-      are: ``false`` and ``true``. *Optional*.
 
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>` Possible values: ``ok``. *Optional*
@@ -423,9 +424,6 @@ To use batch mode, append the ``batch=ok`` query argument to the URL of a
 :post:`/{db}`, :put:`/{db}/{docid}`, or :delete:`/{db}/{docid}` request. The
 CouchDB server will respond with an HTTP :statuscode:`202` response code
 immediately.
-
-Documents in the batch may be manually flushed by using the
-:post:`/{db}/_ensure_full_commit` endpoint.
 
 .. note::
     Creating or updating documents with batch mode doesn't guarantee that all

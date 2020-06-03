@@ -177,6 +177,17 @@
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
+    :query boolean descending: Return the databases in descending order by key.
+      Default is ``false``.
+    :query json endkey: Stop returning databases when the specified key is
+      reached.
+    :query json end_key: Alias for `endkey` param
+    :query number limit: Limit the number of the returned databases to the
+      specified number.
+    :query number skip: Skip this number of databases before starting to return
+      the results. Default is ``0``.
+    :query json startkey: Return databases starting with the specified key.
+    :query json start_key: Alias for `startkey`.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :code 200: Request completed successfully
@@ -208,13 +219,116 @@
            "locations"
         ]
 
+.. _api/server/dbs_info:
+
+==============
+``/_dbs_info``
+==============
+
+.. versionadded:: 2.2
+
+.. http:post:: /_dbs_info
+    :synopsis: Returns information of a list of the specified databases
+
+    Returns information of a list of the specified databases in the CouchDB
+    instance. This enables you to request information about multiple databases
+    in a single request, in place of multiple :get:`/{db}` requests.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+    :<json array keys: Array of database names to be requested
+    :code 200: Request completed successfully
+    :code 400: Missing keys or exceeded keys in request
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_dbs_info HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+        Content-Type: application/json
+
+        {
+            "keys": [
+                "animals",
+                "plants"
+            ]
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Sat, 20 Dec 2017 06:57:48 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        [
+          {
+            "key": "animals",
+            "info": {
+              "db_name": "animals",
+              "update_seq": "52232",
+              "sizes": {
+                "file": 1178613587,
+                "external": 1713103872,
+                "active": 1162451555
+              },
+              "purge_seq": 0,
+              "doc_del_count": 0,
+              "doc_count": 52224,
+              "disk_format_version": 6,
+              "compact_running": false,
+              "cluster": {
+                "q": 8,
+                "n": 3,
+                "w": 2,
+                "r": 2
+              },
+              "instance_start_time": "0"
+            }
+          },
+          {
+            "key": "plants",
+            "info": {
+              "db_name": "plants",
+              "update_seq": "303",
+              "sizes": {
+                "file": 3872387,
+                "external": 2339,
+                "active": 67475
+              },
+              "purge_seq": 0,
+              "doc_del_count": 0,
+              "doc_count": 11,
+              "disk_format_version": 6,
+              "compact_running": false,
+              "cluster": {
+                "q": 8,
+                "n": 3,
+                "w": 2,
+                "r": 2
+              },
+              "instance_start_time": "0"
+            }
+          }
+        ]
+
+.. note::
+    The supported number of the specified databases in the list can be limited
+    by modifying the `max_db_number_for_dbs_info_req` entry in configuration
+    file. The default limit is 100.
+
 .. _api/server/cluster_setup:
 
 ===================
 ``/_cluster_setup``
 ===================
 
-.. versionadded: 2.0
+.. versionadded:: 2.0
 .. http:get:: /_cluster_setup
     :synopsis: Return the status of the cluster setup wizard
 
@@ -224,7 +338,7 @@
                      - :mimetype:`text/plain`
     :query array ensure_dbs_exist: List of system databases to ensure exist
         on the node/cluster. Defaults to
-        ``["_users","_replicator","_global_changes"]``.
+        ``["_users","_replicator"]``.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json string state: Current ``state`` of the node and/or cluster (see
@@ -323,7 +437,7 @@
         (add_node only)
     :<json array ensure_dbs_exist: List of system databases to ensure exist
         on the node/cluster. Defaults to
-        ``["_users","_replicator","_global_changes"]``.
+        ``["_users","_replicator"]``.
 
     *No example request/response included here. For a worked example, please
     see* :ref:`cluster/setup/api`.
@@ -339,7 +453,9 @@
 .. http:get:: /_db_updates
     :synopsis: Return the server changes of databases
 
-    Returns a list of all database events in the CouchDB instance.
+    Returns a list of all database events in the CouchDB instance. The
+    existence of the ``_global_changes`` database is required to use this
+    endpoint.
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
@@ -482,18 +598,28 @@
       Required administrator's privileges on target server.
     :<json array doc_ids: Array of document IDs to be synchronized
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
-    :<json string proxy: Address of a proxy server through which replication
-      should occur (protocol can be "http" or "socks5")
-    :<json string/object source: Source database name or URL or an object
-      which contains the full URL of the source database with additional
-      parameters like headers. Eg: 'source_db_name' or
-      'http://example.com/source_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
-    :<json string/object target: Target database name or URL or an object
-      which contains the full URL of the target database with additional
-      parameters like headers. Eg: 'target_db_name' or
-      'http://example.com/target_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
+    :<json string source_proxy: Address of a proxy server through which
+      replication from the source should occur (protocol can be "http" or
+      "socks5")
+    :<json string target_proxy: Address of a proxy server through which
+      replication to the target should occur (protocol can be "http" or
+      "socks5")
+    :<json string/object source: Fully qualified source database URL or an
+      object which contains the full URL of the source database with additional
+      parameters like headers. Eg: 'http://example.com/source_db_name' or
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
+    :<json string/object target: Fully qualified target database URL or an
+      object which contains the full URL of the target database with additional
+      parameters like headers. Eg: 'http://example.com/target_db_name' or
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json array history: Replication history (see below)
@@ -530,19 +656,23 @@
     :json string start_time:  Date/Time replication operation started in
       :rfc:`2822` format
 
+.. note::
+    As of CouchDB 2.0.0, fully qualified URLs are required for both the
+    replication `source` and `target` parameters.
+
     **Request**
 
     .. code-block:: http
 
         POST /_replicate HTTP/1.1
         Accept: application/json
-        Content-Length: 36
+        Content-Length: 80
         Content-Type: application/json
         Host: localhost:5984
 
         {
-            "source": "db_a",
-            "target": "db_b"
+            "source": "http://127.0.0.1:5984/db_a",
+            "target": "http://127.0.0.1:5984/db_b"
         }
 
     **Response**
@@ -861,6 +991,17 @@ error.
                         }
                     ],
                     "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
+                    "info": {
+                        "changes_pending": 0,
+                        "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                        "doc_write_failures": 0,
+                        "docs_read": 113,
+                        "docs_written": 113,
+                        "missing_revisions_found": 113,
+                        "revisions_checked": 113,
+                        "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                        "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+                    },
                     "node": "node1@127.0.0.1",
                     "pid": "<0.1850.0>",
                     "source": "http://myserver.com/foo",
@@ -882,6 +1023,17 @@ error.
                         }
                     ],
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+                    "info": {
+                        "changes_pending": null,
+                        "checkpointed_source_seq": 0,
+                        "doc_write_failures": 0,
+                        "docs_read": 12,
+                        "docs_written": 12,
+                        "missing_revisions_found": 12,
+                        "revisions_checked": 12,
+                        "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
+                        "through_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg"
+                    },
                     "node": "node2@127.0.0.1",
                     "pid": "<0.1757.0>",
                     "source": "http://myserver.com/foo",
@@ -904,6 +1056,9 @@ error.
                     document-based replications. Previously needed to poll both
                     documents and ``_active_tasks`` to get a complete state
                     summary
+
+.. versionchanged:: 3.0.0 In error states the `"info"` field switched
+                    from being a string to being an object
 
 .. http:get:: /_scheduler/docs
     :synopsis: Retrieve information about replication documents from the
@@ -933,10 +1088,11 @@ error.
     :>json string source: Replication source
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
-    :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json string last_updated: Timestamp of last state update
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -988,10 +1144,21 @@ error.
                     "doc_id": "cdyno-0000001-0000002",
                     "error_count": 0,
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": 15,
+                        "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                        "doc_write_failures": 0,
+                        "docs_read": 67,
+                        "docs_written": 67,
+                        "missing_revisions_found": 67,
+                        "revisions_checked": 67,
+                        "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                        "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1002,10 +1169,21 @@ error.
                     "doc_id": "cdyno-0000001-0000003",
                     "error_count": 0,
                     "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": null,
+                        "checkpointed_source_seq": 0,
+                        "doc_write_failures": 0,
+                        "docs_read": 12,
+                        "docs_written": 12,
+                        "missing_revisions_found": 12,
+                        "revisions_checked": 12,
+                        "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
+                        "through_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node1@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1048,9 +1226,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1102,10 +1281,21 @@ error.
                     "doc_id": "cdyno-0000001-0000002",
                     "error_count": 0,
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": 0,
+                        "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                        "doc_write_failures": 0,
+                        "docs_read": 67,
+                        "docs_written": 67,
+                        "missing_revisions_found": 67,
+                        "revisions_checked": 67,
+                        "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                        "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1138,9 +1328,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1190,75 +1381,41 @@ error.
             "doc_id": "cdyno-0000001-0000002",
             "error_count": 0,
             "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-            "info": null,
+            "info": {
+                "changes_pending": 0,
+                "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                "doc_write_failures": 0,
+                "docs_read": 67,
+                "docs_written": 67,
+                "missing_revisions_found": 67,
+                "revisions_checked": 67,
+                "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+            },
             "last_updated": "2017-04-29T05:01:37Z",
             "node": "node2@127.0.0.1",
-            "proxy": null,
+            "source_proxy": null,
+            "target_proxy": null,
             "source": "http://myserver.com/foo",
             "start_time": "2017-04-29T05:01:37Z",
             "state": "running",
             "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
         }
 
-.. _api/server/restart:
+.. _api/server/name:
 
-=============
-``/_restart``
-=============
+======================
+``/_node/{node-name}``
+======================
 
-.. http:post:: /_restart
-    :synopsis: Restarts the server
+.. http:get:: /_node/{node-name}
+    :synopsis: Returns node name
 
-    Restarts the CouchDB instance. You must be authenticated as a user with
-    administration privileges for this to work.
-
-    :<header Accept: - :mimetype:`application/json`
-                     - :mimetype:`text/plain`
-    :<header Content-Type: :mimetype:`application/json`
-    :>header Content-Type: - :mimetype:`application/json`
-                           - :mimetype:`text/plain; charset=utf-8`
-    :code 202: Server goes to restart (there is no guarantee that it will be
-      alive after)
-    :code 401: CouchDB Server Administrator privileges required
-    :code 415: Bad request`s :header:`Content-Type`
-
-    **Request**:
-
-    .. code-block:: http
-
-        POST /_restart HTTP/1.1
-        Accept: application/json
-        Host: localhost:5984
-
-    **Response**:
-
-    .. code-block:: http
-
-        HTTP/1.1 202 Accepted
-        Cache-Control: must-revalidate
-        Content-Length: 12
-        Content-Type: application/json
-        Date: Sat, 10 Aug 2013 11:33:50 GMT
-        Server: CouchDB (Erlang/OTP)
-
-        {
-            "ok": true
-        }
-
-.. _api/server/stats:
-
-===========
-``/_stats``
-===========
-
-.. http:get:: /_stats
-    :synopsis: Returns server statistics
-
-    The ``_stats`` resource returns a JSON object containing the statistics
-    for the running server. The object is structured with top-level sections
-    collating the statistics for a range of entries, with each individual
-    statistic being easily identified, and the content of each statistic is
-    self-describing
+    The ``/_node/{node-name}`` endpoint can be used to confirm the Erlang
+    node name of the server that processes the request. This is most useful
+    when accessing ``/_node/_local`` to retrieve this information. Repeatedly
+    retrieving this information for a CouchDB endpoint can be useful to determine
+    if a CouchDB cluster is correctly proxied through a reverse load balancer.
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
@@ -1270,7 +1427,61 @@ error.
 
     .. code-block:: http
 
-        GET /_stats/couchdb/request_time HTTP/1.1
+        GET /_node/_local HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+      HTTP/1.1 200 OK
+      Cache-Control: must-revalidate
+      Content-Length: 27
+      Content-Type: application/json
+      Date: Tue, 28 Jan 2020 19:25:51 GMT
+      Server: CouchDB (Erlang OTP)
+      X-Couch-Request-ID: 5b8db6c677
+      X-CouchDB-Body-Time: 0
+
+      {"name":"node1@127.0.0.1"}
+
+.. _api/server/stats:
+
+=============================
+``/_node/{node-name}/_stats``
+=============================
+
+.. http:get:: /_node/{node-name}/_stats
+    :synopsis: Returns server statistics
+
+    The ``_stats`` resource returns a JSON object containing the statistics
+    for the running server. The object is structured with top-level sections
+    collating the statistics for a range of entries, with each individual
+    statistic being easily identified, and the content of each statistic is
+    self-describing.
+
+    Statistics are sampled internally on a :ref:`configurable interval
+    <config/stats>`. When monitoring the ``_stats`` endpoint, you need to use
+    a polling frequency of at least twice this to observe accurate results.
+    For example, if the :ref:`interval <config/stats>` is 10 seconds,
+    poll ``_stats`` at least every 5 seconds.
+
+    The literal string ``_local`` serves as an alias for the local node name, so
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
+    interact with the local node's statistics.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local/_stats/couchdb/request_time HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -1286,149 +1497,196 @@ error.
         Server: CouchDB (Erlang/OTP)
 
         {
-            "couchdb": {
-                "request_time": {
-                    "current": 21.0,
-                    "description": "length of a request inside CouchDB without MochiWeb",
-                    "max": 19.0,
-                    "mean": 7.0,
-                    "min": 1.0,
-                    "stddev": 10.392,
-                    "sum": 21.0
-                }
-            }
+          "value": {
+            "min": 0,
+            "max": 0,
+            "arithmetic_mean": 0,
+            "geometric_mean": 0,
+            "harmonic_mean": 0,
+            "median": 0,
+            "variance": 0,
+            "standard_deviation": 0,
+            "skewness": 0,
+            "kurtosis": 0,
+            "percentile": [
+              [
+                50,
+                0
+              ],
+              [
+                75,
+                0
+              ],
+              [
+                90,
+                0
+              ],
+              [
+                95,
+                0
+              ],
+              [
+                99,
+                0
+              ],
+              [
+                999,
+                0
+              ]
+            ],
+            "histogram": [
+              [
+                0,
+                0
+              ]
+            ],
+            "n": 0
+          },
+          "type": "histogram",
+          "desc": "length of a request inside CouchDB without MochiWeb"
         }
 
 The fields provide the current, minimum and maximum, and a collection of
 statistical means and quantities. The quantity in each case is not defined, but
-the descriptions below provide
+the descriptions below provide sufficient detail to determine units.
 
-The statistics are divided into the following top-level sections:
+Statistics are reported by 'group'.  The statistics are divided into the
+following top-level sections:
 
-``couchdb``
-===========
+- ``couch_log``: Logging subsystem
+- ``couch_replicator``: Replication scheduler and subsystem
+- ``couchdb``: Primary CouchDB database operations
+- ``fabric``: Cluster-related operations
+- ``global_changes``: Global changes feed
+- ``mem3``: Node membership-related statistics
+- ``pread``: CouchDB file-related exceptions
+- ``rexi``: Cluster internal RPC-related statistics
 
-Describes statistics specific to the internals of CouchDB
+The type of the statistic is included in the ``type`` field, and is one of
+the following:
 
-.. lint: ignore errors for the next 17 lines
-
-+-------------------------+-------------------------------------------------------+----------------+
-| Statistic ID            | Description                                           | Unit           |
-+=========================+=======================================================+================+
-| ``auth_cache_hits``     | Number of authentication cache hits                   | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``auth_cache_misses``   | Number of authentication cache misses                 | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``database_reads``      | Number of times a document was read from a database   | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``database_writes``     | Number of times a database was changed                | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``open_databases``      | Number of open databases                              | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``open_os_files``       | Number of file descriptors CouchDB has open           | number         |
-+-------------------------+-------------------------------------------------------+----------------+
-| ``request_time``        | Length of a request inside CouchDB without MochiWeb   | milliseconds   |
-+-------------------------+-------------------------------------------------------+----------------+
-
-``httpd_request_methods``
-=========================
-
-+----------------+----------------------------------+----------+
-| Statistic ID   | Description                      | Unit     |
-+================+==================================+==========+
-| ``COPY``       | Number of HTTP COPY requests     | number   |
-+----------------+----------------------------------+----------+
-| ``DELETE``     | Number of HTTP DELETE requests   | number   |
-+----------------+----------------------------------+----------+
-| ``GET``        | Number of HTTP GET requests      | number   |
-+----------------+----------------------------------+----------+
-| ``HEAD``       | Number of HTTP HEAD requests     | number   |
-+----------------+----------------------------------+----------+
-| ``POST``       | Number of HTTP POST requests     | number   |
-+----------------+----------------------------------+----------+
-| ``PUT``        | Number of HTTP PUT requests      | number   |
-+----------------+----------------------------------+----------+
-
-``httpd_status_codes``
-======================
-
-.. lint: ignore errors for the next 29 lines
-
-+----------------+------------------------------------------------------+----------+
-| Statistic ID   | Description                                          | Unit     |
-+================+======================================================+==========+
-| ``200``        | Number of HTTP 200 OK responses                      | number   |
-+----------------+------------------------------------------------------+----------+
-| ``201``        | Number of HTTP 201 Created responses                 | number   |
-+----------------+------------------------------------------------------+----------+
-| ``202``        | Number of HTTP 202 Accepted responses                | number   |
-+----------------+------------------------------------------------------+----------+
-| ``301``        | Number of HTTP 301 Moved Permanently responses       | number   |
-+----------------+------------------------------------------------------+----------+
-| ``304``        | Number of HTTP 304 Not Modified responses            | number   |
-+----------------+------------------------------------------------------+----------+
-| ``400``        | Number of HTTP 400 Bad Request responses             | number   |
-+----------------+------------------------------------------------------+----------+
-| ``401``        | Number of HTTP 401 Unauthorized responses            | number   |
-+----------------+------------------------------------------------------+----------+
-| ``403``        | Number of HTTP 403 Forbidden responses               | number   |
-+----------------+------------------------------------------------------+----------+
-| ``404``        | Number of HTTP 404 Not Found responses               | number   |
-+----------------+------------------------------------------------------+----------+
-| ``405``        | Number of HTTP 405 Method Not Allowed responses      | number   |
-+----------------+------------------------------------------------------+----------+
-| ``409``        | Number of HTTP 409 Conflict responses                | number   |
-+----------------+------------------------------------------------------+----------+
-| ``412``        | Number of HTTP 412 Precondition Failed responses     | number   |
-+----------------+------------------------------------------------------+----------+
-| ``500``        | Number of HTTP 500 Internal Server Error responses   | number   |
-+----------------+------------------------------------------------------+----------+
-
-``httpd``
-=========
-
-.. lint: ignore errors for the next 13 lines
-
-+----------------------------------+----------------------------------------------+----------+
-| Statistic ID                     | Description                                  | Unit     |
-+==================================+==============================================+==========+
-| ``bulk_requests``                | Number of bulk requests                      | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``clients_requesting_changes``   | Number of clients for continuous _changes    | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``requests``                     | Number of HTTP requests                      | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``temporary_view_reads``         | Number of temporary view reads               | number   |
-+----------------------------------+----------------------------------------------+----------+
-| ``view_reads``                   | Number of view reads                         | number   |
-+----------------------------------+----------------------------------------------+----------+
+- ``counter``: Monotonically increasing counter, resets on restart
+- ``histogram``: Binned set of values with meaningful subdivisions.
+  Scoped to the current :ref:`collection interval <config/stats>`.
+- ``gauge``: Single numerical value that can go up and down
 
 You can also access individual statistics by quoting the statistics sections
 and statistic ID as part of the URL path. For example, to get the
-``request_time`` statistics, you can use:
+``request_time`` statistics within the ``couchdb`` section for the target
+node, you can use:
 
 .. code-block:: http
 
-    GET /_stats/couchdb/request_time HTTP/1.1
+    GET /_node/_local/_stats/couchdb/request_time HTTP/1.1
 
 This returns an entire statistics object, as with the full request, but
-containing only the request individual statistic. Hence, the returned structure
-is as follows:
+containing only the requested individual statistic.
+
+==============================
+``/_node/{node-name}/_system``
+==============================
+
+.. http:get:: /_node/{node-name}/_system
+    :synopsis: Returns system-level server statistics
+
+    The ``_system`` resource returns a JSON object containing various
+    system-level statistics for the running server. The object is structured
+    with top-level sections collating the statistics for a range of entries,
+    with each individual statistic being easily identified, and the content of
+    each statistic is self-describing.
+
+    The literal string ``_local`` serves as an alias for the local node name, so
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
+    interact with the local node's statistics.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local/_system HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 187
+        Content-Type: application/json
+        Date: Sat, 10 Aug 2013 11:41:11 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        {
+          "uptime": 259,
+          "memory": {
+          ...
+        }
+
+    These statistics are generally intended for CouchDB developers only.
+
+.. _api/server/restart:
+
+===============================
+``/_node/{node-name}/_restart``
+===============================
+
+.. http:post:: /_node/{node-name}/_restart
+    :synopsis: Restarts CouchDB application on a given node
+
+    This API is to facilitate integration testing only
+    it is not meant to be used in production
+
+    :code 200: Request completed successfully
+
+.. _api/server/search_analyze:
+
+==========================================
+``/_search_analyze``
+==========================================
+
+.. warning::
+    Search endpoints require a running search plugin connected to each cluster
+    node. See :ref:`Search Plugin Installation <install/search>` for details.
+
+.. versionadded:: 3.0
+
+.. http:post:: /_search_analyze
+    :synopsis: Tests the results of analyzer tokenization
+
+    Tests the results of Lucene analyzer tokenization on sample text.
+
+    :param field: Type of analyzer
+    :param text:  Analyzer token you want to test
+    :code 200: Request completed successfully
+    :code 400: Request body is wrong (malformed or missing one of the mandatory fields)
+    :code 500: A server error (or other kind of error) occurred
+
+**Request**:
+
+.. code-block:: http
+
+    POST /_search_analyze HTTP/1.1
+    Host: localhost:5984
+    Content-Type: application/json
+
+    {"analyzer":"english", "text":"running"}
+
+**Response**:
 
 .. code-block:: javascript
 
     {
-        "couchdb" : {
-            "request_time" : {
-                "stddev" : 7454.305,
-                "min" : 1,
-                "max" : 34185,
-                "current" : 34697.803,
-                "mean" : 1652.276,
-                "sum" : 34697.803,
-                "description" : "length of a request inside CouchDB without MochiWeb"
-            }
-        }
+        "tokens": [
+            "run"
+        ]
     }
 
 .. _api/server/utils:
@@ -1451,6 +1709,40 @@ is as follows:
     :>header Content-Type: :mimetype:`text/html`
     :>header Last-Modified: Static files modification timestamp
     :code 200: Request completed successfully
+
+.. _api/server/up:
+
+========
+``/_up``
+========
+
+.. versionadded:: 2.0
+
+.. http:get:: /_up
+    :synopsis: Health check endpoint
+
+    Confirms that the server is up, running, and ready to respond to requests.
+    If :config:option:`maintenance_mode <couchdb/maintenance_mode>` is
+    ``true`` or ``nolb``, the endpoint will return a 404 response.
+
+    :>header Content-Type: :mimetype:`application/json`
+    :code 200: Request completed successfully
+    :code 404: The server is unavaialble for requests at this time.
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 16
+        Content-Type: application/json
+        Date: Sat, 17 Mar 2018 04:46:26 GMT
+        Server: CouchDB/2.2.0-f999071ec (Erlang OTP/19)
+        X-Couch-Request-ID: c57a3b2787
+        X-CouchDB-Body-Time: 0
+
+        {"status":"ok"}
 
 .. _api/server/uuids:
 
@@ -1555,3 +1847,480 @@ You can verify the change by obtaining a list of UUIDs:
     :>header Content-Type: :mimetype:`image/x-icon`
     :code 200: Request completed successfully
     :code 404: The requested content could not be found
+
+.. _api/server/reshard:
+
+=============
+``/_reshard``
+=============
+
+.. versionadded:: 2.4
+
+.. http:get:: /_reshard
+    :synopsis: Retrieve summary information about resharding on the cluster
+
+    Returns a count of completed, failed, running, stopped, and total jobs
+    along with the state of resharding on the cluster.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json string state: ``stopped`` or ``running``
+    :>json string state_reason: ``null`` or string describing additional
+                                information or reason associated with the state
+    :>json number completed: Count of completed resharding jobs
+    :>json number failed: Count of failed resharding jobs
+    :>json number running: Count of running resharding jobs
+    :>json number stopped: Count of stopped resharding jobs
+    :>json number total: Total count of resharding jobs
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "completed": 21,
+            "failed": 0,
+            "running": 3,
+            "state": "running",
+            "state_reason": null,
+            "stopped": 0,
+            "total": 24
+        }
+
+.. http:get:: /_reshard/state
+    :synopsis: Retrieve the state of resharding on the cluster
+
+    Returns the resharding state and optional information about the state.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json string state: ``stopped`` or ``running``
+    :>json string state_reason: Additional  information  or  reason  associated
+                                with the state
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "reason": null,
+            "state": "running"
+        }
+
+.. http:put:: /_reshard/state
+    :synopsis: Change resharding state on the cluster
+
+    Change the resharding state on the cluster. The states are
+    ``stopped`` or ``running``. This starts and stops global resharding on all
+    the nodes of the cluster. If there are any running jobs, they
+    will be stopped when the state changes to ``stopped``. When the state
+    changes back to ``running`` those job will continue running.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string state: ``stopped`` or ``running``
+    :<json string state_reason: Optional string describing additional
+                                information or reason associated with the state
+
+    :>json boolean ok: ``true``
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request. Could be a bad or missing state name.
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        PUT /_reshard/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+        {
+            "state": "stopped",
+            "reason": "Rebalancing in progress"
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "ok": true
+        }
+
+.. http:get:: /_reshard/jobs
+    :synopsis: Retrieve information about all the resharding jobs on the cluster
+
+    .. note:: The shape of the response and the ``total_rows`` and ``offset``
+              field in particular are meant to be consistent with the
+              ``_scheduler/jobs`` endpoint.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json list jobs: Array of json objects, one for each resharding job. For
+                      the fields of each job see the /_reshard/job/{jobid}
+                      endpoint.
+    :>json number offset: Offset in the list of jobs object. Currently
+                          hard-coded at ``0``.
+    :>json number total_rows: Total number of resharding jobs on the cluster.
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/jobs HTTP/1.1
+        Accept: application/json
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "jobs": [
+                {
+                    "history": [
+                        {
+                            "detail": null,
+                            "timestamp": "2019-03-28T15:28:02Z",
+                            "type": "new"
+                        },
+                        {
+                            "detail": "initial_copy",
+                            "timestamp": "2019-03-28T15:28:02Z",
+                            "type": "running"
+                        },
+                        ...
+                    ],
+                    "id": "001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a",
+                    "job_state": "completed",
+                    "node": "node1@127.0.0.1",
+                    "source": "shards/00000000-1fffffff/d1.1553786862",
+                    "split_state": "completed",
+                    "start_time": "2019-03-28T15:28:02Z",
+                    "state_info": {},
+                    "target": [
+                        "shards/00000000-0fffffff/d1.1553786862",
+                        "shards/10000000-1fffffff/d1.1553786862"
+                    ],
+                    "type": "split",
+                    "update_time": "2019-03-28T15:28:08Z"
+                },
+                ...
+            ],
+            "offset": 0,
+            "total_rows": 24
+        }
+
+.. http:get:: /_reshard/jobs/{jobid}
+    :synopsis: Retrieve information about a particular resharding job
+
+    Get information about the resharding job identified by ``jobid``.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :>json string id: Job ID.
+    :>json string type: Currently only ``split`` is implemented.
+    :>json string job_state: The running state of the job. Could be one of
+                             ``new``, ``running``, ``stopped``, ``completed``
+                             or ``failed``.
+    :>json string split_state: State detail specific to shard splitting. It
+                               indicates how far has shard splitting
+                               progressed, and can be one of ``new``,
+                               ``initial_copy``, ``topoff1``,
+                               ``build_indices``, ``topoff2``,
+                               ``copy_local_docs``, ``update_shardmap``,
+                               ``wait_source_close``, ``topoff3``,
+                               ``source_delete`` or ``completed``.
+    :>json object state_info: Optional additional info associated with the
+                              current state.
+    :>json string source: For ``split`` jobs this will be the source shard.
+    :>json list target: For ``split`` jobs this will be a list of two or more
+                        target shards.
+    :>json list history: List of json objects recording a job's state
+                         transition history.
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/jobs/001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a HTTP/1.1
+        Accept: application/json
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+
+            "id": "001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a",
+            "job_state": "completed",
+            "node": "node1@127.0.0.1",
+            "source": "shards/00000000-1fffffff/d1.1553786862",
+            "split_state": "completed",
+            "start_time": "2019-03-28T15:28:02Z",
+            "state_info": {},
+            "target": [
+                "shards/00000000-0fffffff/d1.1553786862",
+                "shards/10000000-1fffffff/d1.1553786862"
+            ],
+            "type": "split",
+            "update_time": "2019-03-28T15:28:08Z",
+            "history": [
+                {
+                    "detail": null,
+                    "timestamp": "2019-03-28T15:28:02Z",
+                    "type": "new"
+                },
+                {
+                    "detail": "initial_copy",
+                    "timestamp": "2019-03-28T15:28:02Z",
+                    "type": "running"
+                },
+                ...
+            ]
+        }
+
+.. http:post:: /_reshard/jobs
+    :synopsis: Create one or more resharding jobs
+
+    Depending on what fields are specified in the request, one or more
+    resharding jobs will be created. The response is a json array of results.
+    Each result object represents a single resharding job for a particular node
+    and range. Some of the responses could be successful and some could fail.
+    Successful results will have the ``"ok": true`` key and and value, and
+    failed jobs will have the ``"error": "{error_message}"`` key and value.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string type: Type of job. Currently only ``"split"`` is accepted.
+
+    :<json string db: Database to split. This is mutually exclusive with the
+                      ``"shard``" field.
+
+    :<json string node: Split shards on a particular node. This is an optional
+                        parameter. The value should be one of the nodes
+                        returned from the ``_membership`` endpoint.
+
+    :<json string range: Split shards copies in the given range. The range
+                         format is ``hhhhhhhh-hhhhhhhh`` where ``h`` is a
+                         hexadecimal digit. This format is used since this is
+                         how the ranges are represented in the file system.
+                         This is parameter is optional and is mutually
+                         exclusive with the ``"shard"`` field.
+
+    :<json string shard: Split a particular shard. The shard should be
+                         specified as ``"shards/{range}/{db}.{suffix}"``. Where
+                         ``range`` has the ``hhhhhhhh-hhhhhhhh`` format, ``db``
+                         is the database name, and ``suffix`` is the shard
+                         (timestamp) creation suffix.
+
+    :>json boolean ok: ``true`` if job created successfully.
+
+    :<json string error: Error message if a job could be not be created.
+
+    :<json string node: Cluster node where the job was created and is running.
+
+    :code 201: One or more jobs were successfully created
+    :code 400: Invalid request. Parameter validation might have failed.
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: Db, node, range or shard was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_reshard/jobs HTTP/1.1
+        Accept: application/json
+        Content-Type: application/json
+
+       {
+           "db": "db3",
+           "range": "80000000-ffffffff",
+           "type": "split"
+       }
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 201 Created
+        Content-Type: application/json
+
+        [
+            {
+                "id": "001-30d7848a6feeb826d5e3ea5bb7773d672af226fd34fd84a8fb1ca736285df557",
+                "node": "node1@127.0.0.1",
+                "ok": true,
+                "shard": "shards/80000000-ffffffff/db3.1554148353"
+            },
+            {
+                "id": "001-c2d734360b4cb3ff8b3feaccb2d787bf81ce2e773489eddd985ddd01d9de8e01",
+                "node": "node2@127.0.0.1",
+                "ok": true,
+                "shard": "shards/80000000-ffffffff/db3.1554148353"
+            }
+        ]
+
+.. http:delete:: /_reshard/jobs/{jobid}
+    :synopsis: Remove a resharding job
+
+    If the job is running, stop the job and then remove it.
+
+    :>json boolean ok: ``true`` if the job was removed successfully.
+
+    :code 200: The job was removed successfully
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: The job was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        DELETE /_reshard/jobs/001-171d1211418996ff47bd610b1d1257fc4ca2628868def4a05e63e8f8fe50694a HTTP/1.1
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "ok": true
+        }
+
+.. http:get:: /_reshard/jobs/{jobid}/state
+    :synopsis: Retrieve the state of a single resharding job
+
+    Returns the running state of a resharding job identified by ``jobid``.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string state: One of ``new``, ``running``, ``stopped``,
+                         ``completed`` or ``failed``.
+
+    :<json string state_reason: Additional information associated with the
+                                state
+
+    :code 200: Request completed successfully
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: The job was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_reshard/jobs/001-b3da04f969bbd682faaab5a6c373705cbcca23f732c386bb1a608cfbcfe9faff/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "reason": null,
+            "state": "running"
+        }
+
+.. http:put:: /_reshard/jobs/{jobid}/state
+    :synopsis: Change the state of a resharding job
+
+    Change the state of a particular resharding job identified by ``jobid``.
+    The state can be changed from ``stopped`` to ``running`` or from
+    ``running`` to ``stopped``. If an individual job is ``stopped`` via this
+    API it will stay ``stopped`` even after the global resharding state is
+    toggled from ``stopped`` to ``running``. If the job is already
+    ``completed`` its state will stay ``completed``.
+
+    :<header Accept: - :mimetype:`application/json`
+    :>header Content-Type: - :mimetype:`application/json`
+
+    :<json string state: ``stopped`` or ``running``
+    :<json string state_reason: Optional string describing additional
+                                information or reason associated with the state
+
+    :>json boolean ok: ``true``
+
+    :code 200: Request completed successfully
+    :code 400: Invalid request. Could be a bad state name, for example.
+    :code 401: CouchDB Server Administrator privileges required
+    :code 404: The job was not found
+
+    **Request**:
+
+    .. code-block:: http
+
+        PUT /_reshard/state/001-b3da04f969bbd682faaab5a6c373705cbcca23f732c386bb1a608cfbcfe9faff/state HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+        {
+            "state": "stopped",
+            "reason": "Rebalancing in progress"
+        }
+
+    **Response**:
+
+    .. code-block:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+       {
+            "ok": true
+       }

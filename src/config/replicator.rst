@@ -27,11 +27,18 @@ Replicator Database Configuration
 
         .. versionadded:: 2.1
 
-        Number of actively running replications. Making this too high could
-        cause performance issues. Making it too low could mean replications
-        jobs might not have enough time to make progress before getting
-        unscheduled again. This parameter can be adjusted at runtime and will
-        take effect during next rescheduling cycle::
+        Number of actively running replications.
+        This value represents the threshold to trigger the automatic replication
+        scheduler.
+        The system will check every ``interval`` milliseconds how many replication
+        jobs are running, and if there are more than ``max_jobs`` active jobs,
+        the scheduler will pause-and-restart up to ``max_churn`` jobs in the
+        scheduler queue.
+        Making this value too high could cause performance issues, while making
+        it too low could mean replications jobs might not have enough time to make
+        progress before getting unscheduled again.
+        This parameter can be adjusted at runtime and will take effect during next
+        rescheduling cycle::
 
              [replicator]
              max_jobs = 500
@@ -40,8 +47,9 @@ Replicator Database Configuration
 
         .. versionadded:: 2.1
 
-        Scheduling interval in milliseconds. During each reschedule cycle
-        scheduler might start or stop up to "max_churn" number of jobs::
+        Scheduling interval in milliseconds.
+        During each reschedule cycle the scheduler might start or stop up to ``max_churn``
+        number of jobs::
 
              [replicator]
              interval = 60000
@@ -50,13 +58,24 @@ Replicator Database Configuration
 
         .. versionadded:: 2.1
 
-        Maximum number of replications to start and stop during rescheduling.
-        This parameter along with ``interval`` defines the rate of job
-        replacement. During startup, however a much larger number of jobs could
-        be started (up to ``max_jobs``) in a short period of time::
+        Maximum number of replication jobs to start and stop during rescheduling.
+        This parameter, along with ``interval``, defines the rate of job replacement.
+        During startup, however, a much larger number of jobs could be started
+        (up to ``max_jobs``) in a short period of time::
 
              [replicator]
              max_churn = 20
+
+    .. config:option:: max_history
+
+        Maximum number of events recorded for each job. This parameter defines
+        an upper bound on the consecutive failure count for a job, and in turn
+        the maximum backoff factor used when determining the delay before the job
+        is restarted. The longer the length of the crash count, the longer the
+        possible length of the delay::
+
+             [replicator]
+             max_history = 20
 
     .. config:option:: update_docs
 
@@ -95,6 +114,7 @@ Replicator Database Configuration
     .. config:option:: connection_timeout
 
         HTTP connection timeout per replication.
+        This is divided by three (3) when the replicator makes changes feed requests.
         Even for very fast/reliable networks it might need to be increased if
         a remote database is too busy::
 
@@ -211,3 +231,21 @@ Replicator Database Configuration
 
             [replicator]
             ssl_certificate_max_depth = 3
+
+    .. config:option:: auth_plugins
+
+        .. versionadded:: 2.2
+
+        List of replicator client authentication plugins. Plugins will
+        be tried in order and the first to initialize successfully will
+        be used. By default there are two plugins available:
+        `couch_replicator_auth_session` implementing session (cookie)
+        authentication, and `couch_replicator_auth_noop` implementing basic
+        authentication. For backwards compatibility, the no-op plugin should be used at
+        the end of the plugin list::
+
+          [replicator]
+          auth_plugins = couch_replicator_auth_session,couch_replicator_auth_noop
+
+        .. note::
+             In version 2.2, the session plugin is considered experimental and is not enabled by default.

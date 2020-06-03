@@ -22,212 +22,14 @@ CouchDB HTTP Server
 HTTP Server Options
 ===================
 
-.. config:section:: httpd :: HTTP Server Options
-
-.. warning::
-    In CouchDB 2.x, the `httpd` section mostly refers to the node-local port,
-    on port 5986 by default. This port is used only for maintenance and
-    administrative tasks. **It should not be used for regular CouchDB access**,
-    and for security reasons, **should always be bound to localhost**
-    (`127.0.0.1`) or a private LAN segment only.
-
-    .. config:option:: allow_jsonp :: Enables JSONP support
-
-        The ``true`` value of this option enables `JSONP`_ support (it's
-        ``false`` by default)::
-
-            [httpd]
-            allow_jsonp = false
-
-        .. _JSONP: https://en.wikipedia.org/wiki/JSONP
-
-    .. config:option:: bind_address :: Listen IP address
-
-        Defines the IP address by which the node-local port is available.
-        The recommended setting is always::
-
-            [httpd]
-            bind_address = 127.0.0.1
-
-        For IPv6 support you need to set `::1` if you want to let CouchDB
-        listen correctly::
-
-            [httpd]
-            bind_address = ::1
-
-    .. config:option:: changes_timeout :: Changes feed timeout
-
-        Specifies default `timeout` value for :ref:`Changes Feed <changes>` in
-        milliseconds (60000 by default)::
-
-            [httpd]
-            changes_feed = 60000 ; 60 seconds
-
-    .. config:option:: config_whitelist :: Config options while list
-
-        Sets the configuration modification whitelist. Only whitelisted values
-        may be changed via the :ref:`config API <api/config>`. To allow the
-        admin to change this value over HTTP, remember to include
-        ``{httpd,config_whitelist}`` itself. Excluding it from the list would
-        require editing this file to update the whitelist::
-
-            [httpd]
-            config_whitelist = [{httpd,config_whitelist}, {log,level}, {etc,etc}]
-
-    .. config:option:: default_handler :: Default request handler
-
-        Specifies default HTTP requests handler::
-
-            [httpd]
-            default_handler = {couch_httpd_db, handle_request}
-
-    .. config:option:: enable_cors :: Activates CORS
-
-        .. versionadded:: 1.3
-
-        Controls :ref:`CORS <config/cors>` feature::
-
-            [httpd]
-            enable_cors = false
-
-    .. config:option:: port :: Listen port
-
-        Defines the port number to listen::
-
-            [httpd]
-            port = 5986
-
-        To let CouchDB use any free port, set this option to ``0``::
-
-            [httpd]
-            port = 0
-
-    .. config:option:: redirect_vhost_handler :: Virtual Hosts custom redirect handler
-
-        This option customizes the default function that handles requests to
-        :section:`virtual hosts <vhosts>`::
-
-            [httpd]
-            redirect_vhost_handler = {Module, Fun}
-
-        The specified function take 2 arguments: the MochiWeb request object
-        and the target path.
-
-    .. config:option:: server_options :: MochiWeb Server Options
-
-        Server options for the `MochiWeb`_ component of CouchDB can be added to
-        the configuration files::
-
-            [httpd]
-            server_options = [{backlog, 128}, {acceptor_pool_size, 16}]
-
-        .. _MochiWeb: https://github.com/mochi/mochiweb
-
-    .. config:option:: secure_rewrites :: Default request handler
-
-        This option allow to isolate databases via subdomains::
-
-            [httpd]
-            secure_rewrites = true
-
-    .. config:option:: socket_options :: Socket Options
-
-        The socket options for the listening socket in CouchDB can be specified
-        as a list of tuples. For example::
-
-            [httpd]
-            socket_options = [{recbuf, 262144}, {sndbuf, 262144}, {nodelay, true}]
-
-        The options supported are a subset of full options supported by the
-        TCP/IP stack. A list of the supported options are provided in the
-        `Erlang inet`_ documentation.
-
-        .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
-
-    .. config:option:: vhost_global_handlers :: Virtual hosts global handlers
-
-        List of global handlers that are available for :section:`virtual hosts
-        <vhosts>`::
-
-            [httpd]
-            vhost_global_handlers = _utils, _uuids, _session, _users
-
-    .. config:option:: x_forwarded_host :: X-Forwarder-Host
-
-        The `x_forwarded_host` header (``X-Forwarded-Host`` by default) is used
-        to forward the original value of the ``Host`` header field in case, for
-        example, if a reverse proxy is rewriting the "Host" header field to
-        some internal host name before forward the request to CouchDB::
-
-            [httpd]
-            x_forwarded_host = X-Forwarded-Host
-
-        This header has higher priority above ``Host`` one, if only it exists
-        in the request.
-
-    .. config:option:: x_forwarded_proto :: X-Forwarder-Proto
-
-        `x_forwarded_proto` header (``X-Forwarder-Proto`` by default) is used
-        for identifying the originating protocol of an HTTP request, since a
-        reverse proxy may communicate with CouchDB instance using HTTP even if
-        the request to the reverse proxy is HTTPS::
-
-            [httpd]
-            x_forwarded_proto = X-Forwarded-Proto
-
-    .. config:option:: x_forwarded_ssl :: X-Forwarder-Ssl
-
-        The `x_forwarded_ssl` header (``X-Forwarded-Ssl`` by default) tells
-        CouchDB that it should use the `https` scheme instead of the `http`.
-        Actually, it's a synonym for ``X-Forwarded-Proto: https`` header, but
-        used by some reverse proxies::
-
-            [httpd]
-            x_forwarded_ssl = X-Forwarded-Ssl
-
-    .. config:option:: enable_xframe_options :: Controls X-Frame-Options header
-
-        Controls :ref:`Enables or disabled <config/xframe_options>` feature::
-
-            [httpd]
-            enable_xframe_options = false
-
-    .. config:option:: WWW-Authenticate :: Force basic auth
-
-        Set this option to trigger basic-auth pop-up on unauthorized requests::
-
-            [httpd]
-            WWW-Authenticate = Basic realm="Welcome to the Couch!"
-
-    .. config:option:: max_http_request_size :: Maximum HTTP request body size
-
-        .. versionchanged:: 2.1.0
-
-        Limit the maximum size of the HTTP request body. This setting applies
-        to all requests and it doesn't discriminate between single vs.
-        multi-document operations. So setting it to 1MB would block a
-        `PUT` of a document larger than 1MB, but it might also block a
-        `_bulk_docs` update of 1000 1KB documents, or a multipart/related
-        update of a small document followed by two 512KB attachments. This
-        setting is intended to be used as a protection against maliciously
-        large HTTP requests rather than for limiting maximum document sizes. ::
-
-            [httpd]
-            max_http_request_size = 4294967296 ; 4 GB
-
-        .. warning::
-           Before version 2.1.0 :config:option:`couchdb/max_document_size` was
-           implemented effectively as ``max_http_request_size``. That is, it
-           checked HTTP request bodies instead of document sizes. After the
-           upgrade, it is advisable to review the usage of these configuration
-           settings.
-
 .. config:section:: chttpd :: Clustered HTTP Server Options
 
 .. note::
     In CouchDB 2.x, the `chttpd` section refers to the standard, clustered
     port. All use of CouchDB, aside from a few specific maintenance tasks as
     described in this documentation, should be performed over this port.
+
+    .. config:option:: bind_address :: HTTP port IP address binding
 
         Defines the IP address by which the clustered port is available::
 
@@ -286,30 +88,166 @@ HTTP Server Options
             authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
         - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
-        - ``{couch_httpd_auth, proxy_authentication_handler}``: used for Proxy auth;
+        - ``{chttpd_auth, proxy_authentication_handler}``: used for Proxy auth;
         - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
-        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
-          Everlasting `Admin Party`!
+        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth, breaks CouchDB.
+
+.. config:section:: httpd :: HTTP Server Options
+
+    .. config:option:: allow_jsonp :: Enables JSONP support
+
+        The ``true`` value of this option enables `JSONP`_ support (it's
+        ``false`` by default)::
+
+            [httpd]
+            allow_jsonp = false
+
+        .. _JSONP: https://en.wikipedia.org/wiki/JSONP
+
+    .. config:option:: changes_timeout :: Changes feed timeout
+
+        Specifies default `timeout` value for :ref:`Changes Feed <changes>` in
+        milliseconds (60000 by default)::
+
+            [httpd]
+            changes_timeout = 60000 ; 60 seconds
+
+    .. config:option:: config_whitelist :: Config options while list
+
+        Sets the configuration modification whitelist. Only whitelisted values
+        may be changed via the :ref:`config API <api/config>`. To allow the
+        admin to change this value over HTTP, remember to include
+        ``{httpd,config_whitelist}`` itself. Excluding it from the list would
+        require editing this file to update the whitelist::
+
+            [httpd]
+            config_whitelist = [{httpd,config_whitelist}, {log,level}, {etc,etc}]
+
+    .. config:option:: enable_cors :: Activates CORS
+
+        .. versionadded:: 1.3
+
+        Controls :ref:`CORS <config/cors>` feature::
+
+            [httpd]
+            enable_cors = false
+
+    .. config:option:: server_options :: MochiWeb Server Options
+
+        Server options for the MochiWeb component of CouchDB can be added to
+        the configuration files::
+
+            [httpd]
+            server_options = [{backlog, 128}, {acceptor_pool_size, 16}]
+
+        The options supported are a subset of full options supported by the
+        TCP/IP stack. A list of the supported options are provided in the
+        `Erlang inet`_ documentation.
+
+        .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
+
+    .. config:option:: secure_rewrites :: Default request handler
+
+        This option allow to isolate databases via subdomains::
+
+            [httpd]
+            secure_rewrites = true
+
+    .. config:option:: socket_options :: Socket Options
+
+        The socket options for the listening socket in CouchDB, as set at the
+        beginning of ever request, can be specified as a list of tuples. For example::
+
+            [httpd]
+            socket_options = [{sndbuf, 262144}]
+
+        The options supported are a subset of full options supported by the
+        TCP/IP stack. A list of the supported options are provided in the
+        `Erlang inet`_ documentation.
+
+        .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
+
+    .. config:option:: x_forwarded_host :: X-Forwarder-Host
+
+        The `x_forwarded_host` header (``X-Forwarded-Host`` by default) is used
+        to forward the original value of the ``Host`` header field in case, for
+        example, if a reverse proxy is rewriting the "Host" header field to
+        some internal host name before forward the request to CouchDB::
+
+            [httpd]
+            x_forwarded_host = X-Forwarded-Host
+
+        This header has higher priority above ``Host`` one, if only it exists
+        in the request.
+
+    .. config:option:: x_forwarded_proto :: X-Forwarder-Proto
+
+        `x_forwarded_proto` header (``X-Forwarder-Proto`` by default) is used
+        for identifying the originating protocol of an HTTP request, since a
+        reverse proxy may communicate with CouchDB instance using HTTP even if
+        the request to the reverse proxy is HTTPS::
+
+            [httpd]
+            x_forwarded_proto = X-Forwarded-Proto
+
+    .. config:option:: x_forwarded_ssl :: X-Forwarder-Ssl
+
+        The `x_forwarded_ssl` header (``X-Forwarded-Ssl`` by default) tells
+        CouchDB that it should use the `https` scheme instead of the `http`.
+        Actually, it's a synonym for ``X-Forwarded-Proto: https`` header, but
+        used by some reverse proxies::
+
+            [httpd]
+            x_forwarded_ssl = X-Forwarded-Ssl
+
+    .. config:option:: enable_xframe_options :: Controls X-Frame-Options header
+
+        Controls :ref:`Enables or disabled <config/xframe_options>` feature::
+
+            [httpd]
+            enable_xframe_options = false
+
+    .. config:option:: max_http_request_size :: Maximum HTTP request body size
+
+        .. versionchanged:: 2.1.0
+
+        Limit the maximum size of the HTTP request body. This setting applies
+        to all requests and it doesn't discriminate between single vs.
+        multi-document operations. So setting it to 1MB would block a
+        `PUT` of a document larger than 1MB, but it might also block a
+        `_bulk_docs` update of 1000 1KB documents, or a multipart/related
+        update of a small document followed by two 512KB attachments. This
+        setting is intended to be used as a protection against maliciously
+        large HTTP requests rather than for limiting maximum document sizes. ::
+
+            [httpd]
+            max_http_request_size = 4294967296 ; 4 GB
+
+        .. warning::
+           Before version 2.1.0 :config:option:`couchdb/max_document_size` was
+           implemented effectively as ``max_http_request_size``. That is, it
+           checked HTTP request bodies instead of document sizes. After the
+           upgrade, it is advisable to review the usage of these configuration
+           settings.
 
 .. _config/ssl:
 
-Secure Socket Level Options
-===========================
+HTTPS (SSL/TLS) Options
+=======================
 
-.. config:section:: ssl :: Secure Socket Level Options
+.. config:section:: ssl :: HTTPS (SSL/TLS) Options
 
-    CouchDB supports SSL natively. All your secure connection needs can now be
-    served without needing to set up and maintain a separate proxy server that
-    handles SSL.
+    CouchDB supports TLS/SSL natively, without the use of a proxy server.
 
-    SSL setup can be tricky, but the configuration in CouchDB was designed to
+    HTTPS setup can be tricky, but the configuration in CouchDB was designed to
     be as easy as possible. All you need is two files; a certificate and a
-    private key. If you bought an official SSL certificate from a certificate
+    private key. If you have an official certificate from a certificate
     authority, both should be in your possession already.
 
-    If you just want to try this out and don't want to pay anything upfront,
-    you can create a self-signed certificate. Everything will work the same,
-    but clients will get a warning about an insecure certificate.
+    If you just want to try this out and don't want to go through the hassle of
+    obtaining an official certificate, you can create a self-signed certificate.
+    Everything will work the same, but clients will get a warning about an insecure
+    certificate.
 
     You will need the `OpenSSL`_ command line tool installed. It probably
     already is.
@@ -326,14 +264,11 @@ Secure Socket Level Options
     Now, you need to edit CouchDB's configuration, by editing your
     ``local.ini`` file. Here is what you need to do.
 
-    At first, :option:`enable the HTTPS daemon <daemons/httpsd>`::
-
-        [daemons]
-        httpsd = {chttpd, start_link, [https]}
-
-    Next, under the ``[ssl]`` section set up the newly generated certificates::
+    Under the ``[ssl]`` section, enable HTTPS and set up the newly generated
+    certificates::
 
         [ssl]
+        enable = true
         cert_file = /etc/couchdb/cert/couchdb.pem
         key_file = /etc/couchdb/cert/privkey.pem
 
@@ -371,6 +306,11 @@ Secure Socket Level Options
         {"couchdb":"Welcome","version":"1.5.0"}
 
     All done.
+
+    For performance reasons, and for ease of setup, you may still wish to
+    terminate HTTPS connections at your load balancer / reverse proxy, then use
+    unencrypted HTTP between it and your CouchDB cluster. This is a recommended
+    approach.
 
     .. _`certificates HOWTO`: http://www.openssl.org/docs/HOWTO/certificates.txt
     .. _OpenSSL: http://www.openssl.org/
@@ -553,6 +493,14 @@ Cross-Origin Resource Sharing
             [cors]
             methods = GET,POST
 
+    .. config:option:: max_age
+
+        Sets the ``Access-Control-Max-Age`` header in seconds. Use it to
+        avoid repeated ``OPTIONS`` requests.
+
+            [cors]
+            max_age = 3600
+
     .. seealso::
         Original JIRA `implementation ticket <https://issues.apache.org/jira/browse/COUCHDB-431>`_
 
@@ -578,6 +526,10 @@ Cross-Origin Resource Sharing
 Per Virtual Host Configuration
 ------------------------------
 
+.. warning::
+
+    Virtual Hosts are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 To set the options for a :section:`vhosts`, you will need to create a section
 with the vhost name prefixed by ``cors:``. Example case for the vhost
 `example.com`::
@@ -591,10 +543,18 @@ with the vhost name prefixed by ``cors:``. Example case for the vhost
     ; List of accepted methods
     methods = HEAD, GET
 
+A video from 2010 on vhost and rewrite configuration `is available
+<https://vimeo.com/20773112>`_, but is not guaranteed to match current syntax
+or behaviour.
+
 .. _config/vhosts:
 
 Virtual Hosts
 =============
+
+.. warning::
+
+    Virtual Hosts are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. config:section:: vhosts :: Virtual Hosts
 
@@ -655,9 +615,6 @@ variable and use them to create the target path. Some examples::
 The first rule passes the wildcard as `dbname`. The second one does the same,
 but uses a variable name. And the third one allows you to use any URL with
 `ddocname` in any database with `dbname`.
-
-You could also change the default function to handle request by changing the
-setting :option:`httpd/redirect_vhost_handler`.
 
 .. _xframe_options:
 .. _config/xframe_options:

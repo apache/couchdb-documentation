@@ -21,7 +21,7 @@
 
     Find documents using a declarative JSON querying syntax.
     Queries can use the built-in :ref:`_all_docs <api/db/all_docs>` index or
-    custom indices, specified using the :ref:`_index <api/db/find/index>`
+    custom indexes, specified using the :ref:`_index <api/db/find/index>`
     endpoint.
 
     :param db: Database name
@@ -80,6 +80,7 @@
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
+    :code 404: Requested database not found
     :code 500: Query execution error
 
 The ``limit`` and ``skip`` values are exactly as you would expect. While
@@ -176,10 +177,10 @@ documents whose "director" field has the value "Lars von Trier".
 
     A simple selector, inspecting specific fields
 
-.. code:: json
+.. code-block:: javascript
 
     "selector": {
-      "$text": "Bond"
+      "$title": "Live And Let Die"
     },
     "fields": [
       "title",
@@ -317,7 +318,7 @@ value equal to ``8``.
 
 Example of implicit operator applied to a subfield test
 
-.. code:: json
+.. code-block:: javascript
 
         {
             "imdb": {
@@ -337,7 +338,7 @@ Again, you can make the equality operator explicit.
 
 An example of the ``$eq`` operator used with full text indexing
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -355,7 +356,7 @@ An example of the ``$eq`` operator used with full text indexing
 
 An example of  the ``$eq`` operator used with database indexed on the field ``"year"``
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -453,15 +454,15 @@ The list of combination operators:
 .. _find/and:
 
 **The** ``$and`` **operator**
-    ``$and`` operator used with full text indexing
+    ``$and`` operator used with two fields
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
         "$and": [
           {
-            "$text": "Schwarzenegger"
+            "$title": "Total Recall"
           },
           {
             "year": {
@@ -755,7 +756,9 @@ the database performs a full scan of the primary index:
     in production.
 
 Most selector expressions work exactly as you would expect for the given
-operator.
+operator. But it is not always the case: for example, comparison of strings is
+done with ICU and can can give surprising results if you were expecting ASCII
+ordering. See :ref:`views/collation` for more details.
 
 .. _find/sort:
 
@@ -815,7 +818,7 @@ versions.
 
     A simple query, using sorting:
 
-.. code:: json
+.. code-block:: javascript
 
     {
         "selector": {"Actor_name": "Robert De Niro"},
@@ -940,6 +943,13 @@ built using MapReduce Views.
     :query json partial_filter_selector: A :ref:`selector <find/selectors>`
         to apply to documents at indexing time, creating a
         :ref:`partial index <find/partial_indexes>`. *Optional*
+    :query boolean partitioned: Determines whether a JSON index is partitioned
+        or global. The default value of ``partitioned`` is the ``partitioned``
+        property of the database. To create a global index on a
+        partitioned database, specify
+        ``false`` for the ``"partitioned"`` field. If you specify ``true``
+        for the  ``"partitioned"`` field on an unpartitioned database, an
+        error occurs.
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
@@ -999,7 +1009,7 @@ The returned JSON confirms the index has been created:
 
 Example index creation using all available query parameters
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -1027,7 +1037,7 @@ map cleanly to a range query on an index.
 
 Let's look at an example query:
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {
@@ -1070,7 +1080,7 @@ where  ``"status": { "$ne": "archived" }`` at index time using the
 Partial indexes are not currently used by the query planner unless specified
 by a ``"use_index"`` field, so we need to modify the original query:
 
-.. code:: json
+.. code-block:: javascript
 
     {
       "selector": {

@@ -12,36 +12,48 @@
 
 .. This file exists solely to hold the top-level Table of Contents.
 
-=============================================
-|Apache CouchDB(TM)|_ |release| Documentation
-=============================================
+==============
+Apache CouchDB
+==============
 
-Welcome! This is the documentation for Apache CouchDB |release|.
-
-Table of Contents
-=================
 .. toctree::
+    :caption: User Guides
     :maxdepth: 3
-    :numbered: 3
+    :numbered:
 
     intro/index
-    install/index
-    config/index
     replication/index
-    maintenance/index
     ddocs/index
-    externals
-    query-server/index
-    fauxton/index
-    api/index
+    best-practices/index
+
+.. toctree::
+    :caption: Administration Guides
+    :maxdepth: 3
+    :numbered:
+
+    install/index
+    setup/index
+    config/index
     cluster/index
-    json-structure
+    maintenance/index
+    fauxton/index
     experimental
-    contributing
+
+.. toctree::
+    :caption: Reference Guides
+    :maxdepth: 3
+    :numbered:
+
+    api/index
+    json-structure
+    query-server/index
+    partitioned-dbs/index
+
+.. toctree::
+    :caption: Other
+    :numbered:
+
     whatsnew/index
     cve/index
-    about
-
-.. This is how you get a TM sign into a link. Haha. Seriously.
-.. |Apache CouchDB(TM)| unicode:: Apache U+0020 CouchDB U+2122
-.. _Apache CouchDB(TM): http://couchdb.apache.org/
+    License <about>
+    contributing

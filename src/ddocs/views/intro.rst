@@ -178,6 +178,20 @@ confusion. CouchDB automatically includes the document ID of the document that
 created the entry in the view result. We’ll use this as well when constructing
 links to the blog post pages.
 
+.. warning::
+
+    Do not emit the entire document as the value of your ``emit(key, value)``
+    statement unless you're sure you know you want it. This stores an entire
+    additional copy of your document in the view's secondary index. Views with
+    ``emit(key, doc)`` take longer to update, longer to write to disk, and
+    consume significantly more disk space. The only advantage is that they
+    are faster to query than using the ``?include_docs=true`` parameter when
+    querying a view.
+
+    Consider the trade-offs before emitting the entire document. Often it is
+    sufficient to emit only a portion of the document, or just a single key /
+    value pair, in your views.
+
 Efficient Lookups
 =================
 
@@ -401,11 +415,18 @@ the reduce view:
         return sum(values)
     }
 
-returns the total number of rows between the start and end key.
-So with ``startkey=["a","b"]&endkey=["b"]`` (which includes the first three of
-the above keys) the result would equal ``3``. The effect is to count rows.
-If you’d like to count rows without depending on the row value, you can switch
-on the ``rereduce`` parameter:
+or:
+
+.. code-block:: javascript
+
+    _sum
+
+which is a built-in CouchDB reduce function (the others are ``_count`` and
+``_stats``). ``_sum`` here returns the total number of rows between the start
+and end key. So with ``startkey=["a","b"]&endkey=["b"]`` (which includes the
+first three of the above keys) the result would equal ``3``. The effect is to
+count rows.  If you’d like to count rows without depending on the row value,
+you can switch on the ``rereduce`` parameter:
 
 .. code-block:: javascript
 
@@ -604,6 +625,42 @@ reduce function does not reduce its input values.
     :alt: An overflowing reduce index
 
     Figure 4. An overflowing reduce index
+
+One vs. Multiple Design Documents
+=================================
+
+A common question is: when should I split multiple views into multiple design
+documents, or keep them together?
+
+Each view you create corresponds to one B-tree. All views in a single design
+document will live in the same set of index files on disk (one file per
+database shard; in 2.0+ by default, 8 files per node).
+
+The most practical consideration for separating views into separate documents
+is how often you change those views. Views that change often, and are in the
+same design document as other views, will invalidate those other views'
+indexes when the design document is written, forcing them all to rebuild from
+scratch. Obviously you will want to avoid this in production!
+
+However, when you have multiple views with the same map function in the same
+design document, CouchDB will optimize and only calculate that map function
+once. This lets you have two views with different *reduce* functions (say,
+one with ``_sum`` and one with ``_stats``) but build only a single copy
+of the mapped index. It also saves disk space and the time to write multiple
+copies to disk.
+
+Another benefit of having multiple views in the same design document is that
+the index files can keep a single index of backwards references from docids
+to rows. CouchDB needs these "back refs" to invalidate rows in a view when a
+document is deleted (otherwise, a delete would force a total rebuild!)
+
+One other consideration is that each separate design document will spawn
+another (set of) ``couchjs`` processes to generate the view, one per shard.
+Depending on the number of cores on your server(s), this may be efficient
+(using all of the idle cores you have) or inefficient (overloading the CPU on
+your servers). The exact situation will depend on your deployment architecture.
+
+So, should you use one or multiple design documents? The choice is yours.
 
 Lessons Learned
 ===============

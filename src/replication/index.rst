@@ -16,22 +16,22 @@
 Replication
 ===========
 
-The replication is an incremental one way process involving two databases
+Replication is an incremental one way process involving two databases
 (a source and a destination).
 
-The aim of the replication is that at the end of the process, all active
-documents on the source database are also in the destination database and all
-documents that were deleted in the source databases are also deleted (if exists)
-on the destination database.
+The aim of replication is that at the end of the process, all active
+documents in the source database are also in the destination database
+and all documents that were deleted in the source database are also
+deleted in the destination database (if they even existed).
 
 The replication process only copies the last revision of a document, so all
-previous revisions that were only on the source database are not copied to the
+previous revisions that were only in the source database are not copied to the
 destination database.
 
 .. toctree::
     :maxdepth: 2
 
     intro
-    protocol
     replicator
     conflicts
+    protocol

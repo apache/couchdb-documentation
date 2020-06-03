@@ -157,14 +157,13 @@
     transfer size for attachments.
 
 .. http:post:: /{db}/_design/{ddoc}/_view/{view}
-    :synopsis: Returns certain rows for the specified stored view
+    :synopsis: Returns results for the specified view
 
     Executes the specified view function from the specified design document.
-    Unlike :get:`/{db}/_design/{ddoc}/_view/{view}` for accessing views, the
-    :method:`POST` method supports the specification
-    of explicit keys to be retrieved from the view results. The remainder of
-    the :method:`POST` view functionality is identical to the
-    :get:`/{db}/_design/{ddoc}/_view/{view}` API.
+    :method:`POST` view functionality supports identical parameters and behavior
+    as specified in the :get:`/{db}/_design/{ddoc}/_view/{view}` API but allows for the
+    query string parameters to be supplied as keys in a JSON object in the body
+    of the `POST` request.
 
     **Request**:
 
@@ -270,18 +269,12 @@ issues. These include:
 - Create the view definition (and associated design documents) on your database
   before allowing insertion or updates to the documents. If this is allowed
   while the view is being accessed, the index can be updated incrementally.
-
 - Manually force a view request from the database. You can do this either
   before users are allowed to use the view, or you can access the view manually
   after documents are added or updated.
-
 - Use the :ref:`changes feed <api/db/changes>` to monitor for changes to the
   database and then access the view to force the corresponding view index to be
   updated.
-
-- Use a monitor with the :ref:`update notification <update-notifications>`
-  section of the CouchDB configuration file to monitor for changes to your
-  database, and trigger a view query to force the view to be updated.
 
 None of these can completely eliminate the need for the indexes to be rebuilt
 or updated when the view is accessed, but they may lessen the effects on
@@ -324,17 +317,25 @@ sequence exposed in the database information (returned by :get:`/{db}`).
 Sorting Returned Rows
 =====================
 
-Each element within the returned array is sorted using native UTF-8 sorting
-according to the contents of the key portion of the emitted content. The basic
+Each element within the returned array is sorted using
+native UTF-8 sorting
+according to the contents of the key portion of the
+emitted content. The basic
 order of output is as follows:
 
--  ``null``
--  ``false``
--  ``true``
--  Numbers
--  Text (case sensitive, lowercase first)
--  Arrays (according to the values of each element, in order)
--  Objects (according to the values of keys, in key order)
+- ``null``
+
+- ``false``
+
+- ``true``
+
+- Numbers
+
+- Text (case sensitive, lowercase first)
+
+- Arrays (according to the values of each element, in order)
+
+- Objects (according to the values of keys, in key order)
 
 **Request**:
 
@@ -459,8 +460,8 @@ order of output is as follows:
         "total_rows": 17
     }
 
-You can reverse the order of the returned view information by using the
-``descending`` query value set to true:
+You can reverse the order of the returned view information
+by using the ``descending`` query value set to true:
 
 **Request**:
 
@@ -788,9 +789,9 @@ To omit some records you may use ``skip`` query parameter:
 Sending multiple queries to a view
 ==================================
 
-.. versionadded:: 2.0
+.. versionadded:: 2.2
 
-.. http:post:: /{db}/_design/{ddoc}/_view/{view}
+.. http:post:: /{db}/_design/{ddoc}/_view/{view}/queries
     :synopsis: Returns results for the specified queries
 
     Executes multiple specified view queries against the view function
@@ -802,15 +803,13 @@ Sending multiple queries to a view
 
     :<header Content-Type: - :mimetype:`application/json`
     :<header Accept: - :mimetype:`application/json`
-                     - :mimetype:`text/plain`
 
-    :query json queries: An array of query objects with fields for the
+    :<json queries:  An array of query objects with fields for the
         parameters of each individual view query to be executed. The field names
         and their meaning are the same as the query parameters of a
         regular :ref:`view request <api/ddoc/view>`.
 
     :>header Content-Type: - :mimetype:`application/json`
-                           - :mimetype:`text/plain; charset=utf-8`
     :>header ETag: Response signature
     :>header Transfer-Encoding: ``chunked``
 
@@ -821,14 +820,14 @@ Sending multiple queries to a view
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
-    :code 404: Specified database, design document or view is missed
+    :code 404: Specified database, design document or view is missing
     :code 500: View function execution error
 
 **Request**:
 
 .. code-block:: http
 
-    POST /recipes/_design/recipes/_view/by_title HTTP/1.1
+    POST /recipes/_design/recipes/_view/by_title/queries HTTP/1.1
     Content-Type: application/json
     Accept: application/json
     Host: localhost:5984
@@ -855,7 +854,7 @@ Sending multiple queries to a view
     HTTP/1.1 200 OK
     Cache-Control: must-revalidate
     Content-Type: application/json
-    Date: Wed, 07 Sep 2016 11:17:07 GMT
+    Date: Wed, 20 Dec 2016 11:17:07 GMT
     ETag: "1H8RGBCK3ABY6ACDM7ZSC30QK"
     Server: CouchDB (Erlang/OTP)
     Transfer-Encoding: chunked

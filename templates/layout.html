@@ -15,10 +15,10 @@ specific language governing permissions and limitations under the License.
 {% block menu %}
 <h2>Table of Contents</h2>
 {{ super() }}
-<h2>Quick Reference</h2>
+<h2>Quick Reference Guides</h2>
 <ul>
-<li><a href="{{ pathto('http-api') }}">HTTP API Reference</a></li>
-<li><a href="{{ pathto('config-ref') }}">Configuration Reference</a></li>
+<li><a href="{{ pathto('http-api') }}">API Quick Reference</a></li>
+<li><a href="{{ pathto('config-ref') }}">Configuration Quick Reference</a></li>
 </ul>
 
 {% if local %}
@@ -32,7 +32,7 @@ specific language governing permissions and limitations under the License.
 <ul>
 <li><a href="https://couchdb.apache.org/"{% if not local %} onclick="_gaq.push(['_link', 'https://couchdb.apache.org/']); return false;"{% endif %}>CouchDB Homepage</a></li>
 <li><a href="https://couchdb.apache.org/#mailing-list"{% if not local %} onclick="_gaq.push(['_link', 'https://couchdb.apache.org/#mailing-list']); return false;"{% endif %}>Mailing Lists</a></li>
-<li><a href="http://webchat.freenode.net/?channels=couchdb">IRC</a></li>
+<li><a href="https://couchdb.apache.org/#chat">Realtime Chat</a></li>
 <li><a href="https://github.com/apache/couchdb/issues">Issue Tracker</a></li>
 <li><a href="{{ pathto('download') }}">Download Docs</a></li>
 </ul>

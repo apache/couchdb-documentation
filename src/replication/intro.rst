@@ -21,23 +21,47 @@ database. This enables users to distribute data across several nodes or
 data centers, but also to move data more closely to clients.
 
 Replication involves a source and a destination database, which can be on the
-same or on different CouchDB instances. The aim of the replication is that at
-the end of the process, all active documents on the source database are also in
+same or on different CouchDB instances. The aim of replication is that at
+the end of the process, all active documents in the source database are also in
 the destination database and all documents that were deleted in the source
-databases are also deleted on the destination database (if they even existed).
+database are also deleted in the destination database (if they even existed).
 
-Triggering Replication
-======================
+Transient and Persistent Replication
+====================================
 
-Replication is controlled through documents in the
+There are two different ways to set up a replication. The first one that was
+introduced into CouchDB leads to a replication that could be called `transient`.
+Transient means that there are no documents backing up the replication. So after a
+restart of the CouchDB server the replication will disapear. Later, the
+:ref:`_replicator <replicator>` database was introduced, which keeps documents
+containing your replication parameters. Such a replication can be called `persistent`.
+Transient replications were kept for backward compatibility. Both replications can
+have different :ref:`replication states <replicator/states>`.
+
+Triggering, Stopping and Monitoring Replications
+================================================
+
+A persistent replication is controlled through a document in the
 :ref:`_replicator <replicator>` database, where each document describes one
-replication process (see :ref:`replication-settings`).
+replication process (see :ref:`replication-settings`). For setting up a
+transient replication the api endpoint
+:ref:`/_replicate <api/server/replicate>` can be used. A replication is triggered
+by sending a JSON object either to the ``_replicate`` endpoint or storing it as a
+document into the ``_replicator`` database.
 
-A replication is triggered by storing a replication document in the replicator
-database. Its status can be inspected through the active tasks API (see
-:ref:`api/server/active_tasks` and :ref:`replication-status`). A replication can
-be stopped by deleting the document, or by updating it with its `cancel`
-property set to `true`.
+If a replication is currently running its status can be inspected through the
+active tasks API (see :ref:`api/server/active_tasks`, :ref:`replication-status`
+and :ref:`api/server/_scheduler/jobs`).
+
+For document based-replications, :ref:`api/server/_scheduler/docs` can be used to
+get a complete state summary. This API is preferred as it will show the state of the
+replication document before it becomes a replication job.
+
+For transient replications there is no way to query their state when the job is
+finished.
+
+A replication can be stopped by deleting the document, or by updating it with
+its `cancel` property set to `true`.
 
 Replication Procedure
 =====================

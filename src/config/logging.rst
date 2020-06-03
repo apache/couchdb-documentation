@@ -34,6 +34,8 @@ Logging options
         - ``file``: Logs are sent to the file set in
           :option:`log file <log/file>`.
         - ``syslog``: Logs are sent to the syslog daemon.
+        - ``journald``: Logs are sent to stderr without timestamp and log
+          levels compatible with sd-daemon.
 
         You can also specify a full module name here if implement your own
         writer::
@@ -81,9 +83,7 @@ Logging options
 
         Available levels:
 
-        - ``debug``: Very informative and detailed debug logging. Includes HTTP
-          headers, external processes communications, authorization information
-          and more;
+        - ``debug``: Detailed debug logging.
         - ``info``: Informative logging. Includes HTTP requests headlines,
           startup of an external processes etc.
         - ``notice``

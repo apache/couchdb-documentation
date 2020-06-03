@@ -77,10 +77,21 @@ Replication state of this document can then be queried from
          "doc_id": "my_rep",
          "error_count": 0,
          "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
-         "info": null,
+         "info": {
+             "revisions_checked": 113,
+             "missing_revisions_found": 113,
+             "docs_read": 113,
+             "docs_written": 113,
+             "changes_pending": 0,
+             "doc_write_failures": 0,
+             "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+             "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+             "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+         },
          "last_updated": "2017-04-05T19:18:15Z",
          "node": "node1@127.0.0.1",
-         "proxy": null,
+         "source_proxy": null,
+         "target_proxy": null,
          "source": "http://myserver.com/foo/",
          "start_time": "2017-04-05T19:18:15Z",
          "state": "running",
@@ -114,6 +125,17 @@ The replication job will also appear in
                       }
                   ],
                   "id": "a81a78e822837e66df423d54279c15fe+continuous+create_target",
+                  "info": {
+                      "changes_pending": 0,
+                      "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                      "doc_write_failures": 0,
+                      "docs_read": 113,
+                      "docs_written": 113,
+                      "missing_revisions_found": 113,
+                      "revisions_checked": 113,
+                      "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                      "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+                  },
                   "node": "node1@127.0.0.1",
                   "pid": "<0.1174.0>",
                   "source": "http://myserver.com/foo/",
@@ -126,9 +148,12 @@ The replication job will also appear in
           "total_rows": 1
       }
 
-``_scheduler/jobs`` shows more information such as a detailed history of
-state changes. However if replication has completed or has failed to
-start it would not appear here, only in ``_scheduler/docs``.
+``_scheduler/jobs`` shows more information, such as a detailed history of
+state changes. If a persistent replication has not yet started,
+has failed, or is completed, information about its state can only be found
+in ``_scheduler/docs``. Keep in mind that some replication documents could be
+invalid and could not become a replication job. Others might be delayed
+because they are fetching data from a slow source database.
 
 If there is an error, for example if the source database is missing, the
 replication job will crash and retry after a wait period. Each
@@ -182,10 +207,13 @@ crashes with an increasingly larger interval. The ``history`` list from
           "doc_id": "my_rep_crashing",
           "error_count": 6,
           "id": "cb78391640ed34e9578e638d9bb00e44+create_target",
-          "info": "db_not_found: could not open http://adm:*****@localhost:5984/missing/",
+          "info": {
+               "error": "db_not_found: could not open http://adm:*****@localhost:5984/missing/"
+          },
           "last_updated": "2017-04-05T20:55:10Z",
           "node": "node1@127.0.0.1",
-          "proxy": null,
+          "source_proxy": null,
+          "target_proxy": null,
           "source": "http://adm:*****@localhost:5984/missing/",
           "start_time": "2017-04-05T20:38:34Z",
           "state": "crashing",
@@ -237,7 +265,9 @@ exactly why it failed:
             "doc_id": "my_rep_dup",
             "error_count": 1,
             "id": null,
-            "info": "Replication `a81a78e822837e66df423d54279c15fe+continuous+create_target` specified by document `my_rep_dup` already started, triggered by document `my_rep` from db `_replicator`",
+            "info": {
+                "error": "Replication `a81a78e822837e66df423d54279c15fe+continuous+create_target` specified by document `my_rep_dup` already started, triggered by document `my_rep` from db `_replicator`"
+            },
             "last_updated": "2017-04-05T21:41:51Z",
             "source": "http://myserver.com/foo/",
             "start_time": "2017-04-05T21:41:51Z",

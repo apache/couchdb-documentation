@@ -17,16 +17,15 @@ Query Server
 ============
 
 The `Query server` is an external process that communicates with CouchDB by JSON
-protocol through stdio interface and processed all
-:ref:`design functions <ddocs>` calls:
-:ref:`views <viewfun>`, :ref:`shows <showfun>`, :ref:`lists <listfun>` and more.
+protocol through stdio interface and processes all
+:ref:`design functions <ddocs>` calls, such as JavaScript :ref:`views <viewfun>`.
 
 The default query server is written in
 :ref:`JavaScript <query-server/js>`, running via `Mozilla SpiderMonkey`_.
-You can use other languages by setting a Query server key in the ``language``
-property of a design document or the `Content-Type` header of a
-`temporary view`. Design documents that do not specify a ``language`` property
-are assumed to be of type `javascript`.
+You can use :ref:`other languages <config/query_servers>` by setting a Query
+server key in the ``language`` property of a design document or the
+`Content-Type` header of a `temporary view`. Design documents that do not
+specify a ``language`` property are assumed to be of type `javascript`.
 
 .. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
 
