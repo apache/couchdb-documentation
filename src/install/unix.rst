@@ -61,31 +61,31 @@ Enabling the Apache CouchDB package repository
 
     $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb stretch main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Debian 10 (buster)**: Run the following commands::
 
     $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb buster main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 16.04 (Xenial)**: Run the following commands::
 
     $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb xenial main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 18.04 (Bionic)**: Run the following commands::
 
     $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 20.04 (Focal)**: Run the following commands::
 
     $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb focal main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 .. highlight:: ini
 
@@ -112,6 +112,15 @@ Enabling the Apache CouchDB package repository
     [bintray--apache-couchdb-rpm]
     name=bintray--apache-couchdb-rpm
     baseurl=http://apache.bintray.com/couchdb-rpm/el7/$basearch/
+    gpgcheck=0
+    repo_gpgcheck=0
+    enabled=1
+
+**RedHat 8**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
+
+    [bintray--apache-couchdb-rpm]
+    name=bintray--apache-couchdb-rpm
+    baseurl=http://apache.bintray.com/couchdb-rpm/el8/$basearch/
     gpgcheck=0
     repo_gpgcheck=0
     enabled=1
