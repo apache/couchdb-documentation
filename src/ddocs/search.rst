@@ -814,7 +814,7 @@ Drilldown
 You can restrict results to documents with a dimension equal to the specified label.
 Restrict the results by adding ``drilldown=["dimension","label"]`` to a search query. You
 can include multiple ``drilldown`` parameters to restrict results along multiple
-dimensions.
+dimensions: ``drilldown=[["dimension1","label1"], ["dimension2","label2"]]``
 
 Using a ``drilldown`` parameter is similar to using ``key:value`` in the ``q`` parameter,
 but the ``drilldown`` parameter returns values that the analyzer might skip.
