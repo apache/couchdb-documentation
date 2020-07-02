@@ -97,7 +97,7 @@ Reduce and Rereduce Functions
 
 .. function:: redfun(keys, values[, rereduce])
 
-    :param keys: Array of pairs of docid-key for related map function results.
+    :param keys: Array of pairs of key-docid for related map function results.
                  Always ``null`` if rereduce is running (has ``true`` value).
     :param values: Array of map function result values.
     :param rereduce: Boolean flag to indicate a rereduce run.

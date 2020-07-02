@@ -338,7 +338,7 @@
                      - :mimetype:`text/plain`
     :query array ensure_dbs_exist: List of system databases to ensure exist
         on the node/cluster. Defaults to
-        ``["_users","_replicator","_global_changes"]``.
+        ``["_users","_replicator"]``.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json string state: Current ``state`` of the node and/or cluster (see
@@ -437,7 +437,7 @@
         (add_node only)
     :<json array ensure_dbs_exist: List of system databases to ensure exist
         on the node/cluster. Defaults to
-        ``["_users","_replicator","_global_changes"]``.
+        ``["_users","_replicator"]``.
 
     *No example request/response included here. For a worked example, please
     see* :ref:`cluster/setup/api`.
@@ -453,7 +453,9 @@
 .. http:get:: /_db_updates
     :synopsis: Return the server changes of databases
 
-    Returns a list of all database events in the CouchDB instance.
+    Returns a list of all database events in the CouchDB instance. The
+    existence of the ``_global_changes`` database is required to use this
+    endpoint.
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
@@ -474,6 +476,7 @@
         keep the feed alive indefinitely. Default is ``60000``. May be ``true``
         to use default value.
     :query string since: Return only updates since the specified sequence ID.
+        If the sequence ID is specified but does not exist, all changes are returned.
         May be the string ``now`` to begin showing only new updates.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`

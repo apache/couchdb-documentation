@@ -62,7 +62,8 @@ Upgrade Notes
   ...and so on. Documentation has been updated to reflect this change.
 
 * :ghissue:`2389`: CouchDB 3.0 now requires a server admin user to be defined at
-  startup, or will print an error message and exit. (The Admin Party is now over.)
+  startup, or will print an error message and exit. If you do not have one, be sure
+  to :ref:`create an admin user<config/admins>`. (The Admin Party is now over.)
 
 .. figure:: ../../images/23379351593_0c480537de_q.jpg
   :align: center
@@ -155,6 +156,65 @@ The following features are deprecated in CouchDB 3.0 and will be removed in Couc
 * Virtual hosts and ini-file rewrites
 
 * Rewrite functions (``/{db}/{ddoc}/_rewrite``)
+
+.. _release/3.0.1:
+
+Version 3.0.1
+=============
+
+Features and Enhancements
+-------------------------
+
+* Fauxton was updated to version `v1.2.3`.
+
+Bugfixes
+--------
+
+* :ghissue:`2441`: A memory leak when encoding large binary content was patched.
+  This should resolve a long-standing gradual memory increase bug in CouchDB.
+
+* :ghissue:`2613`: Simultaneous attempts to create the same new database should
+  no longer result in a :code 500: error.
+
+* :ghissue:`2678`: Defaults for the ``smoosh`` compaction daemon are now consistent
+  with the shipped ``default.ini`` file.
+
+* :ghissue:`2680`: The Windows CouchDB startup batch file will no longer fail to
+  start CouchDB if incompatible versions of OpenSSL are on the ``PATH``.
+
+* :ghissue:`2741`: A small performance improvement in the ``couch_server`` process
+  was made.
+
+* :ghissue:`2745`: The ``require_valid_user`` exception logic was corrected.
+
+* :ghissue:`2643`: The ``users_db_security_editable`` setting is now in the correct
+  section of the ``default.ini`` file.
+
+* :ghissue:`2654`: Filtered changes feeds that need to rewind partially should no
+  longer rewind all the way to the beginning of the feed.
+
+* :ghissue:`2655`: When deleting a session cookie, CouchDB should now respect the
+  operator-specified cookie domain, if set.
+
+* :ghissue:`2690`: Nodes that re-enter a cluster after a database was created (while
+  the node was offline or in maintenance mode) should more correctly handle
+  creating local replicas of that database.
+
+* :ghissue:`2805`: Mango operators more correctly handle being passed empty arrays.
+
+* :ghissue:`2716`, :ghissue:`2738`: The ``remsh`` utility will now try and guess the
+  node name and Erlang cookie of the local installation. It will also respect the
+  ``COUCHDB_ARGS_FILE`` environment variable.
+
+* :ghissue:`2797`: The cluster setup workflow now uses the correct logging module.
+
+* :ghissue:`2818`: Mango now uses a safer method of bookmark creation that prevents
+  unexpectedly creating new Erlang atoms.
+
+* :ghissue:`2756`: SpiderMonkey 60+ will no longer corrupt UTF-8 strings when
+  various JS functions are applied to them.
+
+* Multiple test case improvements, including more ports of JS tests to Elixir.
 
 .. _release/3.0.0:
 
@@ -357,7 +417,7 @@ Bugfixes
   to match other case clauses.
 
 * :ghissue:`1897`: The ``/{db}/_bulk_docs`` endpoint now correctly catches invalid
-  (*i.e.*, non-hexadecimal) ``_rev_`` values and responds with a 400 error.
+  (*i.e.*, non-hexadecimal) ``_rev_`` values and responds with a :code 400: error.
 
 * :ghissue:`2321`: CouchDB no longer requires Basic auth credentials to reach the
   ``/_session`` endpoint for login, even when ``require_valid_user`` is enabled.
@@ -373,8 +433,8 @@ Bugfixes
 * :ghissue:`2153`: CouchDB no longer may return a ``badmatch`` error when querying
   ``all_docs`` with a passed ``keys`` array.
 
-* :ghissue:`2137`: If search is not available, return a ``400`` instead of ``500``
-  status code.
+* :ghissue:`2137`: If search is not available, return a :code 400: instead of a
+  :code 500: status code.
 
 * :ghissue:`2077`: Any failed ``fsync(2)`` calls are now correctly raised to avoid
   data corruption arising from retry attempts.
@@ -478,7 +538,7 @@ The 3.0.0 release also includes the following minor improvements:
 * :ghissue:`2337`: The md5 shim (introduced to support FIPS-compliance) is now
   used consistently throughout the code base.
 
-* :ghissue:`2270`: Negative and non-integer ``heartbeat`` values now return 400
+* :ghissue:`2270`: Negative and non-integer ``heartbeat`` values now return :code 400:
   Bad Request.
 
 * :ghissue:`2268`: When rescheduling jobs, CouchDB now stops sufficient running jobs

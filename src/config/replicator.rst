@@ -66,6 +66,17 @@ Replicator Database Configuration
              [replicator]
              max_churn = 20
 
+    .. config:option:: max_history
+
+        Maximum number of events recorded for each job. This parameter defines
+        an upper bound on the consecutive failure count for a job, and in turn
+        the maximum backoff factor used when determining the delay before the job
+        is restarted. The longer the length of the crash count, the longer the
+        possible length of the delay::
+
+             [replicator]
+             max_history = 20
+
     .. config:option:: update_docs
 
         .. versionadded:: 2.1

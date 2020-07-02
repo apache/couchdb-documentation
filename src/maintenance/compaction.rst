@@ -235,11 +235,11 @@ configuration setting in the `[smoosh]` block. The default configuration is
 
     [smoosh.ratio_dbs]
     priority = ratio
-    min_priority = 5.0
+    min_priority = 2.0
 
     [smoosh.ratio_views]
     priority = ratio
-    min_priority = 5.0
+    min_priority = 2.0
 
     [smoosh.slack_dbs]
     priority = slack

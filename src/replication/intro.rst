@@ -32,7 +32,7 @@ Transient and Persistent Replication
 There are two different ways to set up a replication. The first one that was
 introduced into CouchDB leads to a replication that could be called `transient`.
 Transient means that there are no documents backing up the replication. So after a
-restart of the CouchDB server the replication will disapear. Later, the
+restart of the CouchDB server the replication will disappear. Later, the
 :ref:`_replicator <replicator>` database was introduced, which keeps documents
 containing your replication parameters. Such a replication can be called `persistent`.
 Transient replications were kept for backward compatibility. Both replications can
