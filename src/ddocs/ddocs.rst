@@ -42,7 +42,7 @@ Design documents are denoted by an id field with the format ``_design/{name}``.
 .. code-block:: json
 
     {
-        "id": "_design/example",
+        "_id": "_design/example",
     }
 
 .. _viewfun:
