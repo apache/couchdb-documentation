@@ -190,20 +190,43 @@ present from previous releases.
 Runtime Errors
 ==============
 
+Erlang stack trace contains ``system_limit``, ``open_port``, or ``emfile``
+--------------------------------------------------------------------------
+Modern Erlang has a default limit of 65536 ports (8196 on Windows), where each
+open file handle, tcp connection, and linked-in driver uses one port. OSes have
+different soft and hard limits on the number of open handles per process, often
+as low as 1024 or 4096 files. You've probably exceeded this.
+
+There are two settings that need changing to increase this value. Consult your
+OS documentation for how to increase the limit for your process. Under Linux
+and systemd, this setting can be adjusted via ``systemctl edit couchdb`` and
+adding the lines:
+
+.. code-block:: ini
+
+    [Service]
+    LimitNOFILE=65536
+
+to the file in the editor.
+
+To increase this value higher than 65536, you must also add the Erlang ``+Q``
+parameter to your ``etc/vm.args`` file by adding the line:
+
+.. code-block:: text
+
+    +Q 102400
+
+The old ``ERL_MAX_PORTS`` environment variable is ignored by the version of
+Erlang supplied with CouchDB.
+
 Lots of memory being used on startup
 ------------------------------------
 Is your CouchDB using a lot of memory (several hundred MB) on startup? This one
 seems to especially affect Dreamhost installs. It's really an issue with the
 Erlang VM pre-allocating data structures when ulimit is very large or
 unlimited. A detailed discussion can be found on the erlang-questions list,
-but the short answer is that you should decrease ``ulimit -n`` or define
-``ERL_MAX_PORTS`` to something reasonable like 1024.
-
-erlang stack trace contains ``system_limit``, ``open_port``
------------------------------------------------------------
-Erlang has a default limit of 1024 ports, where each FD, tcp connection, and
-linked-in driver uses one port. You seem to have exceeded this. You can
-change it at runtime using the ``ERL_MAX_PORTS`` env variable.
+but the short answer is that you should decrease ``ulimit -n`` or lower the
+``vm.args`` parameter ``+Q`` to something reasonable like 1024.
 
 function raised exception (Cannot encode 'undefined' value as JSON)
 -------------------------------------------------------------------
