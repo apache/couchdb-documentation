@@ -270,6 +270,8 @@ settings control this behavior. For example
     to = 06:00
     strict_window = true
 
+where `overnight_channel` is the name of the channel you want to configure.
+
 The `strict_window` setting will cause the compaction daemon to suspend all
 active compactions in this channel when exiting the window, and resume them when
 re-entering. If `strict_window` is left at its default of false, the active
