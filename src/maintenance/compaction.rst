@@ -272,6 +272,8 @@ settings control this behavior. For example
 
 where `overnight_channel` is the name of the channel you want to configure.
 
+Note: CouchDB determines time via the UTC (GMT) timezone, so these settings must be expressed as UTC (GMT).
+
 The `strict_window` setting will cause the compaction daemon to suspend all
 active compactions in this channel when exiting the window, and resume them when
 re-entering. If `strict_window` is left at its default of false, the active
