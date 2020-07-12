@@ -338,7 +338,7 @@ Next, click on “edit query” and change the Mango Query to look like this:
 Then click on ”Run Query”.
 
 The result should be a single result, the movie “My Neighbour Toto” which
-has the year value of 1988. `$eq` here stands for “equal”.
+has the year value of 1988. ``$eq`` here stands for “equal”.
 
 You can also query for all movies during the 1980s, with this selector:
 
