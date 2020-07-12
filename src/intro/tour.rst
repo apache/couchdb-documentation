@@ -352,7 +352,7 @@ You can also query for all movies during the 1980s, with this selector:
      }
   }
 
-The result are the two movies from 1988 and 1998. `$lt` here means “lower than”.
+The result are the two movies from 1988 and 1998. ``$lt`` here means “lower than”.
 
 Triggering Replication
 ======================
