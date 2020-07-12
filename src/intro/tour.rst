@@ -320,7 +320,7 @@ left to look like this:
        "type": "json"
     }
 
-This defines an index on the field `year` and allows us to send queries for
+This defines an index on the field ``year`` and allows us to send queries for
 documents from a specific year.
 
 Next, click on “edit query” and change the Mango Query to look like this:
