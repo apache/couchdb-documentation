@@ -267,7 +267,7 @@ thousands or millions of rows.
 
 Before we can run an example query, we'll need some data to run it on. We'll
 create documents with information about movies. Let's create documents for
-three movies. (Allow CouchDB to generate the _id and _rev fields.) Use Fauxton
+three movies. (Allow CouchDB to generate the ``_id`` and ``_rev`` fields.) Use Fauxton
 to create documents that have a final JSON structure that look like this:
 
 .. code-block:: javascript
