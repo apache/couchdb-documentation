@@ -328,7 +328,7 @@ following behavior:
         Server: CouchDB (Erlang/OTP)
 
         {
-            "missed_revs":{
+            "missing_revs":{
                 "c6114c65e295552ab1019e2b046b10e": [
                     "3-b06fcd1c1c9e0ec7c480ee8aa467bf3b"
                 ]
