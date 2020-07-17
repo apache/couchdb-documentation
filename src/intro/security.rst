@@ -285,18 +285,20 @@ several *mandatory* fields, that CouchDB needs for authentication:
 
 - **_id** (*string*): Document ID. Contains user's login with special prefix
   :ref:`org.couchdb.user`
-- **derived_key** (*string*): `PBKDF2`_ key
+- **derived_key** (*string*): `PBKDF2`_ key derived from salt/iterations. 
 - **name** (*string*): User's name aka login. **Immutable** e.g. you cannot
   rename an existing user - you have to create new one
 - **roles** (*array* of *string*): List of user roles. CouchDB doesn't provide
   any built-in roles, so you're free to define your own depending on your needs.
   However, you cannot set system roles like ``_admin`` there. Also, only
   administrators may assign roles to users - by default all users have no roles
+- **password** (*string*): A plaintext password can be provided, but will be replaced by hashed fields before the document is actually stored.
 - **password_sha** (*string*): Hashed password with salt. Used for ``simple``
   `password_scheme`
 - **password_scheme** (*string*): Password hashing scheme. May be ``simple`` or
   ``pbkdf2``
-- **salt** (*string*): Hash salt. Used for ``simple`` `password_scheme`
+- **salt** (*string*): Hash salt. Used for both ``simple`` and ``pbkdf2`` `password_scheme` options.
+- **iterations** (*integer*): Number of iterations to derive key, used for ``pbkdf2`` `password_scheme`
 - **type** (*string*): Document type. Constantly has the value ``user``
 
 Additionally, you may specify any custom fields that relate to the target
