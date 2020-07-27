@@ -340,6 +340,13 @@ Then click on ”Run Query”.
 The result should be a single result, the movie “My Neighbour Totoro” which
 has the year value of 1988. ``$eq`` here stands for “equal”.
 
+Note that if you skip adding the index, the query will still return the
+correct results, although you will see a warning about not using a pre-existing
+index. Not using an index will work fine on small databases and is acceptable
+for testing out queries in development or training, but we very strongly
+discourage doing this in any other case, since an index is absolutely vital to
+good query performance.
+
 You can also query for all movies during the 1980s, with this selector:
 
 .. code-block:: javascript
