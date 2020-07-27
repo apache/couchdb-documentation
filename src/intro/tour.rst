@@ -210,7 +210,7 @@ Your First Database and Document
 ================================
 
 Creating a database in Fauxton is simple. From the overview page,
-click "Create Database." When asked for a name, enter hello-world and click
+click "Create Database." When asked for a name, enter ``hello-world`` and click
 the Create button.
 
 After your database has been created, Fauxton will display a list of all its
@@ -337,7 +337,7 @@ Next, click on “edit query” and change the Mango Query to look like this:
 
 Then click on ”Run Query”.
 
-The result should be a single result, the movie “My Neighbour Toto” which
+The result should be a single result, the movie “My Neighbour Totoro” which
 has the year value of 1988. ``$eq`` here stands for “equal”.
 
 You can also query for all movies during the 1980s, with this selector:
@@ -347,12 +347,13 @@ You can also query for all movies during the 1980s, with this selector:
   {
      "selector": {
         "year": {
-           "$lt": 1990
+           "$lt": 1990,
+           "$gte": 1980
         }
      }
   }
 
-The result are the two movies from 1988 and 1998. ``$lt`` here means “lower than”.
+The result are the two movies from 1988 and 1989. ``$lt`` here means “lower than”, and ``$gte`` means “greater than or equal to”. The latter currently doesn’t have any effect, given that all of our movies are more recent than 1980, but this makes the query future-proof and allows us to add older movies later.
 
 Triggering Replication
 ======================
@@ -366,12 +367,12 @@ through the examples.
 First we'll need to create an empty database to be the target of replication.
 Return to the Databases overview and create a database called
 ``hello-replication``. Now click "Replication" in the sidebar and choose
-hello-world as the source and hello-replication as the target. Click
+``hello-world`` as the source and ``hello-replication`` as the target. Click
 "Replicate" to replicate your database.
 
 To view the result of your replication, click on the Databases tab again.
-You should see the hello-replication database has the same number of documents
-as the hello-world database, and it should take up roughly the same size as
+You should see the ``hello-replication`` database has the same number of documents
+as the ``hello-world`` database, and it should take up roughly the same size as
 well.
 
 .. note::
