@@ -340,12 +340,13 @@ Then click on ”Run Query”.
 The result should be a single result, the movie “My Neighbour Totoro” which
 has the year value of 1988. ``$eq`` here stands for “equal”.
 
-Note that if you skip adding the index, the query will still return the
-correct results, although you will see a warning about not using a pre-existing
-index. Not using an index will work fine on small databases and is acceptable
-for testing out queries in development or training, but we very strongly
-discourage doing this in any other case, since an index is absolutely vital to
-good query performance.
+.. note::
+    Note that if you skip adding the index, the query will still return the
+    correct results, although you will see a warning about not using a
+    pre-existing index. Not using an index will work fine on small databases
+    and is acceptable for testing out queries in development or training, but
+    we very strongly discourage doing this in any other case, since an index is
+    absolutely vital to good query performance.
 
 You can also query for all movies during the 1980s, with this selector:
 
@@ -360,7 +361,11 @@ You can also query for all movies during the 1980s, with this selector:
      }
   }
 
-The result are the two movies from 1988 and 1989. ``$lt`` here means “lower than”, and ``$gte`` means “greater than or equal to”. The latter currently doesn’t have any effect, given that all of our movies are more recent than 1980, but this makes the query future-proof and allows us to add older movies later.
+The result are the two movies from 1988 and 1989. ``$lt`` here means “lower
+than”, and ``$gte`` means “greater than or equal to”. The latter currently
+doesn’t have any effect, given that all of our movies are more recent than
+1980, but this makes the query future-proof and allows us to add older
+movies later.
 
 Triggering Replication
 ======================
