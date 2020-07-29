@@ -632,7 +632,7 @@ Changing the previous example to:
 Raw collation
 -------------
 
-By default CouchDB using `ICU`_ driver for sorting view results. It's possible
+By default CouchDB uses an `ICU`_ driver for sorting view results. It's possible
 use binary collation instead for faster view builds where Unicode collation is
 not important.
 
