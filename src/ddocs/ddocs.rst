@@ -32,6 +32,19 @@ them extensively within each function:
 - :ref:`Database Security object <security_object>`
 - :ref:`Guide to JavaScript Query Server <query-server/js>`
 
+Creation
+========
+
+Design documents are denoted by an id field with the format ``_design/{name}``.
+
+**Example**:
+
+.. code-block:: json
+
+    {
+        "_id": "_design/example",
+    }
+
 .. _viewfun:
 
 View Functions
@@ -84,7 +97,7 @@ Reduce and Rereduce Functions
 
 .. function:: redfun(keys, values[, rereduce])
 
-    :param keys: Array of pairs of docid-key for related map function results.
+    :param keys: Array of pairs of key-docid for related map function results.
                  Always ``null`` if rereduce is running (has ``true`` value).
     :param values: Array of map function result values.
     :param rereduce: Boolean flag to indicate a rereduce run.
@@ -315,6 +328,10 @@ objects.
 Show Functions
 ==============
 
+.. warning::
+
+    Show functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 .. function:: showfun(doc, req)
 
     :param doc: The document that is being processed; may be omitted.
@@ -436,6 +453,10 @@ correctly, and keys with invalid characters, but you've got the idea!
 
 List Functions
 ==============
+
+.. warning::
+
+    List functions are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. function:: listfun(head, req)
 

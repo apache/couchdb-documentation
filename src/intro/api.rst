@@ -55,11 +55,20 @@ CouchDB replies, all excited to get going:
 .. code-block:: javascript
 
     {
-        "couchdb": "Welcome",
-        "version": "2.0.0",
-        "vendor": {
-            "name": "The Apache Software Foundation"
-        }
+      "couchdb": "Welcome",
+      "version": "3.0.0",
+      "git_sha": "83bdcf693",
+      "uuid": "56f16e7c93ff4a2dc20eb6acc7000b71",
+      "features": [
+        "access-ready",
+        "partitioned",
+        "pluggable-storage-engines",
+        "reshard",
+        "scheduler"
+      ],
+      "vendor": {
+        "name": "The Apache Software Foundation"
+      }
     }
 
 You get back a JSON string, that, if parsed into a native object or data
@@ -89,7 +98,7 @@ and we creatively give our database the name albums. Note that we're now
 using the ``-X`` option again to tell curl to send a :method:`PUT` request
 instead of the default :method:`GET` request::
 
-    curl -X PUT http://127.0.0.1:5984/albums
+    curl -X PUT http://admin:password@127.0.0.1:5984/albums
 
 CouchDB replies:
 
@@ -101,7 +110,7 @@ That's it. You created a database and CouchDB told you that all went well.
 What happens if you try to create a database that already exists? Let's try
 to create that database again::
 
-    curl -X PUT http://127.0.0.1:5984/albums
+    curl -X PUT http://admin:password@127.0.0.1:5984/albums
 
 CouchDB replies:
 
@@ -117,7 +126,7 @@ Let's create another database, this time with curl's ``-v`` (for "verbose")
 option. The verbose option tells curl to show us not only the essentials --
 the HTTP response body -- but all the underlying request and response details::
 
-    curl -vX PUT http://127.0.0.1:5984/albums-backup
+    curl -vX PUT http://admin:password@127.0.0.1:5984/albums-backup
 
 curl elaborates::
 
@@ -293,7 +302,7 @@ that are important for the particular request.
 Creating databases is all fine, but how do we get rid of one? Easy -- just
 change the HTTP method::
 
-    > curl -vX DELETE http://127.0.0.1:5984/albums-backup
+    > curl -vX DELETE http://admin:password@127.0.0.1:5984/albums-backup
 
 This deletes a CouchDB database. The request will remove the file that the
 database contents are stored in. There is no *"Are you sure?"* safety net or
@@ -328,7 +337,7 @@ later time or on a different computer; secondly, CouchDB replication lets you
 share documents with others and using UUIDs ensures that it all works.
 But more on that later; let's make some documents::
 
-    curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af -d '{"title":"There is Nothing Left to Lose","artist":"Foo Fighters"}'
+    curl -X PUT http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af -d '{"title":"There is Nothing Left to Lose","artist":"Foo Fighters"}'
 
 CouchDB replies:
 
@@ -366,7 +375,7 @@ values.
 To double-check that CouchDB isn't lying about having saved your document (it
 usually doesn't), try to retrieve it by sending a GET request::
 
-    curl -X GET http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
+    curl -X GET http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
 
 We hope you see a pattern here. Everything in CouchDB has an address, a URI,
 and you use the different HTTP methods to operate on these URIs.
@@ -404,7 +413,7 @@ are likely to overwrite data you didn't know existed. Or simplified: whoever
 saves a change to a document first, wins. Let's see what happens if we don't
 provide a ``_rev`` field (which is equivalent to providing a outdated value)::
 
-    curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
+    curl -X PUT http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
          -d '{"title":"There is Nothing Left to Lose","artist":"Foo Fighters","year":"1997"}'
 
 CouchDB replies:
@@ -416,7 +425,7 @@ CouchDB replies:
 If you see this, add the latest revision number of your document to the JSON
 structure::
 
-    curl -X PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
+    curl -X PUT http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af \
          -d '{"_rev":"1-2902191555","title":"There is Nothing Left to Lose","artist":"Foo Fighters","year":"1997"}'
 
 Now you see why it was handy that CouchDB returned that ``_rev`` when we made
@@ -481,7 +490,7 @@ We'll add some more of our favorite music albums. Get a fresh UUID from the
 ``/_uuids`` resource. If you don't remember how that works, you can look it up
 a few pages back. ::
 
-    curl -vX PUT http://127.0.0.1:5984/albums/70b50bfa0a4b3aed1f8aff9e92dc16a0 \
+    curl -vX PUT http://admin:password@127.0.0.1:5984/albums/70b50bfa0a4b3aed1f8aff9e92dc16a0 \
          -d '{"title":"Blackened Sky","artist":"Biffy Clyro","year":2002}'
 
 .. note::
@@ -527,7 +536,7 @@ the album artwork to the ``6e1295ed6c29495e54cc05947f18c8af`` document
 (*"There is Nothing Left to Lose"*), and let's also say the artwork is in a file
 `artwork.jpg` in the current directory::
 
-    curl -vX PUT http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg?rev=2-2739352689 \
+    curl -vX PUT http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg?rev=2-2739352689 \
          --data-binary @artwork.jpg -H "Content-Type:image/jpg"
 
 .. note::
@@ -546,7 +555,7 @@ http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af/artwork.jpg
 
 If you request the document again, you'll see a new member::
 
-    curl http://127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
+    curl http://admin:password@127.0.0.1:5984/albums/6e1295ed6c29495e54cc05947f18c8af
 
 CouchDB replies:
 
@@ -600,13 +609,17 @@ create a target database for you, and will return a replication failure if
 the target doesn't exist (likewise for the source, but that mistake isn't as
 easy to make)::
 
-    curl -X PUT http://127.0.0.1:5984/albums-replica
+    curl -X PUT http://admin:password@127.0.0.1:5984/albums-replica
 
 Now we can use the database `albums-replica` as a replication target::
 
-    curl -vX POST http://127.0.0.1:5984/_replicate \
-         -d '{"source":"albums","target":"albums-replica"}' \
+    curl -vX POST http://admin:password@127.0.0.1:5984/_replicate \
+         -d '{"source":"http://127.0.0.1:5984/albums","target":"http://127.0.0.1:5984/albums-replica"}' \
          -H "Content-Type: application/json"
+
+.. note::
+    As of CouchDB 2.0.0, fully qualified URLs are required for both the
+    replication `source` and `target` parameters.
 
 .. note::
     CouchDB supports the option ``"create_target":true`` placed in the JSON
@@ -663,8 +676,8 @@ and target members of our replication request are actually links (like in
 HTML) and so far we've seen links relative to the server we're working on
 (hence local). You can also specify a remote database as the target::
 
-    curl -vX POST http://127.0.0.1:5984/_replicate \
-         -d '{"source":"albums","target":"http://example.org:5984/albums-replica"}' \
+    curl -vX POST http://admin:password@127.0.0.1:5984/_replicate \
+         -d '{"source":"http://127.0.0.1:5984/albums","target":"http://example.org:5984/albums-replica"}' \
          -H "Content-Type:application/json"
 
 Using a *local source* and a *remote target* database is called *push
@@ -682,14 +695,14 @@ You can also use a *remote source* and a *local target* to do a *pull
 replication*. This is great for getting the latest changes from a server that
 is used by others::
 
-    curl -vX POST http://127.0.0.1:5984/_replicate \
-         -d '{"source":"http://example.org:5984/albums-replica","target":"albums"}' \
+    curl -vX POST http://admin:password@127.0.0.1:5984/_replicate \
+         -d '{"source":"http://example.org:5984/albums-replica","target":"http://127.0.0.1:5984/albums"}' \
          -H "Content-Type:application/json"
 
 Finally, you can run remote replication, which is mostly useful for management
 operations::
 
-    curl -vX POST http://127.0.0.1:5984/_replicate \
+    curl -vX POST http://admin:password@127.0.0.1:5984/_replicate \
          -d '{"source":"http://example.org:5984/albums","target":"http://example.org:5984/albums-replica"}' \
          -H"Content-Type: application/json"
 

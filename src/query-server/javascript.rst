@@ -266,7 +266,7 @@ The CommonJS module can be added to a design document, like so:
             }
         },
         "validate_doc_update": "function(newdoc, olddoc, userctx, secobj) {
-            user = require('views/lib/security').user(userctx, secobj);
+            user = require('views/lib/security').user_context(userctx, secobj);
             return user.is_admin();
         }"
         "_id": "_design/test"

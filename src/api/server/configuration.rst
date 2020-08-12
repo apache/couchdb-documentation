@@ -23,7 +23,7 @@ Accessing the local node's configuration
 ========================================
 
 The literal string ``_local`` serves as an alias for the local node name, so
-for all configuration URLs, ``{node-name}`` may be replaced ``_local``, to
+for all configuration URLs, ``{node-name}`` may be replaced with ``_local``, to
 interact with the local node's configuration.
 
 ``/_node/{node-name}/_config``
@@ -70,7 +70,6 @@ interact with the local node's configuration.
             "couchdb": {
                 "users_db_suffix": "_users",
                 "database_dir": "/var/lib/couchdb",
-                "delayed_commits": "true",
                 "max_attachment_chunk_size": "4294967296",
                 "max_dbs_open": "100",
                 "os_process_timeout": "5000",
@@ -81,7 +80,6 @@ interact with the local node's configuration.
             "chttpd": {
                 "backlog": "512",
                 "bind_address": "0.0.0.0",
-                "docroot": "./share/www",
                 "port": "5984",
                 "require_valid_user": "false",
                 "socket_options": "[{sndbuf, 262144}, {nodelay, true}]",
@@ -94,7 +92,6 @@ interact with the local node's configuration.
                 "max_connections": "2048",
                 "port": "5984",
                 "secure_rewrites": "true"
-            }
             },
             "log": {
                 "writer": "file",
@@ -110,8 +107,7 @@ interact with the local node's configuration.
                 "max_http_sessions": "10"
             },
             "stats": {
-                "rate": "1000",
-                "samples": "[0, 60, 300, 900]"
+                "interval": "10"
             },
             "uuids": {
                 "algorithm": "utc_random"
@@ -123,8 +119,8 @@ interact with the local node's configuration.
 
 .. _api/config/section:
 
-``_node/{node-name}/_config/section``
-=====================================
+``/_node/{node-name}/_config/{section}``
+========================================
 
 .. http:get:: /_node/{node-name}/_config/{section}
     :synopsis: Returns all the configuration values for the specified section
@@ -165,14 +161,13 @@ interact with the local node's configuration.
             "default_handler": "{couch_httpd_db, handle_request}",
             "enable_cors": "false",
             "port": "5984",
-            "secure_rewrites": "true",
-            "vhost_global_handlers": "_utils, _uuids, _session, _users"
+            "secure_rewrites": "true"
         }
 
 .. _api/config/section/key:
 
-``/_node/node/_config/section/key``
-===================================
+``/_node/{node-name}/_config/{section}/{key}``
+==============================================
 
 .. http:get:: /_node/{node-name}/_config/{section}/{key}
     :synopsis: Returns a specific section/configuration value
@@ -296,3 +291,37 @@ interact with the local node's configuration.
         Server: CouchDB (Erlang/OTP)
 
         "info"
+
+.. _api/config/reload:
+
+``/_node/{node-name}/_config/_reload``
+======================================
+
+.. versionadded:: 3.0
+
+.. http:post:: /_node/{node-name}/_config/_reload
+    :synopsis: Reload the configuration from disk
+
+    Reloads the configuration from disk. This has a side effect of
+    flushing any in-memory configuration changes that have not been
+    committed to disk.
+
+    **Request**:
+
+    .. code-block:: http
+
+        POST /_node/nonode@nohost/_config/_reload HTTP/1.1
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 12
+        Content-Type: application/json
+        Date: Tues, 21 Jan 2020 11:09:35
+        Server: CouchDB/3.0.0 (Erlang OTP)
+
+        {"ok":true}

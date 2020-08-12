@@ -21,7 +21,7 @@ Reverse proxying with HAProxy
 
 CouchDB recommends the use of `HAProxy`_ as a load balancer and reverse proxy.
 The team's experience with using it in production has shown it to be superior
-for configuration and montioring capabilities, as well as overall performance.
+for configuration and monitoring capabilities, as well as overall performance.
 
 CouchDB's sample haproxy configuration is present in the `code repository`_ and
 release tarball as ``rel/haproxy.cfg``. It is included below. This example
@@ -145,7 +145,11 @@ CouchDB in the ``/couchdb`` subdirectory:
     }
 
 This setup leans entirely on nginx performing authorization, and forwarding
-requests to CouchDB with no authentication (with CouchDB in Admin Party mode).
+requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
+which isn't sufficient in CouchDB 3.0 anymore as Admin Party has been removed.
+You'd need to at the very least hard-code user credentials into this version
+with headers.
+
 For a better solution, see :ref:`api/auth/proxy`.
 
 SSL with nginx
@@ -291,8 +295,12 @@ advisable. One solution is to define Caddy-process environment variables e.g.
 ``COUCH_PW=couchdb_password`` and using placeholders in the ``Caddyfile``
 instead, e.g. ``{$COUCH_PW}``.
 
-This setup leans entirely on Caddy performing authorization, and forwarding
-requests to CouchDB with no authentication (with CouchDB in Admin Party mode).
+This setup leans entirely on nginx performing authorization, and forwarding
+requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
+which isn't sufficient in CouchDB 3.0 anymore as Admin Party has been removed.
+You'd need to at the very least hard-code user credentials into this version
+with headers.
+
 For a better solution, see :ref:`api/auth/proxy`.
 
 SSL/TLS with Caddy

@@ -278,14 +278,9 @@
                 "active": 1162451555
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 1713103872
-              },
               "doc_del_count": 0,
               "doc_count": 52224,
-              "disk_size": 1178613587,
               "disk_format_version": 6,
-              "data_size": 1162451555,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -307,14 +302,9 @@
                 "active": 67475
               },
               "purge_seq": 0,
-              "other": {
-                "data_size": 2339
-              },
               "doc_del_count": 0,
               "doc_count": 11,
-              "disk_size": 3872387,
               "disk_format_version": 6,
-              "data_size": 67475,
               "compact_running": false,
               "cluster": {
                 "q": 8,
@@ -348,7 +338,7 @@
                      - :mimetype:`text/plain`
     :query array ensure_dbs_exist: List of system databases to ensure exist
         on the node/cluster. Defaults to
-        ``["_users","_replicator","_global_changes"]``.
+        ``["_users","_replicator"]``.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json string state: Current ``state`` of the node and/or cluster (see
@@ -447,7 +437,7 @@
         (add_node only)
     :<json array ensure_dbs_exist: List of system databases to ensure exist
         on the node/cluster. Defaults to
-        ``["_users","_replicator","_global_changes"]``.
+        ``["_users","_replicator"]``.
 
     *No example request/response included here. For a worked example, please
     see* :ref:`cluster/setup/api`.
@@ -463,7 +453,9 @@
 .. http:get:: /_db_updates
     :synopsis: Return the server changes of databases
 
-    Returns a list of all database events in the CouchDB instance.
+    Returns a list of all database events in the CouchDB instance. The
+    existence of the ``_global_changes`` database is required to use this
+    endpoint.
 
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
@@ -484,6 +476,7 @@
         keep the feed alive indefinitely. Default is ``60000``. May be ``true``
         to use default value.
     :query string since: Return only updates since the specified sequence ID.
+        If the sequence ID is specified but does not exist, all changes are returned.
         May be the string ``now`` to begin showing only new updates.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
@@ -606,18 +599,28 @@
       Required administrator's privileges on target server.
     :<json array doc_ids: Array of document IDs to be synchronized
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
-    :<json string proxy: Address of a proxy server through which replication
-      should occur (protocol can be "http" or "socks5")
-    :<json string/object source: Source database name or URL or an object
-      which contains the full URL of the source database with additional
-      parameters like headers. Eg: 'source_db_name' or
-      'http://example.com/source_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
-    :<json string/object target: Target database name or URL or an object
-      which contains the full URL of the target database with additional
-      parameters like headers. Eg: 'target_db_name' or
-      'http://example.com/target_db_name' or
-      {"url":"url in here", "headers": {"header1":"value1", ...}}
+    :<json string source_proxy: Address of a proxy server through which
+      replication from the source should occur (protocol can be "http" or
+      "socks5")
+    :<json string target_proxy: Address of a proxy server through which
+      replication to the target should occur (protocol can be "http" or
+      "socks5")
+    :<json string/object source: Fully qualified source database URL or an
+      object which contains the full URL of the source database with additional
+      parameters like headers. Eg: 'http://example.com/source_db_name' or
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
+    :<json string/object target: Fully qualified target database URL or an
+      object which contains the full URL of the target database with additional
+      parameters like headers. Eg: 'http://example.com/target_db_name' or
+      {"url":"url in here", "headers": {"header1":"value1", ...}} . For
+      backwards compatibility, CouchDB 3.x will auto-convert bare database
+      names by prepending the address and port CouchDB is listening on, to
+      form a complete URL. This behaviour is deprecated in 3.x and will be
+      removed in CouchDB 4.0.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :>json array history: Replication history (see below)
@@ -654,19 +657,23 @@
     :json string start_time:  Date/Time replication operation started in
       :rfc:`2822` format
 
+.. note::
+    As of CouchDB 2.0.0, fully qualified URLs are required for both the
+    replication `source` and `target` parameters.
+
     **Request**
 
     .. code-block:: http
 
         POST /_replicate HTTP/1.1
         Accept: application/json
-        Content-Length: 36
+        Content-Length: 80
         Content-Type: application/json
         Host: localhost:5984
 
         {
-            "source": "db_a",
-            "target": "db_b"
+            "source": "http://127.0.0.1:5984/db_a",
+            "target": "http://127.0.0.1:5984/db_b"
         }
 
     **Response**
@@ -985,6 +992,17 @@ error.
                         }
                     ],
                     "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
+                    "info": {
+                        "changes_pending": 0,
+                        "checkpointed_source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                        "doc_write_failures": 0,
+                        "docs_read": 113,
+                        "docs_written": 113,
+                        "missing_revisions_found": 113,
+                        "revisions_checked": 113,
+                        "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
+                        "through_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ"
+                    },
                     "node": "node1@127.0.0.1",
                     "pid": "<0.1850.0>",
                     "source": "http://myserver.com/foo",
@@ -1006,6 +1024,17 @@ error.
                         }
                     ],
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
+                    "info": {
+                        "changes_pending": null,
+                        "checkpointed_source_seq": 0,
+                        "doc_write_failures": 0,
+                        "docs_read": 12,
+                        "docs_written": 12,
+                        "missing_revisions_found": 12,
+                        "revisions_checked": 12,
+                        "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
+                        "through_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg"
+                    },
                     "node": "node2@127.0.0.1",
                     "pid": "<0.1757.0>",
                     "source": "http://myserver.com/foo",
@@ -1028,6 +1057,9 @@ error.
                     document-based replications. Previously needed to poll both
                     documents and ``_active_tasks`` to get a complete state
                     summary
+
+.. versionchanged:: 3.0.0 In error states the `"info"` field switched
+                    from being a string to being an object
 
 .. http:get:: /_scheduler/docs
     :synopsis: Retrieve information about replication documents from the
@@ -1057,10 +1089,11 @@ error.
     :>json string source: Replication source
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
-    :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json string last_updated: Timestamp of last state update
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1112,10 +1145,21 @@ error.
                     "doc_id": "cdyno-0000001-0000002",
                     "error_count": 0,
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": 15,
+                        "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                        "doc_write_failures": 0,
+                        "docs_read": 67,
+                        "docs_written": 67,
+                        "missing_revisions_found": 67,
+                        "revisions_checked": 67,
+                        "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                        "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1126,10 +1170,21 @@ error.
                     "doc_id": "cdyno-0000001-0000003",
                     "error_count": 0,
                     "id": "8f5b1bd0be6f9166ccfd36fc8be8fc22+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": null,
+                        "checkpointed_source_seq": 0,
+                        "doc_write_failures": 0,
+                        "docs_read": 12,
+                        "docs_written": 12,
+                        "missing_revisions_found": 12,
+                        "revisions_checked": 12,
+                        "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
+                        "through_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node1@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1172,9 +1227,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1226,10 +1282,21 @@ error.
                     "doc_id": "cdyno-0000001-0000002",
                     "error_count": 0,
                     "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-                    "info": null,
+                    "info": {
+                        "changes_pending": 0,
+                        "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                        "doc_write_failures": 0,
+                        "docs_read": 67,
+                        "docs_written": 67,
+                        "missing_revisions_found": 67,
+                        "revisions_checked": 67,
+                        "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                        "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+                    },
                     "last_updated": "2017-04-29T05:01:37Z",
                     "node": "node2@127.0.0.1",
-                    "proxy": null,
+                    "source_proxy": null,
+                    "target_proxy": null,
                     "source": "http://myserver.com/foo",
                     "start_time": "2017-04-29T05:01:37Z",
                     "state": "running",
@@ -1262,9 +1329,10 @@ error.
     :>json string target: Replication target
     :>json string start_time: Timestamp of when the replication was started
     :>json string last_update: Timestamp of last state update
-    :>json object info: May contain additional information about the state.
-                        For error states, this will be a string. For success
-                        states this will contain a JSON object (see below).
+    :>json object info: Will contain additional information about the
+                        state. For errors, this will be an object with
+                        an `"error"` field and string value. For
+                        success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
                                Replication will be retried with an exponential
@@ -1314,15 +1382,70 @@ error.
             "doc_id": "cdyno-0000001-0000002",
             "error_count": 0,
             "id": "e327d79214831ca4c11550b4a453c9ba+continuous",
-            "info": null,
+            "info": {
+                "changes_pending": 0,
+                "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
+                "doc_write_failures": 0,
+                "docs_read": 67,
+                "docs_written": 67,
+                "missing_revisions_found": 67,
+                "revisions_checked": 67,
+                "source_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8",
+                "through_seq": "67-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE2VygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSepgk4yMkhITjS0wdWUBAEVKJE8"
+            },
             "last_updated": "2017-04-29T05:01:37Z",
             "node": "node2@127.0.0.1",
-            "proxy": null,
+            "source_proxy": null,
+            "target_proxy": null,
             "source": "http://myserver.com/foo",
             "start_time": "2017-04-29T05:01:37Z",
             "state": "running",
             "target": "http://adm:*****@localhost:15984/cdyno-0000002/"
         }
+
+.. _api/server/name:
+
+======================
+``/_node/{node-name}``
+======================
+
+.. http:get:: /_node/{node-name}
+    :synopsis: Returns node name
+
+    The ``/_node/{node-name}`` endpoint can be used to confirm the Erlang
+    node name of the server that processes the request. This is most useful
+    when accessing ``/_node/_local`` to retrieve this information. Repeatedly
+    retrieving this information for a CouchDB endpoint can be useful to determine
+    if a CouchDB cluster is correctly proxied through a reverse load balancer.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+      HTTP/1.1 200 OK
+      Cache-Control: must-revalidate
+      Content-Length: 27
+      Content-Type: application/json
+      Date: Tue, 28 Jan 2020 19:25:51 GMT
+      Server: CouchDB (Erlang OTP)
+      X-Couch-Request-ID: 5b8db6c677
+      X-CouchDB-Body-Time: 0
+
+      {"name":"node1@127.0.0.1"}
 
 .. _api/server/stats:
 
@@ -1339,8 +1462,14 @@ error.
     statistic being easily identified, and the content of each statistic is
     self-describing.
 
+    Statistics are sampled internally on a :ref:`configurable interval
+    <config/stats>`. When monitoring the ``_stats`` endpoint, you need to use
+    a polling frequency of at least twice this to observe accurate results.
+    For example, if the :ref:`interval <config/stats>` is 10 seconds,
+    poll ``_stats`` at least every 5 seconds.
+
     The literal string ``_local`` serves as an alias for the local node name, so
-    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
@@ -1438,7 +1567,8 @@ The type of the statistic is included in the ``type`` field, and is one of
 the following:
 
 - ``counter``: Monotonically increasing counter, resets on restart
-- ``histogram``: Binned set of values with meaningful subdivisions
+- ``histogram``: Binned set of values with meaningful subdivisions.
+  Scoped to the current :ref:`collection interval <config/stats>`.
 - ``gauge``: Single numerical value that can go up and down
 
 You can also access individual statistics by quoting the statistics sections
@@ -1467,7 +1597,7 @@ containing only the requested individual statistic.
     each statistic is self-describing.
 
     The literal string ``_local`` serves as an alias for the local node name, so
-    for all stats URLs, ``{node-name}`` may be replaced ``_local``, to
+    for all stats URLs, ``{node-name}`` may be replaced with ``_local``, to
     interact with the local node's statistics.
 
     :<header Accept: - :mimetype:`application/json`
@@ -1516,6 +1646,49 @@ containing only the requested individual statistic.
     it is not meant to be used in production
 
     :code 200: Request completed successfully
+
+.. _api/server/search_analyze:
+
+==========================================
+``/_search_analyze``
+==========================================
+
+.. warning::
+    Search endpoints require a running search plugin connected to each cluster
+    node. See :ref:`Search Plugin Installation <install/search>` for details.
+
+.. versionadded:: 3.0
+
+.. http:post:: /_search_analyze
+    :synopsis: Tests the results of analyzer tokenization
+
+    Tests the results of Lucene analyzer tokenization on sample text.
+
+    :param field: Type of analyzer
+    :param text:  Analyzer token you want to test
+    :code 200: Request completed successfully
+    :code 400: Request body is wrong (malformed or missing one of the mandatory fields)
+    :code 500: A server error (or other kind of error) occurred
+
+**Request**:
+
+.. code-block:: http
+
+    POST /_search_analyze HTTP/1.1
+    Host: localhost:5984
+    Content-Type: application/json
+
+    {"analyzer":"english", "text":"running"}
+
+**Response**:
+
+.. code-block:: javascript
+
+    {
+        "tokens": [
+            "run"
+        ]
+    }
 
 .. _api/server/utils:
 
@@ -1957,7 +2130,7 @@ You can verify the change by obtaining a list of UUIDs:
             ]
         }
 
-.. http:post:: /_reshard/jobs/{jobid}
+.. http:post:: /_reshard/jobs
     :synopsis: Create one or more resharding jobs
 
     Depending on what fields are specified in the request, one or more

@@ -80,6 +80,7 @@
     :code 200: Request completed successfully
     :code 400: Invalid request
     :code 401: Read permission required
+    :code 404: Requested database not found
     :code 500: Query execution error
 
 The ``limit`` and ``skip`` values are exactly as you would expect. While
@@ -418,37 +419,41 @@ Combination Operators
 Combination operators are used to combine selectors. In addition to the common
 boolean operators found in most programming languages, there are three
 combination operators (``$all``, ``$elemMatch``, and ``$allMatch``) that help
-you work with JSON arrays.
+you work with JSON arrays and one that works with JSON maps (``$keyMapMatch``).
 
 A combination operator takes a single argument. The argument is either another
 selector, or an array of selectors.
 
 The list of combination operators:
 
-+----------------+----------+--------------------------------------------------+
-| Operator       | Argument | Purpose                                          |
-+================+==========+==================================================+
-| ``$and``       | Array    | Matches if all the selectors in the array match. |
-+----------------+----------+--------------------------------------------------+
-| ``$or``        | Array    | Matches if any of the selectors in the array     |
-|                |          | match. All selectors must use the same index.    |
-+----------------+----------+--------------------------------------------------+
-| ``$not``       | Selector | Matches if the given selector does not match.    |
-+----------------+----------+--------------------------------------------------+
-| ``$nor``       | Array    | Matches if none of the selectors in the array    |
-|                |          | match.                                           |
-+----------------+----------+--------------------------------------------------+
-| ``$all``       | Array    | Matches an array value if it contains all the    |
-|                |          | elements of the argument array.                  |
-+----------------+----------+--------------------------------------------------+
-| ``$elemMatch`` | Selector | Matches and returns all documents that contain an|
-|                |          | array field with at least one element that       |
-|                |          | matches all the specified query criteria.        |
-+----------------+----------+--------------------------------------------------+
-| ``$allMatch``  | Selector | Matches and returns all documents that contain an|
-|                |          | array field with all its elements matching all   |
-|                |          | the specified query criteria.                    |
-+----------------+----------+--------------------------------------------------+
++------------------+----------+--------------------------------------------------+
+| Operator         | Argument | Purpose                                          |
++==================+==========+==================================================+
+| ``$and``         | Array    | Matches if all the selectors in the array match. |
++------------------+----------+--------------------------------------------------+
+| ``$or``          | Array    | Matches if any of the selectors in the array     |
+|                  |          | match. All selectors must use the same index.    |
++------------------+----------+--------------------------------------------------+
+| ``$not``         | Selector | Matches if the given selector does not match.    |
++------------------+----------+--------------------------------------------------+
+| ``$nor``         | Array    | Matches if none of the selectors in the array    |
+|                  |          | match.                                           |
++------------------+----------+--------------------------------------------------+
+| ``$all``         | Array    | Matches an array value if it contains all the    |
+|                  |          | elements of the argument array.                  |
++------------------+----------+--------------------------------------------------+
+| ``$elemMatch``   | Selector | Matches and returns all documents that contain an|
+|                  |          | array field with at least one element that       |
+|                  |          | matches all the specified query criteria.        |
++------------------+----------+--------------------------------------------------+
+| ``$allMatch``    | Selector | Matches and returns all documents that contain an|
+|                  |          | array field with all its elements matching all   |
+|                  |          | the specified query criteria.                    |
++------------------+----------+--------------------------------------------------+
+| ``$keyMapMatch`` | Selector | Matches and returns all documents that contain a |
+|                  |          | map that contains at least one key that matches  |
+|                  |          | all the specified query criteria.                |
++------------------+----------+--------------------------------------------------+
 
 .. _find/and:
 
@@ -613,6 +618,25 @@ is an example used with the primary index (``_all_docs``):
         }
     }
 
+.. _find/keymapmatch:
+
+**The** ``$keyMapMatch`` **operator**
+
+The ``$keyMapMatch`` operator matches and returns all documents that contain a
+map that contains at least one key that matches all the specified query criteria.
+Below is an example used with the primary index (``_all_docs``):
+
+.. code-block:: javascript
+
+    {
+        "_id": { "$gt": null },
+        "cameras": {
+            "$keyMapMatch": {
+                "$eq": "secondary"
+            }
+        }
+    }
+
 .. _find/condition-operators:
 
 Condition Operators
@@ -755,7 +779,9 @@ the database performs a full scan of the primary index:
     in production.
 
 Most selector expressions work exactly as you would expect for the given
-operator.
+operator. But it is not always the case: for example, comparison of strings is
+done with ICU and can can give surprising results if you were expecting ASCII
+ordering. See :ref:`views/collation` for more details.
 
 .. _find/sort:
 
@@ -940,6 +966,13 @@ built using MapReduce Views.
     :query json partial_filter_selector: A :ref:`selector <find/selectors>`
         to apply to documents at indexing time, creating a
         :ref:`partial index <find/partial_indexes>`. *Optional*
+    :query boolean partitioned: Determines whether a JSON index is partitioned
+        or global. The default value of ``partitioned`` is the ``partitioned``
+        property of the database. To create a global index on a
+        partitioned database, specify
+        ``false`` for the ``"partitioned"`` field. If you specify ``true``
+        for the  ``"partitioned"`` field on an unpartitioned database, an
+        error occurs.
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
