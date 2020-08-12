@@ -103,7 +103,7 @@ What is a partition?
 In the previous section, we introduced a hypothetical database that contains
 sensor readings from an IoT field monitoring service. In this particular
 use case, it's quite logical to group all documents by their ``sensor_id``
-field. In this case, we would call the ``sensor_id`` the partition.
+field. In this case, we would call the ``sensor_id`` the partition key.
 
 A good partition has two basic properties. First, it should have a high
 cardinality. That is, a large partitioned database should have many more

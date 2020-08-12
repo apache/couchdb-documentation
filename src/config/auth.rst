@@ -134,8 +134,9 @@ Authentication Configuration
 
     .. config:option:: allow_persistent_cookies :: Persistent cookies
 
-        When set to ``true``, CouchDB will refresh the session cookie whenever
-        the session is nearing expiration. ::
+        When set to ``true``, CouchDB will set the Max-Age and Expires attributes
+        on the cookie, which causes user agents (like browsers) to preserve the cookie
+        over restarts. ::
 
             [couch_httpd_auth]
             allow_persistent_cookies = true

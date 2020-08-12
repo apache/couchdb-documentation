@@ -476,6 +476,7 @@
         keep the feed alive indefinitely. Default is ``60000``. May be ``true``
         to use default value.
     :query string since: Return only updates since the specified sequence ID.
+        If the sequence ID is specified but does not exist, all changes are returned.
         May be the string ``now`` to begin showing only new updates.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`

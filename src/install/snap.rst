@@ -31,6 +31,12 @@ After `installing snapd`_, the CouchDB snap can be installed via::
 CouchDB will be installed at ``/snap/couchdb``. Data will be stored at
 ``/var/snap/couchdb/``.
 
+Please note that all other file system paths are **relative to the snap
+`chroot`** instead of the system root. In addition, the exact path
+depends on your system. For example, when you normally want to
+reference `/opt/couchdb/etc/local.ini`, under snap, this could live at
+`/snap/couchdb/5/opt/couchdb/etc/local.ini`.
+
 **Your installation is not complete. Be sure to complete the**
 :ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
