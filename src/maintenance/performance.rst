@@ -90,51 +90,66 @@ Erlang
 ------
 
 Even if you've increased the maximum connections CouchDB will allow,
-the Erlang runtime system will not allow more than 1024 connections by
-default. Adding the following directive to ``(prefix)/etc/default/couchdb`` (or
-equivalent) will increase this limit (in this case to 4096)::
+the Erlang runtime system will not allow more than 65536 connections by
+default. Adding the following directive to ``(prefix)/etc/vm.args`` (or
+equivalent) will increase this limit (in this case to 102400)::
 
-    export ERL_MAX_PORTS=4096
+    +Q 102400
 
-CouchDB versions up to 1.1.x also create Erlang Term Storage (`ETS`_) tables for
-each replication. If you are using a version of CouchDB older than 1.2 and
-must support many replications, also set the ``ERL_MAX_ETS_TABLES`` variable.
-The default is approximately 1400 tables.
+Note that on Windows, Erlang will not actually increase the file descriptor
+limit past 8192 (i.e. the system header–defined value of ``FD_SETSIZE``). On
+macOS, the limit may be as low as 1024. See `this tip for a possible
+workaround`_ and `this thread for a deeper explanation`_.
 
-Note that on Mac OS X, Erlang will not actually increase the file descriptor
-limit past 1024 (i.e. the system header–defined value of ``FD_SETSIZE``). See
-`this tip for a possible workaround`_ and `this thread for a deeper
-explanation`_.
-
-.. _ETS: http://www.erlang.org/doc/man/ets.html
 .. _this tip for a possible workaround: http://erlang.org/pipermail/erlang-questions/2011-December/063119.html
 .. _this thread for a deeper explanation: http://erlang.org/pipermail/erlang-questions/2011-October/061971.html
 
 Maximum open file descriptors (ulimit)
 --------------------------------------
 
-Most \*nix operating systems impose various resource limits on every process.
+In general, modern UNIX-like systems can handle very large numbers of file
+handles per process (e.g. 100000) without problem. Don't be afraid to increase
+this limit on your system.
+
 The method of increasing these limits varies, depending on your init system and
 particular OS release. The default value for many OSes is 1024 or 4096. On a
 system with many databases or many views, CouchDB can very rapidly hit this
 limit.
 
-If your system is set up to use the Pluggable Authentication Modules (`PAM`_)
-system (as is the case with nearly all modern Linuxes), increasing this limit
+For systemd-based Linuxes (such as CentOS/RHEL 7, Ubuntu 16.04+, Debian 8
+or newer), assuming you are launching CouchDB from systemd, you must
+override the upper limit via editing the override file. The best practice
+for this is via the ``systemctl edit couchdb`` command. Add these lines to
+the file in the editor::
+
+    [Service]
+    LimitNOFILE=65536
+
+...or whatever value you like. To increase this value higher than 65536, you
+must also add the Erlang ``+Q`` parameter to your ``etc/vm.args`` file by
+adding the line::
+
+    +Q 102400
+
+The old ``ERL_MAX_PORTS`` environment variable is ignored by the version of
+Erlang supplied with CouchDB.
+
+If your system is set up to use the Pluggable Authentication Modules (`PAM`_),
+and you are **not** launching CouchDB from systemd, increasing this limit
 is straightforward. For example, creating a file named
 ``/etc/security/limits.d/100-couchdb.conf`` with the following contents will
-ensure that CouchDB can open up to 10000 file descriptors at once::
+ensure that CouchDB can open up to 65536 file descriptors at once::
 
     #<domain>    <type>    <item>    <value>
-    couchdb      hard      nofile    10000
-    couchdb      soft      nofile    10000
+    couchdb      hard      nofile    65536
+    couchdb      soft      nofile    65536
 
 If you are using our Debian/Ubuntu sysvinit script (``/etc/init.d/couchdb``),
 you also need to raise the limits for the root user::
 
     #<domain>    <type>    <item>    <value>
-    root         hard      nofile    10000
-    root         soft      nofile    10000
+    root         hard      nofile    65536
+    root         soft      nofile    65536
 
 You may also have to edit the ``/etc/pam.d/common-session`` and
 ``/etc/pam.d/common-session-noninteractive`` files to add the line::
@@ -143,25 +158,9 @@ You may also have to edit the ``/etc/pam.d/common-session`` and
 
 if it is not already present.
 
-For systemd-based Linuxes (such as CentOS/RHEL 7, Ubuntu 16.04+, Debian 8
-or newer), assuming you are launching CouchDB from systemd, you must also
-override the upper limit by creating the file
-``/etc/systemd/system/<servicename>.d/override.conf`` with the following
-content::
-
-    [Service]
-    LimitNOFILE=#######
-
-and replacing the ``#######`` with the upper limit of file descriptors CouchDB
-is allowed to hold open at once.
-
 If your system does not use PAM, a `ulimit` command is usually available for
 use in a custom script to launch CouchDB with increased resource limits.
-Typical syntax would be something like `ulimit -n 10000`.
-
-In general, modern UNIX-like systems can handle very large numbers of file
-handles per process (e.g. 100000) without problem. Don't be afraid to increase
-this limit on your system.
+Typical syntax would be something like `ulimit -n 65536`.
 
 .. _PAM: http://www.linux-pam.org/
 
