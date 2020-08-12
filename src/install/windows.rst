@@ -82,11 +82,11 @@ The same as above, but also install and launch CouchDB as a service:
 
     msiexec /i apache-couchdb-3.0.0.msi /quiet INSTALLSERVICE=1 ADMINUSER=admin ADMINPASSWORD=hunter2 /norestart
 
-Unattended uninstall of CouchDB:
+Unattended uninstall of CouchDB to target directory `D:\CouchDB`:
 
 .. code-block:: batch
 
-    msiexec /x apache-couchdb-3.0.0.msi /quiet /norestart
+    msiexec /x apache-couchdb-3.0.0.msi INSTALLSERVICE=1 APPLICATIONFOLDER="D:\CouchDB" ADMINUSER=admin ADMINPASSWORD=hunter2 /quiet /norestart
 
 Unattended uninstall if the installer file is unavailable:
 
