@@ -153,6 +153,8 @@ The following features are deprecated in CouchDB 3.0 and will be removed in Couc
 
 * List functions (``/{db}/{ddoc}/_list``)
 
+* Update functions (``/{db}/{ddoc}/_update``)
+
 * Virtual hosts and ini-file rewrites
 
 * Rewrite functions (``/{db}/{ddoc}/_rewrite``)
