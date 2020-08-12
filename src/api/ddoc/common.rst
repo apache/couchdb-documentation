@@ -50,13 +50,15 @@
       to process design document functions
     * **options** (*object*): View's default options
     * **filters** (*object*): :ref:`Filter functions <filterfun>` definition
-    * **lists** (*object*): :ref:`List functions <listfun>` definition
-    * **rewrites** (*array* or *string*): Rewrite rules definition
-    * **shows** (*object*): :ref:`Show functions <showfun>` definition
+    * **lists** (*object*): :ref:`List functions <listfun>` definition. *Deprecated.*
+    * **rewrites** (*array* or *string*): Rewrite rules definition. *Deprecated.*
+    * **shows** (*object*): :ref:`Show functions <showfun>` definition. *Deprecated.*
     * **updates** (*object*): :ref:`Update functions <updatefun>` definition
     * **validate_doc_update** (*string*): :ref:`Validate document update
       <vdufun>` function source
     * **views** (*object*): :ref:`View functions <viewfun>` definition.
+    * **autoupdate** (*boolean*): Indicates whether to automatically build
+      indexes defined in this design document. Default is `true`.
 
     Note, that for ``filters``, ``lists``, ``shows`` and ``updates`` fields
     objects are mapping of function name to string function source code. For

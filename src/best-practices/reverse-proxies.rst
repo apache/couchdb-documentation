@@ -21,7 +21,7 @@ Reverse proxying with HAProxy
 
 CouchDB recommends the use of `HAProxy`_ as a load balancer and reverse proxy.
 The team's experience with using it in production has shown it to be superior
-for configuration and montioring capabilities, as well as overall performance.
+for configuration and monitoring capabilities, as well as overall performance.
 
 CouchDB's sample haproxy configuration is present in the `code repository`_ and
 release tarball as ``rel/haproxy.cfg``. It is included below. This example
@@ -145,7 +145,11 @@ CouchDB in the ``/couchdb`` subdirectory:
     }
 
 This setup leans entirely on nginx performing authorization, and forwarding
-requests to CouchDB with no authentication (with CouchDB in Admin Party mode).
+requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
+which isn't sufficient in CouchDB 3.0 anymore as Admin Party has been removed.
+You'd need to at the very least hard-code user credentials into this version
+with headers.
+
 For a better solution, see :ref:`api/auth/proxy`.
 
 SSL with nginx
@@ -175,45 +179,31 @@ The ``X-Forwarded-Ssl`` header tells CouchDB that it should use the ``https``
 scheme instead of the ``http`` scheme. Otherwise, all CouchDB-generated
 redirects will fail.
 
-Reverse Proxying with Caddy
-===========================
+Reverse Proxying with Caddy 2
+=============================
+
+Caddy is ``https-by-default``, and will automatically acquire, install,
+activate and, when necessary, renew a trusted SSL certificate for you
+- all in the background.
+Certificates are issued by the **Let's Encrypt** certificate authority.
 
 Basic configuration
 -------------------
 
 Here's a basic excerpt from a Caddyfile in
-``/<path>/<to>/<site>/Caddyfile``. This will proxy all
+``/etc/caddy/Caddyfile``. This will proxy all
 requests from ``http(s)://domain.com/...`` to ``http://localhost:5984/...``
 
 .. code-block:: text
 
     domain.com {
 
-        import /path/to/other/config.caddy # logging, error handling etc.
-
-        proxy / localhost:5984 {
-            transparent
-        }
+       reverse_proxy localhost:5984
 
     }
 
-.. Note::
-    The ``transparent`` preset in the ``proxy`` directive is shorthand for:
-
-    .. code-block:: text
-
-        header_upstream Host {host}
-        header_upstream X-Real-IP {remote}
-        header_upstream X-Forwarded-For {remote}
-        header_upstream X-Forwarded-Proto {scheme}
-
-Note that, because Caddy is https-by-default, you must explicitly include the
-``http://`` protocol in the site address if you do NOT want Caddy
-to automatically acquire and install an SSL certificate and begin accepting
-``https`` connections on port 443.
-
-Reverse proxying CouchDB in a subdirectory with Caddy
------------------------------------------------------
+Reverse proxying CouchDB in a subdirectory with Caddy 2
+-------------------------------------------------------
 
 It can be useful to provide CouchDB as a subdirectory of your overall domain,
 especially to avoid CORS concerns. Here's an excerpt of a basic Caddy
@@ -226,12 +216,7 @@ as ``http(s)://domain.com/couchdb/db1/doc1`` are proxied to
 
     domain.com {
 
-        import /path/to/other/config.caddy # logging, error handling etc.
-
-        proxy /couchdb localhost:5984 {
-            transparent
-            without /couchdb
-        }
+        reverse_proxy /couchdb/* localhost:5984
 
     }
 
@@ -251,21 +236,17 @@ comes back online.
 
     domain.com {
 
-        import /path/to/other/config.caddy # logging, error handling etc.
+        reverse_proxy http://localhost:15984 http://localhost:25984 http://localhost:35984 {
+        lb_policy round_robin
+        lb_try_interval 500ms
 
-        proxy / http://localhost:15984 http://localhost:25984 http://localhost:35984 {
-            policy round_robin
-            health_check /_up
-            health_check_duration 5s
-            try_interval 500ms
-            keepalive 0
-            transparent
+        health_interval 5s
         }
 
     }
 
-Authentication with Caddy as a reverse proxy
---------------------------------------------
+Authentication with Caddy 2 as a reverse proxy
+----------------------------------------------
 
 Here's a sample config setting with basic authentication enabled, placing
 CouchDB in the ``/couchdb`` subdirectory:
@@ -274,50 +255,21 @@ CouchDB in the ``/couchdb`` subdirectory:
 
     domain.com {
 
-        import /path/to/other/config.caddy # logging, error handling etc.
-
-        basicauth /couchdb couch_username couchdb_password
-
-        proxy /couchdb localhost:5984 {
-            transparent
-            header_upstream -Authorization
-            without /couchdb
+        basicauth /couchdb/* {
+            couch_username couchdb_hashed_password_base64
         }
+
+        reverse_proxy /couchdb/* localhost:5984
 
     }
 
-For security reasons, using a plaintext password in the ``Caddyfile`` is not
-advisable. One solution is to define Caddy-process environment variables e.g.
-``COUCH_PW=couchdb_password`` and using placeholders in the ``Caddyfile``
-instead, e.g. ``{$COUCH_PW}``.
+This setup leans entirely on nginx performing authorization, and forwarding
+requests to CouchDB with no authentication (with CouchDB in Admin Party mode),
+which isn't sufficient in CouchDB 3.0 anymore as Admin Party has been removed.
+You'd need to at the very least hard-code user credentials into this version
+with headers.
 
-This setup leans entirely on Caddy performing authorization, and forwarding
-requests to CouchDB with no authentication (with CouchDB in Admin Party mode).
 For a better solution, see :ref:`api/auth/proxy`.
-
-SSL/TLS with Caddy
-------------------
-
-Caddy is https-by-default, and will automatically acquire, install, activate and,
-when necessary, renew a trusted SSL certificate for you - all in the background.
-Certificates are issued by the LetsEncrypt certificate authority.
-
-.. code-block:: text
-
-    domain.com {
-
-        import /path/to/other/config.caddy # logging, error handling etc.
-
-        proxy / localhost:5984 {
-            transparent
-            header_upstream x-forwarded-ssl on
-        }
-
-    }
-
-The ``x-forwarded-ssl`` header tells CouchDB that it should use the ``https``
-scheme instead of the ``http`` scheme. Otherwise, all CouchDB-generated
-redirects will fail.
 
 Reverse Proxying with Apache HTTP Server
 ========================================

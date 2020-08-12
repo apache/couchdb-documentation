@@ -25,16 +25,18 @@ Server Administrators
 
 .. config:section:: admins :: Server Administrators
 
-    A default CouchDB install provides admin-level access to all connecting
-    users. This configuration is known as `Admin Party`, and is not recommended
-    for in-production usage. You can crash the party simply by creating the
-    first admin account. CouchDB server administrators and passwords are not
-    stored in the ``_users`` database, but in the last ``[admins]`` section
-    that CouchDB finds when loading its ini files. See :config:intro for
-    details on config file order and behaviour. This file (which could be
-    something like ``etc/local.ini`` or ``etc/local.d/10-admins.ini`` on a
-    Debian/Ubuntu system installed from packages) should be appropriately
-    secured and readable only by system administrators::
+.. versionchanged:: 3.0.0
+
+    CouchDB requires an admin account to start. If an admin account has not
+    been created, CouchDB will print an error message and terminate.
+
+    CouchDB server administrators and passwords are not stored in the
+    ``_users`` database, but in the last ``[admins]`` section that CouchDB
+    finds when loading its ini files. See :config:intro for details on config
+    file order and behaviour. This file (which could be something like
+    ``etc/local.ini`` or ``etc/local.d/10-admins.ini`` on a Debian/Ubuntu
+    system installed from packages) should be appropriately secured and
+    readable only by system administrators::
 
         [admins]
         ;admin = mysecretpassword
@@ -119,20 +121,25 @@ Authentication Configuration
             [chttpd]
             require_valid_user = false
 
-        .. note::
-            This setting only affects the clustered-port (5984 by default).
-            To make the same change for the node-local port (5986 by default),
-            set the ``[couch_httpd_auth]`` setting of the same name.
+    .. config:option:: require_valid_user_except_for_up :: Force user auth (mostly)
+
+        When this option is set to ``true``, no requests are allowed from
+        anonymous users, *except* for the ``/_up`` endpoint. Everyone else must
+        be authenticated. ::
+
+            [chttpd]
+            require_valid_user_except_for_up = false
 
 .. config:section:: couch_httpd_auth :: Authentication Configuration
 
     .. config:option:: allow_persistent_cookies :: Persistent cookies
 
-        When set to ``true``, CouchDB will refresh the session cookie whenever
-        the session is nearing expiration. ::
+        When set to ``true``, CouchDB will set the Max-Age and Expires attributes
+        on the cookie, which causes user agents (like browsers) to preserve the cookie
+        over restarts. ::
 
             [couch_httpd_auth]
-            allow_persistent_cookies = false
+            allow_persistent_cookies = true
 
     .. config:option:: cookie_domain :: Cookie Domain
 
@@ -143,6 +150,16 @@ Authentication Configuration
 
             [couch_httpd_auth]
             cookie_domain = example.com
+
+    .. config:option:: same_site :: SameSite
+
+        .. versionadded:: 3.0.0
+
+        When this option is set to a non-empty value, a ``SameSite`` attribute is added to
+        the ``AuthSession`` cookie. Valid values are ``none``, ``lax`` or ``strict``.::
+
+            [couch_httpd_auth]
+            same_site = strict
 
     .. config:option:: auth_cache_size :: Authentication cache
 
@@ -160,10 +177,6 @@ Authentication Configuration
 
             [couch_httpd_auth]
             authentication_redirect = /_utils/session.html
-
-        .. note::
-            This setting affects both the clustered-port (5984 by default)
-            and the node-local port (5986 by default).
 
     .. config:option:: iterations :: PBKDF2 iterations count
 
@@ -233,11 +246,6 @@ Authentication Configuration
             [couch_httpd_auth]
             require_valid_user = false
 
-        .. warning::
-            This setting only affects the node-local port (5986 by default).
-            Most administrators want the ``[chttpd]`` setting of the same name
-            for clustered-port (5984) behaviour.
-
     .. config:option:: secret :: Authentication secret token
 
         The secret token is used for :ref:`api/auth/proxy` and for :ref:`api/auth/cookie`. ::
@@ -263,10 +271,6 @@ Authentication Configuration
 
             [couch_httpd_auth]
             users_db_public = false
-
-        .. note::
-            This setting affects both the clustered-port (5984 by default)
-            and the node-local port (5986 by default).
 
     .. config:option:: x_auth_roles :: Proxy Auth roles header
 
@@ -297,3 +301,14 @@ Authentication Configuration
 
             [couch_httpd_auth]
             x_auth_username = X-Auth-CouchDB-UserName
+
+.. config:section:: jwt_auth :: JWT Authentication
+
+    .. config:option:: required_claims :: Mandatory claims in JWT tokens
+
+        This parameter is a comma-separated list of additional mandatory JWT claims
+        that must be present in any presented JWT token. A
+        `:code 400:Bad Request` is sent if any are missing. ::
+
+            [jwt_auth]
+                required_claims = exp,iat

@@ -391,6 +391,8 @@ to simplify the job of the client - each line of the response is either empty
 or a JSON object representing a single change, as found in the normal feed's
 results.
 
+If `limit` has been specified the feed will end with a `{ last_seq }` object.
+
 .. code-block:: http
 
     GET /somedatabase/_changes?feed=continuous HTTP/1.1

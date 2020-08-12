@@ -21,18 +21,18 @@ database. This enables users to distribute data across several nodes or
 data centers, but also to move data more closely to clients.
 
 Replication involves a source and a destination database, which can be on the
-same or on different CouchDB instances. The aim of the replication is that at
-the end of the process, all active documents on the source database are also in
+same or on different CouchDB instances. The aim of replication is that at
+the end of the process, all active documents in the source database are also in
 the destination database and all documents that were deleted in the source
-databases are also deleted on the destination database (if they even existed).
+database are also deleted in the destination database (if they even existed).
 
-Transient and Persistant Replication
+Transient and Persistent Replication
 ====================================
 
 There are two different ways to set up a replication. The first one that was
-introduced into CouchDB leads do a replication that could be called `transient`.
+introduced into CouchDB leads to a replication that could be called `transient`.
 Transient means that there are no documents backing up the replication. So after a
-restart of the CouchDB server the replication will disapear. Later, the
+restart of the CouchDB server the replication will disappear. Later, the
 :ref:`_replicator <replicator>` database was introduced, which keeps documents
 containing your replication parameters. Such a replication can be called `persistent`.
 Transient replications were kept for backward compatibility. Both replications can

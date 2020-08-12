@@ -18,7 +18,7 @@ import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath("../ext"))
 
-needs_sphinx = "1.2"
+needs_sphinx = "1.5"
 
 extensions = [
     "sphinx.ext.todo",
@@ -33,8 +33,8 @@ source_suffix = ".rst"
 nitpicky = True
 
 # should be over-written using rebar-inherited settings
-version = "2.3"
-release = "2.3.1"
+version = "3.1"
+release = "3.1.0"
 
 project = u"Apache CouchDB\u00ae"
 
@@ -72,7 +72,7 @@ html_additional_pages = {"download": "pages/download.html", "index": "pages/inde
 html_context = {
     "ga_code": "UA-658988-6",
     # Enable the "Edit in GitHub link within the header of each page.
-    "display_github": True,
+    "display_github": False,
     # Set the following variables to generate the resulting github URL for each page.
     # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
     "github_user": "apache",

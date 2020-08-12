@@ -32,7 +32,15 @@ Resharding Configuration
         will start to fail with the ``max_jobs_exceeded`` error::
 
              [reshard]
-             max_jobs = 25
+             max_jobs = 48
+
+    .. config:option:: max_history
+
+        Each resharding job maintains a timestamped event log. This setting
+        limits the maximum size of that log::
+
+             [reshard]
+             max_history = 20
 
     .. config:option:: max_retries
 
@@ -77,3 +85,21 @@ Resharding Configuration
 
             [reshard]
             source_close_timeout_sec = 600
+
+    .. config:option:: require_node_param
+
+        Require users to specify a ``node`` parameter when creating resharding
+        jobs. This can be used as a safety check to avoid inadvertently
+        starting too many resharding jobs by accident::
+
+            [reshard]
+            require_node_param = false
+
+    .. config:option:: require_range_param
+
+        Require users to specify a ``range`` parameter when creating resharding
+        jobs. This can be used as a safety check to avoid inadvertently
+        starting too many resharding jobs by accident::
+
+            [reshard]
+            require_range_param = false

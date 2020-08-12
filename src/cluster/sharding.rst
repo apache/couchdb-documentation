@@ -44,33 +44,35 @@ level, or on a per-database basis. The relevant parameters are ``q`` and
 
 *q* is the number of database shards to maintain. *n* is the number of
 copies of each document to distribute. The default value for ``n`` is ``3``,
-and for ``q`` is ``8``. With ``q=8``, the database is split into 8 shards. With
+and for ``q`` is ``2``. With ``q=2``, the database is split into 2 shards. With
 ``n=3``, the cluster distributes three replicas of each shard. Altogether,
-that's 24 shard replicas for a single database. In a default 3-node cluster,
-each node would receive 8 shards. In a 4-node cluster, each node would
-receive 6 shards. We recommend in the general case that the number of
-nodes in your cluster should be a multiple of ``n``, so that shards are
-distributed evenly.
+that's 6 shard replicas for a single database.
 
-CouchDB nodes have a ``etc/local.ini`` file with a section named
+In a 3-node cluster with ``q=8``, each node would receive 8 shards. In a 4-node
+cluster, each node would receive 6 shards. We recommend in the general case
+that the number of nodes in your cluster should be a multiple of ``n``, so that
+shards are distributed evenly.
+
+CouchDB nodes have a ``etc/default.ini`` file with a section named
 `cluster <../config/cluster.html>`__ which looks like this:
 
 ::
 
     [cluster]
-    q=8
+    q=2
     n=3
 
-These settings can be modified to set sharding defaults for all
-databases, or they can be set on a per-database basis by specifying the
-``q`` and ``n`` query parameters when the database is created. For
-example:
+These settings specify the default sharding parameters for newly created
+databases. These can be overridden in the ``etc/local.ini`` file by copying the
+text above, and replacing the values with your new defaults.  The values can
+also be set on a per-database basis by specifying the ``q`` and ``n`` query
+parameters when the database is created. For example:
 
 .. code-block:: bash
 
     $ curl -X PUT "$COUCH_URL:5984/database-name?q=4&n=2"
 
-That creates a database that is split into 4 shards and 2 replicas,
+This creates a database that is split into 4 shards and 2 replicas,
 yielding 8 shard replicas distributed throughout the cluster.
 
 Quorum
@@ -105,13 +107,13 @@ have responded:
 
 .. code-block:: bash
 
-    $ curl "$COUCH_URL:5984/<db>/<doc>?r=2"
+    $ curl "$COUCH_URL:5984/{db}/{doc}?r=2"
 
 Here is a similar example for writing a document:
 
 .. code-block:: bash
 
-    $ curl -X PUT "$COUCH_URL:5984/<db>/<doc>?w=2" -d '{...}'
+    $ curl -X PUT "$COUCH_URL:5984/{db}/{doc}?w=2" -d '{...}'
 
 Setting ``r`` or ``w`` to be equal to ``n`` (the number of replicas)
 means you will only receive a response once all nodes with relevant
@@ -334,13 +336,13 @@ another. For example:
 .. code-block:: bash
 
     # one one machine
-    $ mkdir -p data/.shards/<range>
-    $ mkdir -p data/shards/<range>
+    $ mkdir -p data/.shards/{range}
+    $ mkdir -p data/shards/{range}
     # on the other
-    $ scp <couch-dir>/data/.shards/<range>/<database>.<datecode>* \
-      <node>:<couch-dir>/data/.shards/<range>/
-    $ scp <couch-dir>/data/shards/<range>/<database>.<datecode>.couch \
-      <node>:<couch-dir>/data/shards/<range>/
+    $ scp {couch-dir}/data/.shards/{range}/{database}.{datecode}* \
+      {node}:{couch-dir}/data/.shards/{range}/
+    $ scp {couch-dir}/data/shards/{range}/{database}.{datecode}.couch \
+      {node}:{couch-dir}/data/shards/{range}/
 
 .. note::
     Remember to move view files before database files! If a view index
@@ -377,7 +379,7 @@ To enable maintenance mode:
 .. code-block:: bash
 
     $ curl -X PUT -H "Content-type: application/json" \
-        $COUCH_URL:5984/_node/<nodename>/_config/couchdb/maintenance_mode \
+        $COUCH_URL:5984/_node/{node-name}/_config/couchdb/maintenance_mode \
         -d "\"true\""
 
 Then, verify that the node is in maintenance mode by performing a ``GET
@@ -405,15 +407,14 @@ shard replicas for a given database.
 
 To update the cluster metadata, use the special ``/_dbs`` database,
 which is an internal CouchDB database that maps databases to shards and
-nodes. This database is replicated between nodes. It is accessible only
-via a node-local port, usually at port 5986. By default, this port is
-only available on the localhost interface for security purposes.
+nodes. This database is automatically replicated between nodes. It is accessible
+only through the special ``/_node/_local/_dbs`` endpoint.
 
 First, retrieve the database's current metadata:
 
 .. code-block:: bash
 
-    $ curl http://localhost:5986/_dbs/{name}
+    $ curl http://localhost/_node/_local/_dbs/{name}
     {
       "_id": "{name}",
       "_rev": "1-e13fb7e79af3b3107ed62925058bfa3a",
@@ -469,11 +470,11 @@ metadata's ``changelog`` attribute:
 
 .. code-block:: javascript
 
-    ["add", "<range>", "<node-name>"]
+    ["add", "{range}", "{node-name}"]
 
-The ``<range>`` is the specific shard range for the shard. The ``<node-
-name>`` should match the name and address of the node as displayed in
-``GET /_membership`` on the cluster.
+The ``{range}`` is the specific shard range for the shard. The ``{node-name}``
+should match the name and address of the node as displayed in ``GET
+/_membership`` on the cluster.
 
 .. note::
     When removing a shard from a node, specify ``remove`` instead of ``add``.
@@ -524,7 +525,7 @@ Now you can ``PUT`` this new metadata:
 
 .. code-block:: bash
 
-    $ curl -X PUT http://localhost:5986/_dbs/{name} -d '{...}'
+    $ curl -X PUT http://localhost/_node/_local/_dbs/{name} -d '{...}'
 
 .. _cluster/sharding/sync:
 
@@ -539,7 +540,7 @@ CouchDB to synchronize all replicas of all shards in a database with the
 
 .. code-block:: bash
 
-    $ curl -X POST $COUCH_URL:5984/{dbname}/_sync_shards
+    $ curl -X POST $COUCH_URL:5984/{db}/_sync_shards
     {"ok":true}
 
 This starts the synchronization process. Note that this will put
@@ -560,7 +561,7 @@ Monitor internal replication to ensure up-to-date shard(s)
 
 After you complete the previous step, CouchDB will have started
 synchronizing the shards. You can observe this happening by monitoring
-the ``/_node/<nodename>/_system`` endpoint, which includes the
+the ``/_node/{node-name}/_system`` endpoint, which includes the
 ``internal_replication_jobs`` metric.
 
 Once this metric has returned to the baseline from before you started
@@ -589,7 +590,7 @@ Update cluster metadata again to remove the source shard
 
 Now, remove the source shard from the shard map the same way that you
 added the new target shard to the shard map in step 2. Be sure to add
-the ``["remove", <range>, <source-shard>]`` entry to the end of the
+the ``["remove", {range}, {source-shard}]`` entry to the end of the
 changelog as well as modifying both the ``by_node`` and ``by_range`` sections of
 the database metadata document.
 
@@ -603,8 +604,8 @@ command line on the source host, along with any view shard replicas:
 
 .. code-block:: bash
 
-    $ rm <couch-dir>/data/shards/<range>/<dbname>.<datecode>.couch
-    $ rm -r <couch-dir>/data/.shards/<range>/<dbname>.<datecode>*
+    $ rm {couch-dir}/data/shards/{range}/{db}.{datecode}.couch
+    $ rm -r {couch-dir}/data/.shards/{range}/{db}.{datecode}*
 
 Congratulations! You have moved a database shard replica. By adding and removing
 database shard replicas in this way, you can change the cluster's shard layout,
@@ -621,10 +622,11 @@ database creation time using placement rules.
     Use of the ``placement`` option will **override** the ``n`` option,
     both in the ``.ini`` file as well as when specified in a ``URL``.
 
-First, each node must be labeled with a zone attribute. This defines
-which zone each node is in. You do this by editing the node’s document
-in the ``/_nodes`` database, which is accessed through the node-local
-port. Add a key value pair of the form:
+First, each node must be labeled with a zone attribute. This defines which zone
+each node is in. You do this by editing the node’s document in the special
+``/_nodes`` database, which is accessed through the special node-local API
+endpoint at ``/_node/_local/_nodes/{node-name}``. Add a key value pair of the
+form:
 
 ::
 
@@ -634,11 +636,11 @@ Do this for all of the nodes in your cluster. For example:
 
 .. code-block:: bash
 
-    $ curl -X PUT http://localhost:5986/_nodes/<node-name> \
+    $ curl -X PUT http://localhost/_node/_local/_nodes/{node-name} \
         -d '{ \
-            "_id": "<node-name>",
-            "_rev": "<rev>",
-            "zone": "<zone-name>"
+            "_id": "{node-name}",
+            "_rev": "{rev}",
+            "zone": "{zone-name}"
             }'
 
 In the local config file (``local.ini``) of each node, define a
@@ -647,12 +649,12 @@ consistent cluster-wide setting like:
 ::
 
     [cluster]
-    placement = <zone-name-1>:2,<zone-name-2>:1
+    placement = {zone-name-1}:2,{zone-name-2}:1
 
 In this example, CouchDB will ensure that two replicas for a shard will
-be hosted on nodes with the zone attribute set to ``<zone-name-1>`` and
+be hosted on nodes with the zone attribute set to ``{zone-name-1}`` and
 one replica will be hosted on a new with the zone attribute set to
-``<zone-name-2>``.
+``{zone-name-2}``.
 
 This approach is flexible, since you can also specify zones on a per-
 database basis by specifying the placement setting as a query parameter
@@ -660,7 +662,7 @@ when the database is created, using the same syntax as the ini file:
 
 .. code-block:: bash
 
-    curl -X PUT $COUCH_URL:5984/<dbname>?zone=<zone>
+    curl -X PUT $COUCH_URL:5984/{db}?zone={zone}
 
 The ``placement`` argument may also be specified. Note that this *will*
 override the logic that determines the number of created replicas!

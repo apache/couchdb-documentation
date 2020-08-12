@@ -24,7 +24,8 @@ groups, facets, or geographical searches.
 
 .. warning::
     Search cannot function unless it has a functioning, cluster-connected
-    Clouseau instance.
+    Clouseau instance. See :ref:`Search Plugin Installation <install/search>`
+    for details.
 
 To create a search index, you add a JavaScript function to a design document in the
 database. An index builds after processing one search request or after the server detects
@@ -814,6 +815,21 @@ You can restrict results to documents with a dimension equal to the specified la
 Restrict the results by adding ``drilldown=["dimension","label"]`` to a search query. You
 can include multiple ``drilldown`` parameters to restrict results along multiple
 dimensions.
+
+.. code-block:: http
+
+    GET /things/_design/inventory/_search/fruits?q=*:*&drilldown=["state","old"]&drilldown=["item","apple"]&include_docs=true HTTP/1.1
+
+For better language interoperability, you can achieve the same by supplying a list of lists:
+
+.. code-block:: http
+
+    GET /things/_design/inventory/_search/fruits?q=*:*&drilldown=[["state","old"],["item","apple"]]&include_docs=true HTTP/1.1
+
+You can also supply a list of lists for ``drilldown`` in bodies of POST requests.
+
+Note that, multiple values for a single key in a ``drilldown`` means an
+``OR`` relation between them and there is an ``AND`` relation between multiple keys.
 
 Using a ``drilldown`` parameter is similar to using ``key:value`` in the ``q`` parameter,
 but the ``drilldown`` parameter returns values that the analyzer might skip.

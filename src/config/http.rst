@@ -29,6 +29,8 @@ HTTP Server Options
     port. All use of CouchDB, aside from a few specific maintenance tasks as
     described in this documentation, should be performed over this port.
 
+    .. config:option:: bind_address :: HTTP port IP address binding
+
         Defines the IP address by which the clustered port is available::
 
             [chttpd]
@@ -87,18 +89,11 @@ HTTP Server Options
 
         - ``{chttpd_auth, cookie_authentication_handler}``: used for Cookie auth;
         - ``{chttpd_auth, proxy_authentication_handler}``: used for Proxy auth;
+        - ``{chttpd_auth, jwt_authentication_handler}``: used for JWT auth;
         - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
-        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth.
-          Everlasting `Admin Party`!
+        - ``{couch_httpd_auth, null_authentication_handler}``: disables auth, breaks CouchDB.
 
 .. config:section:: httpd :: HTTP Server Options
-
-.. warning::
-    In CouchDB 2.x, the `httpd` section mostly refers to the node-local port,
-    on port 5986 by default. This port is used only for maintenance and
-    administrative tasks. **It should not be used for regular CouchDB access**,
-    and for security reasons, **should always be bound to localhost**
-    (`127.0.0.1`) or a private LAN segment only.
 
     .. config:option:: allow_jsonp :: Enables JSONP support
 
@@ -109,20 +104,6 @@ HTTP Server Options
             allow_jsonp = false
 
         .. _JSONP: https://en.wikipedia.org/wiki/JSONP
-
-    .. config:option:: bind_address :: Listen IP address
-
-        Defines the IP address by which the node-local port is available.
-        The recommended setting is always::
-
-            [httpd]
-            bind_address = 127.0.0.1
-
-        For IPv6 support you need to set `::1` if you want to let CouchDB
-        listen correctly::
-
-            [httpd]
-            bind_address = ::1
 
     .. config:option:: changes_timeout :: Changes feed timeout
 
@@ -143,13 +124,6 @@ HTTP Server Options
             [httpd]
             config_whitelist = [{httpd,config_whitelist}, {log,level}, {etc,etc}]
 
-    .. config:option:: default_handler :: Default request handler
-
-        Specifies default HTTP requests handler::
-
-            [httpd]
-            default_handler = {couch_httpd_db, handle_request}
-
     .. config:option:: enable_cors :: Activates CORS
 
         .. versionadded:: 1.3
@@ -159,38 +133,19 @@ HTTP Server Options
             [httpd]
             enable_cors = false
 
-    .. config:option:: port :: Listen port
-
-        Defines the port number to listen::
-
-            [httpd]
-            port = 5986
-
-        To let CouchDB use any free port, set this option to ``0``::
-
-            [httpd]
-            port = 0
-
-    .. config:option:: redirect_vhost_handler :: Virtual Hosts custom redirect handler
-
-        This option customizes the default function that handles requests to
-        :section:`virtual hosts <vhosts>`::
-
-            [httpd]
-            redirect_vhost_handler = {Module, Fun}
-
-        The specified function take 2 arguments: the MochiWeb request object
-        and the target path.
-
     .. config:option:: server_options :: MochiWeb Server Options
 
-        Server options for the `MochiWeb`_ component of CouchDB can be added to
+        Server options for the MochiWeb component of CouchDB can be added to
         the configuration files::
 
             [httpd]
             server_options = [{backlog, 128}, {acceptor_pool_size, 16}]
 
-        .. _MochiWeb: https://github.com/mochi/mochiweb
+        The options supported are a subset of full options supported by the
+        TCP/IP stack. A list of the supported options are provided in the
+        `Erlang inet`_ documentation.
+
+        .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
 
     .. config:option:: secure_rewrites :: Default request handler
 
@@ -205,35 +160,13 @@ HTTP Server Options
         beginning of ever request, can be specified as a list of tuples. For example::
 
             [httpd]
-            socket_options = [{sndbuf, 262144}, {nodelay, true}]
+            socket_options = [{sndbuf, 262144}]
 
         The options supported are a subset of full options supported by the
         TCP/IP stack. A list of the supported options are provided in the
         `Erlang inet`_ documentation.
 
         .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
-
-    .. config:option:: server_options :: Socket Options
-
-        The server options for any socket in the mochiweb acceptor pool in CouchDB
-        can be specified as a list of tuples. For example::
-
-            [httpd]
-            server_options = [{recbuf, undefined}]
-
-        The options supported are a subset of full options supported by the
-        TCP/IP stack. A list of the supported options are provided in the
-        `Erlang inet`_ documentation.
-
-        .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
-
-    .. config:option:: vhost_global_handlers :: Virtual hosts global handlers
-
-        List of global handlers that are available for :section:`virtual hosts
-        <vhosts>`::
-
-            [httpd]
-            vhost_global_handlers = _utils, _uuids, _session, _users
 
     .. config:option:: x_forwarded_host :: X-Forwarder-Host
 
@@ -274,13 +207,6 @@ HTTP Server Options
 
             [httpd]
             enable_xframe_options = false
-
-    .. config:option:: WWW-Authenticate :: Force basic auth
-
-        Set this option to trigger basic-auth pop-up on unauthorized requests::
-
-            [httpd]
-            WWW-Authenticate = Basic realm="Welcome to the Couch!"
 
     .. config:option:: max_http_request_size :: Maximum HTTP request body size
 
@@ -601,6 +527,10 @@ Cross-Origin Resource Sharing
 Per Virtual Host Configuration
 ------------------------------
 
+.. warning::
+
+    Virtual Hosts are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
+
 To set the options for a :section:`vhosts`, you will need to create a section
 with the vhost name prefixed by ``cors:``. Example case for the vhost
 `example.com`::
@@ -622,6 +552,10 @@ or behaviour.
 
 Virtual Hosts
 =============
+
+.. warning::
+
+    Virtual Hosts are deprecated in CouchDB 3.0, and will be removed in CouchDB 4.0.
 
 .. config:section:: vhosts :: Virtual Hosts
 
@@ -682,9 +616,6 @@ variable and use them to create the target path. Some examples::
 The first rule passes the wildcard as `dbname`. The second one does the same,
 but uses a variable name. And the third one allows you to use any URL with
 `ddocname` in any database with `dbname`.
-
-You could also change the default function to handle request by changing the
-setting :option:`httpd/redirect_vhost_handler`.
 
 .. _xframe_options:
 .. _config/xframe_options:

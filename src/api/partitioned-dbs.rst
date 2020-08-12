@@ -39,7 +39,7 @@ See the guide for
 
     .. code-block:: http
 
-        GET /db/_partition/foo HTTP/1.1
+        GET /db/_partition/sensor-260 HTTP/1.1
         Accept: application/json
         Host: localhost:5984
 
@@ -117,6 +117,8 @@ See the guide for
           "total_rows": 1
         }
 
+.. _api/partitioned/views:
+
 ``/db/_partition/partition/_design/design-doc/_view/view-name``
 ===============================================================
 
@@ -192,3 +194,38 @@ See the guide for
           ],
           "total_rows": 4
         }
+.. _api/partitioned/find:
+
+``/db/_partition/partition_id/_find``
+=====================================
+
+.. http:post:: /{db}/_partition/{partition_id}/_find
+    :synopsis: Query the partition specified by ``partition_id``
+
+    :param db: Database name
+    :param partition id: Name of the partition to query
+
+    This endpoint is responsible for finding a partition query by its ID.
+    The returned view result will only contain rows with the
+    specified partition id.
+
+    Refer to the :ref:`find endpoint <api/db/_find>`
+    documentation for a complete description of the
+    available parameters and the format
+    of the returned data.
+.. _api/partitioned/explain:
+
+``/db/_partition/partition_id/_explain``
+========================================
+
+.. http:post:: /{db}/_partition/{partition_id}/_explain
+    :synopsis: Find index that is used with a query
+
+    :param db: Database name
+    :partition id: Name of the partition to query
+
+    This endpoint shows which index is being used by the query.
+
+    Refer to the :ref:`explain endpoint <api/db/find/explain>`
+    documentation for a complete description of the available
+    parameters and the format of the returned data.

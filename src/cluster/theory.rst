@@ -23,7 +23,7 @@ As you see in ``etc/default.ini`` there is a section called [cluster]
 .. code-block:: text
 
     [cluster]
-    q=8
+    q=2
     n=3
 
 * ``q`` - The number of shards.
@@ -55,10 +55,10 @@ copies of a shard, the more you can scale out. If you have 4 replicas, that
 means that all 4 copies of this specific shard will live on at most 4 nodes.
 With one replica you can have only one node, just as with CouchDB 1.x.
 No node can have more than one copy of each shard replica. The default for
-CouchDB since 2.0.0 is ``q=8`` and ``n=3``, meaning each database (and secondary
-index) is split into 8 shards, with 3 replicas per shard, for a total of 24
+CouchDB since 3.0.0 is ``q=2`` and ``n=3``, meaning each database (and secondary
+index) is split into 2 shards, with 3 replicas per shard, for a total of 6
 shard replica files. For a CouchDB cluster only hosting a single database with
-these default values, a maximum of 24 nodes can be used to scale horizontally.
+these default values, a maximum of 6 nodes can be used to scale horizontally.
 
 Replicas add failure resistance, as some nodes can be offline without everything
 crashing down.
@@ -74,7 +74,7 @@ of ``n`` adds servers and complexity without any real benefit. The sweet spot is
 at ``n=3``.
 
 Say that we have a database with 3 replicas and 4 shards. That would give us a
-maximum of 12 nodes. 4*3=12 Every shard have 3 copies.
+maximum of 12 nodes: 4*3=12.
 
 We can lose any 2 nodes and still read and write all documents.
 

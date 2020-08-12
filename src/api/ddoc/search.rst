@@ -16,6 +16,10 @@
 ``/db/_design/design-doc/_search/index-name``
 =============================================
 
+.. warning::
+    Search endpoints require a running search plugin connected to each cluster
+    node. See :ref:`Search Plugin Installation <install/search>` for details.
+
 .. versionadded:: 3.0
 
 .. http:get:: /{db}/_design/{ddoc}/_search/{index}
@@ -116,10 +120,6 @@
     might cause problems when contact is attempted with replicas that are slow or not
     available.
 
-.. warning::
-    Search requests will fail unless the CouchDB server is connected to a functioning
-    Clouseau instance.
-
 .. seealso::
     For more information about how search works, see the
     :ref:`Search User Guide<ddoc/search>`.
@@ -127,6 +127,10 @@
 ==================================================
 ``/db/_design/design-doc/_search_info/index-name``
 ==================================================
+
+.. warning::
+    Search endpoints require a running search plugin connected to each cluster
+    node. See :ref:`Search Plugin Installation <install/search>` for details.
 
 .. versionadded:: 3.0
 

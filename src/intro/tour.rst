@@ -40,16 +40,20 @@ The reply should look something like:
 .. code-block:: javascript
 
     {
-        "couchdb": "Welcome",
-        "version": "2.2.0",
-        "git_sha":"2a16ec4",
-        "features": [
-            "pluggable-storage-engines",
-            "scheduler"
-        ],
-        "vendor": {
-            "name": "The Apache Software Foundation"
-        }
+      "couchdb": "Welcome",
+      "version": "3.0.0",
+      "git_sha": "83bdcf693",
+      "uuid": "56f16e7c93ff4a2dc20eb6acc7000b71",
+      "features": [
+        "access-ready",
+        "partitioned",
+        "pluggable-storage-engines",
+        "reshard",
+        "scheduler"
+      ],
+      "vendor": {
+        "name": "The Apache Software Foundation"
+      }
     }
 
 Not all that spectacular. CouchDB is saying "hello" with the running version
@@ -57,21 +61,25 @@ number.
 
 Next, we can get a list of databases::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
-All we added to the previous request is the _all_dbs string.
+All we added to the previous request is the _all_dbs string, and our admin user
+name and password (set when installing CouchDB).
 
 The response should look like::
 
-    ["_global_changes","_replicator","_users"]
+    ["_replicator","_users"]
 
 .. note::
     In case this returns an empty Array for you, it means you haven't finished
     installation correctly. Please refer to :ref:`setup` for further
     information on this.
 
-Oh, that's right, we didn't create any databases yet! All we see is an empty
-list.
+    For the purposes of this example, we'll not be showing the system databases
+    past this point. In *your* installation, any time you ``GET /_all_dbs``,
+    you should see the system databases in the list, too.
+
+Oh, that's right, we didn't create any user databases yet!
 
 .. note::
     The curl command issues GET requests by default. You can issue POST requests
@@ -87,7 +95,7 @@ list.
 
 Let's create a database::
 
-    curl -X PUT http://127.0.0.1:5984/baseball
+    curl -X PUT http://admin:password@127.0.0.1:5984/baseball
 
 CouchDB will reply with::
 
@@ -95,7 +103,7 @@ CouchDB will reply with::
 
 Retrieving the list of databases again shows some useful results this time::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
 ::
 
@@ -115,7 +123,7 @@ Retrieving the list of databases again shows some useful results this time::
 
 Let's create another database::
 
-    curl -X PUT http://127.0.0.1:5984/baseball
+    curl -X PUT http://admin:password@127.0.0.1:5984/baseball
 
 CouchDB will reply with::
 
@@ -125,7 +133,7 @@ CouchDB will reply with::
 We already have a database with that name, so CouchDB will respond with an
 error. Let's try again with a different database name::
 
-    curl -X PUT http://127.0.0.1:5984/plankton
+    curl -X PUT http://admin:password@127.0.0.1:5984/plankton
 
 CouchDB will reply with::
 
@@ -133,7 +141,7 @@ CouchDB will reply with::
 
 Retrieving the list of databases yet again shows some useful results::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
 CouchDB will respond with::
 
@@ -141,7 +149,7 @@ CouchDB will respond with::
 
 To round things off, let's delete the second database::
 
-    curl -X DELETE http://127.0.0.1:5984/plankton
+    curl -X DELETE http://admin:password@127.0.0.1:5984/plankton
 
 CouchDB will reply with::
 
@@ -149,7 +157,7 @@ CouchDB will reply with::
 
 The list of databases is now the same as it was before::
 
-    curl -X GET http://127.0.0.1:5984/_all_dbs
+    curl -X GET http://admin:password@127.0.0.1:5984/_all_dbs
 
 CouchDB will respond with::
 
@@ -178,11 +186,13 @@ To load Fauxton in your browser, visit::
 
     http://127.0.0.1:5984/_utils/
 
-In later documents, we'll focus on using CouchDB from
-server-side languages such as Ruby and Python. As such, this document is a great
-opportunity to showcase an example of natively serving up a dynamic web
-application using nothing more than CouchDB's integrated web server, something
-you may wish to do with your own applications.
+and log in when prompted with your admin password.
+
+In later documents, we'll focus on using CouchDB from server-side languages
+such as Ruby and Python. As such, this document is a great opportunity to
+showcase an example of natively serving up a dynamic web application using
+nothing more than CouchDB's integrated web server, something you may wish to do
+with your own applications.
 
 The first thing we should do with a fresh installation of CouchDB is run the
 test suite to verify that everything is working properly. This assures us
@@ -200,7 +210,7 @@ Your First Database and Document
 ================================
 
 Creating a database in Fauxton is simple. From the overview page,
-click "Create Database." When asked for a name, enter hello-world and click
+click "Create Database." When asked for a name, enter ``hello-world`` and click
 the Create button.
 
 After your database has been created, Fauxton will display a list of all its
@@ -240,160 +250,122 @@ select Options, then check the Include Docs option. Finally, press the Run
 Query button. The full document should be displayed along with the ``_id``
 and ``_rev`` values.
 
-Running a Query Using MapReduce
-===============================
+Running a Mango Query
+=====================
 
-Traditional relational databases allow you to run any queries you like as
-long as your data is structured correctly. In contrast,
-CouchDB uses predefined map and reduce functions in a style known as
-MapReduce. These functions provide great flexibility because they can adapt
-to variations in document structure, and indexes for each document can be
-computed independently and in parallel. The combination of a map and a reduce
-function is called a view in CouchDB terminology.
+Now that we have stored documents successfully, we want to be able to query
+them. The easiest way to do this in CouchDB is running a Mango Query. There are
+always two parts to a Mango Query: the index and the selector.
 
-For experienced relational database programmers, MapReduce can take some
-getting used to. Rather than declaring which rows from which tables to
-include in a result set and depending on the database to determine the most
-efficient way to run the query, reduce queries are based on simple range
-requests against the indexes generated by your map functions.
+The index specifies which fields we want to be able to query on, and the
+selector includes the actual query parameters that define what we are looking
+for exactly.
 
-Map functions are called once with each document as the argument.
-The function can choose to skip the document altogether or emit one or more
-view rows as key/value pairs. Map functions may not depend on any information
-outside of the document. This independence is what allows CouchDB views to be
-generated incrementally and in parallel.
+Indexes are stored as rows that are kept sorted by the fields you specify. This
+makes retrieving data from a range of keys efficient even when there are
+thousands or millions of rows.
 
-CouchDB views are stored as rows that are kept sorted by key. This makes
-retrieving data from a range of keys efficient even when there are thousands
-or millions of rows. When writing CouchDB map functions,
-your primary goal is to build an index that stores related data under nearby
-keys.
-
-Before we can run an example MapReduce view, we'll need some data to run it
-on. We'll create documents carrying the price of various supermarket items as
-found at different shops. Let's create documents for apples, oranges,
-and bananas. (Allow CouchDB to generate the _id and _rev fields.) Use Fauxton
-to create documents that have a final JSON structure that looks like this:
+Before we can run an example query, we'll need some data to run it on. We'll
+create documents with information about movies. Let's create documents for
+three movies. (Allow CouchDB to generate the ``_id`` and ``_rev`` fields.) Use Fauxton
+to create documents that have a final JSON structure that look like this:
 
 .. code-block:: javascript
 
     {
         "_id": "00a271787f89c0ef2e10e88a0c0001f4",
-        "_rev": "1-2628a75ac8c3abfffc8f6e30c9949fd6",
-        "item": "apple",
-        "prices": {
-            "Fresh Mart": 1.59,
-            "Price Max": 5.99,
-            "Apples Express": 0.79
-        }
+        "type": "movie",
+        "title": "My Neighbour Totoro",
+        "year": 1988,
+        "director": "miyazaki",
+        "rating": 8.2
     }
-
-OK, now that that's done, let's create the document for oranges:
 
 .. code-block:: javascript
 
     {
         "_id": "00a271787f89c0ef2e10e88a0c0003f0",
-        "_rev": "1-e9680c5d9a688b4ff8dd68549e8e072c",
-        "item": "orange",
-        "prices": {
-            "Fresh Mart": 1.99,
-            "Price Max": 3.19,
-            "Citrus Circus": 1.09
-        }
+        "type": "movie",
+        "title": "Kikis Delivery Service",
+        "year": 1989,
+        "director": "miyazaki",
+        "rating": 7.8
     }
-
-And finally, the document for bananas:
 
 .. code-block:: javascript
 
     {
         "_id": "00a271787f89c0ef2e10e88a0c00048b",
-        "_rev": "1-60e25d93dc12884676d037400a6fa189",
-        "item": "banana",
-        "prices": {
-            "Fresh Mart": 1.99,
-            "Price Max": 0.79,
-            "Banana Montana": 4.22
-        }
+        "type": "movie",
+        "title": "Princess Mononoke",
+        "year": 1997,
+        "director": "miyazaki",
+        "rating": 8.4
     }
 
-Imagine we're catering a big luncheon, but the client is very price-sensitive.
-To find the lowest prices, we're going to create our first view,
-which shows each fruit sorted by price. Click "All Documents" to return to the
-hello-world overview, and then from the "All Documents" plus sign, click "New
-View" to create a new view.
-
-Name the design document ``_design/myDesignDoc``, and set the Index name
-to ``prices``.
-
-Edit the map function, on the right, so that it looks like the following:
+Now we want to be able to find a movie by its release year, we need to create a
+Mango Index. To do this, go to “Run A Query with Mango” in the Database
+overview. Then click on “manage indexes”, and change the index field on the
+left to look like this:
 
 .. code-block:: javascript
 
-    function(doc) {
-        var shop, price, value;
-        if (doc.item && doc.prices) {
-            for (shop in doc.prices) {
-                price = doc.prices[shop];
-                value = [doc.item, shop];
-                emit(price, value);
-            }
-        }
+    {
+       "index": {
+          "fields": [
+             "year"
+          ]
+       },
+       "name": "year-json-index",
+       "type": "json"
     }
 
-This is a JavaScript function that CouchDB runs for each of our documents as
-it computes the view. We'll leave the reduce function blank for the time being.
+This defines an index on the field ``year`` and allows us to send queries for
+documents from a specific year.
 
-Click "Save Document and then Build Index" and you should see result rows,
-with the various items sorted by price. This map function could be even more
-useful if it grouped the items by type so that all the prices for bananas were
-next to each other in the result set. CouchDB's key sorting system allows any
-valid JSON object as a key. In this case, we'll emit an array of [item, price]
-so that CouchDB groups by item type and price.
-
-Let's modify the view function (click the wrench icon next to the Views >
-prices Design Document on the left, then select Edit) so that it looks like
-this:
+Next, click on “edit query” and change the Mango Query to look like this:
 
 .. code-block:: javascript
 
-    function(doc) {
-        var shop, price, key;
-        if (doc.item && doc.prices) {
-            for (shop in doc.prices) {
-                price = doc.prices[shop];
-                key = [doc.item, price];
-                emit(key, shop);
-            }
+  {
+     "selector": {
+        "year": {
+           "$eq": 1988
         }
-    }
+     }
+  }
 
-Here, we first check that the document has the fields we want to use. CouchDB
-recovers gracefully from a few isolated map function failures,
-but when a map function fails regularly (due to a missing required field or
-other JavaScript exception), CouchDB shuts off its indexing to prevent any
-further resource usage. For this reason, it's important to check for the
-existence of any fields before you use them. In this case,
-our map function will skip the first "hello world" document we created
-without emitting any rows or encountering any errors. The result of this
-query should now be displayed.
+Then click on ”Run Query”.
 
-Once we know we've got a document with an item type and some prices,
-we iterate over the item's prices and emit key/values pairs. The key is an
-array of the item and the price, and forms the basis for CouchDB's sorted
-index. In this case, the value is the name of the shop where the item can be
-found for the listed price.
+The result should be a single result, the movie “My Neighbour Totoro” which
+has the year value of 1988. ``$eq`` here stands for “equal”.
 
-View rows are sorted by their keys -- in this example, first by item,
-then by price. This method of complex sorting is at the heart of creating
-useful indexes with CouchDB.
+.. note::
+    Note that if you skip adding the index, the query will still return the
+    correct results, although you will see a warning about not using a
+    pre-existing index. Not using an index will work fine on small databases
+    and is acceptable for testing out queries in development or training, but
+    we very strongly discourage doing this in any other case, since an index is
+    absolutely vital to good query performance.
 
-MapReduce can be challenging, especially if you've spent years working with
-relational databases. The important things to keep in mind are that map
-functions give you an opportunity to sort your data using any key you choose,
-and that CouchDB's design is focused on providing fast,
-efficient access to data within a range of keys.
+You can also query for all movies during the 1980s, with this selector:
+
+.. code-block:: javascript
+
+  {
+     "selector": {
+        "year": {
+           "$lt": 1990,
+           "$gte": 1980
+        }
+     }
+  }
+
+The result are the two movies from 1988 and 1989. ``$lt`` here means “lower
+than”, and ``$gte`` means “greater than or equal to”. The latter currently
+doesn’t have any effect, given that all of our movies are more recent than
+1980, but this makes the query future-proof and allows us to add older
+movies later.
 
 Triggering Replication
 ======================
@@ -406,13 +378,13 @@ through the examples.
 
 First we'll need to create an empty database to be the target of replication.
 Return to the Databases overview and create a database called
-``hello-replication``.  Now click "Replication" in the sidebar and choose
-hello-world as the source and hello-replication as the target. Click
+``hello-replication``. Now click "Replication" in the sidebar and choose
+``hello-world`` as the source and ``hello-replication`` as the target. Click
 "Replicate" to replicate your database.
 
 To view the result of your replication, click on the Databases tab again.
-You should see the hello-replication database has the same number of documents
-as the hello-world database, and it should take up roughly the same size as
+You should see the ``hello-replication`` database has the same number of documents
+as the ``hello-world`` database, and it should take up roughly the same size as
 well.
 
 .. note::

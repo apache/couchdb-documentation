@@ -10,31 +10,26 @@
 .. License for the specific language governing permissions and limitations under
 .. the License.
 
-.. _releases:
+.. _install/kubernetes:
 
-=============
-Release Notes
-=============
+==========================
+Installation on Kubernetes
+==========================
 
-.. toctree::
-    :glob:
-    :maxdepth: 2
+Apache CouchDB provides a `Helm chart`_ to enable deployment to
+Kubernetes.
 
-    3.1
-    3.0
-    2.3
-    2.2
-    2.1
-    2.0
-    1.7
-    1.6
-    1.5
-    1.4
-    1.3
-    1.2
-    1.1
-    1.0
-    0.11
-    0.10
-    0.9
-    0.8
+To install the chart with the release name ``my-release``:
+
+.. code-block:: sh
+
+    helm repo add couchdb https://apache.github.io/couchdb-helm
+
+    helm repo update
+
+    helm install --name my-release couchdb/couchdb
+
+Further details on the configuration options are available in
+the `Helm chart`_ readme.
+
+.. _Helm chart: https://hub.helm.sh/charts/couchdb/couchdb

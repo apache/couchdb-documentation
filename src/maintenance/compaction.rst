@@ -235,11 +235,11 @@ configuration setting in the `[smoosh]` block. The default configuration is
 
     [smoosh.ratio_dbs]
     priority = ratio
-    min_priority = 5.0
+    min_priority = 2.0
 
     [smoosh.ratio_views]
     priority = ratio
-    min_priority = 5.0
+    min_priority = 2.0
 
     [smoosh.slack_dbs]
     priority = slack
@@ -269,6 +269,11 @@ settings control this behavior. For example
     from = 20:00
     to = 06:00
     strict_window = true
+
+where `overnight_channel` is the name of the channel you want to configure.
+
+Note: CouchDB determines time via the UTC (GMT) timezone, so these settings must be
+expressed as UTC (GMT).
 
 The `strict_window` setting will cause the compaction daemon to suspend all
 active compactions in this channel when exiting the window, and resume them when

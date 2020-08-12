@@ -25,5 +25,7 @@ Installation
     freebsd
     docker
     snap
+    kubernetes
+    search
     upgrading
     troubleshooting

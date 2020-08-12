@@ -16,6 +16,11 @@
 Installation on Unix-like systems
 =================================
 
+.. warning::
+    CouchDB 3.0+ will not run without an admin user being created first.
+    Be sure to :ref:`create an admin user<config/admins>` before starting
+    CouchDB!
+
 .. _install/unix/binary:
 
 Installation using the Apache CouchDB convenience binary packages
@@ -30,6 +35,7 @@ to install CouchDB is to use the convenience binary packages:
 * Debian 10 (buster)
 * Ubuntu 16.04 (xenial)
 * Ubuntu 18.04 (bionic)
+* Ubuntu 20.04 (focal)
 
 These RedHat-style rpm packages and Debian-style deb packages will install CouchDB at
 ``/opt/couchdb`` and ensure CouchDB is run at system startup by the appropriate init
@@ -55,25 +61,31 @@ Enabling the Apache CouchDB package repository
 
     $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb stretch main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Debian 10 (buster)**: Run the following commands::
 
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb buster main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 16.04 (Xenial)**: Run the following commands::
 
     $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb xenial main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 **Ubuntu 18.04 (Bionic)**: Run the following commands::
 
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
+    $ sudo apt-get install -y gnupg ca-certificates
     $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
-        | sudo tee -a /etc/apt/sources.list.d/couchdb.list
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
+
+**Ubuntu 20.04 (Focal)**: Run the following commands::
+
+    $ sudo apt-get install -y gnupg ca-certificates
+    $ echo "deb https://apache.bintray.com/couchdb-deb focal main" \
+        | sudo tee /etc/apt/sources.list.d/couchdb.list
 
 .. highlight:: ini
 
@@ -104,6 +116,15 @@ Enabling the Apache CouchDB package repository
     repo_gpgcheck=0
     enabled=1
 
+**RedHat 8**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
+
+    [bintray--apache-couchdb-rpm]
+    name=bintray--apache-couchdb-rpm
+    baseurl=http://apache.bintray.com/couchdb-rpm/el8/$basearch/
+    gpgcheck=0
+    repo_gpgcheck=0
+    enabled=1
+
 Installing the Apache CouchDB packages
 --------------------------------------
 
@@ -111,7 +132,7 @@ Installing the Apache CouchDB packages
 
 **Debian/Ubuntu**: First, install the CouchDB repository key::
 
-    $ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
+    $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
       8756C4F765C9AC3CB6B85D62379CE192D401AB61
 
 Then update the repository cache and install the package::
@@ -127,6 +148,11 @@ joined together and configured consistently across all machines; **follow the**
 **RedHat/CentOS**: Run the command::
 
     $ sudo yum -y install epel-release && sudo yum -y install couchdb
+
+Once installed, :ref:`create an admin user<config/admins>` by hand before
+starting CouchDB, if your installer didn't do this for you already.
+
+You can now start the service.
 
 **Your installation is not complete. Be sure to complete the**
 :ref:`Setup <setup>` **steps for a single node or clustered installation.**
@@ -331,6 +357,10 @@ Update the permissions for your ini files::
 
 First Run
 =========
+
+.. note::
+    Be sure to :ref:`create an admin user<config/admins>` before trying to
+    start CouchDB!
 
 You can start the CouchDB server by running::
 
