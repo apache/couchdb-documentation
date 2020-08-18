@@ -300,8 +300,7 @@ several *mandatory* fields, that CouchDB needs for authentication:
 - **type** (*string*): Document type. Constantly has the value ``user``
 
 Additionally, you may specify any custom fields that relate to the target
-user. This is a good place to store user's private information because only the
-target user and CouchDB administrators may browse it.
+user.
 
 .. _org.couchdb.user:
 
