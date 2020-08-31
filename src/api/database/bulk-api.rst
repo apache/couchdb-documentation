@@ -279,7 +279,7 @@
 
     .. code-block:: http
 
-        POST /db/_all_docs HTTP/1.1
+        POST /db/_design_docs HTTP/1.1
         Accept: application/json
         Content-Length: 70
         Content-Type: application/json
