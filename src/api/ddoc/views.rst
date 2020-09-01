@@ -71,10 +71,10 @@
     :query boolean stable: Whether or not the view results should be returned
      from a stable set of shards. Default is ``false``.
     :query string stale: Allow the results from a stale view to be used.
-      Supported values: ``ok``, ``update_after`` and ``false``.
+      Supported values: ``ok`` and ``update_after``.
       ``ok`` is equivalent to ``stable=true&update=false``.
       ``update_after`` is equivalent to ``stable=true&update=lazy``.
-      ``false`` is equivalent to ``stable=false&update=true``.
+      The default behavior is equivalent to ``stable=false&update=true``.
     :query json startkey: Return records starting with the specified key.
     :query json start_key: Alias for `startkey`.
     :query string startkey_docid: Return records starting with the specified
