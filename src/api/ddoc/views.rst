@@ -76,6 +76,7 @@
       ``update_after`` is equivalent to ``stable=true&update=lazy``.
       The default behavior is equivalent to ``stable=false&update=true``.
       Note that this parameter is deprecated. Use ``stable`` and ``update`` instead.
+      See :ref:`views/generation` for more details.
     :query json startkey: Return records starting with the specified key.
     :query json start_key: Alias for `startkey`.
     :query string startkey_docid: Return records starting with the specified

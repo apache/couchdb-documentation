@@ -62,6 +62,8 @@
         from a "stable" set of shards. *Optional*
     :<json string stale: Combination of ``update=false`` and ``stable=true``
         options. Possible options: ``"ok"``, ``false`` (default). *Optional*
+        Note that this parameter is deprecated. Use ``stable`` and ``update`` instead.
+        See :ref:`views/generation` for more details.
     :<json boolean execution_stats: Include
         :ref:`execution statistics <find/statistics>` in the query response.
         *Optional, default: ``false``*
