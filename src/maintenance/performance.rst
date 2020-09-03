@@ -270,7 +270,7 @@ that will occur giving you a quick response and when views will be updated
 which will take a long time. (A 10 million document database took about 10
 minutes to load into CouchDB but about 4 hours to do view generation).
 
-In a cluster, "stable" requests are serviced by a fixed set of shards in order
+In a cluster, "stale" requests are serviced by a fixed set of shards in order
 to present users with consistent results between requests. This comes with an
 availability trade-off - the fixed set of shards might not be the most
 responsive / available within the cluster. If you don't need this kind of
