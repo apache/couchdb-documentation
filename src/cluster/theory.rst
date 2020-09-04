@@ -18,7 +18,7 @@ Theory
 
 Before we move on, we need some theory.
 
-As you see in ``etc/default.ini`` there is a section called [cluster]
+As you see in ``etc/default.ini`` there is a section called ``[cluster]``
 
 .. code-block:: text
 
