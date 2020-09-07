@@ -254,6 +254,8 @@ For example, something that takes 16 hex digits to represent can be done in
 Views
 =====
 
+.. _views/generation:
+
 Views Generation
 ----------------
 
