@@ -41,7 +41,7 @@ Features and Enhancements
 * :ghissue:`3109`: Drilldown parameters for text index searches may now be
   specified as a list of lists, to avoid having to define this redundantly
   in a single query. (Some languages don't have this facility.)
-  
+
 * :ghissue:`3132`: The new ``[chttpd] buffer_response`` option can be enabled
   to delay the start of a response until the end has been calculated. This
   increases memory usage, but simplifies client error handling as it
@@ -86,10 +86,10 @@ Bugfixes
 
 * :ghissue:`3121`: ``fips`` is now only reported in the welcome message
   if FIPS mode was enabled at boot (such as in ``vm.args``).
-  
+
 * :ghissue:`3128`: Using :method:`COPY` to copy a document will no longer
   return a JSON result with two ``ok`` fields.
-  
+
 * :ghissue:`3138`: Malformed URLs in replication requests or documents
   will no longer throw an error.
 
