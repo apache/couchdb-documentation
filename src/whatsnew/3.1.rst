@@ -31,8 +31,8 @@ Features and Enhancements
 .. rst-class:: open
 
 * :ghissue:`3102`, :ghissue:`1600`, :ghissue:`2877`, :ghissue:`2041`: When a
-  client disconnects unexpectedly, CouchDB will no longer log a "``normal``"
-  "``unknown``" error. Bring forth the rainbows.
+  client disconnects unexpectedly, CouchDB will no longer log a "``normal :
+  unknown``" error. Bring forth the rainbows.
 
 .. figure:: ../../images/gf-gnome-rainbows.png
   :align: center
@@ -41,6 +41,13 @@ Features and Enhancements
 * :ghissue:`3109`: Drilldown parameters for text index searches may now be
   specified as a list of lists, to avoid having to define this redundantly
   in a single query. (Some languages don't have this facility.)
+  
+* :ghissue:`3132`: The new ``[chttpd] buffer_response`` option can be enabled
+  to delay the start of a response until the end has been calculated. This
+  increases memory usage, but simplifies client error handling as it
+  eliminates the possibility that a response may be deliberately
+  terminated midway through, due to a timeout. This config value may be
+  changed at runtime, without impacting any in-flight responses.
 
 Performance
 -----------
@@ -69,7 +76,7 @@ Bugfixes
   invalid parameters on database creation.
 
 * :ghissue:`3090`: CouchDB now correctly encodes URLs correctly when
-  encoding the `atts_since` query string.
+  encoding the ``atts_since`` query string.
 
 * :ghissue:`2953`: Some parameters not allowed for text-index queries on
   partitioned database are now properly validated and rejected.
@@ -79,6 +86,12 @@ Bugfixes
 
 * :ghissue:`3121`: ``fips`` is now only reported in the welcome message
   if FIPS mode was enabled at boot (such as in ``vm.args``).
+  
+* :ghissue:`3128`: Using :method:`COPY` to copy a document will no longer
+  return a JSON result with two ``ok`` fields.
+  
+* :ghissue:`3138`: Malformed URLs in replication requests or documents
+  will no longer throw an error.
 
 Other
 -----
@@ -89,7 +102,7 @@ Other
   ``reduce_false``, ``rev_stemming``, ``update_documents``,
   ``view_collation_raw``, ``view_compaction``, all the
   ``view_multi_key`` tests, ``view_sandboxing``,
-  ``view_update_seq``,
+  ``view_update_seq``.
 
 .. _release/3.1.0:
 
