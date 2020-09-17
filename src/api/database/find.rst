@@ -182,7 +182,7 @@ documents whose "director" field has the value "Lars von Trier".
 .. code-block:: javascript
 
     "selector": {
-      "$title": "Live And Let Die"
+      "title": "Live And Let Die"
     },
     "fields": [
       "title",
@@ -468,7 +468,7 @@ The list of combination operators:
       "selector": {
         "$and": [
           {
-            "$title": "Total Recall"
+            "title": "Total Recall"
           },
           {
             "year": {

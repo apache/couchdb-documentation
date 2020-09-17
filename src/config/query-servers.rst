@@ -148,7 +148,7 @@ Native Erlang Query Server
         Due to security restrictions, the Erlang query server is disabled by
         default.
 
-        Unlike the JavaScript query server, the Erlang one does not runs in a
+        Unlike the JavaScript query server, the Erlang one does not run in a
         sandbox mode. This means that Erlang code has full access to your OS,
         file system and network, which may lead to security issues. While Erlang
         functions are faster than JavaScript ones, you need to be careful
