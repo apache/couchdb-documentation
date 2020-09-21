@@ -123,9 +123,8 @@ Or in a pseudo-JavaScript snippet:
         page.display_link('next');
     }
 
-
-Paging (New Way)
-================
+`page_size` based paging (recommended)
+======================================
 
 .. versionadded:: 4.0
 
@@ -134,7 +133,7 @@ query parameter::
 
     curl -X GET http://127.0.0.1:5984/artists/_design/artists/_view/by-name?page_size=5
 
-The result:
+The result::
 
 .. code-block:: javascript
 
@@ -148,13 +147,13 @@ The result:
         "next": "an encoded string representing bookmark pointing to next page of results"
     }
 
-By presence of ``next`` property we can determine if there  are more pages to display.
+By presence of ``next`` property we can determine if there are more pages to display.
 
-To get next page from CouchDB we would use::
+To get the next page from CouchDB we would use::
 
     curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?bookmark=<the next token>'
 
-The result:
+The result::
 
 .. code-block:: javascript
 
@@ -170,13 +169,12 @@ The result:
         "next": "an encoded string representing bookmark pointing to next page of results",
     }
 
-The ``previous`` property can be used to get the previous page of the results if need to::
+Likewise, the ``previous`` property can be used to get the previous page of the results::
 
     curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?bookmark=<the previous token>'
 
-
-Paging (Old Way)
-================
+Skip based paging
+=================
 
 To get the first five rows from the view result, you use the ``?limit=5``
 query parameter::
@@ -243,8 +241,8 @@ straightforward:
         return page != last_page;
     }
 
-Paging (Alternate Method)
-=========================
+`startkey` based paging
+=======================
 
 The method described above performed poorly with large skip values until
 CouchDB 1.2. Additionally, some use cases may call for the following
