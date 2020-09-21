@@ -28,7 +28,7 @@
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
 
-    :query string bookmark: A bookmark to get sepcific page of the results.
+    :query string bookmark: A bookmark to get specific page of the results.
     :query boolean conflicts: Include `conflicts` information in response.
       Ignored if `include_docs` isn't ``true``. Default is ``false``.
     :query boolean descending: Return the documents in descending order by key.
