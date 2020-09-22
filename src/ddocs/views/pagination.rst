@@ -133,7 +133,7 @@ query parameter::
 
     curl -X GET http://127.0.0.1:5984/artists/_design/artists/_view/by-name?page_size=5
 
-The result::
+The result:
 
 .. code-block:: javascript
 
@@ -153,7 +153,7 @@ To get the next page from CouchDB we would use::
 
     curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?bookmark=<the next token>'
 
-The result::
+The result:
 
 .. code-block:: javascript
 
