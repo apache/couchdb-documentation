@@ -882,7 +882,7 @@ Sending multiple queries to a view
                 ],
             },
             {
-                "total_rows" : 2667,
+                "total_rows" : 5264,
                 "offset" : 3417,
                 "rows" : [
                     {
