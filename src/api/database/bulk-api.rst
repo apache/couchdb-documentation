@@ -373,6 +373,8 @@ Sending multiple queries to a database
                 ]
             },
             {
+                "startkey": "pizza",
+                "endkey": "pizza\uFFFF",
                 "limit": 3,
                 "skip": 2
             }
@@ -394,49 +396,50 @@ Sending multiple queries to a database
     {
         "results" : [
             {
+                "total_rows": 2667,
+                "offset": null,
                 "rows": [
                     {
-                        "id": "meatballs",
+                        "id": "SpaghettiWithMeatballs",
                         "key": "meatballs",
                         "value": 1
                     },
                     {
-                        "id": "spaghetti",
+                        "id": "SpaghettiWithMeatballs",
                         "key": "spaghetti",
                         "value": 1
                     }
                 ],
-                "total_rows": 3
             },
             {
-                "offset" : 2,
+                "total_rows": 2667,
+                "offset" : 1712,
                 "rows" : [
                     {
-                        "id" : "Adukiandorangecasserole-microwave",
-                        "key" : "Aduki and orange casserole - microwave",
+                        "id" : "PizzaMargherita",
+                        "key" : "pizzamargherita",
                         "value" : [
                             null,
-                            "Aduki and orange casserole - microwave"
+                            "Pizza Margherita"
                         ]
                     },
                     {
-                        "id" : "Aioli-garlicmayonnaise",
-                        "key" : "Aioli - garlic mayonnaise",
+                        "id" : "PizzaMarinara",
+                        "key" : "pizzamarinara",
                         "value" : [
                             null,
-                            "Aioli - garlic mayonnaise"
+                            "Pizza Marinara"
                         ]
                     },
                     {
-                        "id" : "Alabamapeanutchicken",
-                        "key" : "Alabama peanut chicken",
+                        "id" : "PizzaRomana",
+                        "key" : "pizzaromana",
                         "value" : [
                             null,
-                            "Alabama peanut chicken"
+                            "Pizza Romana"
                         ]
                     }
-                ],
-                "total_rows" : 2667
+                ]
             }
         ]
     }
