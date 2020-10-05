@@ -49,7 +49,7 @@ following settings.
         database. If the difference is larger than the threshold defined here the
         background job will only be allowed to run in the main queue. Defaults to 1000.
 
-.. config:section:: ken.ignore :: Auto-Indexing Blacklist
+.. config:section:: ken.ignore :: Auto-Indexing Blocklist
 
 Entries in this configuration section can be used to tell the background indexer to skip
 over specific database shard files. The key must be the exact name of the shard with the
