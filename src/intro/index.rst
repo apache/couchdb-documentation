@@ -22,7 +22,7 @@ JSON documents. Access your documents with your web browser, :ref:`via HTTP
 :ref:`transform <listfun>` your documents with :ref:`JavaScript
 <query-server/js>`. CouchDB works well with modern web and mobile apps.  You
 can distribute your data, efficiently using CouchDB’s :ref:`incremental
-replication <replication/intro>`. CouchDB supports master-master setups with
+replication <replication/intro>`. CouchDB supports primary-primary setups with
 :ref:`automatic conflict <replication/conflicts>` detection.
 
 CouchDB comes with a suite of features, such as on-the-fly document

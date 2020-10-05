@@ -492,7 +492,7 @@ And here is an example of this in Ruby using the low-level `RestClient`_:
     p read1("test")
 
 An application written this way never has to deal with a ``PUT 409``, and is
-automatically multi-master capable.
+automatically multi-primary capable.
 
 You can see that it's straightforward enough when you know what you're doing.
 It's just that CouchDB doesn't currently provide a convenient HTTP API for
