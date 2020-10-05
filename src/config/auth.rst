@@ -231,7 +231,7 @@ Authentication Configuration
             public_fields = first_name, last_name, contacts, url
 
         .. note::
-            Using the ``public_fields`` whitelist for user document properties
+            Using the ``public_fields`` allowlist for user document properties
             requires setting the :option:`couch_httpd_auth/users_db_public`
             option to ``true`` (the latter option has no other purpose)::
 
