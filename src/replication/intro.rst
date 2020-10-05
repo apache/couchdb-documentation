@@ -86,7 +86,7 @@ replication, if it is initiated by the receiving node, it is called *pull*
 replication.
 
 Primary - Primary replication
-===========================
+=============================
 
 One replication task will only transfer changes in one direction. To achieve
 primary-primary replication, it is possible to set up two replication tasks in
