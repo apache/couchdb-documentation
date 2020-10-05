@@ -97,6 +97,9 @@ environments.)
     Either properly set up DNS and use fully-qualified domain names, or
     use IP addresses. DNS and FQDNs are preferred.
 
+    Changing the name later is somewhat cumbersome (i.e. moving shards), which
+    is why you will want to set it once and not have to change it.
+
 Open ``etc/vm.args``, on all nodes, and add ``-kernel inet_dist_listen_min 9100``
 and ``-kernel inet_dist_listen_max 9200`` like below:
 
