@@ -595,9 +595,9 @@ is an SHA1 hash of the tip commit.
 If you are replicating with one or more peers, a separate branch is made for
 each of those peers. For example, you might have::
 
-    master               -- my local branch
-    remotes/foo/master   -- branch on peer 'foo'
-    remotes/bar/master   -- branch on peer 'bar'
+    main               -- my local branch
+    remotes/foo/main   -- branch on peer 'foo'
+    remotes/bar/main   -- branch on peer 'bar'
 
 In the regular workflow, replication is a "pull", importing changes from
 a remote peer into the local repository. A "pull" does two things: first "fetch"
@@ -609,24 +609,24 @@ Now let's consider the business card. Alice has created a Git repo containing
 this, where ``AAAAAAAA`` is the SHA1 of the commit::
 
     ---------- desktop ----------           ---------- laptop ----------
-    master: AAAAAAAA                        master: AAAAAAAA
-    remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
+    main: AAAAAAAA                        main: AAAAAAAA
+    remotes/laptop/main: AAAAAAAA         remotes/desktop/main: AAAAAAAA
 
 Now she makes a change on the desktop, and commits it into the desktop repo;
 then she makes a different change on the laptop, and commits it into the laptop
 repo::
 
     ---------- desktop ----------           ---------- laptop ----------
-    master: BBBBBBBB                        master: CCCCCCCC
-    remotes/laptop/master: AAAAAAAA         remotes/desktop/master: AAAAAAAA
+    main: BBBBBBBB                        main: CCCCCCCC
+    remotes/laptop/main: AAAAAAAA         remotes/desktop/main: AAAAAAAA
 
 Now on the desktop she does ``git pull laptop``. First, the remote objects
 are copied across into the local repo and the remote tracking branch is
 updated::
 
     ---------- desktop ----------           ---------- laptop ----------
-    master: BBBBBBBB                        master: CCCCCCCC
-    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
+    main: BBBBBBBB                        main: CCCCCCCC
+    remotes/laptop/main: CCCCCCCC         remotes/desktop/main: AAAAAAAA
 
 .. note::
     The repo still contains AAAAAAAA because commits BBBBBBBB and CCCCCCCC
@@ -639,15 +639,15 @@ the parent commit to ``CCCCCCCC`` is ``AAAAAAAA``, it takes a diff between
 If this is successful, then you'll get a new version with a merge commit::
 
     ---------- desktop ----------           ---------- laptop ----------
-    master: DDDDDDDD                        master: CCCCCCCC
-    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: AAAAAAAA
+    main: DDDDDDDD                        main: CCCCCCCC
+    remotes/laptop/main: CCCCCCCC         remotes/desktop/main: AAAAAAAA
 
 Then Alice has to logon to the laptop and run ``git pull desktop``. A similar
 process occurs. The remote tracking branch is updated::
 
     ---------- desktop ----------           ---------- laptop ----------
-    master: DDDDDDDD                        master: CCCCCCCC
-    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
+    main: DDDDDDDD                        main: CCCCCCCC
+    remotes/laptop/main: CCCCCCCC         remotes/desktop/main: DDDDDDDD
 
 Then a merge takes place. This is a special case: ``CCCCCCCC`` is one of the
 parent commits of ``DDDDDDDD``, so the laptop can `fast forward` update from
@@ -655,8 +655,8 @@ parent commits of ``DDDDDDDD``, so the laptop can `fast forward` update from
 This leaves the final state as::
 
     ---------- desktop ----------           ---------- laptop ----------
-    master: DDDDDDDD                        master: DDDDDDDD
-    remotes/laptop/master: CCCCCCCC         remotes/desktop/master: DDDDDDDD
+    main: DDDDDDDD                        main: DDDDDDDD
+    remotes/laptop/main: CCCCCCCC         remotes/desktop/main: DDDDDDDD
 
 Now this is all and good, but you may wonder how this is relevant when thinking
 about CouchDB.
@@ -678,10 +678,10 @@ multiple remote tracking branches, some of which may match your local branch,
 some of which may be behind you, and some of which may be ahead of you
 (i.e. contain changes that you haven't yet merged)::
 
-    master: AAAAAAAA
-    remotes/foo/master: BBBBBBBB
-    remotes/bar/master: CCCCCCCC
-    remotes/baz/master: AAAAAAAA
+    main: AAAAAAAA
+    remotes/foo/main: BBBBBBBB
+    remotes/bar/main: CCCCCCCC
+    remotes/baz/main: AAAAAAAA
 
 Note that each peer is explicitly tracked, and therefore has to be explicitly
 created. If a peer becomes stale or is no longer needed, it's up to you to
