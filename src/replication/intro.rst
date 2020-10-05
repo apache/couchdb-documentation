@@ -85,11 +85,11 @@ When a replication task is initiated on the sending node, it is called *push*
 replication, if it is initiated by the receiving node, it is called *pull*
 replication.
 
-Master - Master replication
+Primary - Primary replication
 ===========================
 
 One replication task will only transfer changes in one direction. To achieve
-master-master replication, it is possible to set up two replication tasks in
+primary-primary replication, it is possible to set up two replication tasks in
 opposite direction. When a change is replicated from database A to B by the
 first task, the second task from B to A will discover that the new change on
 B already exists in A and will wait for further changes.
