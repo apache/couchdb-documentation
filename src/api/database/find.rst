@@ -965,9 +965,6 @@ built using MapReduce Views.
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
         Geospatial indexes will be supported in the future. *Optional*
         Text indexes are supported via a third party library *Optional*
-    :query json partial_filter_selector: A :ref:`selector <find/selectors>`
-        to apply to documents at indexing time, creating a
-        :ref:`partial index <find/partial_indexes>`. *Optional*
     :query boolean partitioned: Determines whether a JSON index is partitioned
         or global. The default value of ``partitioned`` is the ``partitioned``
         property of the database. To create a global index on a
@@ -994,7 +991,7 @@ built using MapReduce Views.
 
 The index object is a JSON object with the following fields:
 
--  ``fields``: array of field names following the :ref:`sort 
+-  ``fields``: array of field names following the :ref:`sort
    syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
 -  ``partial_filter_selector``: A :ref:`selector <find/selectors>`
    to apply to documents at indexing time, creating a
@@ -1040,28 +1037,35 @@ The returned JSON confirms the index has been created:
 
 Example index creation using all available query parameters
 
-.. code-block:: javascript
+    **Request**:
+
+    .. code-block:: http
+
+        POST /db/_index HTTP/1.1
+        Content-Type: application/json
+        Content-Length: 396
+        Host: localhost:5984
 
         {
-          "index": {
-            "partial_filter_selector": {
-              "year": {
-                "$gt": 2010
-              },
-              "limit": 10,
-              "skip": 0
+            "index": {
+                "partial_filter_selector": {
+                    "year": {
+                        "$gt": 2010
+                    },
+                    "limit": 10,
+                    "skip": 0
+                },
+                "fields": [
+                    "_id",
+                    "_rev",
+                    "year",
+                    "title"
+                ]
             },
-            "fields": [
-              "_id",
-              "_rev",
-              "year",
-              "title"
-            ]
-          },
-          "ddoc": "example-ddoc",
-          "name": "example-index",
-          "type": "json",
-          "partitioned": false
+            "ddoc": "example-ddoc",
+            "name": "example-index",
+            "type": "json",
+            "partitioned": false
         }
 
 By default, a JSON index will include all documents that have the indexed fields
