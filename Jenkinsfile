@@ -34,7 +34,6 @@ pipeline {
                 image "${DOCKER_IMAGE}"
                 label 'docker'
                 args "${DOCKER_ARGS}"
-                alwaysPull true
               }
             }
             options {
