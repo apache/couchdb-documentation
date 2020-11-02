@@ -59,9 +59,9 @@ Base CouchDB Options
     .. config:option:: enable_database_recovery :: Enable database recovery
 
         Enable this to only "soft-delete" databases when
-        :ref:`DELETE /{db} <api/db>` DELETE  requests are made. This will place
-        a ``.recovery`` directory in your data directory and move deleted
-        databases/shards there instead. You can then manually delete these
+        :ref:`DELETE /{db} <api/db>` DELETE  requests are made. This will
+        rename all shards of the database with a suffix of the form
+        ``<dbname>.YMD.HMS.deleted.couchdb``. You can then manually delete these
         files later, as desired.
 
         Default is ``false``. ::
