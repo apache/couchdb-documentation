@@ -1728,7 +1728,7 @@ containing only the requested individual statistic.
 
     :>header Content-Type: :mimetype:`application/json`
     :code 200: Request completed successfully
-    :code 404: The server is unavaialble for requests at this time.
+    :code 404: The server is unavailable for requests at this time.
 
     **Response**:
 
