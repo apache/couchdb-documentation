@@ -231,6 +231,16 @@ response headers important to CouchDB are listed below.
   not know beforehand the size of the data it will send (for example,
   the :ref:`changes feed <changes>`).
 
+- ``X-CouchDB-Body-Time``
+
+  Time spent receiving the request body in milliseconds.
+
+  Available when body content is included in the request.
+
+- ``X-Couch-Request-ID``
+
+  Unique identifier for the request.
+
 .. _chunked transfer encoding:
     https://en.wikipedia.org/wiki/Chunked_transfer_encoding
 
