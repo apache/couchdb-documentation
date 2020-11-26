@@ -17,8 +17,8 @@ Cluster Management
 ==================
 
 As of CouchDB 2.0.0, CouchDB can be run in two different modes of operation:
-    * Standalone
-    * Cluster
+    * Standalone: The default mode of operation. Each instance is a single logical entity. Typically replication is setup to other standalone CouchDB instances.
+    * Cluster: Multiple CouchDBs build a single entity where each CouchDB is a node in the cluster. The cluster itsself is a single logical database which is hosted on multiple servers/VMs. Operations like writing need to reach a quorum in the cluster to guarantee that the change is agreed on by all nodes eventually.
 
 This section details the theory behind CouchDB clusters, and provides specific
 operational instructions on node, database and shard management.
