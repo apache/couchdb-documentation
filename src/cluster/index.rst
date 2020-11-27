@@ -17,8 +17,11 @@ Cluster Management
 ==================
 
 As of CouchDB 2.0.0, CouchDB can be run in two different modes of operation:
-    * Standalone: In this mode, CouchDB's clustering is unavailable. CouchDB's HTML-based replication with other CouchDB installations remains available.
-    * Cluster: A cluster of CouchDB installations internally replicate with each other via optimized network connections. This is intended to be used with servers that are in the same data center. This allow for database sharding to improve performance.
+    * Standalone: In this mode, CouchDB's clustering is unavailable. 
+      CouchDB's HTML-based replication with other CouchDB installations remains available.
+    * Cluster: A cluster of CouchDB installations internally replicate with each other via optimized network connections.
+      This is intended to be used with servers that are in the same data center. 
+      This allow for database sharding to improve performance.
 
 This section details the theory behind CouchDB clusters, and provides specific
 operational instructions on node, database and shard management.
