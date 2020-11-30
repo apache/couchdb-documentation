@@ -45,5 +45,5 @@ couch_peruser Options
         [couch_peruser]
         delete_dbs = false
         
-    Note: When using jwt authorization, the provided token must include a custom _couchdb.roles=['_admin'] claim to for
+    Note: When using JWT authorization, the provided token must include a custom _couchdb.roles=['_admin'] claim to for
     the peruser database to be properly created and accessible for the user provided in the sub= claim
