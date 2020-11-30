@@ -123,8 +123,58 @@ Or in a pseudo-JavaScript snippet:
         page.display_link('next');
     }
 
-Paging
-======
+`page_size` based paging (recommended)
+======================================
+
+.. versionadded:: 4.0
+
+To get the first five rows from the view result, you use the ``?page_size=5``
+query parameter::
+
+    curl -X GET http://127.0.0.1:5984/artists/_design/artists/_view/by-name?page_size=5
+
+The result:
+
+.. code-block:: javascript
+
+    {"total_rows":11,"offset":0,"rows":[
+        {"id":"a0746072bba60a62b01209f467ca4fe2","key":"Biffy Clyro","value":null},
+        {"id":"b47d82284969f10cd1b6ea460ad62d00","key":"Foo Fighters","value":null},
+        {"id":"45ccde324611f86ad4932555dea7fce0","key":"Tenacious D","value":null},
+        {"id":"d7ab24bb3489a9010c7d1a2087a4a9e4","key":"Future of the Left","value":null},
+        {"id":"ad2f85ef87f5a9a65db5b3a75a03cd82","key":"Helmet","value":null}
+    ],
+        "next": "an encoded string representing bookmark pointing to next page of results"
+    }
+
+By presence of ``next`` property we can determine if there are more pages to display.
+
+To get the next page from CouchDB we would use::
+
+    curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?bookmark=<the next token>'
+
+The result:
+
+.. code-block:: javascript
+
+    {"total_rows":11,"offset":5,"rows":[
+        {"id":"a2f31cfa68118a6ae9d35444fcb1a3cf","key":"Nirvana","value":null},
+        {"id":"67373171d0f626b811bdc34e92e77901","key":"Kerub","value":null},
+        {"id":"3e1b84630c384f6aef1a5c50a81e4a34","key":"Perfect Circle","value":null},
+        {"id":"84a371a7b8414237fad1b6aaf68cd16a","key":"Queens of the Stone Age",
+        "value":null},
+        {"id":"dcdaf08242a4be7da1a36e25f4f0b022","key":"Silverchair","value":null}
+    ],
+        "previous": "an encoded string representing bookmark pointing to previous page of results",
+        "next": "an encoded string representing bookmark pointing to next page of results",
+    }
+
+Likewise, the ``previous`` property can be used to get the previous page of the results::
+
+    curl -X GET 'http://127.0.0.1:5984/artists/_design/artists/_view/by-name?bookmark=<the previous token>'
+
+Skip based paging
+=================
 
 To get the first five rows from the view result, you use the ``?limit=5``
 query parameter::
@@ -191,8 +241,8 @@ straightforward:
         return page != last_page;
     }
 
-Paging (Alternate Method)
-=========================
+`startkey` based paging
+=======================
 
 The method described above performed poorly with large skip values until
 CouchDB 1.2. Additionally, some use cases may call for the following
