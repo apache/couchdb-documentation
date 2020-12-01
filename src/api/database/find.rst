@@ -965,9 +965,6 @@ built using MapReduce Views.
     :query string type: Can be ``"json"`` or ``"text"``. Defaults to json.
         Geospatial indexes will be supported in the future. *Optional*
         Text indexes are supported via a third party library *Optional*
-    :query json partial_filter_selector: A :ref:`selector <find/selectors>`
-        to apply to documents at indexing time, creating a
-        :ref:`partial index <find/partial_indexes>`. *Optional*
     :query boolean partitioned: Determines whether a JSON index is partitioned
         or global. The default value of ``partitioned`` is the ``partitioned``
         property of the database. To create a global index on a
@@ -987,14 +984,18 @@ built using MapReduce Views.
     :code 200: Index created successfully or already exists
     :code 400: Invalid request
     :code 401: Admin permission required
+    :code 404: Database not found
     :code 500: Execution error
 
-**Index object format for JSON type indexes**
+    The `Index object` is a JSON object with the following fields:
 
-The index object is a JSON array of field names following the :ref:`sort
-syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
+    :json array fields: array of field names following the :ref:`sort
+       syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
+    :json json partial_filter_selector: A :ref:`selector <find/selectors>`
+       to apply to documents at indexing time, creating a
+       :ref:`partial index <find/partial_indexes>`. *Optional*
 
-Example of creating a new index for the field called ``foo``:
+    Example of creating a new index for a field called ``foo``:
 
     **Request**:
 
@@ -1034,19 +1035,36 @@ The returned JSON confirms the index has been created:
 
 Example index creation using all available query parameters
 
-.. code-block:: javascript
+    **Request**:
 
-    {
-      "selector": {
-        "year": {
-          "$gt": 2010
+    .. code-block:: http
+
+        POST /db/_index HTTP/1.1
+        Content-Type: application/json
+        Content-Length: 396
+        Host: localhost:5984
+
+        {
+            "index": {
+                "partial_filter_selector": {
+                    "year": {
+                        "$gt": 2010
+                    },
+                    "limit": 10,
+                    "skip": 0
+                },
+                "fields": [
+                    "_id",
+                    "_rev",
+                    "year",
+                    "title"
+                ]
+            },
+            "ddoc": "example-ddoc",
+            "name": "example-index",
+            "type": "json",
+            "partitioned": false
         }
-      },
-      "fields": ["_id", "_rev", "year", "title"],
-      "sort": [{"year": "asc"}],
-      "limit": 10,
-      "skip": 0
-    }
 
 By default, a JSON index will include all documents that have the indexed fields
 present, including those which have null values.
