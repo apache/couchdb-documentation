@@ -987,17 +987,15 @@ built using MapReduce Views.
     :code 404: Database not found
     :code 500: Execution error
 
-**Index object format for JSON type indexes**
+    The `Index object` is a JSON object with the following fields:
 
-The index object is a JSON object with the following fields:
+    :json array fields: array of field names following the :ref:`sort
+       syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
+    :json json partial_filter_selector: A :ref:`selector <find/selectors>`
+       to apply to documents at indexing time, creating a
+       :ref:`partial index <find/partial_indexes>`. *Optional*
 
--  ``fields``: array of field names following the :ref:`sort
-   syntax <find/sort>`. Nested fields are also allowed, e.g. `"person.name"`.
--  ``partial_filter_selector``: A :ref:`selector <find/selectors>`
-   to apply to documents at indexing time, creating a
-   :ref:`partial index <find/partial_indexes>`. *Optional*
-
-Example of creating a new index for the field called ``foo``:
+    Example of creating a new index for a field called ``foo``:
 
     **Request**:
 
