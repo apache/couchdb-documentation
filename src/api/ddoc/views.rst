@@ -301,7 +301,7 @@ Accessing a stale view:
 
 - Returns the current version of the view index, if a current version exists.
 
-- Returns an empty result set if the given view index does exist.
+- Returns an empty result set if the given view index does not exist.
 
 As an alternative, you use the ``update_after`` value to the ``stale``
 parameter. This causes the view to be returned as a stale view, but for the
