@@ -62,7 +62,7 @@ clarity):
 .. note::
     On Microsoft Windows, use double-quotes anywhere you see single-quotes in
     the following examples. Use doubled double-quotes ("") anywhere you see
-    single quotes. For example, if you see:
+    single double-quotes. For example, if you see:
 
     .. code-block:: bash
 
