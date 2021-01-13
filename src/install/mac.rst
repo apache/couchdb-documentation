@@ -29,7 +29,7 @@ application. Just follow the below instructions:
 #. Double click on the Zip file
 #. Drag and drop the Apache CouchDB.app into Applications folder
 
-.. _Download Apache CouchDB for macOS: http://couchdb.org/#download
+.. _Download Apache CouchDB for macOS: http://couchdb.apache.org/#download
 .. _archive: http://archive.apache.org/dist/couchdb/binary/mac/
 
 That's all, now CouchDB is installed on your Mac:
