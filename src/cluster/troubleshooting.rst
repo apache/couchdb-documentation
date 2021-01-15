@@ -12,9 +12,9 @@
 
 .. _cluster/troubleshooting:
 
-====================================
-Trouble Shooting with Weather Report
-====================================
+=============================================
+Troubleshooting CouchDB 3 with Weather Report
+=============================================
 
 .. _cluster/troubleshooting/overview:
 
@@ -22,7 +22,8 @@ Overview
 ========
 
 ``weatherreport`` is an escript and set of tools that diagnoses common
-problems which could affect a CouchDB node or cluster.
+problems which could affect a CouchDB version 3 node or cluster. It
+does not support version 4 or later.
 
 Here is a basic example of using ``weatherreport`` followed immediately
 by the command's output:
@@ -100,7 +101,7 @@ the ``--level`` option:
     [warning] Cluster member node3@127.0.0.1 is not connected to this node. Please check whether it is down.
     [info] Process is using 0.3% of available RAM, totalling 25116 KB of real memory.
 
-Most times you'll want to use the defaults, but any Syslog severity
+Most times you'll want to use the defaults, but any syslog severity
 name will do (from most to least verbose): ``debug, info, notice,
 warning, error, critical, alert, emergency``.
 
