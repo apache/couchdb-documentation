@@ -86,7 +86,7 @@ the ``--level`` option:
 
 .. code-block:: bash
 
-    $ weatherreport --etc /path/to/etc -d debug
+    $ weatherreport --etc /path/to/etc --level debug
     [debug] Not connected to the local cluster node, trying to connect. alive:false connect_failed:undefined
     [debug] Starting distributed Erlang.
     [debug] Connected to local cluster node 'node1@127.0.0.1'.
