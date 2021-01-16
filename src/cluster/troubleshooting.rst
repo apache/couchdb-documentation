@@ -12,18 +12,19 @@
 
 .. _cluster/troubleshooting:
 
-=============================================
-Troubleshooting CouchDB 3 with Weather Report
-=============================================
+============================================
+Troubleshooting CouchDB 3 with WeatherReport
+============================================
 
 .. _cluster/troubleshooting/overview:
 
 Overview
 ========
 
-``weatherreport`` is an escript and set of tools that diagnoses common
-problems which could affect a CouchDB version 3 node or cluster. It
-does not support version 4 or later.
+WeatherReport is an OTP application and set of tools that diagnoses
+common problems which could affect a CouchDB version 3 node or cluster
+(version 4 or later is not supported). It is accessed via the
+``weatherreport`` command line escript.
 
 Here is a basic example of using ``weatherreport`` followed immediately
 by the command's output:
