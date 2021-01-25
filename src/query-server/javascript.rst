@@ -96,7 +96,7 @@ modules and functions:
 
 .. data:: JSON
 
-    `JSON2 <https://github.com/apache/couchdb/blob/master/share/server/json2.js>`_
+    `JSON2 <https://github.com/apache/couchdb/blob/main/share/server/json2.js>`_
     object.
 
 .. function:: isArray(obj)

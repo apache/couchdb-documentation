@@ -533,7 +533,7 @@ ID:
     See `couch_replicator_ids.erl`_ for an example of a Replication ID generation
     implementation.
 
-    .. _couch_replicator_ids.erl: https://github.com/apache/couchdb/blob/master/src/couch_replicator/src/couch_replicator_ids.erl
+    .. _couch_replicator_ids.erl: https://github.com/apache/couchdb/blob/main/src/couch_replicator/src/couch_replicator_ids.erl
 
 Retrieve Replication Logs from Source and Target
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

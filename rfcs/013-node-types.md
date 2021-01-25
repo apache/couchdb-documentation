@@ -135,7 +135,7 @@ N/A
 
 [1] https://github.com/apache/couchdb/issues/1338
 
-[2] https://github.com/apache/couchdb-documentation/blob/master/rfcs/007-background-jobs.md
+[2] https://github.com/apache/couchdb-documentation/blob/main/rfcs/007-background-jobs.md
 
 # Acknowledgments
 

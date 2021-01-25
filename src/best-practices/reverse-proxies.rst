@@ -66,7 +66,7 @@ is for a 3 node CouchDB cluster:
         server couchdb2 x.x.x.x:5984 check inter 5s
 
 .. _HAProxy: http://haproxy.org/
-.. _code repository: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg
+.. _code repository: https://github.com/apache/couchdb/blob/main/rel/haproxy.cfg
 
 Reverse proxying with nginx
 ===========================
