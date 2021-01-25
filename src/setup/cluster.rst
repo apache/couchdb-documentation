@@ -365,4 +365,4 @@ Ensure the ``all_nodes`` and ``cluster_nodes`` lists match.
 You CouchDB cluster is now set up.
 
 .. _HAProxy: http://haproxy.org/
-.. _example configuration for HAProxy: https://github.com/apache/couchdb/blob/master/rel/haproxy.cfg
+.. _example configuration for HAProxy: https://github.com/apache/couchdb/blob/main/rel/haproxy.cfg

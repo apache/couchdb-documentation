@@ -39,8 +39,8 @@ The following HTTP headers would be used to link tracing span with application s
 - b3
 
 More information about the use of these headers can be found [here](https://github.com/openzipkin/b3-propagation).
-Open tracing [specification](https://github.com/opentracing/specification/blob/master/specification.md) 
-has a number of [conventions](https://github.com/opentracing/specification/blob/master/semantic_conventions.md) 
+Open tracing [specification](https://github.com/opentracing/specification/blob/main/specification.md) 
+has a number of [conventions](https://github.com/opentracing/specification/blob/main/semantic_conventions.md) 
 which would be good to follow.
 
 In a nutshell the idea is:
@@ -133,7 +133,7 @@ Following headers on the response would be supported
 
 ## Conventions
 
-The conventions bellow are based on [conventions from opentracing](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields).
+The conventions bellow are based on [conventions from opentracing](https://github.com/opentracing/specification/blob/main/semantic_conventions.md#standard-span-tags-and-log-fields).
 All tags are optional since it is just a recomendation from open tracing to hint visualization and filtering tools.
 
 ### Span tags
@@ -224,11 +224,11 @@ The security risk of injecting malicious payload into ini config is mitigated vi
 
 # References
 
-- [opentracing specification](https://github.com/opentracing/specification/blob/master/specification.md)
+- [opentracing specification](https://github.com/opentracing/specification/blob/main/specification.md)
 - https://opentracing.io/
 - https://www.jaegertracing.io/docs/1.14/
 - https://zipkin.io
-- [opentracing conventions](https://github.com/opentracing/specification/blob/master/semantic_conventions.md) 
+- [opentracing conventions](https://github.com/opentracing/specification/blob/main/semantic_conventions.md) 
 
 
 # Acknowledgements
