@@ -24,7 +24,7 @@
     resource. Only the most recent change for a given document is guaranteed to
     be provided, for example if a document has had fields added, and then
     deleted, an API client checking for changes will not necessarily receive
-    the intermediate state of added documents.
+    the intermediate state of added fields.
 
     This can be used to listen for update and modifications to the database for
     post processing or synchronization, and for practical purposes,
