@@ -169,7 +169,7 @@ Note that:
   lowercase before uppercase, so ``a < A``
 
 .. _ICU: http://site.icu-project.org/
-.. _Unicode Collation Algorithm: http://www.unicode.org/unicode/reports/tr10/
+.. _Unicode Collation Algorithm: https://www.unicode.org/reports/tr10/
 
 You can demonstrate the collation sequence for 7-bit ASCII characters like this:
 
