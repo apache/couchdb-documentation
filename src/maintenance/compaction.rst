@@ -111,7 +111,7 @@ information about it via :ref:`database information resource <api/db>`::
         "update_seq": 76215
     }
 
-Note that ``compaction_running`` field is ``true`` indicating that compaction
+Note that ``compact_running`` field is ``true`` indicating that compaction
 is actually running. To track the compaction progress you may query the
 :get:`_active_tasks </_active_tasks>` resource::
 
