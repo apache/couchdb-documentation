@@ -87,10 +87,22 @@ familiar with JavaScript but have used C or any other C-like language such as
 Java, PHP, or C#, this should look familiar. It is a simple function definition.
 
 You provide CouchDB with view functions as strings stored inside the ``views``
-field of a design document. You don’t run it yourself. Instead, when you
+field of a design document. To create this view you can use this command:
+
+.. code-block:: console
+
+    curl -X PUT http://admin:password@127.0.0.1:5984/db/_design/my_ddoc
+         -d '{"views":{"my_filter":{"map":
+             "function(doc) { if(doc.date && doc.title) { emit(doc.date, doc.title); }}"}}}'
+
+You don’t run the JavaScript function yourself. Instead, when you
 `query your view`, CouchDB takes the source code and runs it for you on every
 document in the database your view was defined in. You `query your view` to
-retrieve the `view result`.
+retrieve the `view result` using the following command:
+
+.. code-block:: console
+
+    curl -X GET http://admin:password@127.0.0.1:5984/db/_design/my_ddoc/_view/my_filter
 
 All map functions have a single parameter doc. This is a single document in
 the database. Our map function checks whether our document has a ``date`` and
