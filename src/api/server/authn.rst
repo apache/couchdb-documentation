@@ -299,7 +299,14 @@ headers to CouchDB with related requests:
   :config:option:`proxy_use_secret <couch_httpd_auth/proxy_use_secret>`
   is set (which is strongly recommended!), this header provides an HMAC of the
   username to authenticate and the secret token to prevent requests from
-  untrusted sources.
+  untrusted sources. (Use the SHA1 of the username and sign with the secret)
+
+**Creating the token (example with openssl)**:
+
+.. code-block:: sh
+
+    echo -n "foo" | openssl dgst -sha1 -hmac "the_secret"
+    # (stdin)= 22047ebd7c4ec67dfbcbad7213a693249dbfbf86
 
 **Request**:
 
@@ -311,6 +318,7 @@ headers to CouchDB with related requests:
     Content-Type: application/json; charset=utf-8
     X-Auth-CouchDB-Roles: users,blogger
     X-Auth-CouchDB-UserName: foo
+    X-Auth-CouchDB-Token: 22047ebd7c4ec67dfbcbad7213a693249dbfbf86
 
 **Response**:
 
