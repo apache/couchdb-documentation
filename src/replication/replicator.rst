@@ -21,6 +21,11 @@ Replicator Database
    anymore. There are new replication job states and new API endpoints
    ``_scheduler/jobs`` and ``_scheduler/docs``.
 
+.. versionchanged:: 3.2.0 Fair share scheduling was introduced. Multiple
+   ``_replicator`` databases get an equal chance (configurable) of running
+   their jobs. Previously replication jobs were scheduled without any regard of
+   their originating database.
+
 The ``_replicator`` database works like any other in CouchDB, but
 documents added to it will trigger replications. Create (``PUT`` or
 ``POST``) a document to start replication. ``DELETE`` a replication
@@ -538,6 +543,46 @@ Then remove the additional replicator database:
 After this operation, replication pulling from server X will be stopped
 and the replications in the ``_replicator`` database (pulling from
 servers A and B) will continue.
+
+Fair Share Job Scheduling
+=========================
+
+When multiple ``_replicator`` databases are used, and the total number
+of jobs on any node is greater than ``max_jobs``, replication jobs
+will be scheduled such that each of the ``_replicator`` databases by
+default get an equal chance of running their jobs.
+
+This is accomplished by assigning a number of "shares" to each
+``_replicator`` database and then automatically adjusting the
+proportion of running jobs to match each database's proportion of
+shares. By default, each ``_replicator`` database is assigned 100
+shares. It is possible to alter the share assignments for each
+individual ``_replicator`` database in the :ref:`[replicator.shares]
+<config/replicator.shares>` configuration section.
+
+The fair share behavior is perhaps easier described with a set of
+examples. Each example assumes the default of ``max_jobs = 500``, and
+two replicator databases: ``_replicator`` and ``another/_replicator``.
+
+Example 1: If ``_replicator`` has 1000 jobs and
+``another/_replicator`` has 10, the scheduler will run about 490 jobs
+from ``_replicator`` and 10 jobs from ``another/_replicator``.
+
+Example 2: If ``_replicator`` has 200 jobs and ``another/_replicator``
+also has 200 jobs, all 400 jobs will get to run as the sum of all the
+jobs is less than the ``max_jobs`` limit.
+
+Example 3: If both replicator databases have 1000 jobs each, the
+scheduler will run about 250 jobs from each database on average.
+
+Example 4: If both replicator databases have 1000 jobs each, but
+``_replicator`` was assigned 400 shares, then on average the scheduler
+would run about 400 jobs from ``_replicator`` and 100 jobs from
+``_another/replicator``.
+
+The proportions described in the examples are approximate and might
+oscillate a bit, and also might take anywhere from tens of minutes to
+an hour to converge.
 
 Replicating the replicator database
 ===================================
