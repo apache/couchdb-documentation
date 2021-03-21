@@ -266,9 +266,15 @@ special security-related constraints applied. Below is a list of how the
 - There is a special design document ``_auth`` that cannot be modified
 - Every document except the `design documents` represent registered
   CouchDB users and belong to them
-- Users may only access (:get:`GET /_users/org.couchdb.user:Jan
-  </{db}/{docid}>`) or modify (:put:`PUT /_users/org.couchdb.user:Jan
-  </{db}/{docid}>`) documents that they own
+- By default, the ``_security`` settings of the ``_users`` database disallow 
+  users from accessing or modifying documents
+
+.. note::
+    
+    Settings can be changed so that users do have access to the ``_users`` database, 
+    but even then they may only access (:get:`GET /_users/org.couchdb.user:Jan
+    </{db}/{docid}>`) or modify (:put:`PUT /_users/org.couchdb.user:Jan
+    </{db}/{docid}>`) documents that they own. This will not be possible in CouchDB 4.0.
 
 These draconian rules are necessary since CouchDB cares about its users'
 personal information and will not disclose it to just anyone. Often, user
