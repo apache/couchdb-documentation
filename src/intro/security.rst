@@ -266,12 +266,12 @@ special security-related constraints applied. Below is a list of how the
 - There is a special design document ``_auth`` that cannot be modified
 - Every document except the `design documents` represent registered
   CouchDB users and belong to them
-- By default, the ``_security`` settings of the ``_users`` database disallow 
+- By default, the ``_security`` settings of the ``_users`` database disallow
   users from accessing or modifying documents
 
 .. note::
-    
-    Settings can be changed so that users do have access to the ``_users`` database, 
+
+    Settings can be changed so that users do have access to the ``_users`` database,
     but even then they may only access (:get:`GET /_users/org.couchdb.user:Jan
     </{db}/{docid}>`) or modify (:put:`PUT /_users/org.couchdb.user:Jan
     </{db}/{docid}>`) documents that they own. This will not be possible in CouchDB 4.0.
@@ -452,7 +452,6 @@ document, add a special field to it, and post it back.
 .. note::
     There is no password confirmation for API request: you should implement it
     in your application layer.
-
 
 Authorization
 =============
