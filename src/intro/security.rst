@@ -453,52 +453,6 @@ document, add a special field to it, and post it back.
     There is no password confirmation for API request: you should implement it
     in your application layer.
 
-Users Public Information
-------------------------
-
-.. versionadded:: 1.4
-
-Sometimes users *want* to share some information with the world. For instance,
-their contact email to let other users get in touch with them. To solve this
-problem, but still keep sensitive and private information secured, there is
-a special :ref:`configuration <config>` option :config:option:`public_fields
-<couch_httpd_auth/public_fields>`. In this option you may define
-a comma-separated list of users document fields that will be publicly available.
-
-Normally, if you request a user document and you're not an administrator or the
-document's owner, CouchDB will respond with :statuscode:`404`::
-
-    curl http://localhost:5984/_users/org.couchdb.user:robert
-
-.. code-block:: javascript
-
-    {"error":"not_found","reason":"missing"}
-
-This response is constant for both cases when user exists or doesn't exist for
-security reasons.
-
-Now let's share the field ``name``. First, set up the ``public_fields``
-configuration option. Remember, that this action requires administrator
-privileges. The next command will prompt you for user `admin`'s password:
-
-.. code-block:: bash
-
-    curl -X PUT http://localhost:5984/_node/nonode@nohost/_config/couch_httpd_auth/public_fields \
-       -H "Content-Type: application/json" \
-       -d '"name"' \
-       -u admin
-
-What has changed? Let's check Robert's document once again::
-
-    curl http://localhost:5984/_users/org.couchdb.user:robert
-
-.. code-block:: javascript
-
-    {"_id":"org.couchdb.user:robert","_rev":"6-869e2d3cbd8b081f9419f190438ecbe7","name":"robert"}
-
-Good news! Now we may read the field ``name`` in *every user document without
-needing to be an administrator*. Keep in mind, though, not to publish sensitive
-information, especially without user's consent!
 
 Authorization
 =============
