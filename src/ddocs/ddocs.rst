@@ -32,7 +32,7 @@ them extensively within each function:
 - :ref:`Database Security object <security_object>`
 - :ref:`Guide to JavaScript Query Server <query-server/js>`
 
-Creation and structure
+Creation and Structure
 ======================
 
 Design documents contain functions such as view and update functions. These functions
