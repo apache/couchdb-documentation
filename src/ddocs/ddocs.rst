@@ -32,10 +32,14 @@ them extensively within each function:
 - :ref:`Database Security object <security_object>`
 - :ref:`Guide to JavaScript Query Server <query-server/js>`
 
-Creation
-========
+Creation and Structure
+======================
 
-Design documents are denoted by an id field with the format ``_design/{name}``.
+Design documents contain functions such as view and update functions. These functions
+are executed when requested.
+
+Design documents are denoted by an id field with the format ``_design/{name}``. Their
+structure follows the example below.
 
 **Example**:
 
@@ -43,7 +47,31 @@ Design documents are denoted by an id field with the format ``_design/{name}``.
 
     {
         "_id": "_design/example",
+        "views": {
+            "view-number-one": {
+                "map": "function (doc) {/* function code here - see below */}"
+            },
+            "view-number-two": {
+                "map": "function (doc) {/* function code here - see below */}",
+                "reduce": "function (keys, values, rereduce) {/* function code here - see below */}"
+            }
+        },
+        "updates": {
+            "updatefun1": "function(doc,req) {/* function code here - see below */}",
+            "updatefun2": "function(doc,req) {/* function code here - see below */}"
+        },
+        "filters": {
+            "filterfunction1": "function(doc, req){ /* function code here - see below */ }"
+        },
+        "validate_doc_update": "function(newDoc, oldDoc, userCtx, secObj) { /* function code here - see below */ }",
+        "language": "javascript"
     }
+
+As you can see, a design document can include multiple functions of the same type. The
+example defines two views, both of which have a map function and one of which has a
+reduce function. It also defines two update functions and one filter function. The
+Validate Document Update function is a special case, as each design document cannot
+contain more than one of those.
 
 .. _viewfun:
 
