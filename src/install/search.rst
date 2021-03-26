@@ -77,7 +77,7 @@ the following::
          -Dsun.net.inetaddr.ttl=30 \
          -Dsun.net.inetaddr.negative.ttl=30 \
          -Dlog4j.configuration=file:/path/to/log4j.properties \
-         -XX:OnOutOfMemoryError=\"kill -9 %p\" \
+         -XX:OnOutOfMemoryError="kill -9 %p" \
          -XX:+UseConcMarkSweepGC \
          -XX:+CMSParallelRemarkEnabled \
          com.cloudant.clouseau.Main \
