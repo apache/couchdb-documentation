@@ -313,8 +313,11 @@ HTTPS (SSL/TLS) Options
     unencrypted HTTP between it and your CouchDB cluster. This is a recommended
     approach.
 
+    Additional detail may be available in the `CouchDB wiki`_.
+
     .. _`certificates HOWTO`: http://www.openssl.org/docs/HOWTO/certificates.txt
     .. _OpenSSL: http://www.openssl.org/
+    .. _`CouchDB wiki`: https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=48203146
 
     .. config:option:: cacert_file :: CA Certificate file
 
