@@ -22,16 +22,22 @@ tips and tricks that will ease the difficulty.
 
 .. rst-class:: open
 
-- Remember that CouchDB's JavaScript engine is old, only supporting the
-  ECMA-262 5th edition ("ES5") of the language. ES6/2015 and newer constructs
-  cannot be used.
+- Check the JavaScript version being used by your CouchDB. As of version 3.2.0,
+  this is reported in the output of ``GET /``. Prior to version 3.2.0, you will
+  need to see which JavaScript library is installed by your CouchDB binary
+  distribution, provided by your operating system, or linked by your compilation
+  process.
+
+  If the version is 1.8.5, this is an **old** version of JavaScript, only
+  supporting the ECMA-262 5th edition ("ES5") of the language. ES6/2015 and
+  newer constructs **cannot** be used.
 
   Fortunately, there are many tools available for transpiling modern JavaScript
   into code compatible with older JS engines. The `Babel Project website
   <http://babeljs.io/repl>`_, for example, offers an in-browser text editor
   which transpiles JavaScript in real-time. Configuring CouchDB-compatibility
   is as easy as enabling the ``ENV PRESET`` option, and typing "firefox 4.0"
-  into the *Browsers* field.
+  into the *TARGETS* field.
 
 - The ``log()`` function will log output to the CouchDB log file or stream.
   You can log strings, objects, and arrays directly, without first converting
