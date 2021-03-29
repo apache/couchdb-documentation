@@ -369,6 +369,11 @@ timeout before the connection is automatically closed (the
 the ``heartbeat`` query argument), which sends a newline to keep the
 connection active.
 
+Keep in mind that ``heartbeat`` means "Send a linefeed every ``x`` ms
+if no change arrives, and hold the connection indefinitely" while ``timeout``
+means "Hold this connection open for ``x`` ms, and if no change arrives in that
+time, close the socket."  ``heartbeat`` overrides ``timeout``.
+
 .. _changes/continuous:
 
 Continuous
@@ -383,8 +388,13 @@ closed and changes are sent to the client as they happen, i.e. in near
 real-time.
 
 As with the `longpoll` feed type you can set both the timeout and heartbeat
-intervals to ensure that the connection is kept open for new changes
-and updates.
+intervals to ensure that the connection is kept open for new changes and
+updates.
+
+Keep in mind that ``heartbeat`` means "Send a linefeed every ``x`` ms
+if no change arrives, and hold the connection indefinitely" while ``timeout``
+means "Hold this connection open for ``x`` ms, and if no change arrives in that
+time, close the socket."  ``heartbeat`` overrides ``timeout``.
 
 The continuous feed's response is a little different than the other feed types
 to simplify the job of the client - each line of the response is either empty
