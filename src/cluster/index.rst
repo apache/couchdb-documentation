@@ -35,3 +35,4 @@ operational instructions on node, database and shard management.
     databases
     sharding
     purging
+    troubleshooting
