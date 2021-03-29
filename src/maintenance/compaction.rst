@@ -16,164 +16,25 @@
 Compaction
 ==========
 
-The `compaction` operation is the way to reduce disk space usage by removing
+The `compaction` operation is a way to reduce disk space usage by removing
 unused and old data from database or view index files. This operation is very
 similar to the `vacuum` (`SQLite`_ ex.) operation available for other database
 management systems.
 
 .. _SQLite: http://www.sqlite.org/lang_vacuum.html
 
-During compaction of the `target` CouchDB creates new file with the ``.compact``
-extension and transfers only actual data into. Because of this, CouchDB checks
-first for the available disk space - it should be *twice greater* than the
-compacted file's data.
+During compaction, CouchDB re-creates the database or view in a new file
+with the ``.compact`` extension. As this requires roughly twice the disk storage,
+CouchDB first checks for available disk space before proceeding.
 
-When all actual data is successfully transferred to the `compacted` file CouchDB
-replaces the `target` with the `compacted` file.
+When all actual data is successfully transferred to the newly compacted file,
+CouchDB transparently swaps the compacted file into service, and removes the
+old database or view file.
 
-.. _compact/db:
-
-Database Compaction
-===================
-
-Database compaction compresses the database file by removing unused file
-sections created during updates. Old documents revisions are replaced with
-small amount of metadata called `tombstone` which are used for conflicts
-resolution during replication. The number of stored revisions
-(and their `tombstones`) can be configured by using the :get:`_revs_limit
-</{db}/_revs_limit>` URL endpoint.
-
-Compaction can be manually triggered per database and runs as a background
-task. To start it for specific database there is need to send HTTP
-:post:`/{db}/_compact` sub-resource of the target database::
-
-    curl -H "Content-Type: application/json" -X POST http://localhost:5984/my_db/_compact
-
-On success, HTTP status :statuscode:`202` is returned immediately:
-
-.. code-block:: http
-
-    HTTP/1.1 202 Accepted
-    Cache-Control: must-revalidate
-    Content-Length: 12
-    Content-Type: text/plain; charset=utf-8
-    Date: Wed, 19 Jun 2013 09:43:52 GMT
-    Server: CouchDB (Erlang/OTP)
-
-.. code-block:: javascript
-
-    {"ok":true}
-
-Although the request body is not used you must still specify
-:header:`Content-Type` header with :mimetype:`application/json` value
-for the request. If you don't, you will be aware about with HTTP status
-:statuscode:`415` response:
-
-.. code-block:: http
-
-    HTTP/1.1 415 Unsupported Media Type
-    Cache-Control: must-revalidate
-    Content-Length: 78
-    Content-Type: application/json
-    Date: Wed, 19 Jun 2013 09:43:44 GMT
-    Server: CouchDB (Erlang/OTP)
-
-    {"error":"bad_content_type","reason":"Content-Type must be application/json"}
-
-When the compaction is successful started and running it is possible to get
-information about it via :ref:`database information resource <api/db>`::
-
-    curl http://localhost:5984/my_db
-
-.. code-block:: http
-
-    HTTP/1.1 200 OK
-    Cache-Control: must-revalidate
-    Content-Length: 246
-    Content-Type: application/json
-    Date: Wed, 19 Jun 2013 16:51:20 GMT
-    Server: CouchDB (Erlang/OTP)
-
-    {
-        "committed_update_seq": 76215,
-        "compact_running": true,
-        "db_name": "my_db",
-        "disk_format_version": 6,
-        "doc_count": 5091,
-        "doc_del_count": 0,
-        "instance_start_time": "0",
-        "purge_seq": 0,
-        "sizes": {
-          "active": 3787996,
-          "disk": 17703025,
-          "external": 4763321
-        },
-        "update_seq": 76215
-    }
-
-Note that ``compact_running`` field is ``true`` indicating that compaction
-is actually running. To track the compaction progress you may query the
-:get:`_active_tasks </_active_tasks>` resource::
-
-    curl http://localhost:5984/_active_tasks
-
-.. code-block:: http
-
-    HTTP/1.1 200 OK
-    Cache-Control: must-revalidate
-    Content-Length: 175
-    Content-Type: application/json
-    Date: Wed, 19 Jun 2013 16:27:23 GMT
-    Server: CouchDB (Erlang/OTP)
-
-    [
-        {
-            "changes_done": 44461,
-            "database": "my_db",
-            "pid": "<0.218.0>",
-            "progress": 58,
-            "started_on": 1371659228,
-            "total_changes": 76215,
-            "type": "database_compaction",
-            "updated_on": 1371659241
-        }
-    ]
-
-.. _compact/views:
-
-Views Compaction
-================
-
-`Views` are also need compaction like databases, unlike databases views
-are compacted by groups per `design document`. To start their compaction there
-is need to send HTTP :post:`/{db}/_compact/{ddoc}` request::
-
-    curl -H "Content-Type: application/json" -X POST http://localhost:5984/dbname/_compact/designname
-
-.. code-block:: javascript
-
-    {"ok":true}
-
-This compacts the view index from the current version of the specified design
-document. The HTTP response code is :statuscode:`202`
-(like :ref:`compaction for databases <compact/db>`) and a compaction background
-task will be created.
-
-.. _compact/views/cleanup:
-
-Views cleanup
--------------
-
-View indexes on disk are named after their `MD5` hash of the view definition.
-When you change a view, old indexes remain on disk. To clean up all outdated
-view indexes (files named after the MD5 representation of views, that does not
-exist anymore) you can trigger a :ref:`view cleanup <api/db/view_cleanup>`::
-
-    curl -H "Content-Type: application/json" -X POST http://localhost:5984/dbname/_view_cleanup
-
-.. code-block:: javascript
-
-    {"ok":true}
+Since CouchDB 2.1.1, automated compaction is enabled by default, and is
+described in the next section. It is still possible to trigger manual
+compaction if desired or necessary. This is described in the subsequent
+sections.
 
 .. _compact/auto:
 
@@ -333,3 +194,147 @@ database-specific thresholds as in the ``mydb`` setting above. Rather, channels
 can be configured to focus on specific classes of files: large databases, small
 view indexes, and so on. Most cases of named database compaction rules can be
 expressed using properties of those databases and/or their associated views.
+
+.. _compact/db:
+
+Manual Database Compaction
+==========================
+
+Database compaction compresses the database file by removing unused file
+sections created during updates. Old documents revisions are replaced with
+small amount of metadata called `tombstone` which are used for conflicts
+resolution during replication. The number of stored revisions
+(and their `tombstones`) can be configured by using the :get:`_revs_limit
+</{db}/_revs_limit>` URL endpoint.
+
+Compaction can be manually triggered per database and runs as a background
+task. To start it for specific database there is need to send HTTP
+:post:`/{db}/_compact` sub-resource of the target database::
+
+    curl -H "Content-Type: application/json" -X POST http://localhost:5984/my_db/_compact
+
+On success, HTTP status :statuscode:`202` is returned immediately:
+
+.. code-block:: http
+
+    HTTP/1.1 202 Accepted
+    Cache-Control: must-revalidate
+    Content-Length: 12
+    Content-Type: text/plain; charset=utf-8
+    Date: Wed, 19 Jun 2013 09:43:52 GMT
+    Server: CouchDB (Erlang/OTP)
+
+.. code-block:: javascript
+
+    {"ok":true}
+
+Although the request body is not used you must still specify
+:header:`Content-Type` header with :mimetype:`application/json` value
+for the request. If you don't, you will be aware about with HTTP status
+:statuscode:`415` response:
+
+.. code-block:: http
+
+    HTTP/1.1 415 Unsupported Media Type
+    Cache-Control: must-revalidate
+    Content-Length: 78
+    Content-Type: application/json
+    Date: Wed, 19 Jun 2013 09:43:44 GMT
+    Server: CouchDB (Erlang/OTP)
+
+    {"error":"bad_content_type","reason":"Content-Type must be application/json"}
+
+When the compaction is successful started and running it is possible to get
+information about it via :ref:`database information resource <api/db>`::
+
+    curl http://localhost:5984/my_db
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Length: 246
+    Content-Type: application/json
+    Date: Wed, 19 Jun 2013 16:51:20 GMT
+    Server: CouchDB (Erlang/OTP)
+
+    {
+        "committed_update_seq": 76215,
+        "compact_running": true,
+        "db_name": "my_db",
+        "disk_format_version": 6,
+        "doc_count": 5091,
+        "doc_del_count": 0,
+        "instance_start_time": "0",
+        "purge_seq": 0,
+        "sizes": {
+          "active": 3787996,
+          "disk": 17703025,
+          "external": 4763321
+        },
+        "update_seq": 76215
+    }
+
+Note that ``compact_running`` field is ``true`` indicating that compaction
+is actually running. To track the compaction progress you may query the
+:get:`_active_tasks </_active_tasks>` resource::
+
+    curl http://localhost:5984/_active_tasks
+
+.. code-block:: http
+
+    HTTP/1.1 200 OK
+    Cache-Control: must-revalidate
+    Content-Length: 175
+    Content-Type: application/json
+    Date: Wed, 19 Jun 2013 16:27:23 GMT
+    Server: CouchDB (Erlang/OTP)
+
+    [
+        {
+            "changes_done": 44461,
+            "database": "my_db",
+            "pid": "<0.218.0>",
+            "progress": 58,
+            "started_on": 1371659228,
+            "total_changes": 76215,
+            "type": "database_compaction",
+            "updated_on": 1371659241
+        }
+    ]
+
+.. _compact/views:
+
+Manual View Compaction
+======================
+
+`Views` also need compaction. Unlike databases, views are compacted by groups
+per `design document`. To start their compaction, send the HTTP
+:post:`/{db}/_compact/{ddoc}` request::
+
+    curl -H "Content-Type: application/json" -X POST http://localhost:5984/dbname/_compact/designname
+
+.. code-block:: javascript
+
+    {"ok":true}
+
+This compacts the view index from the current version of the specified design
+document. The HTTP response code is :statuscode:`202`
+(like :ref:`compaction for databases <compact/db>`) and a compaction background
+task will be created.
+
+.. _compact/views/cleanup:
+
+Views cleanup
+-------------
+
+View indexes on disk are named after their `MD5` hash of the view definition.
+When you change a view, old indexes remain on disk. To clean up all outdated
+view indexes (files named after the MD5 representation of views, that does not
+exist anymore) you can trigger a :ref:`view cleanup <api/db/view_cleanup>`::
+
+    curl -H "Content-Type: application/json" -X POST http://localhost:5984/dbname/_view_cleanup
+
+.. code-block:: javascript
+
+    {"ok":true}
