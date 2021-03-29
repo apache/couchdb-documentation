@@ -199,7 +199,8 @@
       and ``false``. If ``false``, a well-formed ``_rev`` must be included in
       the document. ``new_edits=false`` is used by the replicator to insert
       documents into the target database even if that leads to the creation
-      of conflicts. *Optional*
+      of conflicts. *Optional*, **The ``false`` value is intended for use
+      only by the replicator.**
 
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
