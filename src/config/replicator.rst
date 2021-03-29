@@ -247,9 +247,6 @@ Replicator Database Configuration
           [replicator]
           auth_plugins = couch_replicator_auth_session,couch_replicator_auth_noop
 
-        .. note::
-             In version 2.2, the session plugin is considered experimental and is not enabled by default.
-
     .. config:option:: usage_coeff
 
         .. versionadded:: 3.2.0
