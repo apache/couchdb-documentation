@@ -25,7 +25,7 @@ HTTP Server Options
 .. config:section:: chttpd :: Clustered HTTP Server Options
 
 .. note::
-    In CouchDB 2.x, the `chttpd` section refers to the standard, clustered
+    In CouchDB 2.x and 3.x, the `chttpd` section refers to the standard, clustered
     port. All use of CouchDB, aside from a few specific maintenance tasks as
     described in this documentation, should be performed over this port.
 
