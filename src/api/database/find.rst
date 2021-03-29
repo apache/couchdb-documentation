@@ -44,6 +44,9 @@
     :<json string|array use_index: Instruct a query to use a specific index.
         Specified either as ``"<design_document>"`` or
         ``["<design_document>", "<index_name>"]``. *Optional*
+    :<json boolean conflicts: Include conflicted documents if ``true``.
+        Intended use is to easily find conflicted documents, without an
+        index or view. Default is ``false``. *Optional*
     :<json number r: Read quorum needed for the result. This defaults to 1, in
         which case the document found in the index is returned. If set to a
         higher value, each document is read from at least that many replicas
