@@ -66,7 +66,7 @@
         See :ref:`views/generation` for more details.
     :<json boolean execution_stats: Include
         :ref:`execution statistics <find/statistics>` in the query response.
-        *Optional, default: ``false``*
+        *Optional, default:* ``false``
 
     :>header Content-Type: :mimetype:`application/json`
     :>header Transfer-Encoding: ``chunked``
