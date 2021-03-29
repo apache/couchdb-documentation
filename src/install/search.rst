@@ -26,7 +26,8 @@ service is installed on the same host as CouchDB and communicates with it over
 the loopback network.
 
 The search plugin is runtime-compatible with Java JDKs 6, 7 and 8. Building a
-release from source requires JDK 6.
+release from source requires JDK 6. **It will not work with any newer version of
+Java.** Sorry about that.
 
 Installation of Binary Packages
 ===============================
