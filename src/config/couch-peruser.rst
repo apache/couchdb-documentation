@@ -48,3 +48,11 @@ couch_peruser Options
     Note: When using JWT authorization, the provided token must include a custom
     ``_couchdb.roles=['_admin']`` claim to for the peruser database to be properly
     created and accessible for the user provided in the ``sub=`` claim.
+
+    .. config:option:: q
+
+    If set, specify the sharding value for per-user databases. If unset, the
+    cluster default value will be used.
+
+        [couch_peruser]
+        q = 1
