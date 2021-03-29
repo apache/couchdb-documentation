@@ -31,9 +31,9 @@ documents added to it will trigger replications. Create (``PUT`` or
 ``POST``) a document to start replication. ``DELETE`` a replication
 document to cancel an ongoing replication.
 
-These documents have exactly the same content as the JSON objects we
-used to ``POST`` to ``_replicate`` (fields ``source``, ``target``,
-``create_target``, ``continuous``, ``doc_ids``, ``filter``,
+These documents have exactly the same content as the JSON objects we used to
+``POST`` to ``_replicate`` (fields ``source``, ``target``, ``create_target``,
+``create_target_params``, ``continuous``, ``doc_ids``, ``filter``,
 ``query_params``, ``use_checkpoints``, ``checkpoint_interval``).
 
 Replication documents can have a user defined ``_id`` (handy for finding
