@@ -648,6 +648,12 @@ Condition operators are specific to a field, and are used to evaluate the value
 stored in that field. For instance, the basic `$eq` operator matches when the
 specified field contains a value that is equal to the supplied argument.
 
+.. note::
+    For a condition operator to function correctly, the field **must exist**
+    in the document for the selector to match. As an example, ``$ne`` means
+    the specified field must exist, and is not equal to the value of the
+    argument.
+
 The basic equality and inequality operators common to most programming languages
 are supported. In addition, some 'meta' condition operators are available. Some
 condition operators accept any valid JSON content as the argument.
