@@ -17,7 +17,7 @@ Cluster Set Up
 ==============
 
 This section describes everything you need to know to prepare, install, and
-set up your first CouchDB 2.x cluster.
+set up your first CouchDB 2.x/3.x cluster.
 
 Ports and Firewalls
 ===================
@@ -41,7 +41,7 @@ CouchDB uses the following ports:
 
 CouchDB in clustered mode uses the port ``5984``, just as in a standalone
 configuration. Port ``5986``, previously used in CouchDB 2.x, has been removed
-in CouchDB 3.0. All endpoints previously accessible at that port are now
+in CouchDB 3.x. All endpoints previously accessible at that port are now
 available under the ``/_node/{node-name}/...`` hierarchy via the primary ``5984``
 port.
 
@@ -232,7 +232,7 @@ locally on each node; if so, replace ``<server-IP|FQDN>`` below with ``127.0.0.1
 The Cluster Setup Wizard
 ========================
 
-CouchDB 2.x comes with a convenient Cluster Setup Wizard as part of the Fauxton
+CouchDB 2.x/3.x comes with a convenient Cluster Setup Wizard as part of the Fauxton
 web administration interface. For first-time cluster setup, and for
 experimentation, this is your best option.
 
