@@ -93,6 +93,20 @@ HTTP Server Options
         - ``{chttpd_auth, default_authentication_handler}``: used for Basic auth;
         - ``{couch_httpd_auth, null_authentication_handler}``: disables auth, breaks CouchDB.
 
+    .. config:option:: buffer_response :: Buffered response
+
+        .. versionchanged:: 3.1.1
+
+        Set this to ``true`` to delay the start of a response until the end has
+        been calculated. This increases memory usage, but simplifies client error
+        handling as it eliminates the possibility that a response may be deliberately
+        terminated midway through, due to a timeout. This config value may be changed
+        at runtime, without impacting any in-flight responses.
+
+        Even if this is set to ``false`` (the default), buffered responses can be
+        enabled on a per-request basis for any delayed JSON response call by adding
+        ``?buffer_response=true`` to the request's parameters.
+
 .. config:section:: httpd :: HTTP Server Options
 
     .. config:option:: allow_jsonp :: Enables JSONP support
