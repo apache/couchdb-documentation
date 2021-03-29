@@ -1,0 +1,18 @@
+github:
+  description: "Apache CouchDB Documentation"
+  homepage: http://docs.couchdb.org/en/latest
+  labels:
+    - apache
+    - couchdb
+    - erlang
+    - network-client
+    - http
+    - cplusplus
+    - big-data
+    - cloud
+    - database
+    - network-server
+    - javascript
+  protected_branches:
+    main
+
