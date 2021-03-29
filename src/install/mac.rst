@@ -59,7 +59,7 @@ Installation from source
 Installation on macOS is possible from source. Download the `source tarball`_,
 extract it, and follow the instructions in the ``INSTALL.Unix.md`` file.
 
-.. _source tarball: http://couchdb.org/#download
+.. _source tarball: http://couchdb.apache.org/#download
 
 Running as a Daemon
 -------------------
