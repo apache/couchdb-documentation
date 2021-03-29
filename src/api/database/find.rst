@@ -654,10 +654,12 @@ specified field contains a value that is equal to the supplied argument.
     the specified field must exist, and is not equal to the value of the
     argument.
 
-The basic equality and inequality operators common to most programming languages
-are supported. In addition, some 'meta' condition operators are available. Some
-condition operators accept any valid JSON content as the argument.
-Other condition operators require the argument to be in a specific JSON format.
+The basic equality and inequality operators common to most programming
+languages are supported. Strict type matching is used.
+
+In addition, some 'meta' condition operators are available. Some condition
+operators accept any valid JSON content as the argument.  Other condition
+operators require the argument to be in a specific JSON format.
 
 +---------------+-------------+------------+-----------------------------------+
 | Operator type | Operator    | Argument   | Purpose                           |
