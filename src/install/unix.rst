@@ -31,6 +31,7 @@ to install CouchDB is to use the convenience binary packages:
 
 * CentOS/RHEL 6
 * CentOS/RHEL 7
+* CentOS/RHEL 8
 * Debian 9 (stretch)
 * Debian 10 (buster)
 * Ubuntu 16.04 (xenial)
@@ -207,7 +208,7 @@ You can install the dependencies by running::
 Be sure to update the version numbers to match your system's available
 packages.
 
-RedHat-based (Fedora, Centos, RHEL) Systems
+RedHat-based (Fedora, CentOS, RHEL) Systems
 -------------------------------------------
 
 You can install the dependencies by running::
@@ -215,10 +216,7 @@ You can install the dependencies by running::
     sudo yum install autoconf autoconf-archive automake \
         curl-devel erlang-asn1 erlang-erts erlang-eunit gcc-c++ \
         erlang-os_mon erlang-xmerl erlang-erl_interface help2man \
-        js-devel-1.8.5 libicu-devel libtool perl-Test-Harness
-
-While CouchDB builds against the default js-devel-1.7.0 included in some
-distributions, it's recommended to use a more recent js-devel-1.8.5.
+        libicu-devel libtool perl-Test-Harness
 
 Warning: To build a release for CouchDB the erlang-reltool package is required,
 yet on CentOS/RHEL this package depends on erlang-wx which pulls in wxGTK
