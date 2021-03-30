@@ -44,6 +44,9 @@
     :<json string|array use_index: Instruct a query to use a specific index.
         Specified either as ``"<design_document>"`` or
         ``["<design_document>", "<index_name>"]``. *Optional*
+    :<json boolean conflicts: Include conflicted documents if ``true``.
+        Intended use is to easily find conflicted documents, without an
+        index or view. Default is ``false``. *Optional*
     :<json number r: Read quorum needed for the result. This defaults to 1, in
         which case the document found in the index is returned. If set to a
         higher value, each document is read from at least that many replicas
@@ -648,10 +651,18 @@ Condition operators are specific to a field, and are used to evaluate the value
 stored in that field. For instance, the basic `$eq` operator matches when the
 specified field contains a value that is equal to the supplied argument.
 
-The basic equality and inequality operators common to most programming languages
-are supported. In addition, some 'meta' condition operators are available. Some
-condition operators accept any valid JSON content as the argument.
-Other condition operators require the argument to be in a specific JSON format.
+.. note::
+    For a condition operator to function correctly, the field **must exist**
+    in the document for the selector to match. As an example, ``$ne`` means
+    the specified field must exist, and is not equal to the value of the
+    argument.
+
+The basic equality and inequality operators common to most programming
+languages are supported. Strict type matching is used.
+
+In addition, some 'meta' condition operators are available. Some condition
+operators accept any valid JSON content as the argument.  Other condition
+operators require the argument to be in a specific JSON format.
 
 +---------------+-------------+------------+-----------------------------------+
 | Operator type | Operator    | Argument   | Purpose                           |
@@ -1140,6 +1151,14 @@ in the query selector - the partial index ensures this is always true -
 but including it makes the intent of the selector clearer and will make
 it easier to take advantage of future improvements to query planning
 (e.g. automatic selection of partial indexes).
+
+.. note::
+    An index with fields is only used, when the selector includes
+    all of the fields indexed. For instance, if an index contains ``["a". "b"]``
+    but the selector only requires field ``["a"]`` to exist in the matching
+    documents, the index would not be valid for the query. All indexes,
+    however, can be treated as if they include the special fields ``_id`` and
+    ``_rev``. They **never** need to be specified in the query selector.
 
 .. _api/db/find/index-get:
 
