@@ -32,8 +32,9 @@ All paths are specified relative to the CouchDB installation directory:
 ``/opt/couchdb`` recommended on UNIX-like systems, ``C:\CouchDB`` recommended
 on Windows systems, and a combination of two directories on macOS:
 ``Applications/Apache CouchDB.app/Contents/Resources/couchdbx-core/etc`` for
-the ``default.ini`` and ``default.d`` directories, and
-``/Users/youruser/Library/Application Support/CouchDB2/etc/couchdb`` for
+the ``default.ini`` and ``default.d`` directories, and one of
+``/Users/<your-user>/Library/Application Support/CouchDB2/etc/couchdb`` or
+``/Users/<your-user>/Library/Preferences/couchdb2-local.ini`` for
 the ``local.ini`` and ``local.d`` directories.
 
 Settings in successive documents override the settings in earlier entries.
