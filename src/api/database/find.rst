@@ -1153,7 +1153,7 @@ it easier to take advantage of future improvements to query planning
 (e.g. automatic selection of partial indexes).
 
 .. note::
-    An index with fields will never be used, unless the selector includes
+    An index with fields is only used, when the selector includes
     all of the fields indexed. For instance, if an index contains ``["a". "b"]``
     but the selector only requires field ``["a"]`` to exist in the matching
     documents, the index would not be valid for the query. All indexes,
