@@ -17,8 +17,8 @@ Guide to Views
 ==============
 
 Views are the primary tool used for querying and reporting on CouchDB documents.
-There you'll learn how they works and how to use them to build effective
-applications with CouchDB
+There you'll learn how they work and how to use them to build effective
+applications with CouchDB.
 
 .. toctree::
 
