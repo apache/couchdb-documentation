@@ -206,12 +206,17 @@ something like
 
 `GET /db/_changes/<ShardID>`
 
-will provide the change feed for a given shard using all the same semantics as
-the current changes endpoint, while
+will provide the change feed for a given shard using JSONL for all responses,
+but otherwise matching the existing format of the changes feed, while
 
 `GET /db/_changes/_meta?since=N`
 
 can be used to retrieve the shard topology as of a particular sequence.
+
+`POST /db/_changes/_reshard {"shard_count": 4}`
+
+would update the number of shards in the database. We would cap the maximum
+number of shards that a database could have as a server-wide config setting.
 
 ## HTTP API deprecations
 
