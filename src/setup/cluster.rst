@@ -149,7 +149,7 @@ In shell1:
 
 .. code-block:: erlang
 
-    net_kernel:connect_node(car@192.168.0.2).
+    net_kernel:connect_node('car@192.168.0.2').
 
 This will connect to the node called ``car`` on the server called
 ``192.168.0.2``.
