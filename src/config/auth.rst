@@ -209,6 +209,25 @@ Authentication Configuration
             [couch_httpd_auth]
             max_iterations = 100000
 
+    .. config:option:: password_regexp :: List of RegExp to check new passwords
+
+        .. versionadded:: 3.2
+
+        A list of
+        `Regular Expressions <https://erlang.org/doc/man/re.html#regexp_syntax>`_
+        to check new/changed passwords.
+        When set, new user passwords must match all RegExp in this list.
+
+        A RegExp can be paired with a `reason text`:
+        ``[{"RegExp", "reason text"}, ...]``.
+        If a RegExp doesn't match, its `reason text` will be appended to the
+        default reason of ``Password does not conform to requirements.`` ::
+
+            [couch_httpd_auth]
+            ; Password must be 10 chars long and have one or more uppercase and
+            ; lowercase char and one or more numbers.
+            password_regexp = [{".{10,}", "Min length is 10 chars."}, "[A-Z]+", "[a-z]+", "\\d+"]
+
     .. config:option:: proxy_use_secret :: Force proxy auth to use secret token
 
         When this option is set to ``true``, the
