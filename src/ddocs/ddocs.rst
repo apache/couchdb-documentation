@@ -43,7 +43,15 @@ Design documents are denoted by an id field with the format ``_design/{name}``.
 
     {
         "_id": "_design/example",
+        "views": {
+          "viewname": {
+            "map": "function(key,value){...}",
+            "reduce": "_stats"
+          }
+        }
     }
+
+This design document would create a view with the name ''viewname'' with a custom map and built-in reduce function.
 
 .. _viewfun:
 
