@@ -30,6 +30,7 @@ If you are running one of the following operating systems, the easiest way
 to install CouchDB is to use the convenience binary packages:
 
 * CentOS/RHEL 7
+* CentOS/RHEL 8
 * Debian 9 (stretch)
 * Debian 10 (buster)
 * Ubuntu 16.04 (xenial)
