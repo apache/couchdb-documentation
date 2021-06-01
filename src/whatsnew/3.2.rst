@@ -1,0 +1,52 @@
+.. Licensed under the Apache License, Version 2.0 (the "License"); you may not
+.. use this file except in compliance with the License. You may obtain a copy of
+.. the License at
+..
+..   http://www.apache.org/licenses/LICENSE-2.0
+..
+.. Unless required by applicable law or agreed to in writing, software
+.. distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+.. WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+.. License for the specific language governing permissions and limitations under
+.. the License.
+
+.. _release/3.2.x:
+
+============
+3.2.x Branch
+============
+
+.. contents::
+    :depth: 1
+    :local:
+
+.. _release/3.2.0:
+
+Version 3.2.0
+=============
+
+Features and Enhancements
+-------------------------
+
+* :ghissue:`3472`, :ghissue:`3473`: Migrate some config options from [httpd]
+  to [chttpd], migrate some from [couch_httpd_auth] to [chttpd_auth], and
+  commented out in the default.ini.
+
+  **Moved config options from [httpd] to [chttpd]:**
+  `allow_jsonp`, `changes_timeout`, `config_whitelist`,
+  `enable_cors`, `secure_rewrites`, `x_forwarded_host`,
+  `x_forwarded_proto`, `x_forwarded_ssl`,
+  `enable_xframe_options`, `max_http_request_size`.
+
+  **Moved config options from [couch_httpd_auth] to [chttpd_auth]:**
+  `authentication_redirect`, `require_valid_user`, `timeout`, `auth_cache_size`,
+  `allow_persistent_cookies`, `iterations`, `min_iterations`, `max_iterations`,
+  `password_scheme`, `proxy_use_secret`, `public_fields`, `secret`,
+  `users_db_public`, `x_auth_roles`, `x_auth_token`, `x_auth_username`,
+  `cookie_domain`, `same_site`
+
+* :ghissue:`3586`: We added a new way of specifying basic auth credentials
+  which can include various characters previously not allowed to be included
+  in the url info part of endpoint urls.
+
+* Thank you for reading.

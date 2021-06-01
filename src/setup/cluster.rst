@@ -184,7 +184,7 @@ are:
    the cluster when replicating. If this value is not consistent across all nodes
    in the cluster, replications may be forced to rewind the changes feed to zero,
    leading to excessive memory, CPU and network use.
-5. A consistent :config:option:`httpd secret <couch_httpd_auth/secret>`. The secret
+5. A consistent :config:option:`httpd secret <chttpd_auth/secret>`. The secret
    is used in calculating and evaluating cookie and proxy authentication, and should
    be set consistently to avoid unnecessary repeated session cookie requests.
 
@@ -225,7 +225,7 @@ locally on each node; if so, replace ``<server-IP|FQDN>`` below with ``127.0.0.1
     curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/couchdb/uuid -d '"FIRST-UUID-GOES-HERE"'
 
     # Finally, set the shared http secret for cookie creation to the second UUID:
-    curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/couch_httpd_auth/secret -d '"SECOND-UUID-GOES-HERE"'
+    curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/chttpd_auth/secret -d '"SECOND-UUID-GOES-HERE"'
 
 .. _cluster/setup/wizard:
 

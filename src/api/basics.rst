@@ -578,7 +578,7 @@ specific request types are provided in the corresponding API call reference.
 
   A document exceeds the configured :config:option:`couchdb/max_document_size`
   value or the entire request exceeds the
-  :config:option:`httpd/max_http_request_size` value.
+  :config:option:`chttpd/max_http_request_size` value.
 
 - ``415 - Unsupported Media Type``
 

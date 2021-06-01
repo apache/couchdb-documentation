@@ -239,8 +239,8 @@ sending the username and password again::
 
 You can keep using this token for 10 minutes by default. After 10 minutes you
 need to authenticate your user again. The token lifetime can be configured
-with the timeout (in seconds) setting in the :ref:`couch_httpd_auth
-<config/couch_httpd_auth>` configuration section.
+with the timeout (in seconds) setting in the :ref:`chttpd_auth
+<config/chttpd_auth>` configuration section.
 
 .. seealso::
     :ref:`Cookie Authentication API Reference <api/auth/cookie>`

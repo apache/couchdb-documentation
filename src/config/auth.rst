@@ -106,7 +106,7 @@ Server Administrators
         1.4 `PBKDF2` server-side hashed salted password support added, now as a
         synchronous call for the ``_config/admins`` API.
 
-.. _config/couch_httpd_auth:
+.. _config/chttpd_auth:
 
 Authentication Configuration
 ============================
@@ -130,176 +130,210 @@ Authentication Configuration
             [chttpd]
             require_valid_user_except_for_up = false
 
-.. config:section:: couch_httpd_auth :: Authentication Configuration
+.. config:section:: chttpd_auth :: Authentication Configuration
+
+    .. versionchanged:: 3.2 These options were moved to [chttpd_auth] section:
+                        `authentication_redirect`, `require_valid_user`, `timeout`,
+                        `auth_cache_size`, `allow_persistent_cookies`, `iterations`,
+                        `min_iterations`, `max_iterations`, `secret`, `users_db_public`,
+                        `x_auth_roles`, `x_auth_token`, `x_auth_username`,
+                        `cookie_domain`, `same_site`.
 
     .. config:option:: allow_persistent_cookies :: Persistent cookies
+
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         When set to ``true``, CouchDB will set the Max-Age and Expires attributes
         on the cookie, which causes user agents (like browsers) to preserve the cookie
         over restarts. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             allow_persistent_cookies = true
 
     .. config:option:: cookie_domain :: Cookie Domain
 
         .. versionadded:: 2.1.1
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         Configures the ``domain`` attribute of the ``AuthSession`` cookie. By default the
         ``domain`` attribute is empty, resulting in the cookie being set on CouchDB's domain. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             cookie_domain = example.com
 
     .. config:option:: same_site :: SameSite
 
         .. versionadded:: 3.0.0
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         When this option is set to a non-empty value, a ``SameSite`` attribute is added to
         the ``AuthSession`` cookie. Valid values are ``none``, ``lax`` or ``strict``.::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             same_site = strict
 
     .. config:option:: auth_cache_size :: Authentication cache
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         Number of :ref:`userctx_object` to cache in memory, to reduce disk
         lookups. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             auth_cache_size = 50
 
     .. config:option:: authentication_redirect :: Default redirect for authentication requests
+
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         Specifies the location for redirection on successful authentication if
         a ``text/html`` response is accepted by the client (via an ``Accept``
         header). ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             authentication_redirect = /_utils/session.html
 
     .. config:option:: iterations :: PBKDF2 iterations count
 
         .. versionadded:: 1.3
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         The number of iterations for password hashing by the PBKDF2 algorithm.
         A higher  number provides better hash durability, but comes at a cost
         in performance for each request that requires authentication. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             iterations = 10000
 
     .. config:option:: min_iterations :: Minimum PBKDF2 iterations count
 
         .. versionadded:: 1.6
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         The minimum number of iterations allowed for passwords hashed by the
         PBKDF2 algorithm. Any user with fewer iterations is forbidden. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             min_iterations = 100
 
     .. config:option:: max_iterations :: Maximum PBKDF2 iterations count
 
         .. versionadded:: 1.6
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         The maximum number of iterations allowed for passwords hashed by the
         PBKDF2 algorithm. Any user with greater iterations is forbidden. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             max_iterations = 100000
 
     .. config:option:: proxy_use_secret :: Force proxy auth to use secret token
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         When this option is set to ``true``, the
-        :option:`couch_httpd_auth/secret` option is required for
+        :option:`chttpd_auth/secret` option is required for
         :ref:`api/auth/proxy`. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             proxy_use_secret = false
 
     .. config:option:: public_fields :: User documents public fields
 
         .. versionadded:: 1.4
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         A comma-separated list of field names in user documents (in
         :option:`couchdb/users_db_suffix`) that can be read by any
         user. If unset or not specified, authenticated users can only retrieve
         their own document. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             public_fields = first_name, last_name, contacts, url
 
         .. note::
             Using the ``public_fields`` allowlist for user document properties
-            requires setting the :option:`couch_httpd_auth/users_db_public`
+            requires setting the :option:`chttpd_auth/users_db_public`
             option to ``true`` (the latter option has no other purpose)::
 
-                [couch_httpd_auth]
+                [chttpd_auth]
                 users_db_public = true
 
     .. config:option:: require_valid_user :: Force user authentication
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         When this option is set to ``true``, no requests are allowed from
         anonymous users. Everyone must be authenticated. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             require_valid_user = false
 
     .. config:option:: secret :: Authentication secret token
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         The secret token is used for :ref:`api/auth/proxy` and for :ref:`api/auth/cookie`. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             secret = 92de07df7e7a3fe14808cef90a7cc0d91
 
     .. config:option:: timeout :: Session timeout
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         Number of seconds since the last request before sessions will be
         expired. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             timeout = 600
 
     .. config:option:: users_db_public :: Publish user documents
 
         .. versionadded:: 1.4
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         Allow all users to view user documents. By default, only admins may
         browse all users documents, while users may browse only their own
         document. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             users_db_public = false
 
     .. config:option:: x_auth_roles :: Proxy Auth roles header
+
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
 
         The HTTP header name (``X-Auth-CouchDB-Roles`` by default) that
         contains the list of a user's roles, separated by a comma. Used for
         :ref:`api/auth/proxy`. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             x_auth_roles = X-Auth-CouchDB-Roles
 
     .. config:option:: x_auth_token :: Proxy Auth token header
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         The HTTP header name (``X-Auth-CouchDB-Token`` by default) containing
         the token used to authenticate the authorization. This token is an
-        `HMAC-SHA1` created from the :option:`couch_httpd_auth/secret` and
-        :option:`couch_httpd_auth/x_auth_username`. The secret key should be
+        `HMAC-SHA1` created from the :option:`chttpd_auth/secret` and
+        :option:`chttpd_auth/x_auth_username`. The secret key should be
         the same on the client and the CouchDB node. This token is optional if
-        the value of the :option:`couch_httpd_auth/proxy_use_secret` option is
+        the value of the :option:`chttpd_auth/proxy_use_secret` option is
         not ``true``. Used for :ref:`api/auth/proxy`. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             x_auth_token = X-Auth-CouchDB-Token
 
     .. config:option:: x_auth_username :: Proxy Auth username header
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
+
         The HTTP header name (``X-Auth-CouchDB-UserName`` by default)
         containing the username. Used for :ref:`api/auth/proxy`. ::
 
-            [couch_httpd_auth]
+            [chttpd_auth]
             x_auth_username = X-Auth-CouchDB-UserName
 
 .. config:section:: jwt_auth :: JWT Authentication

@@ -24,10 +24,10 @@ HTTP Server Options
 
 .. config:section:: chttpd :: Clustered HTTP Server Options
 
-.. note::
-    In CouchDB 2.x and 3.x, the `chttpd` section refers to the standard, clustered
-    port. All use of CouchDB, aside from a few specific maintenance tasks as
-    described in this documentation, should be performed over this port.
+    .. note::
+        In CouchDB 2.x and 3.x, the `chttpd` section refers to the standard, clustered
+        port. All use of CouchDB, aside from a few specific maintenance tasks as
+        described in this documentation, should be performed over this port.
 
     .. config:option:: bind_address :: HTTP port IP address binding
 
@@ -107,45 +107,138 @@ HTTP Server Options
         enabled on a per-request basis for any delayed JSON response call by adding
         ``?buffer_response=true`` to the request's parameters.
 
-.. config:section:: httpd :: HTTP Server Options
-
     .. config:option:: allow_jsonp :: Enables JSONP support
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
 
         The ``true`` value of this option enables `JSONP`_ support (it's
         ``false`` by default)::
 
-            [httpd]
+            [chttpd]
             allow_jsonp = false
 
         .. _JSONP: https://en.wikipedia.org/wiki/JSONP
 
     .. config:option:: changes_timeout :: Changes feed timeout
 
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
         Specifies default `timeout` value for :ref:`Changes Feed <changes>` in
         milliseconds (60000 by default)::
 
-            [httpd]
+            [chttpd]
             changes_timeout = 60000 ; 60 seconds
 
     .. config:option:: config_whitelist :: Config options while list
 
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
         Sets the configuration modification whitelist. Only whitelisted values
         may be changed via the :ref:`config API <api/config>`. To allow the
         admin to change this value over HTTP, remember to include
-        ``{httpd,config_whitelist}`` itself. Excluding it from the list would
+        ``{chttpd,config_whitelist}`` itself. Excluding it from the list would
         require editing this file to update the whitelist::
 
-            [httpd]
-            config_whitelist = [{httpd,config_whitelist}, {log,level}, {etc,etc}]
+            [chttpd]
+            config_whitelist = [{chttpd,config_whitelist}, {log,level}, {etc,etc}]
 
     .. config:option:: enable_cors :: Activates CORS
 
         .. versionadded:: 1.3
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
 
         Controls :ref:`CORS <config/cors>` feature::
 
-            [httpd]
+            [chttpd]
             enable_cors = false
+
+    .. config:option:: secure_rewrites :: Default request handler
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
+        This option allow to isolate databases via subdomains::
+
+            [chttpd]
+            secure_rewrites = true
+
+    .. config:option:: x_forwarded_host :: X-Forwarder-Host
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
+        The `x_forwarded_host` header (``X-Forwarded-Host`` by default) is used
+        to forward the original value of the ``Host`` header field in case, for
+        example, if a reverse proxy is rewriting the "Host" header field to
+        some internal host name before forward the request to CouchDB::
+
+            [chttpd]
+            x_forwarded_host = X-Forwarded-Host
+
+        This header has higher priority above ``Host`` one, if only it exists
+        in the request.
+
+    .. config:option:: x_forwarded_proto :: X-Forwarder-Proto
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
+        `x_forwarded_proto` header (``X-Forwarder-Proto`` by default) is used
+        for identifying the originating protocol of an HTTP request, since a
+        reverse proxy may communicate with CouchDB instance using HTTP even if
+        the request to the reverse proxy is HTTPS::
+
+            [chttpd]
+            x_forwarded_proto = X-Forwarded-Proto
+
+    .. config:option:: x_forwarded_ssl :: X-Forwarder-Ssl
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
+        The `x_forwarded_ssl` header (``X-Forwarded-Ssl`` by default) tells
+        CouchDB that it should use the `https` scheme instead of the `http`.
+        Actually, it's a synonym for ``X-Forwarded-Proto: https`` header, but
+        used by some reverse proxies::
+
+            [chttpd]
+            x_forwarded_ssl = X-Forwarded-Ssl
+
+    .. config:option:: enable_xframe_options :: Controls X-Frame-Options header
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
+        Controls :ref:`Enables or disabled <config/xframe_options>` feature::
+
+            [chttpd]
+            enable_xframe_options = false
+
+    .. config:option:: max_http_request_size :: Maximum HTTP request body size
+
+        .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
+
+        Limit the maximum size of the HTTP request body. This setting applies
+        to all requests and it doesn't discriminate between single vs.
+        multi-document operations. So setting it to 1MB would block a
+        `PUT` of a document larger than 1MB, but it might also block a
+        `_bulk_docs` update of 1000 1KB documents, or a multipart/related
+        update of a small document followed by two 512KB attachments. This
+        setting is intended to be used as a protection against maliciously
+        large HTTP requests rather than for limiting maximum document sizes. ::
+
+            [chttpd]
+            max_http_request_size = 4294967296 ; 4 GB
+
+        .. warning::
+           Before version 2.1.0 :config:option:`couchdb/max_document_size` was
+           implemented effectively as ``max_http_request_size``. That is, it
+           checked HTTP request bodies instead of document sizes. After the
+           upgrade, it is advisable to review the usage of these configuration
+           settings.
+
+.. config:section:: httpd :: HTTP Server Options
+
+    .. versionchanged:: 3.2 These options were moved to [chttpd] section:
+                        `allow_jsonp`, `changes_timeout`, `config_whitelist`,
+                        `enable_cors`, `secure_rewrites`, `x_forwarded_host`,
+                        `x_forwarded_proto`, `x_forwarded_ssl`,
+                        `enable_xframe_options`, `max_http_request_size`.
 
     .. config:option:: server_options :: MochiWeb Server Options
 
@@ -161,13 +254,6 @@ HTTP Server Options
 
         .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
 
-    .. config:option:: secure_rewrites :: Default request handler
-
-        This option allow to isolate databases via subdomains::
-
-            [httpd]
-            secure_rewrites = true
-
     .. config:option:: socket_options :: Socket Options
 
         The socket options for the listening socket in CouchDB, as set at the
@@ -181,69 +267,6 @@ HTTP Server Options
         `Erlang inet`_ documentation.
 
         .. _Erlang inet: http://www.erlang.org/doc/man/inet.html#setopts-2
-
-    .. config:option:: x_forwarded_host :: X-Forwarder-Host
-
-        The `x_forwarded_host` header (``X-Forwarded-Host`` by default) is used
-        to forward the original value of the ``Host`` header field in case, for
-        example, if a reverse proxy is rewriting the "Host" header field to
-        some internal host name before forward the request to CouchDB::
-
-            [httpd]
-            x_forwarded_host = X-Forwarded-Host
-
-        This header has higher priority above ``Host`` one, if only it exists
-        in the request.
-
-    .. config:option:: x_forwarded_proto :: X-Forwarder-Proto
-
-        `x_forwarded_proto` header (``X-Forwarder-Proto`` by default) is used
-        for identifying the originating protocol of an HTTP request, since a
-        reverse proxy may communicate with CouchDB instance using HTTP even if
-        the request to the reverse proxy is HTTPS::
-
-            [httpd]
-            x_forwarded_proto = X-Forwarded-Proto
-
-    .. config:option:: x_forwarded_ssl :: X-Forwarder-Ssl
-
-        The `x_forwarded_ssl` header (``X-Forwarded-Ssl`` by default) tells
-        CouchDB that it should use the `https` scheme instead of the `http`.
-        Actually, it's a synonym for ``X-Forwarded-Proto: https`` header, but
-        used by some reverse proxies::
-
-            [httpd]
-            x_forwarded_ssl = X-Forwarded-Ssl
-
-    .. config:option:: enable_xframe_options :: Controls X-Frame-Options header
-
-        Controls :ref:`Enables or disabled <config/xframe_options>` feature::
-
-            [httpd]
-            enable_xframe_options = false
-
-    .. config:option:: max_http_request_size :: Maximum HTTP request body size
-
-        .. versionchanged:: 2.1.0
-
-        Limit the maximum size of the HTTP request body. This setting applies
-        to all requests and it doesn't discriminate between single vs.
-        multi-document operations. So setting it to 1MB would block a
-        `PUT` of a document larger than 1MB, but it might also block a
-        `_bulk_docs` update of 1000 1KB documents, or a multipart/related
-        update of a small document followed by two 512KB attachments. This
-        setting is intended to be used as a protection against maliciously
-        large HTTP requests rather than for limiting maximum document sizes. ::
-
-            [httpd]
-            max_http_request_size = 4294967296 ; 4 GB
-
-        .. warning::
-           Before version 2.1.0 :config:option:`couchdb/max_document_size` was
-           implemented effectively as ``max_http_request_size``. That is, it
-           checked HTTP request bodies instead of document sizes. After the
-           upgrade, it is advisable to review the usage of these configuration
-           settings.
 
 .. _config/ssl:
 
@@ -434,6 +457,7 @@ Cross-Origin Resource Sharing
 .. config:section:: cors :: Cross-Origin Resource Sharing
 
     .. versionadded:: 1.3 added CORS support, see JIRA :issue:`431`
+    .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
 
     `CORS`, or "Cross-Origin Resource Sharing", allows a resource such as a web
     page running JavaScript inside a browser, to make AJAX requests
@@ -460,10 +484,10 @@ Cross-Origin Resource Sharing
     origins are forbidden from making requests by default, support is available
     for simple requests, preflight requests and per-vhost configuration.
 
-    This section requires :option:`httpd/enable_cors` option have
+    This section requires :option:`chttpd/enable_cors` option have
     ``true`` value::
 
-        [httpd]
+        [chttpd]
         enable_cors = true
 
     .. config:option:: credentials
