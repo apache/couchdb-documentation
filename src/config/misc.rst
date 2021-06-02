@@ -269,3 +269,37 @@ Configuration of Database Purge
 
             [purge]
             index_lag_warn_seconds = 86400
+
+.. _config/prometheus:
+
+Configuration of Prometheus Endpoint
+===============================
+
+.. config:section:: prometheus :: Configuration of Prometheus Options
+
+    .. config:option:: additional_port
+
+        .. versionadded:: 3.2
+
+        Sets whether or not to create a separate, non-authenticated port (default is false)::
+
+            [prometheus]
+            additional_port = true
+
+    .. config:option:: bind_address
+
+        .. versionadded:: 3.2
+
+        The ip address to bind::
+
+            [prometheus]
+            bind_address = 127.0.0.1
+
+    .. config:option:: port
+
+        .. versionadded:: 3.2
+
+        The port which clients can query prometheus endpoint data without authentication
+
+            [prometheus]
+            port = 17986

@@ -1586,6 +1586,75 @@ node, you can use:
 This returns an entire statistics object, as with the full request, but
 containing only the requested individual statistic.
 
+============================
+``/_node/{node-name}/_prometheus``
+=============================
+
+.. http:get:: /_node/{node-name}/_prometheus
+    :synopsis: Returns server statistics in prometheus format
+
+    The ``_prometheus`` resource returns a text/plain response that consolidates our
+    `_stats`, `active_task`, and `_system` endpoints. The format is determined by
+    https://prometheus.io/docs/introduction/overview/. Currently the format version 2.0.
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local/_prometheus HTTP/1.1
+        Accept: text/plain
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 187
+        Content-Type: text/plain; version=2.0
+        Date: Sat, 10 May 2020 11:41:11 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        # TYPE couchdb_uptime_seconds counter
+        couchdb_uptime_seconds 1
+        # TYPE couchdb_erlang_memory_bytes gauge
+        couchdb_erlang_memory_bytes{memory_type="total"} 71237784
+        couchdb_erlang_memory_bytes{memory_type="processes"} 12248504
+        couchdb_erlang_memory_bytes{memory_type="processes_used"} 12235928
+        couchdb_erlang_memory_bytes{memory_type="system"} 58989280
+        couchdb_erlang_memory_bytes{memory_type="atom"} 1172689
+        couchdb_erlang_memory_bytes{memory_type="atom_used"} 1156575
+        couchdb_erlang_memory_bytes{memory_type="binary"} 182568
+        couchdb_erlang_memory_bytes{memory_type="code"} 27819083
+        couchdb_erlang_memory_bytes{memory_type="ets"} 3143536
+        # TYPE couchdb_erlang_gc_collections_total counter
+        couchdb_erlang_gc_collections_total 13417
+        # TYPE couchdb_erlang_gc_words_reclaimed_total counter
+        couchdb_erlang_gc_words_reclaimed_total 71296018
+        # TYPE couchdb_erlang_context_switches_total counter
+        couchdb_erlang_context_switches_total 358276
+        # TYPE couchdb_erlang_reductions_total counter
+        couchdb_erlang_reductions_total 46527253
+        # TYPE couchdb_erlang_processes gauge
+        couchdb_erlang_processes 528
+        # TYPE couchdb_erlang_process_limit gauge
+        couchdb_erlang_process_limit 262144
+        couchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "docs_read"} 4524
+        ouchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "docs_written"} 4524
+        couchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "missing_revisions_found"} 4524
+
+If the additional port config option is specified, then a client can call this api using
+a different port that does not require authentication. This option is false(OFF) by default.
+When the option true(ON), the default ports for a 3 node cluster are 17986, 27986, 37986.
+See :ref:`Configuration of Prometheus Endpoint <config/misc>` for details.
+
+.. code-block:: http
+
+        GET /_node/_local/_prometheus HTTP/1.1
+        Accept: text/plain
+        Host: localhost:17986
+
 ==============================
 ``/_node/{node-name}/_system``
 ==============================
