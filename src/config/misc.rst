@@ -273,7 +273,7 @@ Configuration of Database Purge
 .. _config/prometheus:
 
 Configuration of Prometheus Endpoint
-===============================
+====================================
 
 .. config:section:: prometheus :: Configuration of Prometheus Options
 
@@ -299,7 +299,7 @@ Configuration of Prometheus Endpoint
 
         .. versionadded:: 3.2
 
-        The port which clients can query prometheus endpoint data without authentication
+        The port on which clients can query prometheus endpoint data without authentication
 
             [prometheus]
             port = 17986

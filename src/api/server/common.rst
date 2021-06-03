@@ -1586,16 +1586,16 @@ node, you can use:
 This returns an entire statistics object, as with the full request, but
 containing only the requested individual statistic.
 
-============================
+==================================
 ``/_node/{node-name}/_prometheus``
-=============================
+==================================
 
 .. http:get:: /_node/{node-name}/_prometheus
     :synopsis: Returns server statistics in prometheus format
 
     The ``_prometheus`` resource returns a text/plain response that consolidates our
     `_stats`, `active_task`, and `_system` endpoints. The format is determined by
-    https://prometheus.io/docs/introduction/overview/. Currently the format version 2.0.
+    https://prometheus.io/docs/introduction/overview/. The format version is 2.0.
 
     **Request**:
 
@@ -1644,10 +1644,11 @@ containing only the requested individual statistic.
         ouchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "docs_written"} 4524
         couchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "missing_revisions_found"} 4524
 
-If an additional port config option is specified, then a client can call this api using a
-that port which does not require authentication. This option is false(OFF) by default.
-When the option true(ON), the default ports for a 3 node cluster are 17986, 27986, 37986.
-See :ref:`Configuration of Prometheus Endpoint <config/misc>` for details.
+If an additional port config option is specified, then a client can call this API using
+that port which does not require authentication. This option is ``false``(OFF) by default.
+When the option ``true``(ON), the default ports for a 3 node cluster are ``17986``,
+``27986``,``37986``.
+See :ref:`Configuration of Prometheus Endpoint <config/prometheus>` for details.
 
 .. code-block:: http
 
