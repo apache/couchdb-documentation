@@ -114,6 +114,12 @@ recommendation is to limit individual partitions to less than ten
 gigabytes (10 GB) of data. Which, for the example of sensor documents,
 equates to roughly 60,000 years of data.
 
+.. note::
+
+    The ``max_partition_size`` under CouchDB dictates the partition limit.
+    The default value for this option is 10GiB but can be changed accordingly.
+    Setting the value for this option to 0 disables the partition limit.
+
 Why use partitions?
 ===================
 
