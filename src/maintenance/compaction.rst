@@ -104,11 +104,11 @@ configuration setting in the `[smoosh]` block. The default configuration is
 
     [smoosh.slack_dbs]
     priority = slack
-    min_priority = 16777216
+    min_priority = 536870912
 
     [smoosh.slack_views]
     priority = slack
-    min_priority = 16777216
+    min_priority = 536870912
 
 The "upgrade" channels are a special pair of channels that only check whether
 the `disk_format_version` for the file matches the current version, and enqueue
