@@ -1586,6 +1586,8 @@ node, you can use:
 This returns an entire statistics object, as with the full request, but
 containing only the requested individual statistic.
 
+.. _api/server/prometheus:
+
 ==================================
 ``/_node/{node-name}/_prometheus``
 ==================================
@@ -1594,8 +1596,9 @@ containing only the requested individual statistic.
     :synopsis: Returns server statistics in prometheus format
 
     The ``_prometheus`` resource returns a text/plain response that consolidates our
-    `_stats`, `active_task`, and `_system` endpoints. The format is determined by
-    https://prometheus.io/docs/introduction/overview/. The format version is 2.0.
+    :ref:`api/server/stats`, and :ref:`api/server/system` endpoints. The format is
+    determined by `Prometheus <https://prometheus.io/docs/introduction/overview/>`_.
+    The format version is 2.0.
 
     **Request**:
 
@@ -1616,38 +1619,485 @@ containing only the requested individual statistic.
         Date: Sat, 10 May 2020 11:41:11 GMT
         Server: CouchDB (Erlang/OTP)
 
+        # TYPE couchdb_couch_log_requests_total counter
+        couchdb_couch_log_requests_total{level="alert"} 0
+        couchdb_couch_log_requests_total{level="critical"} 0
+        couchdb_couch_log_requests_total{level="debug"} 0
+        couchdb_couch_log_requests_total{level="emergency"} 0
+        couchdb_couch_log_requests_total{level="error"} 0
+        couchdb_couch_log_requests_total{level="info"} 8
+        couchdb_couch_log_requests_total{level="notice"} 51
+        couchdb_couch_log_requests_total{level="warning"} 0
+        # TYPE couchdb_couch_replicator_changes_manager_deaths_total counter
+        couchdb_couch_replicator_changes_manager_deaths_total 0
+        # TYPE couchdb_couch_replicator_changes_queue_deaths_total counter
+        couchdb_couch_replicator_changes_queue_deaths_total 0
+        # TYPE couchdb_couch_replicator_changes_read_failures_total counter
+        couchdb_couch_replicator_changes_read_failures_total 0
+        # TYPE couchdb_couch_replicator_changes_reader_deaths_total counter
+        couchdb_couch_replicator_changes_reader_deaths_total 0
+        # TYPE couchdb_couch_replicator_checkpoints_failure_total counter
+        couchdb_couch_replicator_checkpoints_failure_total 0
+        # TYPE couchdb_couch_replicator_checkpoints_total counter
+        couchdb_couch_replicator_checkpoints_total 0
+        # TYPE couchdb_couch_replicator_cluster_is_stable gauge
+        couchdb_couch_replicator_cluster_is_stable 1
+        # TYPE couchdb_couch_replicator_connection_acquires_total counter
+        couchdb_couch_replicator_connection_acquires_total 0
+        # TYPE couchdb_couch_replicator_connection_closes_total counter
+        couchdb_couch_replicator_connection_closes_total 0
+        # TYPE couchdb_couch_replicator_connection_creates_total counter
+        couchdb_couch_replicator_connection_creates_total 0
+        # TYPE couchdb_couch_replicator_connection_owner_crashes_total counter
+        couchdb_couch_replicator_connection_owner_crashes_total 0
+        # TYPE couchdb_couch_replicator_connection_releases_total counter
+        couchdb_couch_replicator_connection_releases_total 0
+        # TYPE couchdb_couch_replicator_connection_worker_crashes_total counter
+        couchdb_couch_replicator_connection_worker_crashes_total 0
+        # TYPE couchdb_couch_replicator_db_scans_total counter
+        couchdb_couch_replicator_db_scans_total 1
+        # TYPE couchdb_couch_replicator_docs_completed_state_updates_total counter
+        couchdb_couch_replicator_docs_completed_state_updates_total 0
+        # TYPE couchdb_couch_replicator_docs_db_changes_total counter
+        couchdb_couch_replicator_docs_db_changes_total 0
+        # TYPE couchdb_couch_replicator_docs_dbs_created_total counter
+        couchdb_couch_replicator_docs_dbs_created_total 0
+        # TYPE couchdb_couch_replicator_docs_dbs_deleted_total counter
+        couchdb_couch_replicator_docs_dbs_deleted_total 0
+        # TYPE couchdb_couch_replicator_docs_dbs_found_total counter
+        couchdb_couch_replicator_docs_dbs_found_total 2
+        # TYPE couchdb_couch_replicator_docs_failed_state_updates_total counter
+        couchdb_couch_replicator_docs_failed_state_updates_total 0
+        # TYPE couchdb_couch_replicator_failed_starts_total counter
+        couchdb_couch_replicator_failed_starts_total 0
+        # TYPE couchdb_couch_replicator_jobs_adds_total counter
+        couchdb_couch_replicator_jobs_adds_total 0
+        # TYPE couchdb_couch_replicator_jobs_crashed gauge
+        couchdb_couch_replicator_jobs_crashed 0
+        # TYPE couchdb_couch_replicator_jobs_crashes_total counter
+        couchdb_couch_replicator_jobs_crashes_total 0
+        # TYPE couchdb_couch_replicator_jobs_duplicate_adds_total counter
+        couchdb_couch_replicator_jobs_duplicate_adds_total 0
+        # TYPE couchdb_couch_replicator_jobs_pending gauge
+        couchdb_couch_replicator_jobs_pending 0
+        # TYPE couchdb_couch_replicator_jobs_removes_total counter
+        couchdb_couch_replicator_jobs_removes_total 0
+        # TYPE couchdb_couch_replicator_jobs_running gauge
+        couchdb_couch_replicator_jobs_running 0
+        # TYPE couchdb_couch_replicator_jobs_starts_total counter
+        couchdb_couch_replicator_jobs_starts_total 0
+        # TYPE couchdb_couch_replicator_jobs_stops_total counter
+        couchdb_couch_replicator_jobs_stops_total 0
+        # TYPE couchdb_couch_replicator_jobs_total gauge
+        couchdb_couch_replicator_jobs_total 0
+        # TYPE couchdb_couch_replicator_requests_total counter
+        couchdb_couch_replicator_requests_total 0
+        # TYPE couchdb_couch_replicator_responses_failure_total counter
+        couchdb_couch_replicator_responses_failure_total 0
+        # TYPE couchdb_couch_replicator_responses_total counter
+        couchdb_couch_replicator_responses_total 0
+        # TYPE couchdb_couch_replicator_stream_responses_failure_total counter
+        couchdb_couch_replicator_stream_responses_failure_total 0
+        # TYPE couchdb_couch_replicator_stream_responses_total counter
+        couchdb_couch_replicator_stream_responses_total 0
+        # TYPE couchdb_couch_replicator_worker_deaths_total counter
+        couchdb_couch_replicator_worker_deaths_total 0
+        # TYPE couchdb_couch_replicator_workers_started_total counter
+        couchdb_couch_replicator_workers_started_total 0
+        # TYPE couchdb_auth_cache_requests_total counter
+        couchdb_auth_cache_requests_total 0
+        # TYPE couchdb_auth_cache_misses_total counter
+        couchdb_auth_cache_misses_total 0
+        # TYPE couchdb_collect_results_time_seconds summary
+        couchdb_collect_results_time_seconds{quantile="0.5"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.75"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.9"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.95"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.99"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.999"} 0.0
+        couchdb_collect_results_time_seconds_sum 0.0
+        couchdb_collect_results_time_seconds_count 0
+        # TYPE couchdb_couch_server_lru_skip_total counter
+        couchdb_couch_server_lru_skip_total 0
+        # TYPE couchdb_database_purges_total counter
+        couchdb_database_purges_total 0
+        # TYPE couchdb_database_reads_total counter
+        couchdb_database_reads_total 0
+        # TYPE couchdb_database_writes_total counter
+        couchdb_database_writes_total 0
+        # TYPE couchdb_db_open_time_seconds summary
+        couchdb_db_open_time_seconds{quantile="0.5"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.75"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.9"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.95"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.99"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.999"} 0.0
+        couchdb_db_open_time_seconds_sum 0.0
+        couchdb_db_open_time_seconds_count 0
+        # TYPE couchdb_dbinfo_seconds summary
+        couchdb_dbinfo_seconds{quantile="0.5"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.75"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.9"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.95"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.99"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.999"} 0.0
+        couchdb_dbinfo_seconds_sum 0.0
+        couchdb_dbinfo_seconds_count 0
+        # TYPE couchdb_document_inserts_total counter
+        couchdb_document_inserts_total 0
+        # TYPE couchdb_document_purges_failure_total counter
+        couchdb_document_purges_failure_total 0
+        # TYPE couchdb_document_purges_success_total counter
+        couchdb_document_purges_success_total 0
+        # TYPE couchdb_document_purges_total_total counter
+        couchdb_document_purges_total_total 0
+        # TYPE couchdb_document_writes_total counter
+        couchdb_document_writes_total 0
+        # TYPE couchdb_httpd_aborted_requests_total counter
+        couchdb_httpd_aborted_requests_total 0
+        # TYPE couchdb_httpd_all_docs_timeouts_total counter
+        couchdb_httpd_all_docs_timeouts_total 0
+        # TYPE couchdb_httpd_bulk_docs_seconds summary
+        couchdb_httpd_bulk_docs_seconds{quantile="0.5"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.75"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.9"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.95"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.99"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.999"} 0.0
+        couchdb_httpd_bulk_docs_seconds_sum 0.0
+        couchdb_httpd_bulk_docs_seconds_count 0
+        # TYPE couchdb_httpd_bulk_requests_total counter
+        couchdb_httpd_bulk_requests_total 0
+        # TYPE couchdb_httpd_clients_requesting_changes_total counter
+        couchdb_httpd_clients_requesting_changes_total 0
+        # TYPE couchdb_httpd_explain_timeouts_total counter
+        couchdb_httpd_explain_timeouts_total 0
+        # TYPE couchdb_httpd_find_timeouts_total counter
+        couchdb_httpd_find_timeouts_total 0
+        # TYPE couchdb_httpd_partition_all_docs_requests_total counter
+        couchdb_httpd_partition_all_docs_requests_total 0
+        # TYPE couchdb_httpd_partition_all_docs_timeouts_total counter
+        couchdb_httpd_partition_all_docs_timeouts_total 0
+        # TYPE couchdb_httpd_partition_explain_requests_total counter
+        couchdb_httpd_partition_explain_requests_total 0
+        # TYPE couchdb_httpd_partition_explain_timeouts_total counter
+        couchdb_httpd_partition_explain_timeouts_total 0
+        # TYPE couchdb_httpd_partition_find_requests_total counter
+        couchdb_httpd_partition_find_requests_total 0
+        # TYPE couchdb_httpd_partition_find_timeouts_total counter
+        couchdb_httpd_partition_find_timeouts_total 0
+        # TYPE couchdb_httpd_partition_view_requests_total counter
+        couchdb_httpd_partition_view_requests_total 0
+        # TYPE couchdb_httpd_partition_view_timeouts_total counter
+        couchdb_httpd_partition_view_timeouts_total 0
+        # TYPE couchdb_httpd_purge_requests_total counter
+        couchdb_httpd_purge_requests_total 0
+        # TYPE couchdb_httpd_requests_total counter
+        couchdb_httpd_requests_total 5
+        # TYPE couchdb_httpd_temporary_view_reads_total counter
+        couchdb_httpd_temporary_view_reads_total 0
+        # TYPE couchdb_httpd_view_reads_total counter
+        couchdb_httpd_view_reads_total 0
+        # TYPE couchdb_httpd_view_timeouts_total counter
+        couchdb_httpd_view_timeouts_total 0
+        # TYPE couchdb_httpd_request_methods counter
+        couchdb_httpd_request_methods{method="COPY"} 0
+        couchdb_httpd_request_methods{method="DELETE"} 0
+        couchdb_httpd_request_methods{method="GET"} 1
+        couchdb_httpd_request_methods{method="HEAD"} 0
+        couchdb_httpd_request_methods{method="OPTIONS"} 0
+        couchdb_httpd_request_methods{method="POST"} 4
+        couchdb_httpd_request_methods{method="PUT"} 0
+        couchdb_httpd_status_codes{code="200"} 1
+        couchdb_httpd_status_codes{code="201"} 1
+        couchdb_httpd_status_codes{code="202"} 0
+        couchdb_httpd_status_codes{code="204"} 0
+        couchdb_httpd_status_codes{code="206"} 0
+        couchdb_httpd_status_codes{code="301"} 0
+        couchdb_httpd_status_codes{code="302"} 0
+        couchdb_httpd_status_codes{code="304"} 0
+        couchdb_httpd_status_codes{code="400"} 1
+        couchdb_httpd_status_codes{code="401"} 0
+        couchdb_httpd_status_codes{code="403"} 0
+        couchdb_httpd_status_codes{code="404"} 0
+        couchdb_httpd_status_codes{code="405"} 0
+        couchdb_httpd_status_codes{code="406"} 0
+        couchdb_httpd_status_codes{code="409"} 2
+        couchdb_httpd_status_codes{code="412"} 0
+        couchdb_httpd_status_codes{code="413"} 0
+        couchdb_httpd_status_codes{code="414"} 0
+        couchdb_httpd_status_codes{code="415"} 0
+        couchdb_httpd_status_codes{code="416"} 0
+        couchdb_httpd_status_codes{code="417"} 0
+        couchdb_httpd_status_codes{code="500"} 0
+        couchdb_httpd_status_codes{code="501"} 0
+        couchdb_httpd_status_codes{code="503"} 0
+        # TYPE couchdb_io_queue_search_total counter
+        couchdb_io_queue_search_total 0
+        # TYPE couchdb_io_queue2_search_count_total counter
+        couchdb_io_queue2_search_count_total 0
+        # TYPE couchdb_local_document_writes_total counter
+        couchdb_local_document_writes_total 1
+        # TYPE couchdb_mrview_emits_total counter
+        couchdb_mrview_emits_total 0
+        # TYPE couchdb_mrview_map_doc_total counter
+        couchdb_mrview_map_doc_total 0
+        # TYPE couchdb_open_databases_total counter
+        couchdb_open_databases_total 0
+        # TYPE couchdb_open_os_files_total counter
+        couchdb_open_os_files_total 0
+        # TYPE couchdb_query_server_vdu_process_time_seconds summary
+        couchdb_query_server_vdu_process_time_seconds{quantile="0.5"} 0.0
+        couchdb_query_server_vdu_process_time_seconds{quantile="0.75"} 0.0
+        couchdb_query_server_vdu_process_time_seconds{quantile="0.9"} 0.0
+        couchdb_query_server_vdu_process_time_seconds{quantile="0.95"} 0.0
+        couchdb_query_server_vdu_process_time_seconds{quantile="0.99"} 0.0
+        couchdb_query_server_vdu_process_time_seconds{quantile="0.999"} 0.0
+        couchdb_query_server_vdu_process_time_seconds_sum 0.0
+        couchdb_query_server_vdu_process_time_seconds_count 0
+        # TYPE couchdb_query_server_vdu_rejects_total counter
+        couchdb_query_server_vdu_rejects_total 0
+        # TYPE couchdb_request_time_seconds summary
+        couchdb_request_time_seconds{quantile="0.5"} 0.0
+        couchdb_request_time_seconds{quantile="0.75"} 0.0
+        couchdb_request_time_seconds{quantile="0.9"} 0.0
+        couchdb_request_time_seconds{quantile="0.95"} 0.0
+        couchdb_request_time_seconds{quantile="0.99"} 0.0
+        couchdb_request_time_seconds{quantile="0.999"} 0.0
+        couchdb_request_time_seconds_sum 0.0
+        couchdb_request_time_seconds_count 0
+        # TYPE couchdb_ddoc_cache_requests_total counter
+        couchdb_ddoc_cache_requests_total 0
+        # TYPE couchdb_ddoc_cache_requests_failures_total counter
+        couchdb_ddoc_cache_requests_failures_total 0
+        # TYPE couchdb_ddoc_cache_requests_recovery_total counter
+        couchdb_ddoc_cache_requests_recovery_total 0
+        # TYPE couchdb_dreyfus_httpd_search_seconds summary
+        couchdb_dreyfus_httpd_search_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_httpd_search_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_httpd_search_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_httpd_search_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_httpd_search_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_httpd_search_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_httpd_search_seconds_sum 0.0
+        couchdb_dreyfus_httpd_search_seconds_count 0
+        # TYPE couchdb_dreyfus_index_await_seconds summary
+        couchdb_dreyfus_index_await_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_index_await_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_index_await_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_index_await_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_index_await_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_index_await_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_index_await_seconds_sum 0.0
+        couchdb_dreyfus_index_await_seconds_count 0
+        # TYPE couchdb_dreyfus_index_group1_seconds summary
+        couchdb_dreyfus_index_group1_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_index_group1_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_index_group1_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_index_group1_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_index_group1_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_index_group1_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_index_group1_seconds_sum 0.0
+        couchdb_dreyfus_index_group1_seconds_count 0
+        # TYPE couchdb_dreyfus_index_group2_seconds summary
+        couchdb_dreyfus_index_group2_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_index_group2_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_index_group2_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_index_group2_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_index_group2_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_index_group2_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_index_group2_seconds_sum 0.0
+        couchdb_dreyfus_index_group2_seconds_count 0
+        # TYPE couchdb_dreyfus_index_info_seconds summary
+        couchdb_dreyfus_index_info_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_index_info_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_index_info_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_index_info_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_index_info_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_index_info_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_index_info_seconds_sum 0.0
+        couchdb_dreyfus_index_info_seconds_count 0
+        # TYPE couchdb_dreyfus_index_search_seconds summary
+        couchdb_dreyfus_index_search_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_index_search_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_index_search_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_index_search_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_index_search_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_index_search_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_index_search_seconds_sum 0.0
+        couchdb_dreyfus_index_search_seconds_count 0
+        # TYPE couchdb_dreyfus_rpc_group1_seconds summary
+        couchdb_dreyfus_rpc_group1_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_rpc_group1_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_rpc_group1_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_rpc_group1_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_rpc_group1_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_rpc_group1_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_rpc_group1_seconds_sum 0.0
+        couchdb_dreyfus_rpc_group1_seconds_count 0
+        # TYPE couchdb_dreyfus_rpc_group2_seconds summary
+        couchdb_dreyfus_rpc_group2_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_rpc_group2_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_rpc_group2_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_rpc_group2_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_rpc_group2_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_rpc_group2_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_rpc_group2_seconds_sum 0.0
+        couchdb_dreyfus_rpc_group2_seconds_count 0
+        # TYPE couchdb_dreyfus_rpc_info_seconds summary
+        couchdb_dreyfus_rpc_info_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_rpc_info_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_rpc_info_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_rpc_info_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_rpc_info_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_rpc_info_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_rpc_info_seconds_sum 0.0
+        couchdb_dreyfus_rpc_info_seconds_count 0
+        # TYPE couchdb_dreyfus_rpc_search_seconds summary
+        couchdb_dreyfus_rpc_search_seconds{quantile="0.5"} 0.0
+        couchdb_dreyfus_rpc_search_seconds{quantile="0.75"} 0.0
+        couchdb_dreyfus_rpc_search_seconds{quantile="0.9"} 0.0
+        couchdb_dreyfus_rpc_search_seconds{quantile="0.95"} 0.0
+        couchdb_dreyfus_rpc_search_seconds{quantile="0.99"} 0.0
+        couchdb_dreyfus_rpc_search_seconds{quantile="0.999"} 0.0
+        couchdb_dreyfus_rpc_search_seconds_sum 0.0
+        couchdb_dreyfus_rpc_search_seconds_count 0
+        # TYPE couchdb_fabric_doc_update_errors_total counter
+        couchdb_fabric_doc_update_errors_total 0
+        # TYPE couchdb_fabric_doc_update_mismatched_errors_total counter
+        couchdb_fabric_doc_update_mismatched_errors_total 0
+        # TYPE couchdb_fabric_doc_update_write_quorum_errors_total counter
+        couchdb_fabric_doc_update_write_quorum_errors_total 0
+        # TYPE couchdb_fabric_open_shard_timeouts_total counter
+        couchdb_fabric_open_shard_timeouts_total 0
+        # TYPE couchdb_fabric_read_repairs_failures_total counter
+        couchdb_fabric_read_repairs_failures_total 0
+        # TYPE couchdb_fabric_read_repairs_total counter
+        couchdb_fabric_read_repairs_total 0
+        # TYPE couchdb_fabric_worker_timeouts_total counter
+        couchdb_fabric_worker_timeouts_total 0
+        # TYPE couchdb_global_changes_db_writes_total counter
+        couchdb_global_changes_db_writes_total 0
+        # TYPE couchdb_global_changes_event_doc_conflict_total counter
+        couchdb_global_changes_event_doc_conflict_total 0
+        # TYPE couchdb_global_changes_listener_pending_updates gauge
+        couchdb_global_changes_listener_pending_updates 0
+        # TYPE couchdb_global_changes_rpcs_total counter
+        couchdb_global_changes_rpcs_total 0
+        # TYPE couchdb_global_changes_server_pending_updates gauge
+        couchdb_global_changes_server_pending_updates 0
+        # TYPE couchdb_mango_docs_examined_total counter
+        couchdb_mango_docs_examined_total 0
+        # TYPE couchdb_mango_evaluate_selector_total counter
+        couchdb_mango_evaluate_selector_total 0
+        # TYPE couchdb_mango_query_invalid_index_total counter
+        couchdb_mango_query_invalid_index_total 0
+        # TYPE couchdb_mango_query_time_seconds summary
+        couchdb_mango_query_time_seconds{quantile="0.5"} 0.0
+        couchdb_mango_query_time_seconds{quantile="0.75"} 0.0
+        couchdb_mango_query_time_seconds{quantile="0.9"} 0.0
+        couchdb_mango_query_time_seconds{quantile="0.95"} 0.0
+        couchdb_mango_query_time_seconds{quantile="0.99"} 0.0
+        couchdb_mango_query_time_seconds{quantile="0.999"} 0.0
+        couchdb_mango_query_time_seconds_sum 0.0
+        couchdb_mango_query_time_seconds_count 0
+        # TYPE couchdb_mango_quorum_docs_examined_total counter
+        couchdb_mango_quorum_docs_examined_total 0
+        # TYPE couchdb_mango_results_returned_total counter
+        couchdb_mango_results_returned_total 0
+        # TYPE couchdb_mango_too_many_docs_scanned_total counter
+        couchdb_mango_too_many_docs_scanned_total 0
+        # TYPE couchdb_mango_unindexed_queries_total counter
+        couchdb_mango_unindexed_queries_total 0
+        # TYPE couchdb_mem3_shard_cache_eviction_total counter
+        couchdb_mem3_shard_cache_eviction_total 0
+        # TYPE couchdb_mem3_shard_cache_hit_total counter
+        couchdb_mem3_shard_cache_hit_total 74
+        # TYPE couchdb_mem3_shard_cache_miss_total counter
+        couchdb_mem3_shard_cache_miss_total 17
+        # TYPE couchdb_pread_exceed_eof_total counter
+        couchdb_pread_exceed_eof_total 0
+        # TYPE couchdb_pread_exceed_limit_total counter
+        couchdb_pread_exceed_limit_total 0
+        # TYPE couchdb_rexi_buffered_total counter
+        couchdb_rexi_buffered_total 0
+        # TYPE couchdb_rexi_down_total counter
+        couchdb_rexi_down_total 0
+        # TYPE couchdb_rexi_dropped_total counter
+        couchdb_rexi_dropped_total 0
+        # TYPE couchdb_rexi_streams_timeout_total counter
+        couchdb_rexi_streams_timeout_total{stage="init_stream"} 0
+        # TYPE couchdb_rexi_streams_timeout_stream_total counter
+        couchdb_rexi_streams_timeout_stream_total 0
+        # TYPE couchdb_rexi_streams_timeout_wait_for_ack_total counter
+        couchdb_rexi_streams_timeout_wait_for_ack_total 0
         # TYPE couchdb_uptime_seconds counter
-        couchdb_uptime_seconds 1
+        couchdb_uptime_seconds 45
         # TYPE couchdb_erlang_memory_bytes gauge
-        couchdb_erlang_memory_bytes{memory_type="total"} 71237784
-        couchdb_erlang_memory_bytes{memory_type="processes"} 12248504
-        couchdb_erlang_memory_bytes{memory_type="processes_used"} 12235928
-        couchdb_erlang_memory_bytes{memory_type="system"} 58989280
-        couchdb_erlang_memory_bytes{memory_type="atom"} 1172689
-        couchdb_erlang_memory_bytes{memory_type="atom_used"} 1156575
-        couchdb_erlang_memory_bytes{memory_type="binary"} 182568
-        couchdb_erlang_memory_bytes{memory_type="code"} 27819083
-        couchdb_erlang_memory_bytes{memory_type="ets"} 3143536
+        couchdb_erlang_memory_bytes{memory_type="total"} 43769504
+        couchdb_erlang_memory_bytes{memory_type="processes"} 11848592
+        couchdb_erlang_memory_bytes{memory_type="processes_used"} 11848296
+        couchdb_erlang_memory_bytes{memory_type="system"} 31920912
+        couchdb_erlang_memory_bytes{memory_type="atom"} 512625
+        couchdb_erlang_memory_bytes{memory_type="atom_used"} 500224
+        couchdb_erlang_memory_bytes{memory_type="binary"} 251056
+        couchdb_erlang_memory_bytes{memory_type="code"} 11294870
+        couchdb_erlang_memory_bytes{memory_type="ets"} 1983880
         # TYPE couchdb_erlang_gc_collections_total counter
-        couchdb_erlang_gc_collections_total 13417
+        couchdb_erlang_gc_collections_total 5750
         # TYPE couchdb_erlang_gc_words_reclaimed_total counter
-        couchdb_erlang_gc_words_reclaimed_total 71296018
+        couchdb_erlang_gc_words_reclaimed_total 16438214
         # TYPE couchdb_erlang_context_switches_total counter
-        couchdb_erlang_context_switches_total 358276
+        couchdb_erlang_context_switches_total 41514
         # TYPE couchdb_erlang_reductions_total counter
-        couchdb_erlang_reductions_total 46527253
+        couchdb_erlang_reductions_total 16236244
         # TYPE couchdb_erlang_processes gauge
-        couchdb_erlang_processes 528
+        couchdb_erlang_processes 387
         # TYPE couchdb_erlang_process_limit gauge
         couchdb_erlang_process_limit 262144
-        couchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "docs_read"} 4524
-        ouchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "docs_written"} 4524
-        couchdb_active_task{type="replication", source="mailbox", target="http://mailsrv:5984/mailbox <http://mailsrv:5984/mailbox>", docs_count = "missing_revisions_found"} 4524
+        # TYPE couchdb_erlang_io_recv_bytes_total counter
+        couchdb_erlang_io_recv_bytes_total 9226598
+        # TYPE couchdb_erlang_io_sent_bytes_total counter
+        couchdb_erlang_io_sent_bytes_total 941140
+        # TYPE couchdb_erlang_message_queues gauge
+        couchdb_erlang_message_queues 0
+        # TYPE couchdb_erlang_message_queue_min gauge
+        couchdb_erlang_message_queue_min 0
+        # TYPE couchdb_erlang_message_queue_max gauge
+        couchdb_erlang_message_queue_max 0
+        # TYPE couchdb_erlang_scheduler_queues gauge
+        couchdb_erlang_scheduler_queues 0
+        # TYPE couchdb_erlang_dirty_cpu_scheduler_queues gauge
+        couchdb_erlang_dirty_cpu_scheduler_queues 0
+        # TYPE couchdb_erlang_memory_bytes gauge
+        couchdb_erlang_memory_bytes{memory_type="total"} 43847560
+        couchdb_erlang_memory_bytes{memory_type="processes"} 11926272
+        couchdb_erlang_memory_bytes{memory_type="processes_used"} 11925976
+        couchdb_erlang_memory_bytes{memory_type="system"} 31921288
+        couchdb_erlang_memory_bytes{memory_type="atom"} 512625
+        couchdb_erlang_memory_bytes{memory_type="atom_used"} 500224
+        couchdb_erlang_memory_bytes{memory_type="binary"} 251168
+        couchdb_erlang_memory_bytes{memory_type="code"} 11294870
+        couchdb_erlang_memory_bytes{memory_type="ets"} 1983880
+        # TYPE couchdb_erlang_gc_collections_total counter
+        couchdb_erlang_gc_collections_total 5752
+        # TYPE couchdb_erlang_gc_words_reclaimed_total counter
+        couchdb_erlang_gc_words_reclaimed_total 16482068
+        # TYPE couchdb_erlang_context_switches_total counter
+        couchdb_erlang_context_switches_total 41522
+        # TYPE couchdb_erlang_reductions_total counter
+        couchdb_erlang_reductions_total 16256839
+        # TYPE couchdb_erlang_processes gauge
+        couchdb_erlang_processes 387
+        # TYPE couchdb_erlang_process_limit gauge
+        couchdb_erlang_process_limit 262144
+        # TYPE couchdb_erlang_ets_table gauge
+        couchdb_erlang_ets_table 174
 
 If an additional port config option is specified, then a client can call this API using
 that port which does not require authentication. This option is ``false``(OFF) by default.
 When the option ``true``(ON), the default ports for a 3 node cluster are ``17986``,
-``27986``,``37986``.
+``27986``, ``37986``.
 See :ref:`Configuration of Prometheus Endpoint <config/prometheus>` for details.
 
 .. code-block:: http
@@ -1655,6 +2105,8 @@ See :ref:`Configuration of Prometheus Endpoint <config/prometheus>` for details.
         GET /_node/_local/_prometheus HTTP/1.1
         Accept: text/plain
         Host: localhost:17986
+
+.. _api/server/system:
 
 ==============================
 ``/_node/{node-name}/_system``
