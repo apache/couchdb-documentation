@@ -78,20 +78,20 @@ interact with the local node's configuration.
                 "view_index_dir": "/var/lib/couchdb"
             },
             "chttpd": {
+                "allow_jsonp": "false",
                 "backlog": "512",
                 "bind_address": "0.0.0.0",
                 "port": "5984",
                 "require_valid_user": "false",
                 "socket_options": "[{sndbuf, 262144}, {nodelay, true}]",
-                "server_options": "[{recbuf, undefined}]"
+                "server_options": "[{recbuf, undefined}]",
+                "secure_rewrites": "true"
             },
             "httpd": {
-                "allow_jsonp": "false",
                 "authentication_handlers": "{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
                 "bind_address": "192.168.0.2",
                 "max_connections": "2048",
                 "port": "5984",
-                "secure_rewrites": "true"
             },
             "log": {
                 "writer": "file",
@@ -155,13 +155,10 @@ interact with the local node's configuration.
         Server: CouchDB (Erlang/OTP)
 
         {
-            "allow_jsonp": "false",
             "authentication_handlers": "{couch_httpd_auth, cookie_authentication_handler}, {couch_httpd_auth, default_authentication_handler}",
             "bind_address": "127.0.0.1",
             "default_handler": "{couch_httpd_db, handle_request}",
-            "enable_cors": "false",
-            "port": "5984",
-            "secure_rewrites": "true"
+            "port": "5984"
         }
 
 .. _api/config/section/key:

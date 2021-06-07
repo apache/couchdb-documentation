@@ -53,7 +53,7 @@ Upgrade Notes
   ``stale=update_after`` behaviour is equivalent to ``stable=true&update=lazy``.
   The deprecated ``stale`` parameter will be removed in CouchDB 3.0.
 
-* The new :config:option:`httpd/max_http_request_size` configuration parameter
+* The new :``httpd/max_http_request_size`` configuration parameter
   was added. This has the same behavior as the old
   :config:option:`couchdb/max_document_size` configuration parameter, which
   had been unfortunately misnamed, and has now been updated to behave as the

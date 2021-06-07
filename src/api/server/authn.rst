@@ -74,8 +74,8 @@ client can use for the next few requests to CouchDB. Tokens are valid until
 a timeout. When CouchDB sees a valid token in a subsequent request, it will
 authenticate the user by this token without requesting the password again. By
 default, cookies are valid for 10 minutes, but it's :config:option:`adjustable
-<couch_httpd_auth/timeout>`. Also it's possible to make cookies
-:config:option:`persistent <couch_httpd_auth/allow_persistent_cookies>`.
+<chttpd_auth/timeout>`. Also it's possible to make cookies
+:config:option:`persistent <chttpd_auth/allow_persistent_cookies>`.
 
 To obtain the first token and thus authenticate a user for the first time, the
 `username` and `password` must be sent to the :ref:`_session API
@@ -290,13 +290,13 @@ This authentication method allows creation of a :ref:`userctx_object` for
 remotely authenticated user. By default, the client just needs to pass specific
 headers to CouchDB with related requests:
 
-- :config:option:`X-Auth-CouchDB-UserName <couch_httpd_auth/x_auth_username>`:
+- :config:option:`X-Auth-CouchDB-UserName <chttpd_auth/x_auth_username>`:
   username;
-- :config:option:`X-Auth-CouchDB-Roles <couch_httpd_auth/x_auth_roles>`:
+- :config:option:`X-Auth-CouchDB-Roles <chttpd_auth/x_auth_roles>`:
   comma-separated (``,``) list of user roles;
-- :config:option:`X-Auth-CouchDB-Token <couch_httpd_auth/x_auth_token>`:
+- :config:option:`X-Auth-CouchDB-Token <chttpd_auth/x_auth_token>`:
   authentication token. When
-  :config:option:`proxy_use_secret <couch_httpd_auth/proxy_use_secret>`
+  :config:option:`proxy_use_secret <chttpd_auth/proxy_use_secret>`
   is set (which is strongly recommended!), this header provides an HMAC of the
   username to authenticate and the secret token to prevent requests from
   untrusted sources. (Use the SHA1 of the username and sign with the secret)

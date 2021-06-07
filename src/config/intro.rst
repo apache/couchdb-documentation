@@ -155,7 +155,7 @@ If you make a typo or the specified IP address is not available from your
 network, CouchDB will be unreachable. The only way to resolve this will be
 to remote into the server, correct the config file, and restart CouchDB. To
 protect yourself against such accidents you may set the
-:option:`httpd/config_whitelist` of permitted configuration parameters for
+:option:`chttpd/config_whitelist` of permitted configuration parameters for
 updates via the HTTP API. Once this option is set, further changes to
 non-whitelisted parameters must take place via the configuration file, and in
 most cases, will also require a server restart before taking effect.
