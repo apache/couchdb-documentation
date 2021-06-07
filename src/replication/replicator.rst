@@ -54,7 +54,15 @@ Let's say you POST the following document into ``_replicator``:
     {
         "_id": "my_rep",
         "source": "http://myserver.com/foo",
-        "target":  "http://user:pass@localhost:5984/bar",
+        "target": {
+            "url": "http://localhost:5984/bar",
+            "auth": {
+                "basic": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            }
+        },
         "create_target":  true,
         "continuous": true
     }
@@ -100,7 +108,7 @@ Replication state of this document can then be queried from
          "source": "http://myserver.com/foo/",
          "start_time": "2017-04-05T19:18:15Z",
          "state": "running",
-         "target": "http://adm:*****@localhost:5984/bar/"
+         "target": "http://localhost:5984/bar/"
      }
 
 The state is ``running``. That means replicator has scheduled this
@@ -145,7 +153,7 @@ The replication job will also appear in
                   "pid": "<0.1174.0>",
                   "source": "http://myserver.com/foo/",
                   "start_time": "2017-04-05T19:18:15Z",
-                  "target": "http://adm:*****@localhost:5984/bar/",
+                  "target": "http://localhost:5984/bar/",
                   "user": null
               }
           ],
@@ -171,7 +179,15 @@ For example, POST-ing this document
     {
         "_id": "my_rep_crashing",
         "source": "http://myserver.com/missing",
-        "target":  "http://user:pass@localhost:5984/bar",
+        "target": {
+            "url": "http://localhost:5984/bar",
+            "auth": {
+                "basic": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            }
+        },
         "create_target":  true,
         "continuous": true
     }
@@ -213,16 +229,16 @@ crashes with an increasingly larger interval. The ``history`` list from
           "error_count": 6,
           "id": "cb78391640ed34e9578e638d9bb00e44+create_target",
           "info": {
-               "error": "db_not_found: could not open http://adm:*****@localhost:5984/missing/"
+               "error": "db_not_found: could not open http://myserver.com/missing/"
           },
           "last_updated": "2017-04-05T20:55:10Z",
           "node": "node1@127.0.0.1",
           "source_proxy": null,
           "target_proxy": null,
-          "source": "http://adm:*****@localhost:5984/missing/",
+          "source": "http://myserver.com/missing/",
           "start_time": "2017-04-05T20:38:34Z",
           "state": "crashing",
-          "target": "http://adm:*****@localhost:5984/bar/"
+          "target": "http://localhost:5984/bar/"
     }
 
 Repeated crashes are described as a ``crashing`` state. ``-ing`` suffix
@@ -277,7 +293,7 @@ exactly why it failed:
             "source": "http://myserver.com/foo/",
             "start_time": "2017-04-05T21:41:51Z",
             "state": "failed",
-            "target": "http://adm:*****@localhost:5984/bar/"
+            "target": "http://user:****@localhost:5984/bar",
         }
 
 Notice the state for this replication is ``failed``. Unlike
@@ -495,7 +511,15 @@ which represent pull replications from servers A and B:
     {
         "_id": "rep_from_A",
         "source":  "http://aserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/foo_a",
+        "target": {
+            "url": "http://localhost:5984/foo_a",
+            "auth": {
+                "basic": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            }
+        },
         "continuous":  true
     }
 
@@ -504,7 +528,15 @@ which represent pull replications from servers A and B:
     {
         "_id": "rep_from_B",
         "source":  "http://bserver.com:5984/foo",
-        "target":  "http://user:pass@localhost:5984/foo_b",
+        "target": {
+            "url": "http://localhost:5984/foo_b",
+            "auth": {
+                "basic": {
+                    "username": "user",
+                    "password": "pass"
+                }
+            }
+        },
         "continuous":  true
     }
 
@@ -696,3 +728,76 @@ The syntax for a selector is the same as the
 Using a selector is significantly more efficient than using a JavaScript
 filter function, and is the recommended option if filtering on document
 attributes only.
+
+Specifying Usernames and Passwords
+===================================
+
+There are multiple ways to specify usernames and passwords for replication endpoints:
+
+ - In an ``{"auth": {"basic": ...}}`` object:
+
+    .. versionadded:: 3.2.0
+
+    .. code-block:: javascript
+
+        {
+            "target": {
+                "url": "http://someurl.com/mydb",
+                "auth": {
+                    "basic": {
+                        "username": "$username",
+                        "password": "$password"
+                     }
+                }
+            },
+            ...
+        }
+
+   This is the prefererred format as it allows including characters like ``@``, ``:``
+   and others in the username and password fields.
+
+ - In the userinfo part of the endpoint URL. This allows for a more compact
+   endpoint represention however, it prevents using characters like ``@`` and ``:``
+   in usernames or passwords:
+
+    .. code-block:: javascript
+
+        {
+            "target":  "http://user:pass@localhost:5984/bar"
+            ...
+        }
+
+   Specifying credentials in the userinfo part of the URL is deprecated as per
+   `RFC3986 <https://datatracker.ietf.org/doc/html/rfc3986#section-3.2.1>`_.
+   CouchDB still supports this way of specifying credentials and doesn't yet
+   have a target release when support will be removed.
+
+ - In an ``"Authorization: Basic $b64encoded_username_and_password"`` header:
+
+    .. code-block:: javascript
+
+        {
+            "target": {
+                "url": "http://someurl.com/mydb",
+                    "headers": {
+                        "Authorization": "Basic dXNlcjpwYXNz"
+                    }
+                },
+            ...
+        }
+
+    This method has the downside of the going through the extra step of base64
+    encoding. In addition, it could give the impression that it encrypts or
+    hides the credentials so it could encourage invadvertent sharing and
+    leaking credentials.
+
+When credentials are provided in multiple forms, they are selected in the following order:
+
+  - ``"auth": {"basic": {...}}`` object
+  - URL userinfo
+  - ``"Authorization: Basic ..."`` header.
+
+First, the ``auth`` object is checked, and if credentials are defined there,
+they are used. If they are not, then URL userinfo is checked. If credentials
+are found there, then those credentials are used, otherwise basic auth header
+is used.
