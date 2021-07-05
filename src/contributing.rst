@@ -141,12 +141,12 @@ leave this for later. For now we'll contribute our change back to CouchDB.
 First, we commit our changes::
 
     $ > git commit -am 'document number encoding'
-    [master a84b2cf] document number encoding
+    [main a84b2cf] document number encoding
     1 file changed, 199 insertions(+)
 
 Then we push the commit to our CouchDB fork::
 
-    $ git push origin master
+    $ git push origin main
 
 Next, we go back to our GitHub page
 https://github.com/username/couchdb-documentation and click the "Pull Request"
