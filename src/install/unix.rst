@@ -46,7 +46,7 @@ node, prompt for the address to which it will bind, and a password for the admin
 Responses to these prompts may be pre-seeded using standard ``debconf`` tools. Further
 details are in the `README.Debian`_ file.
 
-.. _README.Debian: https://github.com/apache/couchdb-pkg/blob/master/debian/README.Debian
+.. _README.Debian: https://github.com/apache/couchdb-pkg/blob/main/debian/README.Debian
 
 For distributions lacking a compatible SpiderMonkey library, Apache CouchDB
 also provides packages for the 1.8.5 version.
