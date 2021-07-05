@@ -1894,5 +1894,5 @@ Reference
 .. _MVCC: http://en.wikipedia.org/wiki/Multiversion_concurrency_control
 .. _CouchDB: http://couchdb.apache.org
 .. _Erlang: http://erlang.org
-.. _couch_replicator: https://github.com/apache/couchdb/tree/master/src/couch_replicator
+.. _couch_replicator: https://github.com/apache/couchdb/tree/main/src/couch_replicator
 .. _change notifications: http://guide.couchdb.org/draft/notifications.html
