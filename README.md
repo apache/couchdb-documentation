@@ -1,4 +1,4 @@
-# CouchDB Documentation [![Build Status](https://travis-ci.org/apache/couchdb-documentation.svg?branch=master)](https://travis-ci.org/apache/couchdb-documentation)
+# CouchDB Documentation
 
 This repository contains the Sphinx source for Apache CouchDB's documentation.
 You can view the latest rendered build of this content at:
