@@ -61,7 +61,7 @@ For transient replications there is no way to query their state when the job is
 finished.
 
 A replication can be stopped by deleting the document, or by updating it with
-its `cancel` property set to `true`.
+its ``cancel`` property set to ``true``.
 
 Replication Procedure
 =====================
@@ -76,7 +76,7 @@ the deletion of documents is represented by a new revision, a document deleted
 on the source will also be deleted on the target.
 
 A replication task will finish once it reaches the end of the changes feed. If
-its `continuous` property is set to true, it will wait for new changes to
+its ``continuous`` property is set to true, it will wait for new changes to
 appear until the task is canceled. Replication tasks also create checkpoint
 documents on the destination to ensure that a restarted task can continue from
 where it stopped, for example after it has crashed.
@@ -113,7 +113,7 @@ that is used to test whether a document should be replicated.
 :ref:`filterfun` can be used in a replication (see
 :ref:`replication-settings`). The replication task evaluates
 the filter function for each document in the changes feed. The document is
-only replicated if the filter returns `true`.
+only replicated if the filter returns ``true``.
 
 .. note::
     Using a selector provides performance benefits when compared with using a

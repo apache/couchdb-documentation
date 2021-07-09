@@ -488,7 +488,7 @@ The list of combination operators:
     }
 
 The ``$and`` operator matches if all the selectors in the array match. Below is
-an example using the primary index (```_all_docs```):
+an example using the primary index (``_all_docs``):
 
 .. code-block:: javascript
 
@@ -648,7 +648,7 @@ Condition Operators
 -------------------
 
 Condition operators are specific to a field, and are used to evaluate the value
-stored in that field. For instance, the basic `$eq` operator matches when the
+stored in that field. For instance, the basic ``$eq`` operator matches when the
 specified field contains a value that is equal to the supplied argument.
 
 .. note::
@@ -890,7 +890,7 @@ Example of selective retrieval of fields from matching documents:
 Pagination
 ==========
 
-Mango queries support pagination via the bookmark field. Every `_find`
+Mango queries support pagination via the bookmark field. Every ``_find``
 response contains a bookmark - a token that CouchDB uses to determine
 where to resume from when subsequent queries are made. To get the next
 set of query results, add the bookmark that was received in the previous
@@ -988,7 +988,7 @@ built using MapReduce Views.
     :>header Transfer-Encoding: ``chunked``
 
     :>json string result: Flag to show whether the index was created or one
-        already exists. Can be `"created"` or `"exists"`.
+        already exists. Can be ``"created"`` or ``"exists"``.
     :>json string id: Id of the design document the index was created in.
     :>json string name: Name of the index created.
 

@@ -36,7 +36,7 @@
                      - :mimetype:`text/event-stream`
                      - :mimetype:`text/plain`
     :<header Last-Event-ID: ID of the last events received by the server on a
-        previous connection. Overrides `since` query parameter.
+        previous connection. Overrides ``since`` query parameter.
     :query array doc_ids: List of document IDs to filter the changes feed as
         valid JSON array. Used with :ref:`_doc_ids <changes/filter/doc_ids>`
         filter. Since `length of URL is limited`_, it is better to use
@@ -75,11 +75,11 @@
         Default is ``false``.
     :query boolean attachments: Include the Base64-encoded content of
         :ref:`attachments <api/doc/attachments>` in the documents that
-        are included if `include_docs` is ``true``. Ignored if `include_docs`
+        are included if ``include_docs`` is ``true``. Ignored if ``include_docs``
         isn't ``true``. Default is ``false``.
     :query boolean att_encoding_info: Include encoding information in attachment
-        stubs if `include_docs` is ``true`` and the particular attachment is
-        compressed. Ignored if `include_docs` isn't ``true``.
+        stubs if ``include_docs`` is ``true`` and the particular attachment is
+        compressed. Ignored if ``include_docs`` isn't ``true``.
         Default is ``false``.
     :query number last-event-id: Alias of `Last-Event-ID` header.
     :query number limit: Limit number of result rows to the specified value
@@ -206,7 +206,7 @@
     unavailable, alternative replicas are selected, and the last known
     checkpoint between them is used. If this happens, you might see changes
     again that you have previously seen. Therefore, an application making use
-    of the `_changes` feed should be ‘idempotent’, that is, able to receive the
+    of the ``_changes`` feed should be ‘idempotent’, that is, able to receive the
     same data multiple times, safely.
 
 .. note::

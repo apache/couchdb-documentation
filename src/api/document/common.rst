@@ -93,8 +93,8 @@
       what `rev` was requested. Default is ``false``
     :query boolean local_seq: Includes last update sequence for the
       document. Default is ``false``
-    :query boolean meta: Acts same as specifying all `conflicts`,
-      `deleted_conflicts` and `revs_info` query parameters. Default is
+    :query boolean meta: Acts same as specifying all ``conflicts``,
+      ``deleted_conflicts`` and ``revs_info`` query parameters. Default is
       ``false``
     :query array open_revs: Retrieves documents of specified leaf revisions.
       Additionally, it accepts value as ``all`` to return all leaf revisions.
@@ -177,8 +177,8 @@
     specify the document ID in the request URL.
 
     When updating an existing document, the current document revision must be
-    included in the document (i.e. the request body), as the `rev` query
-    parameter, or in the `If-Match` request header.
+    included in the document (i.e. the request body), as the ``rev`` query
+    parameter, or in the ``If-Match`` request header.
 
     :param db: Database name
     :param docid: Document ID
@@ -191,7 +191,7 @@
       parameter or document key. *Optional*
 
     :query string rev: Document's revision if updating an existing document.
-      Alternative to `If-Match` header or document key. *Optional*
+      Alternative to ``If-Match`` header or document key. *Optional*
     :query string batch: Stores document in :ref:`batch mode
       <api/doc/batch-writes>`. Possible values: ``ok``. *Optional*
     :query boolean new_edits: Prevents insertion of a :ref:`conflicting
@@ -356,7 +356,7 @@
       document ID, and optionally the target document revision, if copying to
       an existing document.  See :ref:`Copying to an Existing Document
       <copy_to_existing_document>`.
-    :<header If-Match: Source document's revision. Alternative to `rev` query
+    :<header If-Match: Source document's revision. Alternative to ``rev`` query
       parameter
     :query string rev: Revision to copy from. *Optional*
     :query string batch: Stores document in :ref:`batch mode

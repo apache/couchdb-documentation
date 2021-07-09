@@ -208,10 +208,10 @@ jump to the next 10 rows. We even use skip, but only with the value 1.
 Here is how it works:
 
 - Request `rows_per_page + 1` rows from the view
-- Display `rows_per_page` rows, `store + 1` row as `next_startkey` and
-  `next_startkey_docid`
-- As page information, keep ``startkey`` and `next_startkey`
-- Use the `next_*` values to create the next link, and use the others to
+- Display `rows_per_page` rows, `store + 1` row as ``next_startkey`` and
+  ``next_startkey_docid``
+- As page information, keep ``startkey`` and ``next_startkey``
+- Use the ``next_*`` values to create the next link, and use the others to
   create the previous link
 
 The trick to finding the next page is pretty simple. Instead of requesting 10
@@ -236,8 +236,8 @@ handy. In addition to ``startkey`` and ``limit``, you also use
 ``startkey_docid`` for pagination if, and only if, the extra row you fetch to
 find the next page has the same key as the current ``startkey``.
 
-It is important to note that the `*_docid` parameters only work in addition to
-the `*key` parameters and are only useful to further narrow down the result set
+It is important to note that the ``*_docid`` parameters only work in addition to
+the ``*key`` parameters and are only useful to further narrow down the result set
 of a view for a single key. They do not work on their own (the one exception
 being the built-in :ref:`_all_docs view <api/db/all_docs>`  that already sorts
 by document ID).

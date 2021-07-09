@@ -78,7 +78,7 @@ default, cookies are valid for 10 minutes, but it's :config:option:`adjustable
 :config:option:`persistent <chttpd_auth/allow_persistent_cookies>`.
 
 To obtain the first token and thus authenticate a user for the first time, the
-`username` and `password` must be sent to the :ref:`_session API
+``username`` and ``password`` must be sent to the :ref:`_session API
 <api/auth/session>`.
 
 .. _api/auth/session:

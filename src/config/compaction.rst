@@ -127,9 +127,9 @@ channel.
 
     .. config: option:: strict_window
 
-        If set to `true`, any compaction that is still running after the end of
+        If set to ``true``, any compaction that is still running after the end of
         the allowed perio will be suspended, and then resumed during the next
-        window. It defaults to `false`, in which case any running compactions
+        window. It defaults to ``false``, in which case any running compactions
         will be allowed to finish, but no new ones will be started.
 
 There are also several settings that collectively control whether a channel will
@@ -163,5 +163,5 @@ enqueue a file for compaction and how it prioritizes files within its queue:
     .. config:option:: priority
 
         The method used to calculate priority. Can be ratio (calculated as
-        `sizes.file/sizes.active`) or slack (calculated as `sizes.file -
-        sizes.active`). Defaults to ratio.
+        ``sizes.file/sizes.active``) or slack (calculated as ``sizes.file -
+        sizes.active``). Defaults to ratio.

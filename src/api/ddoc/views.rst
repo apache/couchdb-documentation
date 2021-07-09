@@ -29,29 +29,29 @@
                      - :mimetype:`text/plain`
 
     :query boolean conflicts: Include `conflicts` information in response.
-      Ignored if `include_docs` isn't ``true``. Default is ``false``.
+      Ignored if ``include_docs`` isn't ``true``. Default is ``false``.
     :query boolean descending: Return the documents in descending order by key.
       Default is ``false``.
     :query json endkey: Stop returning records when the specified key is
       reached.
-    :query json end_key: Alias for `endkey` param
+    :query json end_key: Alias for ``endkey`` param
     :query string endkey_docid: Stop returning records when the specified
-      document ID is reached. Ignored if `endkey` is not set.
-    :query string end_key_doc_id: Alias for `endkey_docid`.
+      document ID is reached. Ignored if ``endkey`` is not set.
+    :query string end_key_doc_id: Alias for ``endkey_docid``.
     :query boolean group: Group the results using the reduce function to a
-      group or single row. Implies `reduce` is ``true`` and the maximum
-      `group_level`. Default is ``false``.
+      group or single row. Implies ``reduce`` is ``true`` and the maximum
+      ``group_level``. Default is ``false``.
     :query number group_level: Specify the group level to be used. Implies
-      `group` is ``true``.
+      ``group`` is ``true``.
     :query boolean include_docs: Include the associated document with each row.
       Default is ``false``.
     :query boolean attachments: Include the Base64-encoded content of
       :ref:`attachments <api/doc/attachments>` in the documents that are
-      included if `include_docs` is ``true``. Ignored if `include_docs` isn't
+      included if ``include_docs`` is ``true``. Ignored if ``include_docs`` isn't
       ``true``. Default is ``false``.
     :query boolean att_encoding_info: Include encoding information in
-      attachment stubs if `include_docs` is ``true`` and the particular
-      attachment is compressed. Ignored if `include_docs` isn't ``true``.
+      attachment stubs if ``include_docs`` is ``true`` and the particular
+      attachment is compressed. Ignored if ``include_docs`` isn't ``true``.
       Default is ``false``.
     :query boolean inclusive_end: Specifies whether the specified end key
       should be included in the result. Default is ``true``.
@@ -66,7 +66,7 @@
       the results. Default is ``0``.
     :query boolean sorted: Sort returned rows (see :ref:`Sorting Returned Rows
      <api/ddoc/view/sorting>`). Setting this to ``false`` offers a performance
-     boost. The `total_rows` and `offset` fields are not available when this
+     boost. The ``total_rows`` and ``offset`` fields are not available when this
      is set to ``false``. Default is ``true``.
     :query boolean stable: Whether or not the view results should be returned
      from a stable set of shards. Default is ``false``.
@@ -78,15 +78,15 @@
       Note that this parameter is deprecated. Use ``stable`` and ``update`` instead.
       See :ref:`views/generation` for more details.
     :query json startkey: Return records starting with the specified key.
-    :query json start_key: Alias for `startkey`.
+    :query json start_key: Alias for ``startkey``.
     :query string startkey_docid: Return records starting with the specified
       document ID. Ignored if ``startkey`` is not set.
-    :query string start_key_doc_id: Alias for `startkey_docid` param
+    :query string start_key_doc_id: Alias for ``startkey_docid`` param
     :query string update: Whether or not the view in question should be updated
      prior to responding to the user. Supported values: ``true``, ``false``,
      ``lazy``. Default is ``true``.
     :query boolean update_seq: Whether to include in the response an
-      `update_seq` value indicating the sequence id of the database the view
+      ``update_seq`` value indicating the sequence id of the database the view
       reflects. Default is ``false``.
 
     :>header Content-Type: - :mimetype:`application/json`

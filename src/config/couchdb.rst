@@ -135,7 +135,7 @@ Base CouchDB Options
         code 413 if one or more documents is larger than this configuration
         value.
 
-        In case of `_update` handlers, document size is checked after the
+        In case of ``_update`` handlers, document size is checked after the
         transformation and right before being inserted into the database. ::
 
             [couchdb]
@@ -145,7 +145,7 @@ Base CouchDB Options
            Before version 2.1.0 this setting was implemented by simply checking
            http request body sizes. For individual document updates via `PUT`
            that approximation was close enough, however that is not the case
-           for `_bulk_docs` endpoint. After 2.1.0 a separate configuration
+           for ``_bulk_docs`` endpoint. After 2.1.0 a separate configuration
            parameter was defined: :config:option:`chttpd/max_http_request_size`,
            which can be used to limit maximum http request sizes. After upgrade,
            it is advisable to review those settings and adjust them accordingly.
