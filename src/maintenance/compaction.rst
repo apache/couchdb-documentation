@@ -77,16 +77,16 @@ type of algorithm used for prioritization:
     a compaction to be added to the queue. Compactions are prioritised for
     higher values of X.
 
-In both cases, Y is set using the `min_priority` configuration variable. CouchDB
+In both cases, Y is set using the ``min_priority`` configuration variable. CouchDB
 ships with four channels pre-configured: one channel of each type for databases,
 and another one for views.
 
 Channel Configuration
 ---------------------
 
-Channels are defined using `[smoosh.<channel_name>]` configuration blocks, and
-activated by naming the channel in the `db_channels` or `view_channels`
-configuration setting in the `[smoosh]` block. The default configuration is
+Channels are defined using ``[smoosh.<channel_name>]`` configuration blocks, and
+activated by naming the channel in the ``db_channels`` or ``view_channels``
+configuration setting in the ``[smoosh]`` block. The default configuration is
 
 .. code-block:: ini
 
@@ -136,9 +136,9 @@ where `overnight_channel` is the name of the channel you want to configure.
 Note: CouchDB determines time via the UTC (GMT) timezone, so these settings must be
 expressed as UTC (GMT).
 
-The `strict_window` setting will cause the compaction daemon to suspend all
+The ``strict_window`` setting will cause the compaction daemon to suspend all
 active compactions in this channel when exiting the window, and resume them when
-re-entering. If `strict_window` is left at its default of false, the active
+re-entering. If ``strict_window`` is left at its default of false, the active
 compactions will be allowed to complete but no new compactions will be started.
 
 Migration Guide

@@ -181,13 +181,13 @@
       Default is ``false``.
     :query json endkey: Stop returning databases when the specified key is
       reached.
-    :query json end_key: Alias for `endkey` param
+    :query json end_key: Alias for ``endkey`` param
     :query number limit: Limit the number of the returned databases to the
       specified number.
     :query number skip: Skip this number of databases before starting to return
       the results. Default is ``0``.
     :query json startkey: Return databases starting with the specified key.
-    :query json start_key: Alias for `startkey`.
+    :query json start_key: Alias for ``startkey``.
     :>header Content-Type: - :mimetype:`application/json`
                            - :mimetype:`text/plain; charset=utf-8`
     :code 200: Request completed successfully
@@ -662,7 +662,7 @@
 
 .. note::
     As of CouchDB 2.0.0, fully qualified URLs are required for both the
-    replication `source` and `target` parameters.
+    replication ``source`` and ``target`` parameters.
 
     **Request**
 
@@ -1095,7 +1095,7 @@ error.
     :>json string last_updated: Timestamp of last state update
     :>json object info: Will contain additional information about the
                         state. For errors, this will be an object with
-                        an `"error"` field and string value. For
+                        an ``"error"`` field and string value. For
                         success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
@@ -1232,7 +1232,7 @@ error.
     :>json string last_update: Timestamp of last state update
     :>json object info: Will contain additional information about the
                         state. For errors, this will be an object with
-                        an `"error"` field and string value. For
+                        an ``"error"`` field and string value. For
                         success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.
@@ -1334,7 +1334,7 @@ error.
     :>json string last_update: Timestamp of last state update
     :>json object info: Will contain additional information about the
                         state. For errors, this will be an object with
-                        an `"error"` field and string value. For
+                        an ``"error"`` field and string value. For
                         success states, see below.
     :>json number error_count: Consecutive errors count. Indicates how many
                                times in a row this replication has crashed.

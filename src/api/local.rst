@@ -71,15 +71,15 @@ A list of the available methods and URL paths are provided below:
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
     :query boolean conflicts: Includes `conflicts` information in response.
-      Ignored if `include_docs` isn't ``true``. Default is ``false``.
+      Ignored if ``include_docs`` isn't ``true``. Default is ``false``.
     :query boolean descending: Return the local documents in descending by
       key order. Default is ``false``.
     :query string endkey: Stop returning records when the specified key is
       reached. *Optional*.
-    :query string end_key: Alias for `endkey` param.
+    :query string end_key: Alias for ``endkey`` param.
     :query string endkey_docid: Stop returning records when the specified
         local document ID is reached. *Optional*.
-    :query string end_key_doc_id: Alias for `endkey_docid` param.
+    :query string end_key_doc_id: Alias for ``endkey_docid`` param.
     :query boolean include_docs: Include the full content of the local
       documents in the return. Default is ``false``.
     :query boolean inclusive_end: Specifies whether the specified end key
@@ -94,10 +94,10 @@ A list of the available methods and URL paths are provided below:
       the results. Default is ``0``.
     :query string startkey: Return records starting with the specified key.
       *Optional*.
-    :query string start_key: Alias for `startkey` param.
+    :query string start_key: Alias for ``startkey`` param.
     :query string startkey_docid: Return records starting with the specified
       local document ID. *Optional*.
-    :query string start_key_doc_id: Alias for `startkey_docid` param.
+    :query string start_key_doc_id: Alias for ``startkey_docid`` param.
     :query boolean update_seq: Response includes an ``update_seq`` value
       indicating which sequence id of the underlying database the view
       reflects. Default is ``false``.

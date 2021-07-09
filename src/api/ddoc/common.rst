@@ -58,7 +58,7 @@
       <vdufun>` function source
     * **views** (*object*): :ref:`View functions <viewfun>` definition.
     * **autoupdate** (*boolean*): Indicates whether to automatically build
-      indexes defined in this design document. Default is `true`.
+      indexes defined in this design document. Default is ``true``.
 
     Note, that for ``filters``, ``lists``, ``shows`` and ``updates`` fields
     objects are mapping of function name to string function source code. For

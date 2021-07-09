@@ -29,7 +29,7 @@
     :param docid: Document ID
     :param attname: Attachment name
 
-    :<header If-Match: Document's revision. Alternative to `rev` query
+    :<header If-Match: Document's revision. Alternative to ``rev`` query
       parameter
     :<header If-None-Match: Attachment's base64 encoded MD5 binary digest.
       *Optional*
@@ -84,7 +84,7 @@
     :param docid: Document ID
     :param attname: Attachment name
 
-    :<header If-Match: Document's revision. Alternative to `rev` query
+    :<header If-Match: Document's revision. Alternative to ``rev`` query
       parameter
     :<header If-None-Match: Attachment's base64 encoded MD5 binary digest.
       *Optional*
@@ -132,7 +132,7 @@
     :param attname: Attachment name
 
     :<header Content-Type: Attachment MIME type. Default: :mimetype:`application/octet-stream` *Optional*
-    :<header If-Match: Document revision. Alternative to `rev` query parameter
+    :<header If-Match: Document revision. Alternative to ``rev`` query parameter
 
     :query string rev: Document revision. *Optional*
 
@@ -199,7 +199,7 @@
     :param docid: Document ID
     :<header Accept: - :mimetype:`application/json`
                      - :mimetype:`text/plain`
-    :<header If-Match: Document revision. Alternative to `rev` query parameter
+    :<header If-Match: Document revision. Alternative to ``rev`` query parameter
 
     :query string rev: Document revision. *Required*
     :query string batch: Store changes in :ref:`batch mode

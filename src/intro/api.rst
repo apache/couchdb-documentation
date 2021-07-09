@@ -619,7 +619,7 @@ Now we can use the database `albums-replica` as a replication target::
 
 .. note::
     As of CouchDB 2.0.0, fully qualified URLs are required for both the
-    replication `source` and `target` parameters.
+    replication ``source`` and ``target`` parameters.
 
 .. note::
     CouchDB supports the option ``"create_target":true`` placed in the JSON

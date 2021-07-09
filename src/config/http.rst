@@ -36,18 +36,18 @@ HTTP Server Options
             [chttpd]
             bind_address = 127.0.0.1
 
-        To let CouchDB listen any available IP address, use `0.0.0.0`::
+        To let CouchDB listen any available IP address, use ``0.0.0.0``::
 
             [chttpd]
             bind_address = 0.0.0.0
 
-        For IPv6 support you need to set `::1` if you want to let CouchDB
+        For IPv6 support you need to set ``::1`` if you want to let CouchDB
         listen correctly::
 
             [chttpd]
             bind_address = ::1
 
-        or `::` for any available::
+        or ``::`` for any available::
 
             [chttpd]
             bind_address = ::
@@ -59,15 +59,15 @@ HTTP Server Options
             [chttpd]
             port = 5984
 
-        To let CouchDB use any free port, set this option to `0`::
+        To let CouchDB use any free port, set this option to ``0``::
 
             [chttpd]
             port = 0
 
     .. config:option:: prefer_minimal :: Sends minimal set of headers
 
-        If a request has the header `"Prefer": "return=minimal"`, CouchDB
-        will only send the headers that are listed for the `prefer_minimal`
+        If a request has the header ``"Prefer": "return=minimal"``, CouchDB
+        will only send the headers that are listed for the ``prefer_minimal``
         configuration.::
 
             [chttpd]
@@ -217,7 +217,7 @@ HTTP Server Options
         to all requests and it doesn't discriminate between single vs.
         multi-document operations. So setting it to 1MB would block a
         `PUT` of a document larger than 1MB, but it might also block a
-        `_bulk_docs` update of 1000 1KB documents, or a multipart/related
+        ``_bulk_docs`` update of 1000 1KB documents, or a multipart/related
         update of a small document followed by two 512KB attachments. This
         setting is intended to be used as a protection against maliciously
         large HTTP requests rather than for limiting maximum document sizes. ::
@@ -408,17 +408,17 @@ HTTPS (SSL/TLS) Options
 
     .. config:option:: verify_ssl_certificates :: Enable certificate verification
 
-        Set to `true` to validate peer certificates::
+        Set to ``true`` to validate peer certificates::
 
             [ssl]
             verify_ssl_certificates = false
 
     .. config:option:: fail_if_no_peer_cert :: Require presence of client certificate if certificate verification is enabled
 
-        Set to `true` to terminate the TLS/SSL handshake with a
-        `handshake_failure` alert message if the client does not send a
-        certificate. Only used if `verify_ssl_certificates` is `true`. If set
-        to `false` it will only fail if the client sends an invalid certificate
+        Set to ``true`` to terminate the TLS/SSL handshake with a
+        ``handshake_failure`` alert message if the client does not send a
+        certificate. Only used if ``verify_ssl_certificates`` is ``true``. If set
+        to ``false`` it will only fail if the client sends an invalid certificate
         (an empty certificate is considered valid)::
 
             [ssl]
@@ -426,7 +426,7 @@ HTTPS (SSL/TLS) Options
 
     .. config:option:: secure_renegotiate :: Enable secure renegotiation
 
-        Set to `true` to reject renegotiation attempt that does not live up to
+        Set to ``true`` to reject renegotiation attempt that does not live up to
         RFC 5746::
 
             [ssl]
@@ -635,7 +635,7 @@ Virtual Hosts
 
     If your CouchDB is listening on the the default HTTP port (80), or is
     sitting behind a proxy, then you don't need to specify a port number in the
-    `vhost` key.
+    ``vhost`` key.
 
     The first line will rewrite the request to display the content of the
     `example` database. This rule works only if the ``Host`` header is
@@ -654,9 +654,9 @@ variable and use them to create the target path. Some examples::
     :dbname. = /:dbname
     :ddocname.:dbname.example.com = /:dbname/_design/:ddocname/_rewrite
 
-The first rule passes the wildcard as `dbname`. The second one does the same,
+The first rule passes the wildcard as ``dbname``. The second one does the same,
 but uses a variable name. And the third one allows you to use any URL with
-`ddocname` in any database with `dbname`.
+``ddocname`` in any database with ``dbname``.
 
 .. _xframe_options:
 .. _config/xframe_options:
@@ -677,8 +677,8 @@ feature to help against clickjacking.
     ; List of hosts separated by a comma. * means accept all
     ; hosts =
 
-If xframe_options is enabled it will return `X-Frame-Options: DENY` by default.
-If `same_origin` is enabled it will return `X-Frame-Options: SAMEORIGIN`.
-A `X-FRAME-OPTIONS: ALLOW-FROM url` will be returned when `same_origin`
-is false, and the HOST header matches one of the urls in the `hosts` config.
-Otherwise a `X-Frame-Options: DENY` will be returned.
+If xframe_options is enabled it will return ``X-Frame-Options: DENY`` by default.
+If ``same_origin`` is enabled it will return ``X-Frame-Options: SAMEORIGIN``.
+A ``X-FRAME-OPTIONS: ALLOW-FROM url`` will be returned when ``same_origin``
+is false, and the HOST header matches one of the urls in the ``hosts`` config.
+Otherwise a ``X-Frame-Options: DENY`` will be returned.

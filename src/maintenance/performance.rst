@@ -206,7 +206,7 @@ Connection limit
 
 `MochiWeb`_ handles CouchDB requests.
 The default maximum number of connections is 2048. To change this limit, use the
-`server_options` configuration variable. `max` indicates maximum number of
+``server_options`` configuration variable. ``max`` indicates maximum number of
 connections.
 
 .. code-block:: ini

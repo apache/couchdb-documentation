@@ -38,7 +38,7 @@ Where:
 
 - ``LANGUAGE``: is a programming language which code this query server may
   execute. For instance, there are `PYTHON`, `RUBY`, `CLOJURE` and other
-  query servers in the wild. This value in *lowercase* is also used for `ddoc`
+  query servers in the wild. This value in *lowercase* is also used for ``ddoc``
   field ``language`` to determine which query server processes the functions.
 
   Note, that you may set up multiple query servers for the same programming
@@ -101,8 +101,8 @@ Query Servers Configuration
             [query_server_config]
             os_process_limit = 100
 
-        Setting `os_process_limit` too low can result in starvation of
-        Query Servers, and manifest in `os_process_timeout` errors,
+        Setting ``os_process_limit`` too low can result in starvation of
+        Query Servers, and manifest in ``os_process_timeout`` errors,
         while setting it too high can potentially use too many system
         resources. Production settings are typically 10-20 times the
         default value.

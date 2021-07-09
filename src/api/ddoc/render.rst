@@ -26,7 +26,7 @@
 .. http:post:: /{db}/_design/{ddoc}/_show/{func}
     :synopsis: Same as GET method for the related endpoint
 
-    Applies :ref:`show function <showfun>` for `null` document.
+    Applies :ref:`show function <showfun>` for ``null`` document.
 
     The request and response parameters are depended upon function
     implementation.

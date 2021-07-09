@@ -100,9 +100,9 @@ leaf revision  `3-c50a32451890a3f1c3e423334cc92745` that will be purged.
 As a result of this purge operation, a document with
 `_id:c6114c65e295552ab1019e2b046b10e` will be completely removed from the
 database's document b+tree, and sequence b+tree. It will not be available
-through `_all_docs` or `_changes` endpoints, as though this document never
-existed. Also as a result of purge operation, the database's `purge_seq` and
-`update_seq` will be increased.
+through ``_all_docs`` or ``_changes`` endpoints, as though this document never
+existed. Also as a result of purge operation, the database's ``purge_seq`` and
+``update_seq`` will be increased.
 
 Notice, how revision `3-b06fcd1c1c9e0ec7c480ee8aa467bf3b` was ignored. Revisions
 that have already been purged and non-leaf revisions are ignored in a purge
@@ -126,8 +126,8 @@ revision tree with only a single branch:
     Document Revision Tree 3
 
 As a result of this purge operation, a new updated version of the document will
-be available in `_all_docs` and `_changes`, creating a new record in `_changes`.
-The database's `purge_seq` and `update_seq` will be increased.
+be available in ``_all_docs`` and ``_changes``, creating a new record in ``_changes``.
+The database's ``purge_seq`` and ``update_seq`` will be increased.
 
 Internal Replication
 ======================

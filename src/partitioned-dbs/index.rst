@@ -385,7 +385,7 @@ request like:
 
 Notice that we're not using the ``/dbname/_partition/...`` path for global
 queries. This is because global queries, by definition, do not cover individual
-partitions. Other than having the `"partitioned": false` parameter in the
+partitions. Other than having the ``"partitioned": false`` parameter in the
 design document, global design documents and queries are identical in
 behavior to design documents on non-partitioned databases.
 

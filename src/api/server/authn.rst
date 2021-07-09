@@ -184,7 +184,7 @@ To obtain the first token and thus authenticate a user for the first time, the
     :ref:`userctx_object`, the authentication method and database that were
     used, and a list of configured authentication handlers on the server.
 
-    :query boolean basic: Accept ``Basic Auth`` by requesting this resource.
+    :query boolean basic: Accept `Basic Auth` by requesting this resource.
       *Optional*.
     :>json boolean ok: Operation status
     :>json object userCtx: User context for the current user
@@ -282,7 +282,7 @@ Proxy Authentication
         [chttpd]
         authentication_handlers = {chttpd_auth, cookie_authentication_handler}, {chttpd_auth, proxy_authentication_handler}, {chttpd_auth, default_authentication_handler}
 
-``Proxy authentication`` is very useful in case your application already uses
+`Proxy authentication` is very useful in case your application already uses
 some external authentication service and you don't want to duplicate users and
 their roles in CouchDB.
 
