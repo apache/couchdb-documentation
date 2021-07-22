@@ -51,8 +51,8 @@
     Having no admins, only server admins (with the reserved ``_admin`` role)
     are able to update design documents and make other admin level changes.
 
-    Having no members and roles, any user can write regular documents (any non-design
-    document) and read documents from the database.
+    Having no members or roles, any user can write regular documents (any
+    non-design document) and read documents from the database.
     
     Since CouchDB 3.x newly created databases have by default the _admin role
     to prevent unintentional access.
