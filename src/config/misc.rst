@@ -290,7 +290,7 @@ Configuration of Prometheus Endpoint
 
         .. versionadded:: 3.2
 
-        The ip address to bind::
+        The IP address to bind::
 
             [prometheus]
             bind_address = 127.0.0.1
