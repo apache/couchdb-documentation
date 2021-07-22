@@ -23,10 +23,10 @@ tips and tricks that will ease the difficulty.
 .. rst-class:: open
 
 - Check the JavaScript version being used by your CouchDB. As of version 3.2.0,
-  this is reported in the output of ``GET /``. Prior to version 3.2.0, you will
-  need to see which JavaScript library is installed by your CouchDB binary
-  distribution, provided by your operating system, or linked by your compilation
-  process.
+  this is reported in the output of ``GET /_node/_local/_versions``. Prior to
+  version 3.2.0, you will   need to see which JavaScript library is installed by
+  your CouchDB binary   distribution, provided by your operating system, or
+  linked by your compilation process.
 
   If the version is 1.8.5, this is an **old** version of JavaScript, only
   supporting the ECMA-262 5th edition ("ES5") of the language. ES6/2015 and
