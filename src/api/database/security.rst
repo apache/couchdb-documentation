@@ -53,7 +53,7 @@
 
     Having no members or roles, any user can write regular documents (any
     non-design document) and read documents from the database.
-    
+
     Since CouchDB 3.x newly created databases have by default the _admin role
     to prevent unintentional access.
 
