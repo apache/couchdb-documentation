@@ -1586,6 +1586,202 @@ node, you can use:
 This returns an entire statistics object, as with the full request, but
 containing only the requested individual statistic.
 
+.. _api/server/prometheus:
+
+==================================
+``/_node/{node-name}/_prometheus``
+==================================
+
+.. http:get:: /_node/{node-name}/_prometheus
+    :synopsis: Returns server statistics in prometheus format
+
+    The ``_prometheus`` resource returns a text/plain response that consolidates our
+    :ref:`api/server/stats`, and :ref:`api/server/system` endpoints. The format is
+    determined by `Prometheus <https://prometheus.io/docs/introduction/overview/>`_.
+    The format version is 2.0.
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_node/_local/_prometheus HTTP/1.1
+        Accept: text/plain
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Length: 187
+        Content-Type: text/plain; version=2.0
+        Date: Sat, 10 May 2020 11:41:11 GMT
+        Server: CouchDB (Erlang/OTP)
+
+        # TYPE couchdb_couch_log_requests_total counter
+        couchdb_couch_log_requests_total{level="alert"} 0
+        couchdb_couch_log_requests_total{level="critical"} 0
+        couchdb_couch_log_requests_total{level="debug"} 0
+        couchdb_couch_log_requests_total{level="emergency"} 0
+        couchdb_couch_log_requests_total{level="error"} 0
+        couchdb_couch_log_requests_total{level="info"} 8
+        couchdb_couch_log_requests_total{level="notice"} 51
+        couchdb_couch_log_requests_total{level="warning"} 0
+        # TYPE couchdb_couch_replicator_changes_manager_deaths_total counter
+        couchdb_couch_replicator_changes_manager_deaths_total 0
+        # TYPE couchdb_couch_replicator_changes_queue_deaths_total counter
+        couchdb_couch_replicator_changes_queue_deaths_total 0
+        # TYPE couchdb_couch_replicator_changes_read_failures_total counter
+        couchdb_couch_replicator_changes_read_failures_total 0
+        # TYPE couchdb_couch_replicator_changes_reader_deaths_total counter
+        couchdb_couch_replicator_changes_reader_deaths_total 0
+        # TYPE couchdb_couch_replicator_checkpoints_failure_total counter
+        couchdb_couch_replicator_checkpoints_failure_total 0
+        # TYPE couchdb_couch_replicator_checkpoints_total counter
+        couchdb_couch_replicator_checkpoints_total 0
+        # TYPE couchdb_couch_replicator_cluster_is_stable gauge
+        couchdb_couch_replicator_cluster_is_stable 1
+        # TYPE couchdb_couch_replicator_connection_acquires_total counter
+        couchdb_couch_replicator_connection_acquires_total 0
+        # TYPE couchdb_couch_replicator_connection_closes_total counter
+        couchdb_couch_replicator_connection_closes_total 0
+        # TYPE couchdb_couch_replicator_connection_creates_total counter
+        couchdb_couch_replicator_connection_creates_total 0
+        # TYPE couchdb_couch_replicator_connection_owner_crashes_total counter
+        couchdb_couch_replicator_connection_owner_crashes_total 0
+        # TYPE couchdb_couch_replicator_connection_releases_total counter
+        couchdb_couch_replicator_connection_releases_total 0
+        # TYPE couchdb_couch_replicator_connection_worker_crashes_total counter
+        couchdb_couch_replicator_connection_worker_crashes_total 0
+        # TYPE couchdb_couch_replicator_db_scans_total counter
+        couchdb_couch_replicator_db_scans_total 1
+        # TYPE couchdb_couch_replicator_docs_completed_state_updates_total counter
+        couchdb_couch_replicator_docs_completed_state_updates_total 0
+        # TYPE couchdb_couch_replicator_docs_db_changes_total counter
+        couchdb_couch_replicator_docs_db_changes_total 0
+        # TYPE couchdb_couch_replicator_docs_dbs_created_total counter
+        couchdb_couch_replicator_docs_dbs_created_total 0
+        # TYPE couchdb_couch_replicator_docs_dbs_deleted_total counter
+        couchdb_couch_replicator_docs_dbs_deleted_total 0
+        # TYPE couchdb_couch_replicator_docs_dbs_found_total counter
+        couchdb_couch_replicator_docs_dbs_found_total 2
+        # TYPE couchdb_couch_replicator_docs_failed_state_updates_total counter
+        couchdb_couch_replicator_docs_failed_state_updates_total 0
+        # TYPE couchdb_couch_replicator_failed_starts_total counter
+        couchdb_couch_replicator_failed_starts_total 0
+        # TYPE couchdb_couch_replicator_jobs_adds_total counter
+        couchdb_couch_replicator_jobs_adds_total 0
+        # TYPE couchdb_couch_replicator_jobs_crashed gauge
+        couchdb_couch_replicator_jobs_crashed 0
+        # TYPE couchdb_couch_replicator_jobs_crashes_total counter
+        couchdb_couch_replicator_jobs_crashes_total 0
+        # TYPE couchdb_couch_replicator_jobs_duplicate_adds_total counter
+        couchdb_couch_replicator_jobs_duplicate_adds_total 0
+        # TYPE couchdb_couch_replicator_jobs_pending gauge
+        couchdb_couch_replicator_jobs_pending 0
+        # TYPE couchdb_couch_replicator_jobs_removes_total counter
+        couchdb_couch_replicator_jobs_removes_total 0
+        # TYPE couchdb_couch_replicator_jobs_running gauge
+        couchdb_couch_replicator_jobs_running 0
+        # TYPE couchdb_couch_replicator_jobs_starts_total counter
+        couchdb_couch_replicator_jobs_starts_total 0
+        # TYPE couchdb_couch_replicator_jobs_stops_total counter
+        couchdb_couch_replicator_jobs_stops_total 0
+        # TYPE couchdb_couch_replicator_jobs_total gauge
+        couchdb_couch_replicator_jobs_total 0
+        # TYPE couchdb_couch_replicator_requests_total counter
+        couchdb_couch_replicator_requests_total 0
+        # TYPE couchdb_couch_replicator_responses_failure_total counter
+        couchdb_couch_replicator_responses_failure_total 0
+        # TYPE couchdb_couch_replicator_responses_total counter
+        couchdb_couch_replicator_responses_total 0
+        # TYPE couchdb_couch_replicator_stream_responses_failure_total counter
+        couchdb_couch_replicator_stream_responses_failure_total 0
+        # TYPE couchdb_couch_replicator_stream_responses_total counter
+        couchdb_couch_replicator_stream_responses_total 0
+        # TYPE couchdb_couch_replicator_worker_deaths_total counter
+        couchdb_couch_replicator_worker_deaths_total 0
+        # TYPE couchdb_couch_replicator_workers_started_total counter
+        couchdb_couch_replicator_workers_started_total 0
+        # TYPE couchdb_auth_cache_requests_total counter
+        couchdb_auth_cache_requests_total 0
+        # TYPE couchdb_auth_cache_misses_total counter
+        couchdb_auth_cache_misses_total 0
+        # TYPE couchdb_collect_results_time_seconds summary
+        couchdb_collect_results_time_seconds{quantile="0.5"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.75"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.9"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.95"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.99"} 0.0
+        couchdb_collect_results_time_seconds{quantile="0.999"} 0.0
+        couchdb_collect_results_time_seconds_sum 0.0
+        couchdb_collect_results_time_seconds_count 0
+        # TYPE couchdb_couch_server_lru_skip_total counter
+        couchdb_couch_server_lru_skip_total 0
+        # TYPE couchdb_database_purges_total counter
+        couchdb_database_purges_total 0
+        # TYPE couchdb_database_reads_total counter
+        couchdb_database_reads_total 0
+        # TYPE couchdb_database_writes_total counter
+        couchdb_database_writes_total 0
+        # TYPE couchdb_db_open_time_seconds summary
+        couchdb_db_open_time_seconds{quantile="0.5"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.75"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.9"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.95"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.99"} 0.0
+        couchdb_db_open_time_seconds{quantile="0.999"} 0.0
+        couchdb_db_open_time_seconds_sum 0.0
+        couchdb_db_open_time_seconds_count 0
+        # TYPE couchdb_dbinfo_seconds summary
+        couchdb_dbinfo_seconds{quantile="0.5"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.75"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.9"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.95"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.99"} 0.0
+        couchdb_dbinfo_seconds{quantile="0.999"} 0.0
+        couchdb_dbinfo_seconds_sum 0.0
+        couchdb_dbinfo_seconds_count 0
+        # TYPE couchdb_document_inserts_total counter
+        couchdb_document_inserts_total 0
+        # TYPE couchdb_document_purges_failure_total counter
+        couchdb_document_purges_failure_total 0
+        # TYPE couchdb_document_purges_success_total counter
+        couchdb_document_purges_success_total 0
+        # TYPE couchdb_document_purges_total_total counter
+        couchdb_document_purges_total_total 0
+        # TYPE couchdb_document_writes_total counter
+        couchdb_document_writes_total 0
+        # TYPE couchdb_httpd_aborted_requests_total counter
+        couchdb_httpd_aborted_requests_total 0
+        # TYPE couchdb_httpd_all_docs_timeouts_total counter
+        couchdb_httpd_all_docs_timeouts_total 0
+        # TYPE couchdb_httpd_bulk_docs_seconds summary
+        couchdb_httpd_bulk_docs_seconds{quantile="0.5"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.75"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.9"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.95"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.99"} 0.0
+        couchdb_httpd_bulk_docs_seconds{quantile="0.999"} 0.0
+        couchdb_httpd_bulk_docs_seconds_sum 0.0
+        couchdb_httpd_bulk_docs_seconds_count 0
+        ...remaining couchdb metrics from _stats and _system
+
+If an additional port config option is specified, then a client can call this API using
+that port which does not require authentication. This option is ``false``(OFF) by default.
+When the option ``true``(ON), the default ports for a 3 node cluster are ``17986``,
+``27986``, ``37986``.
+See :ref:`Configuration of Prometheus Endpoint <config/prometheus>` for details.
+
+.. code-block:: http
+
+        GET /_node/_local/_prometheus HTTP/1.1
+        Accept: text/plain
+        Host: localhost:17986
+
+.. _api/server/system:
+
 ==============================
 ``/_node/{node-name}/_system``
 ==============================
