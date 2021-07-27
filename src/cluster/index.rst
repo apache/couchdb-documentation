@@ -35,4 +35,5 @@ operational instructions on node, database and shard management.
     databases
     sharding
     purging
+    tls_erlang_distribution
     troubleshooting
