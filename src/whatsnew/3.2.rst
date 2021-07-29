@@ -28,6 +28,14 @@ Version 3.2.0
 Features and Enhancements
 -------------------------
 
+* :ghissue:`3643`: Contribute a custom Erlang network protocol to CouchDB,
+  users can specify nodes to use TCP or TLS.
+
+.. figure:: ../../images/TLS-Handshake.png
+  :align: center
+  :alt: The SSL/TLS handshake enables the TLS client and server to establish
+        the secret keys with which they communicate.
+
 * :ghissue:`3472`, :ghissue:`3473`: Migrate some config options from [httpd]
   to [chttpd], migrate some from [couch_httpd_auth] to [chttpd_auth], and
   commented out in the default.ini.
