@@ -352,7 +352,7 @@
 ``/db/_design/design-doc/_update/update-name/doc-id``
 =====================================================
 
-.. http:put:: /{db}/_design/{ddoc}/_update/{func}/{docid}
+.. http:post:: /{db}/_design/{ddoc}/_update/{func}/{docid}
     :synopsis: Executes an update function against the specified document
 
     Executes :ref:`update function <updatefun>` on server side for the specified
