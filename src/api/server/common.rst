@@ -600,10 +600,14 @@
     :<json object create_target_params: An object that contains parameters
       to be used when creating the target database. Can include the
       standard ``q`` and ``n`` parameters.
-    :<json array doc_ids: Array of document IDs to be synchronized
+    :<json array doc_ids: Array of document IDs to be synchronized.
+      ``doc_ids``, ``filter``, and ``selector`` mutually exclusive.
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
+      ``doc_ids``, ``filter``, and ``selector`` mutually exclusive.
     :<json json selector: A :ref:`selector <find/selectors>` to filter
-      documents for synchronization.
+      documents for synchronization. Has the same behavior as the
+      :ref:`selector objects <selectorobj>` in replication documents.
+      ``doc_ids``, ``filter``, and ``selector`` mutually exclusive.
     :<json string source_proxy: Address of a proxy server through which
       replication from the source should occur (protocol can be "http" or
       "socks5")
