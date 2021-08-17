@@ -602,6 +602,8 @@
       standard ``q`` and ``n`` parameters.
     :<json array doc_ids: Array of document IDs to be synchronized
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
+    :<json json selector: A :ref:`selector <find/selectors>` to filter
+      documents for synchronization.
     :<json string source_proxy: Address of a proxy server through which
       replication from the source should occur (protocol can be "http" or
       "socks5")
