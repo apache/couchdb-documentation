@@ -218,7 +218,57 @@ Content-Security-Policy
 
 .. config:section:: csp :: Content-Security-Policy
 
-    Experimental support of CSP Headers for ``/_utils`` (Fauxton).
+  You can configure ``Content-Security-Policy`` header for Fauxton, attachments and
+  show/list functions separately. See `MDN Content-Security-Policy <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy>`_
+  for more details on CSP.
+
+    .. config:option:: utils_enable
+
+        Enable the sending of the header ``Content-Security-Policy`` for ``/_utils``.
+        Defaults to ``true``::
+
+            [csp]
+            utils_enable = true
+
+    .. config:option:: utils_header_value
+
+        Specifies the exact header value to send. Defaults to::
+
+            [csp]
+            utils_header_value = default-src 'self'; img-src 'self'; font-src *; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';
+
+    .. config:option:: attachments_enable
+
+        Enable sending the ``Content-Security-Policy`` header for attachments::
+
+            [csp]
+            attachments_enable = false
+
+    .. config:option:: attachments_header_value
+
+        Specifies the exact header value to send. Defaults to::
+
+            [csp]
+            attachments_header_value = sandbox
+
+    .. config:option:: showlist_enable
+
+        Enable sending the ``Content-Security-Policy`` header for show and list functions::
+
+            [csp]
+            showlist_enable = false
+
+    .. config:option:: showlist_header_value
+
+        Specifies the exact header value to send. Defaults to::
+
+            [csp]
+            showlist_header_value = sandbox
+
+    The pre 3.1.2 behaviour is still honoured, but we recommend updating
+    to the new format.
+
+    Experimental support of CSP headers for ``/_utils`` (Fauxton).
 
     .. config:option:: enable
 
