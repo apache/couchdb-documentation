@@ -245,6 +245,12 @@ Bugfixes
   the filename if it finds this situation with a ``file_truncate_error``.
 * :ghissue:`3739`: Shards with large purge sequences no longer fail to split in a
   shard splitting job.
+* :ghissue:`3754`: Always return views meta info when ``limit=0`` and
+  ``sorted=true``.
+* :ghissue:`3757`: Properly sort ``descending=true`` view results with a ``keys``
+  list.
+* :ghissue:`3763`: Stabilize view row sorting order when they are merged by the
+  coordinator.
 
 Other
 -----
