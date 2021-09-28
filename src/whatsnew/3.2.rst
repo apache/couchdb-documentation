@@ -113,6 +113,9 @@ Features and Enhancements
   which can include various characters previously not allowed to be included
   in the url info part of endpoint urls.
 
+* :ghissue:`3483`: We added a way of specifying requirements for new user passwords
+  using a list of regexp.
+
 * :ghissue:`3506`, :ghissue:`3416`, :ghissue:`3377`: CouchDB now provides a Prometheus
   compatible endpoint at ``GET /_node/{node-name}/_prometheus``. A configuration option
   allows for scraping via a different port (17986) that does not require authentication,
