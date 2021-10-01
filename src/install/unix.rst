@@ -46,99 +46,38 @@ node, prompt for the address to which it will bind, and a password for the admin
 Responses to these prompts may be pre-seeded using standard ``debconf`` tools. Further
 details are in the `README.Debian`_ file.
 
-.. _README.Debian: https://github.com/apache/couchdb-pkg/blob/master/debian/README.Debian
+.. _README.Debian: https://github.com/apache/couchdb-pkg/blob/main/debian/README.Debian
 
-Apache CouchDB also provides packages for the SpiderMonkey 1.8.5 JavaScript
-dependency, as the upstream packages for this shared library are starting to
-disappear or become unreliable.
+For distributions lacking a compatible SpiderMonkey library, Apache CouchDB
+also provides packages for the 1.8.5 version.
 
 Enabling the Apache CouchDB package repository
 ----------------------------------------------
 
 .. highlight:: sh
 
-**Debian 9 (stretch)**: Run the following commands::
+**Debian or Ubuntu**: Run the following commands::
 
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
-    $ echo "deb https://apache.bintray.com/couchdb-deb stretch main" \
-        | sudo tee /etc/apt/sources.list.d/couchdb.list
+    sudo apt update && sudo apt install -y curl apt-transport-https gnupg
+    curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1
+    source /etc/os-release
+    echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" \
+        | sudo tee /etc/apt/sources.list.d/couchdb.list >/dev/null
 
-**Debian 10 (buster)**: Run the following commands::
+**RedHat or CentOS**: Run the following commands::
 
-    $ sudo apt-get install -y gnupg ca-certificates
-    $ echo "deb https://apache.bintray.com/couchdb-deb buster main" \
-        | sudo tee /etc/apt/sources.list.d/couchdb.list
-
-**Ubuntu 16.04 (Xenial)**: Run the following commands::
-
-    $ sudo apt-get install -y apt-transport-https gnupg ca-certificates
-    $ echo "deb https://apache.bintray.com/couchdb-deb xenial main" \
-        | sudo tee /etc/apt/sources.list.d/couchdb.list
-
-**Ubuntu 18.04 (Bionic)**: Run the following commands::
-
-    $ sudo apt-get install -y gnupg ca-certificates
-    $ echo "deb https://apache.bintray.com/couchdb-deb bionic main" \
-        | sudo tee /etc/apt/sources.list.d/couchdb.list
-
-**Ubuntu 20.04 (Focal)**: Run the following commands::
-
-    $ sudo apt-get install -y gnupg ca-certificates
-    $ echo "deb https://apache.bintray.com/couchdb-deb focal main" \
-        | sudo tee /etc/apt/sources.list.d/couchdb.list
-
-.. highlight:: ini
-
-**CentOS**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
-
-    [bintray--apache-couchdb-rpm]
-    name=bintray--apache-couchdb-rpm
-    baseurl=http://apache.bintray.com/couchdb-rpm/el$releasever/$basearch/
-    gpgcheck=0
-    repo_gpgcheck=0
-    enabled=1
-
-**RedHat 6**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
-
-    [bintray--apache-couchdb-rpm]
-    name=bintray--apache-couchdb-rpm
-    baseurl=http://apache.bintray.com/couchdb-rpm/el6/$basearch/
-    gpgcheck=0
-    repo_gpgcheck=0
-    enabled=1
-
-**RedHat 7**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
-
-    [bintray--apache-couchdb-rpm]
-    name=bintray--apache-couchdb-rpm
-    baseurl=http://apache.bintray.com/couchdb-rpm/el7/$basearch/
-    gpgcheck=0
-    repo_gpgcheck=0
-    enabled=1
-
-**RedHat 8**: Place the following text into ``/etc/yum.repos.d/bintray-apache-couchdb-rpm.repo``::
-
-    [bintray--apache-couchdb-rpm]
-    name=bintray--apache-couchdb-rpm
-    baseurl=http://apache.bintray.com/couchdb-rpm/el8/$basearch/
-    gpgcheck=0
-    repo_gpgcheck=0
-    enabled=1
+    sudo yum install -y yum-utils
+    sudo yum-config-manager --add-repo https://couchdb.apache.org/repo/couchdb.repo
 
 Installing the Apache CouchDB packages
 --------------------------------------
 
 .. highlight:: sh
 
-**Debian/Ubuntu**: First, install the CouchDB repository key::
+**Debian or Ubuntu**: Run the following commands::
 
-    $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys \
-      8756C4F765C9AC3CB6B85D62379CE192D401AB61
-
-Then update the repository cache and install the package::
-
-    $ sudo apt update
-    $ sudo apt install -y couchdb
+    sudo apt update
+    sudo apt install -y couchdb
 
 Debian/Ubuntu installs from binaries can be pre-configured for single node or
 clustered installations. For clusters, multiple nodes will still need to be
@@ -147,7 +86,7 @@ joined together and configured consistently across all machines; **follow the**
 
 **RedHat/CentOS**: Run the command::
 
-    $ sudo yum -y install epel-release && sudo yum -y install couchdb
+    sudo yum install -y couchdb
 
 Once installed, :ref:`create an admin user<config/admins>` by hand before
 starting CouchDB, if your installer didn't do this for you already.
@@ -157,7 +96,25 @@ You can now start the service.
 **Your installation is not complete. Be sure to complete the**
 :ref:`Setup <setup>` **steps for a single node or clustered installation.**
 
-Relax! CouchDB is installed and running.
+**Relax!** CouchDB is installed and running.
+
+GPG keys used for signing the CouchDB repositories
+--------------------------------------------------
+
+As of 2021.04.25, the *repository* signing key for both types of supported packages
+is::
+
+    pub   rsa8192 2015-01-19 [SC]
+          390EF70BB1EA12B2773962950EE62FB37A00258D
+    uid           The Apache Software Foundation (Package repository signing key) <root@apache.org>
+
+As of 2021.04.25, the *package* signing key (only used for ``rpm`` packages) is::
+
+    pub   rsa4096 2017-07-28 [SC] [expires: 2022-07-27]
+          2EC788AE3F239FA13E82D215CDE711289384AE37
+    uid           Joan Touzet (Apache Code Signing Key) <wohali@apache.org>
+
+Both are available from most popular GPG key servers.
 
 Installation from source
 ========================
@@ -207,7 +164,7 @@ You can install the dependencies by running::
 Be sure to update the version numbers to match your system's available
 packages.
 
-RedHat-based (Fedora, Centos, RHEL) Systems
+RedHat-based (Fedora, CentOS, RHEL) Systems
 -------------------------------------------
 
 You can install the dependencies by running::
@@ -215,10 +172,7 @@ You can install the dependencies by running::
     sudo yum install autoconf autoconf-archive automake \
         curl-devel erlang-asn1 erlang-erts erlang-eunit gcc-c++ \
         erlang-os_mon erlang-xmerl erlang-erl_interface help2man \
-        js-devel-1.8.5 libicu-devel libtool perl-Test-Harness
-
-While CouchDB builds against the default js-devel-1.7.0 included in some
-distributions, it's recommended to use a more recent js-devel-1.8.5.
+        libicu-devel libtool perl-Test-Harness
 
 Warning: To build a release for CouchDB the erlang-reltool package is required,
 yet on CentOS/RHEL this package depends on erlang-wx which pulls in wxGTK
