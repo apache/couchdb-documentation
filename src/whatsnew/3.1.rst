@@ -20,6 +20,16 @@
     :depth: 1
     :local:
 
+.. _release/3.1.2:
+
+Version 3.1.2
+=============
+
+This is a security release for a *low severity* vulnerability. Details of
+the issue will be published one week after this release. See the `CVE
+database <https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-38295>`_
+for details at a later time.
+
 .. _release/3.1.1:
 
 Version 3.1.1
