@@ -66,7 +66,7 @@ clarity):
 
     .. code-block:: bash
 
-        shell> curl -X PUT 'http:/127.0.0.1:5984/demo/doc' -d '{"motto": "I love gnomes"}'
+        shell> curl -X PUT 'http://127.0.0.1:5984/demo/doc' -d '{"motto": "I love gnomes"}'
 
     you should replace it with:
 
