@@ -20,6 +20,65 @@
     :depth: 1
     :local:
 
+.. _release/3.2.1:
+
+Version 3.2.1
+=============
+
+Features and Enhancements
+-------------------------
+
+* :ghissue:`3746`: ``couch_icu_driver`` collation driver has been
+  removed. ICU collation functionality is consolidated in the single
+  ``couch_ejson_compare`` module. View performance might slighty
+  increase as there are less corner cases when the C collation driver
+  fails and falls back to Erlang.
+
+* :ghissue:`3787`: Update sequences generated from DB info and
+  ``_changes?since=now&limit=0`` now contain shard uuids as part of
+  their internal, opaque, representation. As a result, there should be
+  less chance of experiencing changes feed rewinds with these
+  sequences.
+
+* :ghissue:`3798`: ICU driver and collator algorithm versions are
+  returned in the ``_node/$node/_versions`` result.
+
+* :ghissue:`3801`: Users with the ``_metrics`` role can now read
+  ``_prometheus`` metrics.
+
+Bugfixes
+--------
+
+* :ghissue:`3780`: Avoid changes feed rewinds after shard moves.
+
+* :ghissue:`3779`, :ghissue:`3785`: Prevent deleted view file cleanup
+  from crashing when database is deleted while the cleanup process is
+  running.
+
+* :ghissue:`3789`: Fix ``badarith`` 500 errors when ``[fabric]
+  request_timeout`` is set to ``infinity``.
+
+* :ghissue:`3786`: Fix off-by-one ``limit`` error for
+  ``_all_dbs``. Also, the auto-injected shard ``_dbs`` design doc is
+  removed and replaced with an Erlang module.
+
+* :ghissue:`3788`: Minimize changes feeds rewinds when a node is down.
+
+* :ghissue:`3807`: Enable ``custodian`` application
+  reporting. Previously, ``custodian`` was accidentally left disabled
+  as it used a hard-coded shards db name different than ``_dbs``.
+
+* :ghissue:`3805`: Cluster setup correctly syncs admin passwords and
+  uses the new (since 3.2.0) ``[chttpd_auth]`` config section instead
+  of the previous ``[couch_httpd_auth]`` section.
+
+* :ghissue:`3810`: Local development ``dev/run`` script now uses the
+  ``[chttpd_auth]`` section in ``local.ini`` instead of
+  ``[couch_httpd_auth]``.
+
+* :ghissue:`3773`: Fix reduce view collation results for unicode
+  equivalent keys.
+
 .. _release/3.2.0:
 
 Version 3.2.0
