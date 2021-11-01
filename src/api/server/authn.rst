@@ -379,8 +379,7 @@ Additionally, CouchDB can be configured to reject JWT tokens that are
 missing a configurable set of claims (e.g, a CouchDB administrator
 could insist on the ``exp`` claim).
 
-All claims presented in a JWT token are validated if presented, regardless of whether they
-are required.
+Only claims listed in required checks are validated. Additional claims will be ignored.
 
 Two sections of config exist to configure JWT authentication;
 
