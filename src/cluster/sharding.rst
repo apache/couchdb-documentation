@@ -717,13 +717,12 @@ good idea to remove already completed jobs. See :ref:`reshard configuration
 section <config/reshard>` for the default value of ``max_jobs`` parameter and
 how to adjust if needed.
 
-For example, if the jobs have completed, to remove all the jobs run:
+For example, to remove all the completed jobs run:
 
 .. code-block:: bash
 
-    $ curl -s $COUCH_URL:5984/_reshard/jobs | jq -r '.jobs[].id' |\
-      while read -r jobid; do\
-          curl -s -XDELETE $COUCH_URL:5984/_reshard/jobs/$jobid\
+    $ for jobid in $(curl -s $COUCH_URL:5984/_reshard/jobs | jq -r '.jobs[] | select (.job_state=="completed") | .id'); do \
+          curl -s -XDELETE $COUCH_URL:5984/_reshard/jobs/$jobid \
       done
 
 Then it's a good idea to see what the db shard map looks like.
