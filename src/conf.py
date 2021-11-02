@@ -118,4 +118,4 @@ github_docs_path = "src"
 
 
 def setup(app):
-    app.add_stylesheet("css/rtd_theme.css")
+    app.add_css_file("css/rtd_theme.css")
