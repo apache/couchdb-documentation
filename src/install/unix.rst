@@ -114,7 +114,16 @@ As of 2021.04.25, the *package* signing key (only used for ``rpm`` packages) is:
           2EC788AE3F239FA13E82D215CDE711289384AE37
     uid           Joan Touzet (Apache Code Signing Key) <wohali@apache.org>
 
-Both are available from most popular GPG key servers.
+As of 2021.11.13, the *package* signing key (only used for ``rpm`` packages) is::
+
+     pub   rsa4096 2019-09-05 [SC] [expires: 2039-01-02]
+           0BD7A98499C4AB41C910EE65FC04DFBC9657A78E
+     uid           Nicolae Vatamaniuc <vatamane@apache.org>
+     uid           default <vatamane@gmail.com>
+
+All are available from most popular GPG key servers. The ``rpm``
+signing keys should be listed in the `KEYS
+<https://downloads.apache.org/couchdb/KEYS>`_ list as well.
 
 Installation from source
 ========================
