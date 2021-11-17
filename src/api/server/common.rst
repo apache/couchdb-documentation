@@ -320,7 +320,9 @@
 .. note::
     The supported number of the specified databases in the list can be limited
     by modifying the `max_db_number_for_dbs_info_req` entry in configuration
-    file. The default limit is 100.
+    file. The default limit is 100. Increasing the limit, while possible, creates
+    load on the server so it is advisable to have more requests with 100 dbs,
+    rather than a few requests with 1000s of dbs at a time.
 
 .. _api/server/cluster_setup:
 
