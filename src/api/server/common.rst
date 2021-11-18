@@ -225,6 +225,76 @@
 ``/_dbs_info``
 ==============
 
+.. versionadded:: 3.2
+
+.. http:get:: /_dbs_info
+    :synopsis: Returns all databases information
+
+    Returns a list of all the databases information in the CouchDB instance.
+
+    :<header Accept: - :mimetype:`application/json`
+                     - :mimetype:`text/plain`
+    :query boolean descending: Return databases information in descending order
+      by key. Default is ``false``.
+    :query json endkey: Stop returning databases information when the specified
+      key is reached.
+    :query json end_key: Alias for ``endkey`` param
+    :query number limit: Limit the number of the returned databases information
+      to the specified number.
+    :query number skip: Skip this number of databases before starting to return
+      the results. Default is ``0``.
+    :query json startkey: Return databases information starting with the
+      specified key.
+    :query json start_key: Alias for ``startkey``.
+    :>header Content-Type: - :mimetype:`application/json`
+                           - :mimetype:`text/plain; charset=utf-8`
+    :code 200: Request completed successfully
+
+    **Request**:
+
+    .. code-block:: http
+
+        GET /_dbs_info HTTP/1.1
+        Accept: application/json
+        Host: localhost:5984
+
+    **Response**:
+
+    .. code-block:: http
+
+        HTTP/1.1 200 OK
+        Cache-Control: must-revalidate
+        Content-Type: application/json
+        Date: Thu, 18 Nov 2021 14:37:35 GMT
+        Server: CouchDB (Erlang OTP/23)
+
+        [
+          {
+            "key": "animals",
+            "info": {
+              "db_name": "animals",
+              "update_seq": "52232",
+              "sizes": {
+                "file": 1178613587,
+                "external": 1713103872,
+                "active": 1162451555
+              },
+              "purge_seq": 0,
+              "doc_del_count": 0,
+              "doc_count": 52224,
+              "disk_format_version": 6,
+              "compact_running": false,
+              "cluster": {
+                "q": 8,
+                "n": 3,
+                "w": 2,
+                "r": 2
+              },
+              "instance_start_time": "0"
+            }
+          }
+        ]
+
 .. versionadded:: 2.2
 
 .. http:post:: /_dbs_info
