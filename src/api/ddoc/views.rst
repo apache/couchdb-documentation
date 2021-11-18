@@ -638,9 +638,9 @@ By default CouchDB uses an `ICU`_ driver for sorting view results. It's possible
 use binary collation instead for faster view builds where Unicode collation is
 not important.
 
-To use raw collation add ``"collation": "raw"`` key-value pair to the design
-documents ``options`` object at the root level. After that, views will be
-regenerated and new order applied.
+To use raw collation add ``"options":{"collation":"raw"}``  within the view object of the
+design document. After that, views will be regenerated and new order applied for the
+appropriate view.
 
 .. seealso::
     :ref:`views/collation`
