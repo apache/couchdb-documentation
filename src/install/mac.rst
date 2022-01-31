@@ -48,8 +48,9 @@ That's all, now CouchDB is installed on your Mac:
 Installation with Homebrew
 ==========================
 
-CouchDB can be installed via `Homebrew`_. Fetch the newest version of Homebrew and all formulae and install CouchDB with the following commands: 
-   
+CouchDB can be installed via `Homebrew`_. Fetch the newest version of Homebrew 
+and all formulae and install CouchDB with the following commands:
+
 .. code:: bash
 
    brew update
