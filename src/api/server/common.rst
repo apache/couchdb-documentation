@@ -219,6 +219,12 @@
            "locations"
         ]
 
+.. note::
+    The "`skip`" and "`limit`" parameters of GET `_all_dbs` will not work
+    properly if design documents exist in shards dbs. For example, if we have
+    2 _design/* docs and 2 dbs (db1, db2), if we set `skip=2`, it will return
+    [db1, db2], which looks like skip doesn't work.
+
 .. _api/server/dbs_info:
 
 ==============
@@ -294,6 +300,12 @@
             }
           }
         ]
+
+.. note::
+    The "`skip`" and "`limit`" parameters of GET `_dbs_info` will not work
+    properly if design documents exist in shards dbs. For example, if we have
+    2 _design/* docs and 2 dbs (db1, db2), if we set `skip=2`, it will return
+    db's info for db1 and db2, which looks like skip doesn't work.
 
 .. versionadded:: 2.2
 
