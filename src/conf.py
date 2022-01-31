@@ -36,12 +36,12 @@ nitpicky = True
 version = "3.2"
 release = "3.2.0"
 
-project = u"Apache CouchDB\u00ae"
+project = "Apache CouchDB\u00ae"
 
-copyright = u"%d, %s" % (
+copyright = "%d, %s" % (
     datetime.datetime.now().year,
-    u"Apache Software Foundation. CouchDB\u00ae is a registered trademark of the "
-    + u"Apache Software Foundation",
+    "Apache Software Foundation. CouchDB\u00ae is a registered trademark of the "
+    + "Apache Software Foundation",
 )
 
 primary_domain = "http"
