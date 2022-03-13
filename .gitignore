@@ -1,6 +1,8 @@
 ext/*.pyc
 ext/__pycache__/
 build/
+_build/
+rebar.lock
 venv
 .venv
 Pipfile
