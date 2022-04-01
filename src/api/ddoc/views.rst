@@ -258,7 +258,7 @@ reflected in the view indexes.
 .. note::
     View index rebuilds occur when one view from the same the view group (i.e.
     all the views defined within a single a design document) has been
-    determined as needing a rebuild. For example, if if you have a design
+    determined as needing a rebuild. For example, if you have a design
     document with different views, and you update the database, all three view
     indexes within the design document will be updated.
 
