@@ -28,6 +28,10 @@ in the following order:
 #. ``etc/local.ini``
 #. ``etc/local.d/*.ini``
 
+Configuration files in the ``*.d/`` directories are sorted by name, that means
+for example a file with the name ``etc/local.d/00-shared.ini`` is loaded before
+``etc/local.d/10-server-specific.ini``.
+
 All paths are specified relative to the CouchDB installation directory:
 ``/opt/couchdb`` recommended on UNIX-like systems, ``C:\CouchDB`` recommended
 on Windows systems, and a combination of two directories on macOS:
