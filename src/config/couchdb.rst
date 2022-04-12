@@ -51,7 +51,7 @@ Base CouchDB Options
         to ``everyone``, anyone can performs reads and writes. When set to
         ``admin_only``, only admins can read and write. When set to
         ``admin_local``, sharded databases can be read and written by anyone
-        but the shards can only be read and written by admins.
+        but the shards can only be read and written by admins. ::
 
             [couchdb]
             default_security = admin_only
