@@ -160,7 +160,7 @@ Style Guidelines for this Documentation
 
 When you make a change to the documentation, you should make sure that you
 follow the style. Look through some files and you will see that the style is
-quite straightforward. If you do not know if your formating is in compliance
+quite straightforward. If you do not know if your formatting is in compliance
 with the style, ask yourself the following question::
 
     Is it needed for correct syntax?

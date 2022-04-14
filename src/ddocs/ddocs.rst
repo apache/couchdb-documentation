@@ -165,7 +165,7 @@ equivalent JavaScript functions.
 
 .. versionadded:: 2.2
 
-Aproximates the number of distinct keys in a view index using a variant of the
+Approximates the number of distinct keys in a view index using a variant of the
 `HyperLogLog`_ algorithm. This algorithm enables an efficient, parallelizable
 computation of cardinality using fixed memory resources. CouchDB has configured
 the underlying data structure to have a relative error of ~2%.

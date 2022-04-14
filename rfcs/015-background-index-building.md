@@ -44,7 +44,7 @@ in a set of sharded ETS tables. Each sharded ETS table has an associated
 background process which periodically removes entries from there and calls the
 index building API functions for each registered indexing backend.
 
-In addition to buiding indices, the background index builder also cleanups up
+In addition to building indices, the background index builder also cleanups up
 stale index data. This is index data left behind after design documents have
 been updated or deleted and the view signatures changed.
 

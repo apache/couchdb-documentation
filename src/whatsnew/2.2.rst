@@ -162,7 +162,7 @@ Features
 * :ghissue:`977`: When using ``COPY`` to copy a document, CouchDB no longer fails if
   the new ID includes Unicode characters.
 * :ghissue:`1095`: Recognize the environment variables ``ARGS_FILE``, ``SYSCONFIG_FILE``,
-  ``COUCHDB_ARGS_FILE`` and ``COUCHDB_SYSCONFIG_FILE`` to overrride where CouchDB looks
+  ``COUCHDB_ARGS_FILE`` and ``COUCHDB_SYSCONFIG_FILE`` to override where CouchDB looks
   for the ``vm.args`` and ``sys.config`` files at startup.
 * :ghissue:`1101`, :ghissue:`1425`: Mango can now be used to find conflicted documents
   in a database by adding ``conflicts: true`` to a mango selector.

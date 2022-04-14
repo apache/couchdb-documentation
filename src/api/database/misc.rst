@@ -133,7 +133,7 @@ Internal Replication
 ======================
 Purges are automatically replicated between replicas of the same database. Each
 database has an internal purge tree that stores a certain number of the most
-recent purges. This allows internal synchonization between replicas of the same
+recent purges. This allows internal synchronization between replicas of the same
 database.
 
 External Replication

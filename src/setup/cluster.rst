@@ -58,7 +58,7 @@ all nodes are connected to all other nodes, in a mesh network configuration.
 .. _cookie: http://erlang.org/doc/reference_manual/distributed.html
 
 Every Erlang application running on that machine (such as CouchDB) then uses
-automatically assigned ports for communciation with other nodes. Yes, this
+automatically assigned ports for communication with other nodes. Yes, this
 means random ports. This will obviously not work with a firewall, but it is
 possible to force an Erlang application to use a specific port range.
 
@@ -217,7 +217,7 @@ locally on each node; if so, replace ``<server-IP|FQDN>`` below with ``127.0.0.1
     # Create the admin user and password:
     curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/admins/admin -d '"password"'
 
-    # Now, bind the clustered interface to all IP addresses availble on this machine
+    # Now, bind the clustered interface to all IP addresses available on this machine
     curl -X PUT http://<server-IP|FQDN>:5984/_node/_local/_config/chttpd/bind_address -d '"0.0.0.0"'
 
     # If not using the setup wizard / API endpoint, the following 2 steps are required:

@@ -271,7 +271,7 @@ monitor the job status and re-create the job. In the current design,
 `transient` jobs are persisted to FDB as `couch_jobs` records, and so would
 survive node restarts. Also after transient jobs complete or failed,
 they used to disappear immediately. This design proposes keeping them around
-for a configurable emount of time to allow users to retrive their status via
+for a configurable emount of time to allow users to retrieve their status via
 `_scheduler/jobs/$id` API.
 
 ## Monitoring Endpoints

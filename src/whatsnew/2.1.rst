@@ -274,7 +274,7 @@ Other scheduling replicator improvements
   * Network resource usage and performance was improved by
     implementing a shared connection pool. This should help in cases
     of a large number of connections to the same sources or
-    target. Previously connection pools were shared only withing a
+    target. Previously connection pools were shared only within a
     single replication job.
 
   * Improved request rate limit handling. Replicator requests will
@@ -364,7 +364,7 @@ The 2.1.0 release includes fixes for the following issues:
 * :issue:`1447`: X-Couch-Update-NewRev header is missed if custom headers are
   specified in response of _update handler (missed in 2.0 merge)
 * :issue:`2731`: Authentication DB was not considered a system DB
-* :issue:`3010`: (Superceded fix for replication exponential backoff)
+* :issue:`3010`: (Superseded fix for replication exponential backoff)
 * :issue:`3090`: Error when handling empty "Access-Control-Request-Headers"
   header
 * :issue:`3100`: Fix documentation on require_valid_user
@@ -390,7 +390,7 @@ The 2.1.0 release includes fixes for the following issues:
   spawned process
 * :issue:`3193`: fabric:open_revs returns multiple results when one of the
   shards has stem_interactive_updates=false
-* :issue:`3199`: Replicator VDU function doesn't acount for an already
+* :issue:`3199`: Replicator VDU function doesn't account for an already
   malformed document in replicator db
 * :issue:`3202`: (mango) do not allow empty field names
 * :issue:`3220`: Handle timeout in _revs_diff

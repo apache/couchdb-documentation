@@ -30,7 +30,7 @@ Features and Enhancements
 
 * :ghissue:`3746`: ``couch_icu_driver`` collation driver has been
   removed. ICU collation functionality is consolidated in the single
-  ``couch_ejson_compare`` module. View performance might slighty
+  ``couch_ejson_compare`` module. View performance might slightly
   increase as there are less corner cases when the C collation driver
   fails and falls back to Erlang.
 
