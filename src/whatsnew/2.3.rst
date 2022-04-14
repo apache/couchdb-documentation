@@ -185,7 +185,7 @@ Performance
 
 * :ghissue:`1409`: CouchDB no longer forces the TCP receive buffer to a fixed size
   of 256KB, allowing the operating system to dynamically adjust the buffer size. This
-  can lead to siginificantly improved network performance when transferring large
+  can lead to significantly improved network performance when transferring large
   attachments.
 * :ghissue:`1423`: Mango selector matching now occurs at the shard level, reducing the
   network traffic within a cluster for a mango query.

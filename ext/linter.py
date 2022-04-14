@@ -154,13 +154,13 @@ def whitespace_committee(file):
     in files. The documentation style guide says:
 
     - There should be no trailing white space;
-    - More than one emtpy lines are not allowed and there shouldn't be such
+    - More than one empty line is not allowed and there shouldn't be such
       at the end of file;
     - The last line should ends with newline character
 
-    Additionally it alerts about for tabs if they were used instead of spaces.
+    Additionally it alerts about tabs if they were used instead of spaces.
 
-    TODO: check for indention
+    TODO: check for indentation
     """
     error = prev = None
     n = 0
@@ -246,7 +246,7 @@ def line_length_checker(file):
         elif not line:
             seen_emptyline = True
 
-        # So if we saw an empty line and here goes content without indention,
+        # So if we saw an empty line and here goes content without indentation,
         # so it mostly have to sign about the end of our code block
         # (if it ever occurs)
         elif seen_emptyline and line and not line.startswith(" "):

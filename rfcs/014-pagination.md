@@ -93,12 +93,12 @@ document are to be interpreted as described in
 
 - The `first`/`next`/`last` keys in the response are represented as path which
   includes the bookmark query key. This means the bookmark token size contributes
-  to total URI length and is subject to a max URL lenght (around 2000 characters).
+  to total URI length and is subject to a max URL length (around 2000 characters).
   This means storing `keys` in a bookmark is not an option. For that reason
   `POST` method is not supported when pagination is enabled
 - Ideally we would want to signal (return 400) when number of rows returned from
   streaming version of the endpoint goes over limit configured in `request_limit`.
-  However with streaming we've aready sent a return code.
+  However with streaming we've already sent a return code.
 
 ## Semantics of the implementation
 
@@ -140,7 +140,7 @@ document are to be interpreted as described in
   }
   ```
 - Every bookmark returned by `_all_docs/queries` and `{db}/_design/{ddoc}/_view/{view}/queries`
-  can be submited via separate request to `_all_docs` and `{db}/_design/{ddoc}/_view/{view}`
+  can be submitted via separate request to `_all_docs` and `{db}/_design/{ddoc}/_view/{view}`
   correspondly.
 
 

@@ -101,7 +101,7 @@ The query server line protocol has changed for all functions except
 :ref:`rereduce <qs/rereduce>`. This allows us to cache the entire design
 document in the query server process, which results in faster performance for
 common operations. It also gives more flexibility to query server
-implementators and shouldn't require major changes in the future when adding
+implementers and shouldn't require major changes in the future when adding
 new query server features.
 
 UTF8 JSON
@@ -343,7 +343,7 @@ View Server
 * Improved view information objects.
 * Bug fix for partial updates during view builds.
 * Move query server to a design-doc based protocol.
-* Use json2.js for JSON serialization for compatiblity with native JSON.
+* Use json2.js for JSON serialization for compatibility with native JSON.
 * Major refactoring of couchjs to lay the groundwork for disabling cURL
   support. The new HTTP interaction acts like a synchronous XHR. Example usage
   of the new system is in the JavaScript CLI test runner.

@@ -72,7 +72,7 @@ Adding `interactive: true` to the option field of an index will configure the in
 }
 ```
 
-Interactive views have two step process to being built. When an index is added to the database, a background job is created for the index to be built up to the change sequence, creation versionstamp, that the index was added at. Any new documents added after the index was added will be indexed in the transaction that the document is added to the database. If a query for an interative view is received before the background job is complete, CouchDB will wait until the background job is complete before serving the request.
+Interactive views have two step process to being built. When an index is added to the database, a background job is created for the index to be built up to the change sequence, creation versionstamp, that the index was added at. Any new documents added after the index was added will be indexed in the transaction that the document is added to the database. If a query for an interactive view is received before the background job is complete, CouchDB will wait until the background job is complete before serving the request.
 
 ### Data model
 
@@ -118,7 +118,7 @@ Each field is defined as:
 - `total_keys` is the number of keys emitted by a document
 - `total_size` is the size of the key/values emitted by the document
 - `unique_keys` is the unique keys emitted by the document
-- `dupe_id` the duplication id to allow mutiple documents to emit a key/value
+- `dupe_id` the duplication id to allow multiple documents to emit a key/value
 
 The process flow for a document to be indexed in the background is as follows:
 

@@ -73,7 +73,7 @@ guarantees. The `Sequence` defined in the Terminology section above is totally
 ordered across the entire cluster, and repeated calls to `_changes` on a
 quiescent database will retrieve the same results in the same order. The
 `Sequence` will still be encoded as a string, but as it's a more compact value
-we propose to encode it in hexademical notation. These strings will sort
+we propose to encode it in hexadecimal notation. These strings will sort
 correctly, something that has not always been true in CouchDB 2.x.
 
 ## Data Model
@@ -122,7 +122,7 @@ In short, the operations in this subspace are
 - doc insert: 0 read, 0 clear, 1 insert
 - doc update: 0 read, 1 clear, 1 insert
 
-## Handling of Unkown Commit Results
+## Handling of Unknown Commit Results
 
 When using versionstamped keys as proposed in this RFC one needs to pay
 particular care to the degraded mode when FoundationDB responds to a transaction
@@ -133,7 +133,7 @@ this subspace are performed), so the risk for duplicate entries is indeed a
 valid concern.
 
 We can guard against creating duplicates in the "changes" subspace by having the
-transaction that updates that subpsace also insert a KV into a dedicated
+transaction that updates that subspace also insert a KV into a dedicated
 "transaction ID" subspace specifically corresponding to this document update. If
 the CouchDB layer receives a `commit_unknown_result` it can simply check for the
 presence of the transaction ID in FoundationDB to determine whether the previous
@@ -155,7 +155,7 @@ the `BranchCount` for each row; if it's larger than 1, the client will need to
 do a followup range request against the "revisions" subspace to retrieve the
 additional revision identifiers to include in the response. A request with
 `include_docs=true` will need to make a separate range request to the doc
-storage subpsace to retrieve the body of each winning document revision.
+storage subspace to retrieve the body of each winning document revision.
 
 If a normal response to `_changes` cannot be delivered in a single transaction
 the CouchDB layer should execute multiple transactions in series and stitch the

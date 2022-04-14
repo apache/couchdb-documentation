@@ -119,7 +119,7 @@ that directly emits the format defined in the document storage RFC).
 Assuming we can agree on a set of sizes and how they should be calculated, the
 implementation will require two pieces: a single key for each size, mutated by
 atomic operations, and a record of the size of each revision in the ?REVISIONS
-subpsace so that a transaction can compute the delta for each document.
+subspace so that a transaction can compute the delta for each document.
 
 ### Clustering
 

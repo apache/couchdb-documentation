@@ -78,7 +78,7 @@ ExUnit shouldn't have these problems:
     - performance tests
     - property based tests
 
-## Dissadvantages
+## Disadvantages
 
 - New language & tooling to learn
 - We make Elixir required dependency (currently it is somewhat optional)

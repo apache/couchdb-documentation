@@ -89,7 +89,7 @@ pack({"foo", "bar", "baz"}) = pack({123})
 ```
 
 Clients SHOULD NOT submit objects containing duplicate keys, as CouchDB will
-only preserve  the last occurence of the key and will silently drop the other
+only preserve  the last occurrence of the key and will silently drop the other
 occurrences. Similarly, clients MUST NOT rely on the ordering of keys within an
 Object as this ordering will generally not be preserved by the database.
 
@@ -130,7 +130,7 @@ are baked into the key. The structure looks like this
 et cetera
 ```
 
-where `RevisionMetadata` includes at the minium an enum to enable schema
+where `RevisionMetadata` includes at the minimum an enum to enable schema
 evolution for subsequent changes to the document encoding structure, and
 `NotDeleted` is `true` if this revision is a typical `deleted=false` revision,
 and `false` if the revision is storing user-supplied data associated with the

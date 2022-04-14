@@ -37,7 +37,7 @@ the nodes it is connected to and knows about.
             "node1@xxx.xxx.xxx.xxx"]
     }
 
-* ``all_nodes`` are all the nodes thats this node knows about.
+* ``all_nodes`` are all the nodes that this node knows about.
 * ``cluster_nodes`` are the nodes that are connected to this node.
 
 To add a node simply do:

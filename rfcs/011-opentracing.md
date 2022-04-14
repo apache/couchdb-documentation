@@ -133,7 +133,7 @@ Following headers on the response would be supported
 
 ## Conventions
 
-The conventions bellow are based on [conventions from opentracing](https://github.com/opentracing/specification/blob/main/semantic_conventions.md#standard-span-tags-and-log-fields).
+The conventions below are based on [conventions from opentracing](https://github.com/opentracing/specification/blob/main/semantic_conventions.md#standard-span-tags-and-log-fields).
 All tags are optional since it is just a recomendation from open tracing to hint visualization and filtering tools.
 
 ### Span tags
