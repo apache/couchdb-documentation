@@ -31,9 +31,8 @@ to install CouchDB is to use the convenience binary packages:
 
 * CentOS/RHEL 7
 * CentOS/RHEL 8
-* Debian 9 (stretch)
 * Debian 10 (buster)
-* Ubuntu 16.04 (xenial)
+* Debian 11 (bullseye)
 * Ubuntu 18.04 (bionic)
 * Ubuntu 20.04 (focal)
 
@@ -143,21 +142,20 @@ Dependencies
 
 You should have the following installed:
 
-* `Erlang OTP (20.x >= 21.3.8.5, 21.x >= 21.2.3, 22.x >= 22.0.5, 23.x, 24.x) <http://erlang.org/>`_
+* `Erlang OTP (20.x >= 20.3.8.11, 21.x >= 21.2.3, 22.x >= 22.0.5, 23.x, 24.x) <http://erlang.org/>`_
 * `ICU                          <http://icu-project.org/>`_
 * `OpenSSL                      <http://www.openssl.org/>`_
-* `Mozilla SpiderMonkey (1.8.5, 60, 68, 78) <https://spidermonkey.dev/>`_
+* `Mozilla SpiderMonkey (1.8.5, 60, 68, 78, 91) <https://spidermonkey.dev/>`_
 * `GNU Make                     <http://www.gnu.org/software/make/>`_
 * `GNU Compiler Collection      <http://gcc.gnu.org/>`_
 * `libcurl                      <http://curl.haxx.se/libcurl/>`_
 * `help2man                     <http://www.gnu.org/s/help2man/>`_
-* `Python (>=2.7) for docs      <http://python.org/>`_
+* `Python (>=3.6) for docs and tests      <http://python.org/>`_
 * `Python Sphinx (>=1.1.3)      <http://pypi.python.org/pypi/Sphinx>`_
 
-It is recommended that you install Erlang OTP R16B03-1 or above where possible.
 You will only need libcurl if you plan to run the JavaScript test suite. And
 help2man is only need if you plan on installing the CouchDB man pages.
-Python and Sphinx are only required for building the online documentation.
+Sphinx is only required for building the online documentation.
 Documentation build can be disabled by adding the ``--disable-docs`` flag to
 the ``configure`` script.
 
@@ -367,7 +365,7 @@ the CouchDB `user mailing list <http://mail-archives.apache.org/mod_mbox/couchdb
 or `IRC-channel #couchdb <http://webchat.freenode.net/?channels=#couchdb>`_
 in FreeNode network.
 
-Let's consider configuring runit on Ubuntu 16.04. The following
+Let's consider configuring runit on Ubuntu 18.04. The following
 steps should be considered only as an example. Details will vary
 by operating system and distribution. Check your system's package
 management tools for specifics.
