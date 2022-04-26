@@ -28,6 +28,9 @@ Version 3.2.2
 Bugfixes
 ---------
 
+* Fix for `CVE-2022-24706 <https://docs.couchdb.org/en/stable/cve/2022-24706.html>`_.
+  This is a security release for a *critical* vulnerability.
+
 * :ghissue:`3963`: Optimize compaction and doc updates for conflicted
   documents on Erlang versions higher than 21.
 
