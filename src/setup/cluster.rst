@@ -24,20 +24,21 @@ Ports and Firewalls
 
 CouchDB uses the following ports:
 
-+-------------+----------+-----------------------+----------------------+
-| Port Number | Protocol | Recommended binding   | Usage                |
-+=============+==========+=======================+======================+
-| 5984        | tcp      | As desired, by        | Standard clustered   |
-|             |          | default ``localhost`` | port for all HTTP    |
-|             |          |                       | API requests         |
-+-------------+----------+-----------------------+----------------------+
-| 4369        | tcp      | All interfaces        | Erlang port mapper   |
-|             |          | by default            | daemon (epmd)        |
-+-------------+----------+-----------------------+----------------------+
-| Random      | tcp      | Automatic             | Communication with   |
-| above 1024  |          |                       | other CouchDB nodes  |
-| (see below) |          |                       | in the cluster       |
-+-------------+----------+-----------------------+----------------------+
++-------------+----------+--------------------------+----------------------+
+| Port Number | Protocol | Recommended binding      | Usage                |
++=============+==========+==========================+======================+
+| 5984        | tcp      | As desired, by           | Standard clustered   |
+|             |          | default ``localhost``    | port for all HTTP    |
+|             |          |                          | API requests         |
++-------------+----------+--------------------------+----------------------+
+| 4369        | tcp      | ``localhost`` for single | Erlang port mapper   |
+|             |          | node installs. Private   | daemon (epmd)        |
+|             |          | interface if clustered   |                      |
++-------------+----------+--------------------------+----------------------+
+| Random      | tcp      | Private interface        | Communication with   |
+| above 1024  |          |                          | other CouchDB nodes  |
+| (see below) |          |                          | in the cluster       |
++-------------+----------+--------------------------+----------------------+
 
 CouchDB in clustered mode uses the port ``5984``, just as in a standalone
 configuration. Port ``5986``, previously used in CouchDB 2.x, has been removed
@@ -50,13 +51,6 @@ installation.  Erlang uses TCP port ``4369`` (EPMD) to find other nodes, so all
 servers must be able to speak to each other on this port. In an Erlang cluster,
 all nodes are connected to all other nodes, in a mesh network configuration.
 
-.. warning::
-    If you expose the port ``4369`` to the Internet or any other untrusted
-    network, then the only thing protecting you is the Erlang
-    `cookie`_.
-
-.. _cookie: http://erlang.org/doc/reference_manual/distributed.html
-
 Every Erlang application running on that machine (such as CouchDB) then uses
 automatically assigned ports for communication with other nodes. Yes, this
 means random ports. This will obviously not work with a firewall, but it is
@@ -65,9 +59,16 @@ possible to force an Erlang application to use a specific port range.
 This documentation will use the range TCP ``9100-9200``, but this range is
 unnecessarily broad. If you only have a single Erlang application running on a
 machine, the range can be limited to a single port: ``9100-9100``, since the
-ports epmd assign are for *inbound connections* only. Three CouchDB nodes
+ports erlang assigns are for *inbound connections* only. Three CouchDB nodes
 running on a single machine, as in a development cluster scenario, would need
 three ports in this range.
+
+.. warning::
+    If you expose the distribution port to the Internet or any other untrusted
+    network, then the only thing protecting you is the Erlang
+    `cookie`_.
+
+.. _cookie: http://erlang.org/doc/reference_manual/distributed.html
 
 Configure and Test the Communication with Erlang
 ================================================
