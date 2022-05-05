@@ -385,8 +385,8 @@ Two sections of config exist to configure JWT authentication;
 
 The :config:option:`required_claims <jwt_auth/required_claims>` config
 setting is a comma-separated list of additional mandatory JWT claims
-that must be present in any presented JWT token. A `:code 400:Bad
-Request` is sent if any are missing.
+that must be present in any presented JWT token. A :statuscode:`400`
+is sent if any are missing.
 
 The ``alg`` claim is mandatory as it used to lookup the correct key for verifying the
 signature.
@@ -407,8 +407,8 @@ list as long as the JWT token is valid.
     ; Examples
     ; hmac:_default = aGVsbG8=
     ; hmac:foo = aGVsbG8=
-    ; The config values can represent symmetric and asymmetrics keys.
-    ; For symmetrics keys, the value is base64 encoded;
+    ; The config values can represent symmetric and asymmetric keys.
+    ; For symmetric keys, the value is base64 encoded;
     ; hmac:_default = aGVsbG8= # base64-encoded form of "hello"
     ; For asymmetric keys, the value is the PEM encoding of the public
     ; key with newlines replaced with the escape sequence \n.
