@@ -540,8 +540,8 @@
                         - **eventsource**: Like, ``continuous``, but sends
                           the events in `EventSource
                           <http://dev.w3.org/html5/eventsource/>`_ format.
-    :query number timeout: Number of seconds until CouchDB closes the
-      connection. Default is ``60``.
+    :query number timeout: Number of *milliseconds* until CouchDB closes the
+      connection. Default is ``60000``.
     :query number heartbeat: Period in *milliseconds* after which an empty
         line is sent in the results. Only applicable for ``longpoll``,
         ``continuous``, and ``eventsource`` feeds. Overrides any timeout to
