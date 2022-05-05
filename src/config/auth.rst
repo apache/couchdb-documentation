@@ -366,4 +366,3 @@ Authentication Configuration
 
             [jwt_auth]
                 required_claims = exp,iat
-
