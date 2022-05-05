@@ -104,8 +104,9 @@ as ``http://domain.com/couchdb/db1/doc1`` are proxied to
 .. code-block:: text
 
     location /couchdb {
-        rewrite /couchdb/(.*) /$1 break;
-        proxy_pass http://localhost:5984;
+        rewrite ^ $request_uri;
+        rewrite ^/couchdb/(.*) /$1 break;
+        proxy_pass http://localhost:5984$uri;
         proxy_redirect off;
         proxy_buffering off;
         proxy_set_header Host $host;
