@@ -201,7 +201,9 @@ Authentication Configuration
 
         The number of iterations for password hashing by the PBKDF2 algorithm.
         A higher  number provides better hash durability, but comes at a cost
-        in performance for each request that requires authentication. ::
+        in performance for each request that requires authentication.
+        When using hundreds of thousands of iterations, use session cookies, or the performance hit will be huge.
+        (The internal hashing algorithm is SHA1, which affects the recommended number of iterations.) ::
 
             [chttpd_auth]
             iterations = 10000
