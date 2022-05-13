@@ -19,10 +19,10 @@ Database Per User
 
 .. _config/couch_peruser:
 
-couch_peruser Options
-=====================
+Database Per User Options
+=========================
 
-.. config:section:: couch_peruser :: couch_peruser Options
+.. config:section:: couch_peruser :: Database Per User Options
 
     .. config:option:: enable
 
