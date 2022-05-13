@@ -13,9 +13,9 @@
 .. default-domain:: config
 .. highlight:: ini
 
-=============
+=================
 Database Per User
-=============
+=================
 
 .. _config/couch_peruser:
 
