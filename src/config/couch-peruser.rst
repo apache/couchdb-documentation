@@ -14,7 +14,7 @@
 .. highlight:: ini
 
 =============
-couch_peruser
+Database Per User
 =============
 
 .. _config/couch_peruser:
