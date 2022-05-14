@@ -258,8 +258,7 @@ Mango is the Query Engine that services the :ref:`_find <api/db/_find>`, endpoin
             [mango]
             default_limit = 25
 
-    .. config:option:: index_scan_warning_threshold :: Ratio threshold that generates an
-       index scan warning
+    .. config:option:: index_scan_warning_threshold :: Ratio threshold that generates an index scan warning
 
         This sets the ratio between documents scanned and results matched that
         will generate a warning in the _find response. For example, if a query
