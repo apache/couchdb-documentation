@@ -1847,9 +1847,9 @@ containing only the requested individual statistic.
         ...remaining couchdb metrics from _stats and _system
 
 If an additional port config option is specified, then a client can call this API using
-that port which does not require authentication. This option is ``false``(OFF) by default.
-When the option ``true``(ON), the default ports for a 3 node cluster are ``17986``,
-``27986``, ``37986``.
+that port which does not require authentication. This option is ``false`` (OFF)
+by default. When the option ``true`` (ON), the default ports for a 3 node cluster
+are ``17986``, ``27986``, ``37986``.
 See :ref:`Configuration of Prometheus Endpoint <config/prometheus>` for details.
 
 .. code-block:: http
