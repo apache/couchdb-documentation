@@ -65,7 +65,7 @@ you can adjust the memory limitation (here, increasing to 512 MiB)::
 
 For more info about the available options, please consult ``couchjs -h``.
 
-.. _Mozilla SpiderMonkey: https://developer.mozilla.org/en/docs/SpiderMonkey
+.. _Mozilla SpiderMonkey: https://spidermonkey.dev/
 
 .. seealso::
     The :ref:`Mango Query Server <api/db/_find>` is a declarative language
@@ -92,8 +92,7 @@ Query Servers Configuration
             [query_server_config]
             commit_freq = 5
 
-    .. config:option:: os_process_limit :: Query Server process hard
-                       limit
+    .. config:option:: os_process_limit :: Query Server process hard limit
 
         Hard limit on the number of OS processes usable by Query
         Servers. The default value is ``100``::
@@ -107,8 +106,7 @@ Query Servers Configuration
         resources. Production settings are typically 10-20 times the
         default value.
 
-    .. config:option:: os_process_soft_limit :: Query Server process
-                       soft limit
+    .. config:option:: os_process_soft_limit :: Query Server process soft limit
 
         Soft limit on the number of OS processes usable by Query
         Servers. The default value is ``100``::
@@ -258,7 +256,8 @@ Mango is the Query Engine that services the :ref:`_find <api/db/_find>`, endpoin
             [mango]
             default_limit = 25
 
-    .. config:option:: index_scan_warning_threshold :: Ratio threshold that generates an index scan warning
+    .. config:option:: index_scan_warning_threshold :: Ratio threshold that generates \
+        an index scan warning
 
         This sets the ratio between documents scanned and results matched that
         will generate a warning in the _find response. For example, if a query
