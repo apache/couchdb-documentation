@@ -349,7 +349,7 @@ Configuration of Prometheus Endpoint
 
         .. versionadded:: 3.2
 
-        The port on which clients can query prometheus endpoint data without authentication
+        The port on which clients can query prometheus endpoint data without authentication::
 
             [prometheus]
             port = 17986
