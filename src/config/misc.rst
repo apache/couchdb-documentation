@@ -24,7 +24,7 @@ Configuration of Attachment Storage
 
 .. config:section:: attachments :: Configuration of Attachment Storage
 
-    .. config:option:: compression_level
+    .. config:option:: compression_level :: Set zlib compression level
 
         Defines zlib compression level for the attachments from ``1`` (lowest,
         fastest) to ``9`` (highest, slowest). A value of ``0`` disables
@@ -33,7 +33,7 @@ Configuration of Attachment Storage
             [attachments]
             compression_level = 8
 
-    .. config:option:: compressible_types
+    .. config:option:: compressible_types :: List of attachment types for compression
 
         Since compression is ineffective for some types of files, it is
         possible to let CouchDB compress only some types of attachments,
@@ -49,7 +49,7 @@ Statistic Calculation
 
 .. config:section:: stats :: Statistic Calculation
 
-    .. config:option:: interval
+    .. config:option:: interval :: Statistics gathering interval
 
         Interval between gathering statistics in seconds::
 
@@ -218,11 +218,11 @@ Content-Security-Policy
 
 .. config:section:: csp :: Content-Security-Policy
 
-  You can configure ``Content-Security-Policy`` header for Fauxton, attachments and
-  show/list functions separately. See `MDN Content-Security-Policy <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy>`_
-  for more details on CSP.
+    You can configure ``Content-Security-Policy`` header for Fauxton, attachments and
+    show/list functions separately. See `MDN Content-Security-Policy <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy>`_
+    for more details on CSP.
 
-    .. config:option:: utils_enable
+    .. config:option:: utils_enable :: Enable Content-Security-Policy header (Fauxton)
 
         Enable the sending of the header ``Content-Security-Policy`` for ``/_utils``.
         Defaults to ``true``::
@@ -230,35 +230,35 @@ Content-Security-Policy
             [csp]
             utils_enable = true
 
-    .. config:option:: utils_header_value
+    .. config:option:: utils_header_value :: Set CSP-Header value (Fauxton)
 
         Specifies the exact header value to send. Defaults to::
 
             [csp]
             utils_header_value = default-src 'self'; img-src 'self'; font-src *; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';
 
-    .. config:option:: attachments_enable
+    .. config:option:: attachments_enable :: Enable CSP-Header (attachments)
 
         Enable sending the ``Content-Security-Policy`` header for attachments::
 
             [csp]
             attachments_enable = true
 
-    .. config:option:: attachments_header_value
+    .. config:option:: attachments_header_value :: Set CSP-Header value (attachments)
 
         Specifies the exact header value to send. Defaults to::
 
             [csp]
             attachments_header_value = sandbox
 
-    .. config:option:: showlist_enable
+    .. config:option:: showlist_enable :: Enable CSP-Header (Show/List-Functions)
 
         Enable sending the ``Content-Security-Policy`` header for show and list functions::
 
             [csp]
             showlist_enable = true
 
-    .. config:option:: showlist_header_value
+    .. config:option:: showlist_header_value :: Set CSP-Header value (Show/List-Functions)
 
         Specifies the exact header value to send. Defaults to::
 
@@ -270,14 +270,14 @@ Content-Security-Policy
 
     Experimental support of CSP headers for ``/_utils`` (Fauxton).
 
-    .. config:option:: enable
+    .. config:option:: enable :: Enable CSP-Header (deprecated)
 
         Enable the sending of the Header ``Content-Security-Policy``::
 
             [csp]
             enable = true
 
-    .. config:option:: header_value
+    .. config:option:: header_value :: Set CSP-Header value (deprecated)
 
         You can change the default value for the Header which is sent::
 
@@ -291,7 +291,8 @@ Configuration of Database Purge
 
 .. config:section:: purge :: Configuration of Database Purge
 
-    .. config:option:: max_document_id_number
+    .. config:option:: max_document_id_number :: Allowed number of documents \
+        per Delete-Request
 
         .. versionadded:: 3.0
 
@@ -300,7 +301,8 @@ Configuration of Database Purge
             [purge]
             max_document_id_number = 100
 
-    .. config:option:: max_revisions_number
+    .. config:option:: max_revisions_number :: Allowed number of accumulated \
+        revisions per Purge-Request
 
         .. versionadded:: 3.0
 
@@ -310,7 +312,8 @@ Configuration of Database Purge
             [purge]
             max_revisions_number = 1000
 
-    .. config:option:: index_lag_warn_seconds
+    .. config:option:: index_lag_warn_seconds :: Allowed duration for purge \
+        checkpoint document
 
         .. versionadded:: 3.0
 
@@ -327,7 +330,8 @@ Configuration of Prometheus Endpoint
 
 .. config:section:: prometheus :: Configuration of Prometheus Options
 
-    .. config:option:: additional_port
+    .. config:option:: additional_port :: Enable a separate, non-authenticated port \
+        for prometheus data
 
         .. versionadded:: 3.2
 
@@ -336,7 +340,7 @@ Configuration of Prometheus Endpoint
             [prometheus]
             additional_port = true
 
-    .. config:option:: bind_address
+    .. config:option:: bind_address :: IP address binding
 
         .. versionadded:: 3.2
 
@@ -345,7 +349,7 @@ Configuration of Prometheus Endpoint
             [prometheus]
             bind_address = 127.0.0.1
 
-    .. config:option:: port
+    .. config:option:: port :: Port for querying Prometheus data without authentication
 
         .. versionadded:: 3.2
 
