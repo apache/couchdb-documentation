@@ -22,9 +22,9 @@ Configuring Clustering
 Cluster Options
 ===============
 
-.. config:section:: cluster :: cluster Options
+.. config:section:: cluster :: Cluster Options
 
-    .. config:option:: q
+    .. config:option:: q :: Default number of shards for newly created database
 
     Sets the default number of shards for newly created databases. The
     default value, ``2``, splits a database into 2 separate partitions. ::
@@ -42,7 +42,7 @@ Cluster Options
     .. seealso::
         :http:put:`PUT /{db} </{db}>`
 
-    .. config:option:: n
+    .. config:option:: n :: Number of replicas of each document
 
     Sets the number of replicas of each document in a cluster. CouchDB will
     only place one replica per node in a cluster. When set up through the
@@ -54,7 +54,7 @@ Cluster Options
         [cluster]
         n = 3
 
-    .. config:option:: placement
+    .. config:option:: placement :: Sets the cluster-wide replica placement policy
 
     .. warning::
 
@@ -75,7 +75,8 @@ Cluster Options
     .. seealso::
         :ref:`cluster/databases/placement`
 
-    .. config:option:: seedlist
+    .. config:option:: seedlist:: Optional, comma-delimited list of nodes that should \
+        be contacted to join cluster
 
     An optional, comma-delimited list of node names that this node should
     contact in order to join a cluster. If a seedlist is configured the ``_up``
@@ -96,20 +97,22 @@ RPC Performance Tuning
     communication channel. There are a few configuration knobs for this system,
     although in general the defaults work well.
 
-    .. config:option:: buffer_count
+    .. config:option:: buffer_count :: Number of buffered messages before dropping
 
     The local RPC server will buffer messages if a remote node goes unavailable.
     This flag determines how many messages will be buffered before the local
     server starts dropping messages. Default value is ``2000``.
 
-    .. config:option:: server_per_node
+    .. config:option:: server_per_node :: Enable or disable one local `gen_server` \
+        process per node
 
     By default, rexi will spawn one local gen_server process for each node in
     the cluster. Disabling this flag will cause CouchDB to use a single process
     for all RPC communication, which is not recommended in high throughput
     deployments.
 
-    .. config:option:: stream_limit
+    .. config:option:: stream_limit :: Number of send messages without waiting \
+        for acknowledgement from the coordinator
 
         .. versionadded:: 3.0
 
