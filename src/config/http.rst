@@ -129,7 +129,7 @@ HTTP Server Options
             [chttpd]
             changes_timeout = 60000 ; 60 seconds
 
-    .. config:option:: config_whitelist :: Config options white list
+    .. config:option:: config_whitelist :: Config options whitelist
 
         .. versionchanged:: 3.2 moved from [httpd] to [chttpd] section
 
