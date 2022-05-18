@@ -294,12 +294,12 @@ Fair Share Replicator Share Allocation
         value is 100, minimum is 1 and maximum is 1000. The
         configuration may be set even if the database does not exist.
 
-        Please adjust the variable ``$replicator_db`` to your replicator
-        database name. The default replicator database is _replicator.
-        Additional replicator databases can be created. To be recognized
-        as such by the system, their database names should end with
-        /_replicator. See the :ref:`Replicator Database <replicator>` section
-        for more info.
+        In this context the option ``$replicator_db`` acts as a placeholder
+        for your replicator database name. The default replicator database is
+        ``_replicator``. Additional replicator databases can be created. To be
+        recognized as such by the system, their database names should end with
+        ``/_replicator``. See the :ref:`Replicator Database <replicator>`
+        section for more info.
 
         ::
 
