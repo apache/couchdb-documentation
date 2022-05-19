@@ -23,7 +23,7 @@ Resharding Configuration
 
 .. config:section:: resharding :: Resharding Configuration
 
-    .. config:option:: max_jobs
+    .. config:option:: max_jobs :: Maximum resharding jobs per node
 
         Maximum number of resharding jobs per cluster node. This includes
         completed, failed, and running jobs. If the job appears in the
@@ -34,7 +34,7 @@ Resharding Configuration
              [reshard]
              max_jobs = 48
 
-    .. config:option:: max_history
+    .. config:option:: max_history :: Maximum size of the event log
 
         Each resharding job maintains a timestamped event log. This setting
         limits the maximum size of that log::
@@ -42,7 +42,8 @@ Resharding Configuration
              [reshard]
              max_history = 20
 
-    .. config:option:: max_retries
+    .. config:option:: max_retries :: Maximum number of retries before failing \
+        resharding job
 
         How many times to retry shard splitting steps if they fail. For
         example, if indexing or topping off fails, it will be retried up to
@@ -51,14 +52,14 @@ Resharding Configuration
              [reshard]
              max_retries = 1
 
-    .. config:option:: retry_interval_sec
+    .. config:option:: retry_interval_sec :: Wait time between resharding retries
 
         How long to wait between subsequent retries::
 
              [reshard]
              retry_interval_sec = 10
 
-    .. config:option:: delete_source
+    .. config:option:: delete_source :: Delete source after resharding
 
         Indicates if the source shard should be deleted after resharding has
         finished. By default, it is ``true`` as that would recover the space
@@ -68,7 +69,7 @@ Resharding Configuration
              [reshard]
              delete_source = true
 
-    .. config:option:: update_shard_map_timeout_sec
+    .. config:option:: update_shard_map_timeout_sec :: Shard map update waiting time
 
         How many seconds to wait for the shard map update operation to
         complete. If there is a large number of shard db changes waiting to
@@ -77,7 +78,7 @@ Resharding Configuration
             [reshard]
             update_shard_map_timeout_sec = 60
 
-    .. config:option:: source_close_timeout_sec
+    .. config:option:: source_close_timeout_sec :: Source shard wait time before close
 
         How many seconds to wait for the source shard to close. "Close" in this
         context means that client requests which keep the database open have
@@ -86,7 +87,8 @@ Resharding Configuration
             [reshard]
             source_close_timeout_sec = 600
 
-    .. config:option:: require_node_param
+    .. config:option:: require_node_param :: Require node parameter when creating \
+        resharding job
 
         Require users to specify a ``node`` parameter when creating resharding
         jobs. This can be used as a safety check to avoid inadvertently
@@ -95,7 +97,8 @@ Resharding Configuration
             [reshard]
             require_node_param = false
 
-    .. config:option:: require_range_param
+    .. config:option:: require_range_param :: Require range parameter when creating \
+        resharding job
 
         Require users to specify a ``range`` parameter when creating resharding
         jobs. This can be used as a safety check to avoid inadvertently

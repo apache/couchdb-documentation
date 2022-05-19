@@ -104,19 +104,19 @@ following parameters.
 The following settings control the resource allocation for a given compaction
 channel.
 
-    .. config:option:: capacity
+    .. config:option:: capacity :: Maximum number of items
 
         The maximum number of items the channel can hold (lowest priority item
         is removed to make room for new items). Defaults to 9999.
 
-    .. config:option:: concurrency
+    .. config:option:: concurrency :: Maximum number of concurrent jobs
 
         The maximum number of jobs that can run concurrently in this channel.
         Defaults to 1.
 
-    .. config: option:: from
+    .. config:option:: from :: Time window start
 
-    .. config: option:: to
+    .. config:option:: to :: Time window end
 
         The time period during which this channel is allowed to execute
         compactions. The value for each of these parameters must obey the format
@@ -125,7 +125,7 @@ channel.
         regardless of the period defined here. The default is to allow the
         channel to execute compactions all the time.
 
-    .. config: option:: strict_window
+    .. config:option:: strict_window :: Run compaction only within the time window
 
         If set to ``true``, any compaction that is still running after the end of
         the allowed perio will be suspended, and then resumed during the next
@@ -135,32 +135,32 @@ channel.
 There are also several settings that collectively control whether a channel will
 enqueue a file for compaction and how it prioritizes files within its queue:
 
-    .. config:option:: max_priority
+    .. config:option:: max_priority :: Maximum priority of item to be enqueued
 
         Each item must have a priority lower than this to be enqueued. Defaults
         to infinity.
 
-    .. config:option:: max_size
+    .. config:option:: max_size :: Maximum size of item to be enqueued
 
         The item must be no larger than this many bytes in length to be
         enqueued. Defaults to infinity.
 
-    .. config:option:: min_priority
+    .. config:option:: min_priority :: Minimum priority of item to be enqueued
 
         The item must have a priority at least this high to be enqueued.
         Defaults to 5.0 for ratio and 16 MB for slack.
 
-    .. config:option:: min_changes
+    .. config:option:: min_changes :: Minimum number of changes of item to be enqueued
 
         The minimum number of changes since last compaction before the item will
         be enqueued. Defaults to 0. Currently only works for databases.
 
-    .. config:option:: min_size
+    .. config:option:: min_size :: Minimum size of item to be enqueued
 
         The item must be at least this many bytes in length to be enqueued.
         Defaults to 1mb (1048576 bytes).
 
-    .. config:option:: priority
+    .. config:option:: priority :: Method for priority calculation
 
         The method used to calculate priority. Can be ratio (calculated as
         ``sizes.file/sizes.active``) or slack (calculated as ``sizes.file -

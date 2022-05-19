@@ -24,7 +24,7 @@ Database Per User Options
 
 .. config:section:: couch_peruser :: Database Per User Options
 
-    .. config:option:: enable
+    .. config:option:: enable :: Enable private per-user database pattern
 
     If set to ``true``, couch_peruser ensures that a private per-user
     database exists for each document in ``_users``. These databases are
@@ -37,7 +37,7 @@ Database Per User Options
     .. note::
         The ``_users`` database must exist before couch_peruser can be enabled.
 
-    .. config:option:: delete_dbs
+    .. config:option:: delete_dbs :: Enable deleting user-db after user delete
 
     If set to ``true`` and a user is deleted, the respective database gets
     deleted as well. ::
@@ -49,7 +49,7 @@ Database Per User Options
     ``_couchdb.roles=['_admin']`` claim to for the peruser database to be properly
     created and accessible for the user provided in the ``sub=`` claim.
 
-    .. config:option:: q
+    .. config:option:: q :: Sharding value for per-user databases
 
     If set, specify the sharding value for per-user databases. If unset, the
     cluster default value will be used.

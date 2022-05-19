@@ -42,7 +42,7 @@ according to the settings described below.
             [ioq]
             ratio = 0.01
 
-.. config:section:: ioq.bypass :: Bypass selected IO classes by setting these to true
+.. config:section:: ioq.bypass :: Bypass Selected IO Classes
 
     System administrators can choose to submit specific classes of IO directly
     to the underlying file descriptor or OS process, bypassing the queues
@@ -50,28 +50,28 @@ according to the settings described below.
     latency, but relinquishes some control over prioritization. The following
     classes are recognized:
 
-    .. config:option:: os_process
+    .. config:option:: os_process :: Bypass IO messages to external processes
 
         Messages on their way to an external process (e.g., ``couchjs``).
 
-    .. config:option:: read
+    .. config:option:: read :: Bypass Disk IO read requests
 
         Disk IO fulfilling interactive read requests.
 
-    .. config:option:: write
+    .. config:option:: write :: Bypass Disk IO write requests
 
         Disk IO required to update a database.
 
-    .. config:option:: view_update
+    .. config:option:: view_update :: Bypass Disk IO view update requests
 
         Disk IO required to update views and other secondary indexes.
 
-    .. config:option:: shard_sync
+    .. config:option:: shard_sync :: Bypass Disk IO for shard syncing requests
 
         Disk IO issued by the background replication processes that fix any
         inconsistencies between shard copies.
 
-    .. config:option:: compaction
+    .. config:option:: compaction :: Bypass Disk IO for compaction job requests
 
         Disk IO issued by compaction jobs.
 
