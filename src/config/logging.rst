@@ -130,7 +130,7 @@ Logging options
             [log]
             syslog_appid = couchdb
 
-    .. config:option:: syslog_facility :: SYSLOG designations for message sources
+    .. config:option:: syslog_facility :: Syslog designations for message sources
 
         Specifies the syslog facility to use with the ``syslog``
         :option:`writer <log/writer>`::
