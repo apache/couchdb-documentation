@@ -108,6 +108,10 @@ Logging options
 
     .. config:option:: syslog_host :: Syslog host
 
+        .. note::
+
+            Setting `syslog_host` is mandatory for ``syslog`` to work!
+
         Specifies the syslog host to send logs to. Only used by the
         ``syslog`` :option:`writer <log/writer>`::
 
