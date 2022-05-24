@@ -108,6 +108,10 @@ Logging options
 
     .. config:option:: syslog_host :: Syslog host
 
+        .. note::
+
+            Setting `syslog_host` is mandatory for ``syslog`` to work!
+
         Specifies the syslog host to send logs to. Only used by the
         ``syslog`` :option:`writer <log/writer>`::
 
@@ -137,3 +141,13 @@ Logging options
 
             [log]
             syslog_facility = local2
+
+    .. note::
+        CouchDB's ``syslog`` only knows how to use UDP logging. Please ensure that your
+        ``syslog`` server has UDP logging enabled.
+
+        For ``rsyslog`` you can enable the UDP module `imudp` in ``/etc/rsyslog.conf``::
+
+            # provides UDP syslog reception
+            module(load="imudp")
+            input(type="imudp" port="514")
