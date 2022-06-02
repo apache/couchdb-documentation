@@ -397,12 +397,10 @@ Authentication Configuration
         .. code-block:: json
 
             {
-                //...
                 "my-couchdb.roles": [
                     "role_1",
                     "role_2"
-                ],
-                //...
+                ]
             }
 
     .. config:option:: roles_claim_path :: (Nested) CouchDB roles claim in JWT token
@@ -432,7 +430,6 @@ Authentication Configuration
         .. code-block:: json
 
             {
-                //...
                 "resource_access": {
                     "security.settings": {
                         "account": {
@@ -442,8 +439,7 @@ Authentication Configuration
                             ]
                         }
                     }
-                },
-                //...
+                }
             }
 
         Now, let's define the config variable ``roles_claim_path`` for this example. It
@@ -479,10 +475,8 @@ Authentication Configuration
         .. code-block:: json
 
             {
-                //...
                 "_couchdb.roles": [
                     "accounting-role",
                     "view-role"
                 ]
-                //...
             }
