@@ -28,14 +28,27 @@ Database Per User Options
 
     If set to ``true``, couch_peruser ensures that a private per-user
     database exists for each document in ``_users``. These databases are
-    writable only by the corresponding user. Databases are in the following
-    form: ``userdb-{hex encoded username}``. ::
+    writable only by the corresponding user. Database names are in the following
+    form: ``userdb-{UTF-8 hex encoded username}``. ::
 
         [couch_peruser]
         enable = false
 
     .. note::
         The ``_users`` database must exist before couch_peruser can be enabled.
+
+    .. tip::
+        Under NodeJS, user names can be converted to and from database names thusly:
+
+    .. code:: javascript
+
+        function dbNameToUsername(prefixedHexName) {
+          return Buffer.from(prefixedHexName.replace('userdb-', ''), 'hex').toString('utf8');
+        }
+
+        function usernameToDbName(name) {
+          return 'userdb-' + Buffer.from(name).toString('hex');
+        }
 
     .. config:option:: delete_dbs :: Enable deleting user-db after user delete
 
