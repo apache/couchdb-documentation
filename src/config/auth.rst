@@ -470,7 +470,8 @@ Authentication Configuration
 
             roles_claim_path = _couchdb\.roles
 
-        Your JWT token should have the following data-payload:
+        Let's assume your JWT token have the following data-payload for your couchdb
+        roles claim:
 
         .. code-block:: json
 
@@ -480,3 +481,42 @@ Authentication Configuration
                     "view-role"
                 ]
             }
+
+        If you did everything right, the response from the ``_session`` endpoint should
+        look something like this:
+
+        .. code-block:: http
+
+            GET /_session HTTP/1.1
+            Host: localhost:5984
+            Authorization: Bearer <JWT token>
+
+        .. code-block:: http
+
+            HTTP/1.1 200 OK
+            Content-Type: application/json
+
+        .. code-block:: json
+
+            {
+                "ok": true,
+                "userCtx": {
+                    "name": "1234567890",
+                    "roles": [
+                        "accounting-role",
+                        "view-role"
+                    ]
+                },
+                "info": {
+                "authentication_handlers": [
+                    "jwt",
+                    "proxy",
+                    "cookie",
+                    "default"
+                ],
+                "authenticated": "jwt"
+                }
+            }
+
+        That's all, you are done with the migration from ``roles_claim_name`` to
+        ``roles_claim_path`` Easy, isn't it?
