@@ -672,6 +672,7 @@
     :<json object create_target_params: An object that contains parameters
       to be used when creating the target database. Can include the
       standard ``q`` and ``n`` parameters.
+    :<json boolean winning_revs_only: Replicate winning revisions only.
     :<json array doc_ids: Array of document IDs to be synchronized.
       ``doc_ids``, ``filter``, and ``selector`` are mutually exclusive.
     :<json string filter: The name of a :ref:`filter function <filterfun>`.
