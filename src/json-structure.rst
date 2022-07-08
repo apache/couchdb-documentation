@@ -282,6 +282,8 @@ Replication Settings
 | use_checkpoints (optional)     | Whether to use replication checkpoints      |
 |                                | or not.                                     |
 +--------------------------------+---------------------------------------------+
+| winning_revs_only (optional)   | Replicate only the winning revisions.       |
++--------------------------------+---------------------------------------------+
 
 .. _replication-status:
 
