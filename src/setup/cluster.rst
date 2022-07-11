@@ -362,7 +362,10 @@ Response:
         ]
     }
 
-Ensure the ``all_nodes`` and ``cluster_nodes`` lists match.
+If the cluster is enabled and ``all_nodes`` and ``cluster_nodes`` lists don't match, use curl to add nodes with
+PUT ``/_node/_local/_nodes/couchdb@<reachable-ip-address|fully-qualified-domain-name>``
+and remove nodes with
+DELETE ``/_node/_local/_nodes/couchdb@<reachable-ip-address|fully-qualified-domain-name>``
 
 You CouchDB cluster is now set up.
 
