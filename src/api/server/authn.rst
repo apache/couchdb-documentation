@@ -73,7 +73,7 @@ For cookie authentication (:rfc:`2109`) CouchDB generates a token that the
 client can use for the next few requests to CouchDB. Tokens are valid until
 a timeout. When CouchDB sees a valid token in a subsequent request, it will
 authenticate the user by this token without requesting the password again. By
-default, cookies are valid for 10 minutes, but it's :config:option:`adjustable
+default, cookies are valid for 10 minutes, but it's adjustable via :config:option:`timeout
 <chttpd_auth/timeout>`. Also it's possible to make cookies
 :config:option:`persistent <chttpd_auth/allow_persistent_cookies>`.
 
