@@ -374,7 +374,7 @@ Authentication Configuration
 
         .. warning::
 
-            ``roles_claim_name`` is deprecated in CouchDB 3.X, and will be removed later.
+            ``roles_claim_name`` is deprecated in CouchDB 3.3, and will be removed later.
             Please migrate to ``roles_claim_path``.
 
         If presented, as a JSON array of strings, it is used as the CouchDB user's roles
@@ -405,7 +405,7 @@ Authentication Configuration
 
     .. config:option:: roles_claim_path :: (Nested) CouchDB roles claim in JWT token
 
-        .. versionadded:: 3.X
+        .. versionadded:: 3.3
 
         This parameter was introduced to overcome disadvantages of ``roles_claim_name``,
         because it is not possible with ``roles_claim_name`` to map nested role

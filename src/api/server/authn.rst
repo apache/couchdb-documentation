@@ -402,7 +402,7 @@ list as long as the JWT token is valid.
 
 .. warning::
 
-    ``roles_claim_name`` is deprecated in CouchDB 3.X, and will be removed later.
+    ``roles_claim_name`` is deprecated in CouchDB 3.3, and will be removed later.
     Please use :config:option:`roles_claim_path <jwt_auth/roles_claim_path>`.
 
 .. code-block:: ini
