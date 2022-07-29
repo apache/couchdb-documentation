@@ -601,5 +601,5 @@ specific request types are provided in the corresponding API call reference.
 - ``503 - Service Unavailable``
 
   The request can't be serviced at this time, either because the cluster is overloaded,
-  a security migration is underway, or some other reason.
-  The request may be retried as-is, perhaps in a couple minutes.
+  maintenance is underway, or some other reason.
+  The request may be retried without changes, perhaps in a couple of minutes.
