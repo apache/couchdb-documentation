@@ -116,6 +116,8 @@ Authentication Configuration
 
     .. config:option:: require_valid_user :: Force user authentication
 
+        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd] section
+
         When this option is set to ``true``, no requests are allowed from
         anonymous users. Everyone must be authenticated. ::
 
@@ -134,7 +136,7 @@ Authentication Configuration
 .. config:section:: chttpd_auth :: Authentication Configuration
 
     .. versionchanged:: 3.2 These options were moved to [chttpd_auth] section:
-                        `authentication_redirect`, `require_valid_user`, `timeout`,
+                        `authentication_redirect`, `timeout`,
                         `auth_cache_size`, `allow_persistent_cookies`, `iterations`,
                         `min_iterations`, `max_iterations`, `secret`, `users_db_public`,
                         `x_auth_roles`, `x_auth_token`, `x_auth_username`,
@@ -280,16 +282,6 @@ Authentication Configuration
 
                 [chttpd_auth]
                 users_db_public = true
-
-    .. config:option:: require_valid_user :: Force user authentication
-
-        .. versionchanged:: 3.2 moved from [couch_httpd_auth] to [chttpd_auth] section
-
-        When this option is set to ``true``, no requests are allowed from
-        anonymous users. Everyone must be authenticated. ::
-
-            [chttpd_auth]
-            require_valid_user = false
 
     .. config:option:: secret :: Authentication secret token
 
