@@ -194,6 +194,33 @@ Authentication Configuration
             [chttpd_auth]
             authentication_redirect = /_utils/session.html
 
+    .. config:option:: hash_algorithms :: Supported hash algorithms for cookie auth
+
+        .. versionadded:: 3.3
+
+        Sets the HMAC hash algorithm used for cookie authentication. You can provide a
+        comma-separated list of hash algorithms. New cookie sessions or
+        session updates are calculated with the first hash algorithm. All values in the
+        list can be used to decode the cookie session. ::
+
+            [chttpd_auth]
+            hash_algorithms = sha256, sha
+
+        .. note::
+            You can select any hash algorithm the version of erlang used in your CouchDB
+            install supports. The common list of available hashes might be: ::
+
+                sha, sha224, sha256, sha384, sha512
+
+            To retrieve a complete list of supported hash algorithms you can use our
+            ``bin/remsh`` script and retrieve a full list of available hash algorithms
+            with ``crypto:supports(hashs).``.
+
+        .. warning::
+            We do not recommend using the following hash algorithms: ::
+
+                md4, md5
+
     .. config:option:: iterations :: PBKDF2 iterations count
 
         .. versionadded:: 1.3
