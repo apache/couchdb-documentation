@@ -64,9 +64,12 @@ CouchDB nodes have a ``etc/default.ini`` file with a section named
 
 These settings specify the default sharding parameters for newly created
 databases. These can be overridden in the ``etc/local.ini`` file by copying the
-text above, and replacing the values with your new defaults.  The values can
-also be set on a per-database basis by specifying the ``q`` and ``n`` query
-parameters when the database is created. For example:
+text above, and replacing the values with your new defaults.
+If ``[couch_peruser]`` ``q`` is set, that value is used for per-user databases.
+(By default, it is set to 1, on the assumption that per-user dbs will be quite
+small and there will be many of them.)  The values can also be set on a
+per-database basis by specifying the ``q`` and ``n`` query parameters when the
+database is created. For example:
 
 .. code-block:: bash
 
