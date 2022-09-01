@@ -324,6 +324,10 @@ Replication Status
 +--------------------+-------------------------------------------+
 | missing_found      | Number of missing documents found         |
 +--------------------+-------------------------------------------+
+| bulk_get_attempts  | Number of attempted _bulk_get fetches     |
++--------------------+-------------------------------------------+
+| bulk_get_docs      | Number of documents read with _bulk_get   |
++--------------------+-------------------------------------------+
 
 .. _request_object:
 

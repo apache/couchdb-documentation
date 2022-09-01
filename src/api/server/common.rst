@@ -66,6 +66,8 @@
 
 .. versionchanged:: 2.1.0 Because of how the scheduling replicator works, continuous replication jobs could be periodically stopped and then started later. When they are not running they will not appear in the ``_active_tasks`` endpoint
 
+.. versionchanged:: 3.3 Added `"bulk_get_attempts"` and `"bulk_get_docs"` fields for replication jobs.
+
 .. http:get:: /_active_tasks
     :synopsis: Obtains a list of the tasks running in the server
 
@@ -148,6 +150,8 @@
                 "continuous": false,
                 "doc_id": null,
                 "doc_write_failures": 0,
+                "bulk_get_attempts": 4524,
+                "bulk_get_docs": 4524,
                 "docs_read": 4524,
                 "docs_written": 4524,
                 "missing_revisions_found": 4524,
@@ -657,6 +661,8 @@
 ``/_replicate``
 ===============
 
+.. versionchanged:: 3.3 Added `"bulk_get_attempts"` and `"bulk_get_docs"`  fields to the replication history response object.
+
 .. http:post:: /_replicate
     :synopsis: Starts or cancels the replication
 
@@ -728,6 +734,10 @@
     :json number doc_write_failures: Number of document write failures
     :json number docs_read:  Number of documents read
     :json number docs_written:  Number of documents written to target
+    :json number bulk_get_attempts: The total count of attempted doc revisions
+        fetched with ``_bulk_get``.
+    :json number bulk_get_docs: The total count of successful docs fetched with
+        ``_bulk_get``.
     :json number end_last_seq:  Last sequence number in changes stream
     :json string end_time:  Date/Time replication operation completed in
       :rfc:`2822` format
@@ -774,6 +784,8 @@
                 {
                     "doc_write_failures": 0,
                     "docs_read": 10,
+                    "bulk_get_attempts": 10,
+                    "bulk_get_docs": 10,
                     "docs_written": 10,
                     "end_last_seq": 28,
                     "end_time": "Sun, 11 Aug 2013 20:38:50 GMT",
@@ -787,6 +799,8 @@
                 {
                     "doc_write_failures": 0,
                     "docs_read": 1,
+                    "bulk_get_attempts": 1,
+                    "bulk_get_docs": 1,
                     "docs_written": 1,
                     "end_last_seq": 1,
                     "end_time": "Sat, 10 Aug 2013 15:41:54 GMT",
@@ -913,6 +927,8 @@ request was made. The response will be a JSON structure containing the success
         "history" : [
             {
                 "docs_read" : 1000,
+                "bulk_get_attempts": 1000,
+                "bulk_get_docs": 1000,
                 "session_id" : "52c2370f5027043d286daca4de247db0",
                 "recorded_seq" : 1000,
                 "end_last_seq" : 1000,
@@ -1080,6 +1096,8 @@ error.
                         "doc_write_failures": 0,
                         "docs_read": 113,
                         "docs_written": 113,
+                        "bulk_get_attempts": 113,
+                        "bulk_get_docs": 113,
                         "missing_revisions_found": 113,
                         "revisions_checked": 113,
                         "source_seq": "113-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE01ygQLsZsYGqcamiZjKcRqRxwIkGRqA1H-oSbZgk1KMLCzTDE0wdWUBAF6HJIQ",
@@ -1112,6 +1130,8 @@ error.
                         "doc_write_failures": 0,
                         "docs_read": 12,
                         "docs_written": 12,
+                        "bulk_get_attempts": 12,
+                        "bulk_get_docs": 12,
                         "missing_revisions_found": 12,
                         "revisions_checked": 12,
                         "source_seq": "12-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYE1lzgQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSexgk4yMkhITjS0wdWUBADfEJBg",
@@ -1142,6 +1162,9 @@ error.
 
 .. versionchanged:: 3.0.0 In error states the `"info"` field switched
                     from being a string to being an object
+
+.. versionchanged:: 3.3 Added `"bulk_get_attempts"` and `"bulk_get_docs"` the
+                    `"info"` object.
 
 .. http:get:: /_scheduler/docs
     :synopsis: Retrieve information about replication documents from the
@@ -1196,6 +1219,10 @@ error.
         source.
     :json number docs_written: The count of docs which have been written to the
         target.
+    :json number bulk_get_attempts: The total count of attempted doc revisions
+        fetched with ``_bulk_get``.
+    :json number bulk_get_docs: The total count of successful docs fetched with
+        ``_bulk_get``.
     :json number changes_pending: The count of changes not yet replicated.
     :json number doc_write_failures: The count of docs which failed to be
         written to the target.
@@ -1232,6 +1259,8 @@ error.
                         "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
                         "doc_write_failures": 0,
                         "docs_read": 67,
+                        "bulk_get_attempts": 67,
+                        "bulk_get_docs": 67,
                         "docs_written": 67,
                         "missing_revisions_found": 67,
                         "revisions_checked": 67,
@@ -1256,6 +1285,8 @@ error.
                         "changes_pending": null,
                         "checkpointed_source_seq": 0,
                         "doc_write_failures": 0,
+                        "bulk_get_attempts": 12,
+                        "bulk_get_docs": 12,
                         "docs_read": 12,
                         "docs_written": 12,
                         "missing_revisions_found": 12,
@@ -1333,6 +1364,10 @@ error.
         source.
     :json number docs_written: The count of docs which have been written to the
         target.
+    :json number bulk_get_attempts: The total count of attempted doc revisions
+        fetched with ``_bulk_get``.
+    :json number bulk_get_docs: The total count of successful docs fetched with
+        ``_bulk_get``.
     :json number changes_pending: The count of changes not yet replicated.
     :json number doc_write_failures: The count of docs which failed to be
         written to the target.
@@ -1369,6 +1404,8 @@ error.
                         "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
                         "doc_write_failures": 0,
                         "docs_read": 67,
+                        "bulk_get_attempts": 67,
+                        "bulk_get_docs": 67,
                         "docs_written": 67,
                         "missing_revisions_found": 67,
                         "revisions_checked": 67,
@@ -1435,6 +1472,10 @@ error.
         source.
     :json number docs_written: The count of docs which have been written to the
         target.
+    :json number bulk_get_attempts: The total count of attempted doc revisions
+        fetched with ``_bulk_get``.
+    :json number bulk_get_docs: The total count of successful docs fetched with
+        ``_bulk_get``.
     :json number changes_pending: The count of changes not yet replicated.
     :json number doc_write_failures: The count of docs which failed to be
         written to the target.
@@ -1469,6 +1510,8 @@ error.
                 "checkpointed_source_seq": "60-g1AAAACTeJzLYWBgYMpgTmHgz8tPSTV0MDQy1zMAQsMckEQiQ1L9____szKYEyVygQLsBsZm5pZJJpjKcRqRxwIkGRqA1H-oSSpgk4yMkhITjS0wdWUBAENCJEg",
                 "doc_write_failures": 0,
                 "docs_read": 67,
+                "bulk_get_attempts": 67,
+                "bulk_get_docs": 67,
                 "docs_written": 67,
                 "missing_revisions_found": 67,
                 "revisions_checked": 67,
